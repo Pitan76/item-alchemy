@@ -8,9 +8,9 @@
     "Pitan"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/itemalchemy",
-    "sources": "https://github.com/PTOM76/itemalchemy",
-    "issues": "https://github.com/PTOM76/itemalchemy/issues"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/item-alchemy-fabric",
+    "sources": "https://github.com/Pitan76/item-alchemy",
+    "issues": "https://github.com/Pitan76/item-alchemy/issues"
   },
 
   "license": "MIT",
