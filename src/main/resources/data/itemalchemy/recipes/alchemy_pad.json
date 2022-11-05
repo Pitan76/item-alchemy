@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "A",
+    "S"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "A": {
+      "item": "itemalchemy:alchemy_table"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:alchemy_pad",
+    "count": 1
+  }
+}

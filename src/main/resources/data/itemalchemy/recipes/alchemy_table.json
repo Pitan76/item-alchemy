@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "OSO",
+    "S#S",
+    "OSO"
+  ],
+  "key": {
+    "S": {
+      "tag": "c:stones"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "#": {
+      "item": "itemalchemy:philosopher_stone"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:alchemy_table",
+    "count": 1
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "ml.pkom.itemalchemy.mixins",
+  "mixins": [
+    "PlayerEntityMixin"
+  ],
+  "client": [
+    "client.ScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "itemalchemy",
+  "version": "${version}",
+  "name": "Item Alchemy",
+  "description": "",
+  "authors": [
+    "Pitan"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/itemalchemy",
+    "sources": "https://github.com/PTOM76/itemalchemy",
+    "issues": "https://github.com/PTOM76/itemalchemy/issues"
+  },
+
+  "license": "MIT",
+  "icon": "assets/itemalchemy/logo.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "ml.pkom.itemalchemy.FabricMain"
+    ]
+  },
+  "mixins": [
+    "itemalchemy.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": "*",
+    "fabric": "*",
+    "minecraft": "*",
+    "mcpitanlibarch": "*"
+  }
+}
