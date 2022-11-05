@@ -24,9 +24,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class EMCManager {
 
@@ -455,31 +453,31 @@ public class EMCManager {
     }
 
     public static void setEmcFromRecipes(World world) {
+        List<Recipe<?>> unsetRecipes = new ArrayList<>();
         Collection<Recipe<?>> recipes = world.getRecipeManager().values();
 
         for (Recipe<?> recipe : recipes) {
             ItemStack outStack = recipe.getOutput();
-            addEmcFromRecipe(outStack, recipe, recipes);
+            addEmcFromRecipe(outStack, recipe, unsetRecipes);
+        }
+        for (Recipe<?> recipe : unsetRecipes) {
+            ItemStack outStack = recipe.getOutput();
+            List<Recipe<?>> dummy = new ArrayList<>();
+            addEmcFromRecipe(outStack, recipe, dummy);
         }
     }
 
-    public static boolean addEmcFromRecipe(ItemStack outStack, Recipe<?> recipe, Collection<Recipe<?>> recipes) {
+    public static boolean addEmcFromRecipe(ItemStack outStack, Recipe<?> recipe, List<Recipe<?>> unsetRecipes) {
         if (!contains(outStack.getItem())) {
             long totalEmc = 0;
             for (Ingredient ingredient : recipe.getIngredients()) {
                 if (ingredient.getMatchingStacks().length > 0) {
                     ItemStack stack = ingredient.getMatchingStacks()[0];
-                    if (!contains(stack.getItem())) {
-                        for (Recipe<?> recipe2 : recipes) {
-                            if (recipe2.getOutput().getItem() == stack.getItem()) {
-                                if (addEmcFromRecipe(stack, recipe2, recipes)) break;
-                            }
-                        }
-                    }
                     if (contains(stack.getItem())) {
                         totalEmc += get(stack.getItem()) / outStack.getCount();
                     } else {
-                        totalEmc += 1 / outStack.getCount();
+                        unsetRecipes.add(recipe);
+                        //totalEmc += 1 / outStack.getCount();
                     }
                 }
             }
