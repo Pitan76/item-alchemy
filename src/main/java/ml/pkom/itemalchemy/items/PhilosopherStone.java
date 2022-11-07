@@ -83,7 +83,7 @@ public class PhilosopherStone extends ExtendItem {
     }
 
     public PhilosopherStone(Settings settings) {
-        super(settings.recipeRemainder(Items.PHILOSOPHER_STONE.getOrNull()));
+        super(settings); //.recipeRemainder(Items.PHILOSOPHER_STONE.getOrNull())
     }
 
     @Override
@@ -125,8 +125,11 @@ public class PhilosopherStone extends ExtendItem {
         world.setBlockState(blockPos, newBlockState);
     }
 
+    /*
     @Override
     public boolean hasRecipeRemainder() {
         return true;
     }
+
+     */
 }
