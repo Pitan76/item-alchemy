@@ -1,0 +1,12 @@
+{
+	"parent": "itemalchemy:block/cube",
+	"textures": {
+		"particle": "itemalchemy:blocks/emc_collector/side",
+		"north": "itemalchemy:blocks/emc_collector/front",
+		"south": "itemalchemy:blocks/emc_collector/side",
+		"east": "itemalchemy:blocks/emc_collector/side",
+		"west": "itemalchemy:blocks/emc_collector/side",
+		"up": "itemalchemy:blocks/emc_collector/top_mk3",
+		"down": "itemalchemy:blocks/emc_collector/bottom"
+	}
+}

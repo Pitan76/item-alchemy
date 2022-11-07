@@ -4,10 +4,10 @@ import ml.pkom.easyapi.config.Config;
 import ml.pkom.easyapi.config.JsonConfig;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
+import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -31,7 +31,7 @@ public class EMCManager {
     private static Map<String, Long> map = new LinkedHashMap<>();
 
     public static String itemToId(Item item) {
-        return Registry.ITEM.getId(item).toString();
+        return ItemUtil.toID(item).toString();
     }
 
     public static void add(Item item, long emc) {
@@ -161,7 +161,6 @@ public class EMCManager {
         add(Items.MAGMA_BLOCK, 128);
         add2(ItemTags.LEAVES, 1);
         add2(ItemTags.SAND, 1);
-
 
         add2(ItemTags.BUTTONS, 2);
         add(Items.STONE_PRESSURE_PLATE, 2);
@@ -458,16 +457,16 @@ public class EMCManager {
 
         for (Recipe<?> recipe : recipes) {
             ItemStack outStack = recipe.getOutput();
-            addEmcFromRecipe(outStack, recipe, unsetRecipes);
+            addEmcFromRecipe(outStack, recipe, unsetRecipes, false);
         }
+        List<Recipe<?>> dummy = new ArrayList<>();
         for (Recipe<?> recipe : unsetRecipes) {
             ItemStack outStack = recipe.getOutput();
-            List<Recipe<?>> dummy = new ArrayList<>();
-            addEmcFromRecipe(outStack, recipe, dummy);
+            addEmcFromRecipe(outStack, recipe, dummy, true);
         }
     }
 
-    public static boolean addEmcFromRecipe(ItemStack outStack, Recipe<?> recipe, List<Recipe<?>> unsetRecipes) {
+    public static boolean addEmcFromRecipe(ItemStack outStack, Recipe<?> recipe, List<Recipe<?>> unsetRecipes, boolean last) {
         if (!contains(outStack.getItem())) {
             long totalEmc = 0;
             for (Ingredient ingredient : recipe.getIngredients()) {
@@ -475,8 +474,11 @@ public class EMCManager {
                     ItemStack stack = ingredient.getMatchingStacks()[0];
                     if (contains(stack.getItem())) {
                         totalEmc += get(stack.getItem()) / outStack.getCount();
-                    } else {
-                        unsetRecipes.add(recipe);
+                    } else if (!unsetRecipes.contains(recipe)) {
+                        if (!last) {
+                            unsetRecipes.add(recipe);
+                            return false;
+                        }
                         //totalEmc += 1 / outStack.getCount();
                     }
                 }

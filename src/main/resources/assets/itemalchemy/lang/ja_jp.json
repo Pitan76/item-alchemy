@@ -1,8 +1,11 @@
 {
   "itemGroup.itemalchemy.item_alchemy": "Item Alchemy",
   "item.itemalchemy.philosopher_stone": "賢者の石",
-  "block.itemalchemy.alchemy_table": "錬金テーブル",
   "item.itemalchemy.alchemy_pad": "錬金パッド",
-
-  "container.itemalchemy.alchemy_table": "錬金テーブル"
+  "block.itemalchemy.alchemy_table": "錬金テーブル",
+  "block.itemalchemy.emc_condenser": "EMCコンデンサー",
+  "block.itemalchemy.emc_collector": "EMCコレクター",
+  "container.itemalchemy.alchemy_table": "錬金テーブル",
+  "container.itemalchemy.emc_condenser": "EMCコンデンサー",
+  "container.itemalchemy.emc_collector": "EMCコレクター"
 }

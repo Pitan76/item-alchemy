@@ -4,6 +4,7 @@ import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.screens.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
+import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -31,8 +32,8 @@ public class RegisterInventory extends SimpleInventory {
                 }
             }
 
-            if (!items.contains(Registry.ITEM.getId(stack.getItem()).toString())) {
-                items.putBoolean(Registry.ITEM.getId(stack.getItem()).toString(), true);
+            if (!items.contains(ItemUtil.toID(stack.getItem()).toString())) {
+                items.putBoolean(ItemUtil.toID(stack.getItem()).toString(), true);
                 if (player.getCurrentScreenHandler() instanceof AlchemyTableScreenHandler) {
                     AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
                     screenHandler.extractInventory.placeExtractSlots();

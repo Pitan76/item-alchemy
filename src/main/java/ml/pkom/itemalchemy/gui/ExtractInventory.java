@@ -4,6 +4,7 @@ import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.screens.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
+import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -66,7 +67,7 @@ public class ExtractInventory extends SimpleInventory {
                 Identifier id = new Identifier(keys.get(id_index));
                 //System.out.println(id);
                 if (!Registry.ITEM.containsId(id)) continue;
-                ItemStack itemStack = new ItemStack(Registry.ITEM.get(id), 1);
+                ItemStack itemStack = new ItemStack(ItemUtil.fromId(id), 1);
                 setStack(i + 64, itemStack);
             }
         }

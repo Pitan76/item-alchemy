@@ -2,6 +2,7 @@ package ml.pkom.itemalchemy.screens;
 
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.ScreenHandlers;
+import ml.pkom.itemalchemy.api.PlayerRegisteredItemUtil;
 import ml.pkom.itemalchemy.gui.*;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,6 +29,7 @@ public class AlchemyTableScreenHandler extends ScreenHandler {
     public int index = 0;
 
     public void nextExtractSlots() {
+        if (PlayerRegisteredItemUtil.count(extractInventory.player) < 13 * (index + 1) + 1) return;
         index++;
         extractInventory.placeExtractSlots();
     }
@@ -59,7 +61,7 @@ public class AlchemyTableScreenHandler extends ScreenHandler {
         addRegisterSlot(registerInventory, 61, 15, 79);
         addRegisterSlot(registerInventory, 62, 66, 79);
         addRegisterSlot(registerInventory, 63, 41, 89);
-        addExtractSlot(extractInventory, 64, 144, 13);
+        addExtractSlot(extractInventory, 64, 144, 13); // 13
         addExtractSlot(extractInventory, 65, 114, 25);
         addExtractSlot(extractInventory, 66, 174, 25);
         addExtractSlot(extractInventory, 67, 144, 33);

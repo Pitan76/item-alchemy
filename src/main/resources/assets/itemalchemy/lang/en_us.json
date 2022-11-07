@@ -1,8 +1,11 @@
 {
   "itemGroup.itemalchemy.item_alchemy": "Item Alchemy",
   "item.itemalchemy.philosopher_stone": "Philosopher's Stone",
-  "block.itemalchemy.alchemy_table": "Alchemy Table",
   "item.itemalchemy.alchemy_pad": "Alchemy Pad",
-
-  "container.itemalchemy.alchemy_table": "Alchemy Table"
+  "block.itemalchemy.alchemy_table": "Alchemy Table",
+  "block.itemalchemy.emc_condenser": "EMC Condenser",
+  "block.itemalchemy.emc_collector": "EMC Collector",
+  "container.itemalchemy.alchemy_table": "Alchemy Table",
+  "container.itemalchemy.emc_condenser": "EMC Condenser",
+  "container.itemalchemy.emc_collector": "EMC Collector"
 }

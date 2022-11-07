@@ -1,5 +1,6 @@
 package ml.pkom.itemalchemy.items;
 
+import ml.pkom.itemalchemy.Items;
 import ml.pkom.itemalchemy.Sounds;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.item.ItemUseOnBlockEvent;
@@ -82,7 +83,7 @@ public class PhilosopherStone extends ExtendItem {
     }
 
     public PhilosopherStone(Settings settings) {
-        super(settings);
+        super(settings.recipeRemainder(Items.PHILOSOPHER_STONE.getOrNull()));
     }
 
     @Override

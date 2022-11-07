@@ -4,6 +4,7 @@ import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.screens.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
+import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -32,8 +33,8 @@ public class RemoveSlot extends Slot {
             }
         }
 
-        if (items.contains(Registry.ITEM.getId(stack.getItem()).toString())) {
-            items.remove(Registry.ITEM.getId(stack.getItem()).toString());
+        if (items.contains(ItemUtil.toID(stack.getItem()).toString())) {
+            items.remove(ItemUtil.toID(stack.getItem()).toString());
             if (player.getCurrentScreenHandler() instanceof AlchemyTableScreenHandler) {
                 AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
                 screenHandler.extractInventory.placeExtractSlots();

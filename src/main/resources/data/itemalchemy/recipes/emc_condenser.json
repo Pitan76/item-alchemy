@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#B#",
+    "BAB",
+    "#B#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:obsidian"
+    },
+    "A": {
+      "item": "minecraft:ender_chest"
+    },
+    "B": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:emc_condenser",
+    "count": 1
+  }
+}
