@@ -19,18 +19,17 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
-;import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
+
+;
 
 public class AlchemyTableScreen extends SimpleHandledScreen {
     public PlayerInventory playerInventory;
     public TextFieldWidget searchBox;
     public AlchemyTableScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
-        this.backgroundWidth = 208;
-        this.backgroundHeight = 222;
         this.passEvents = false;
         this.playerInventory = inventory;
     }
@@ -99,6 +98,9 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
     @Override
     public void initOverride() {
         super.initOverride();
+        this.backgroundWidth = 208;
+        this.backgroundHeight = 222;
+
         searchBox = new TextFieldWidget(this.textRenderer, x + 85,  y + 5, 60, 9, TextUtil.literal(""));
         searchBox.setDrawsBackground(true);
         searchBox.setFocusUnlocked(true);

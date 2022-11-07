@@ -30,13 +30,13 @@ public class EMCCollectorScreen extends SimpleHandledScreen {
 
     public EMCCollectorScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
-        this.backgroundWidth = 208;
-        this.backgroundHeight = 222;
     }
 
     @Override
     public void initOverride() {
         super.initOverride();
+        this.backgroundWidth = 208;
+        this.backgroundHeight = 222;
     }
 
     public Identifier getTexture() {
