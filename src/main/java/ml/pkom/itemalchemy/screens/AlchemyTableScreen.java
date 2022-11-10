@@ -32,6 +32,8 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
         super(handler, inventory, title);
         this.passEvents = false;
         this.playerInventory = inventory;
+        setBackgroundWidth(208);
+        setBackgroundHeight(222);
     }
 
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
@@ -98,8 +100,6 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
     @Override
     public void initOverride() {
         super.initOverride();
-        this.backgroundWidth = 208;
-        this.backgroundHeight = 222;
 
         searchBox = new TextFieldWidget(this.textRenderer, x + 85,  y + 5, 60, 9, TextUtil.literal(""));
         searchBox.setDrawsBackground(true);
@@ -144,7 +144,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
 
     @Override
     public void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
-        //super.drawForeground(matrices, mouseX, mouseY);
+        super.drawForeground(matrices, mouseX, mouseY);
         this.textRenderer.draw(matrices, getTitle(), (float) this.titleX, (float) this.titleY, 4210752);
         long emc;
         emc = ItemAlchemyClient.getClientPlayerEMC();
