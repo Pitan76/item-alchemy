@@ -144,7 +144,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
 
     @Override
     public void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
-        super.drawForeground(matrices, mouseX, mouseY);
+        //super.drawForeground(matrices, mouseX, mouseY);
         this.textRenderer.draw(matrices, getTitle(), (float) this.titleX, (float) this.titleY, 4210752);
         long emc;
         emc = ItemAlchemyClient.getClientPlayerEMC();
