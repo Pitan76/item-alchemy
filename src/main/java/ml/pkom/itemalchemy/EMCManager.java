@@ -473,6 +473,9 @@ public class EMCManager {
                 if (ingredient.getMatchingStacks().length > 0) {
                     ItemStack stack = ingredient.getMatchingStacks()[0];
                     if (contains(stack.getItem())) {
+                        if (outStack.getCount() == 0) {
+                            totalEmc += get(stack.getItem());
+                        }
                         totalEmc += get(stack.getItem()) / outStack.getCount();
                     } else if (!unsetRecipes.contains(recipe)) {
                         if (!last) {
