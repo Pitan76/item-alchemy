@@ -1,14 +1,13 @@
-package ml.pkom.itemalchemy.gui;
+package ml.pkom.itemalchemy.gui.inventory;
 
 import ml.pkom.itemalchemy.EMCManager;
-import ml.pkom.itemalchemy.screens.AlchemyTableScreenHandler;
+import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.registry.Registry;
 
 public class RegisterInventory extends SimpleInventory {
     public Player player;

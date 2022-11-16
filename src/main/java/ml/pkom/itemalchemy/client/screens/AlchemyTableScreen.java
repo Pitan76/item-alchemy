@@ -1,8 +1,9 @@
-package ml.pkom.itemalchemy.screens;
+package ml.pkom.itemalchemy.client.screens;
 
 import io.netty.buffer.Unpooled;
 import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.itemalchemy.ItemAlchemyClient;
+import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.client.SimpleHandledScreen;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;

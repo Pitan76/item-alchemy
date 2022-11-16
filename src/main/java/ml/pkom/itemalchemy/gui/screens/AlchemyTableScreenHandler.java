@@ -1,9 +1,9 @@
-package ml.pkom.itemalchemy.screens;
+package ml.pkom.itemalchemy.gui.screens;
 
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.ScreenHandlers;
 import ml.pkom.itemalchemy.api.PlayerRegisteredItemUtil;
-import ml.pkom.itemalchemy.gui.*;
+import ml.pkom.itemalchemy.gui.inventory.*;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

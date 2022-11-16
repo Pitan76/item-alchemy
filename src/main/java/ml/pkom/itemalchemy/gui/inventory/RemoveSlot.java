@@ -1,7 +1,6 @@
-package ml.pkom.itemalchemy.gui;
+package ml.pkom.itemalchemy.gui.inventory;
 
-import ml.pkom.itemalchemy.EMCManager;
-import ml.pkom.itemalchemy.screens.AlchemyTableScreenHandler;
+import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
@@ -9,7 +8,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.registry.Registry;
 
 public class RemoveSlot extends Slot {
     public Player player;

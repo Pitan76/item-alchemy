@@ -30,7 +30,7 @@
     "fabricloader": "*",
     "fabric": "*",
     "minecraft": "*",
-    "mcpitanlibarch": ">1.1.5"
+    "mcpitanlibarch": ">1.1.7"
   },
 
   "custom": {

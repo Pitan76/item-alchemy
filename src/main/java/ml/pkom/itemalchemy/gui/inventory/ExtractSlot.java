@@ -1,4 +1,4 @@
-package ml.pkom.itemalchemy.gui;
+package ml.pkom.itemalchemy.gui.inventory;
 
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.mcpitanlibarch.api.entity.Player;

@@ -1,7 +1,7 @@
 package ml.pkom.itemalchemy.items;
 
 import ml.pkom.itemalchemy.EMCManager;
-import ml.pkom.itemalchemy.screens.AlchemyTableScreenHandler;
+import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.item.ItemUseEvent;
 import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
