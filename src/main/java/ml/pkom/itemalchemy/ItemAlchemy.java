@@ -1,6 +1,7 @@
 package ml.pkom.itemalchemy;
 
 import ml.pkom.itemalchemy.screens.AlchemyTableScreenHandler;
+import ml.pkom.mcpitanlibarch.api.command.CommandRegistry;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.registry.ArchRegistry;
@@ -105,5 +106,7 @@ public class ItemAlchemy {
         }));
 
         registry.allRegister();
+
+        CommandRegistry.register("itemalchemy", new ItemAlchemyCommand());
     }
 }

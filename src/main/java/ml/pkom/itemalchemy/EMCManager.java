@@ -20,6 +20,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.tag.TagKey;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
@@ -84,7 +85,7 @@ public class EMCManager {
 
     public static void init(MinecraftServer server, ServerWorld world) {
         System.out.println("init emc manager");
-        if (!map.isEmpty()) map.clear();
+        if (!map.isEmpty()) map = new LinkedHashMap<>();
 
         File dir = new File(FabricLoader.getInstance().getConfigDir().toFile(), ItemAlchemy.MOD_ID);
         if (!dir.exists()) dir.mkdirs();
@@ -593,7 +594,9 @@ public class EMCManager {
 
         for (Map.Entry<String, Long> entry : map.entrySet()) {
             if (entry.getValue() == 0) continue;
-            data.putLong(entry.getKey(), entry.getValue());
+            if (ItemUtil.isExist(new Identifier(entry.getKey()))) {
+                data.putLong(entry.getKey(), entry.getValue());
+            }
         }
 
         buf.writeNbt(data);

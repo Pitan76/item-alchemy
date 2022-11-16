@@ -30,6 +30,12 @@
     "fabricloader": "*",
     "fabric": "*",
     "minecraft": "*",
-    "mcpitanlibarch": "*"
+    "mcpitanlibarch": ">1.1.5"
+  },
+
+  "custom": {
+    "modmenu": {
+      "badges": [ "library" ]
+    }
   }
 }

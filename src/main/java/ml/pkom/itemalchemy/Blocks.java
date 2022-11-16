@@ -17,7 +17,7 @@ public class Blocks {
 
     public static void init() {
         ALCHEMY_TABLE = registry.registerBlock(id("alchemy_table"), AlchemyTable::new);
-        //EMC_COLLECTOR_MK1 = registry.registerBlock(id("emc_collector_mk1"), EMCCollector::new);
-        //EMC_CONDENSER = registry.registerBlock(id("emc_condenser"), EMCCondenser::new);
+        EMC_COLLECTOR_MK1 = registry.registerBlock(id("emc_collector_mk1"), EMCCollector::new);
+        EMC_CONDENSER = registry.registerBlock(id("emc_condenser"), EMCCondenser::new);
     }
 }
