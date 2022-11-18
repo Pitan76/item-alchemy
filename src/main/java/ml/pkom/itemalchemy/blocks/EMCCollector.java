@@ -1,60 +1,75 @@
 package ml.pkom.itemalchemy.blocks;
 
-import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
-import ml.pkom.itemalchemy.gui.screens.EMCCollectorScreenHandler;
 import ml.pkom.itemalchemy.tiles.EMCCollectorTile;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlockEntityProvider;
-import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.block.BlockUseEvent;
-import ml.pkom.mcpitanlibarch.api.event.block.ScreenHandlerCreateEvent;
 import ml.pkom.mcpitanlibarch.api.event.block.TileCreateEvent;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.BlockEntityProvider;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvider {
-    public static final DirectionProperty FACING = Properties.FACING;
+    public static DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
     private static final Text TITLE = TextUtil.translatable("container.itemalchemy.emc_collector");
 
-    public EMCCollector(Settings settings) {
+    public long maxEMC;
+
+    public EMCCollector(Settings settings, long maxEMC) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
+        getStateManager().getDefaultState().with(FACING, Direction.NORTH);
+        this.maxEMC = maxEMC;
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
+        super.appendProperties(builder);
+    }
+
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+        if (state.isOf(newState.getBlock())) {
+            return;
+        }
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof Inventory) {
+            ItemScatterer.spawn(world, pos, (Inventory) blockEntity);
+            world.updateComparators(pos, this);
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite());
-    }
-
-    @Override
-    public BlockState rotate(BlockState state, BlockRotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
-    }
-
-    @Override
-    public BlockState mirror(BlockState state, BlockMirror mirror) {
-        return state.rotate(mirror.getRotation(state.get(FACING)));
+        return getDefaultState().with(FACING, ctx.getPlayer().getHorizontalFacing().getOpposite());
     }
 
     public EMCCollector() {
-        this(FabricBlockSettings.of(Material.STONE, MapColor.YELLOW).strength(2f, 7.0f));
+        this(10000);
+    }
+
+    public EMCCollector(long maxEMC) {
+        this(FabricBlockSettings.of(Material.STONE, MapColor.YELLOW).strength(2f, 7.0f), maxEMC);
     }
 
     @Override
@@ -63,14 +78,13 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
             return ActionResult.SUCCESS;
         }
 
-        Player player = e.player;
-        player.openGuiScreen(e.world, e.state, e.pos);
-        return ActionResult.CONSUME;
-    }
-
-    @Override
-    public @Nullable ScreenHandler createScreenHandler(ScreenHandlerCreateEvent e) {
-        return new EMCCollectorScreenHandler(e.syncId, e.inventory);
+        BlockEntity blockEntity = e.world.getBlockEntity(e.pos);
+        if (blockEntity instanceof EMCCollectorTile) {
+            EMCCollectorTile tile = (EMCCollectorTile)blockEntity;
+            e.player.openGuiScreen(tile);
+            return ActionResult.CONSUME;
+        }
+        return ActionResult.PASS;
     }
 
     @Nullable
@@ -82,5 +96,16 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
     @Override
     public @Nullable BlockEntity createBlockEntity(TileCreateEvent event) {
         return new EMCCollectorTile(event);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return ((world1, pos, state1, blockEntity) -> {
+            if (blockEntity instanceof EMCCollectorTile) {
+                EMCCollectorTile emcCollectorTile = (EMCCollectorTile) blockEntity;
+                emcCollectorTile.tick(world1, pos, state1, emcCollectorTile);
+            }
+        });
     }
 }
