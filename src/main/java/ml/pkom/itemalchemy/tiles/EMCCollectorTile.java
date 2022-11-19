@@ -230,12 +230,12 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        return true;
+        return dir != Direction.DOWN;
     }
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        return false;
+        return dir == Direction.DOWN;
     }
 
     @Override
