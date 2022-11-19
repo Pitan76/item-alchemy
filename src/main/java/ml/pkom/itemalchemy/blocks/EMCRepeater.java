@@ -20,10 +20,12 @@ public class EMCRepeater extends ExtendBlock {
         this(FabricBlockSettings.of(Material.STONE, MapColor.YELLOW).strength(2f, 7.0f));
     }
 
-    public static List<BlockPos> getNearPoses(World world, BlockPos[] blockPoses) {
+    private static List<BlockPos> getNearPoses(World world, BlockPos[] blockPoses, List<BlockPos> emcRepeaterPosList) {
         List<BlockPos> blockPosList = new ArrayList<>();
         for (BlockPos pos : blockPoses) {
+            if (emcRepeaterPosList.contains(pos)) continue;
             if (world.getBlockState(pos).getBlock() instanceof EMCRepeater) {
+                emcRepeaterPosList.add(pos);
                 BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
                 blockPosList.addAll(getNearPoses(world, nearPoses));
             } else {
@@ -32,5 +34,9 @@ public class EMCRepeater extends ExtendBlock {
         }
 
         return blockPosList;
+    }
+
+    public static List<BlockPos> getNearPoses(World world, BlockPos[] blockPoses) {
+        return getNearPoses(world, blockPoses, new ArrayList<>());
     }
 }
