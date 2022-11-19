@@ -55,6 +55,14 @@ public class ItemAlchemyClient {
                 screenHandler.storedEMC = storedEMC;
             }
         });
+
+        ClientPlayNetworking.registerGlobalReceiver(ItemAlchemy.id("itemalchemy_emc_condenser"), (client, handler, buf, sender) -> {
+            long storedEMC = buf.readLong();
+            if (Objects.requireNonNull(client.player).currentScreenHandler instanceof EMCCondenserScreenHandler) {
+                EMCCondenserScreenHandler screenHandler = (EMCCondenserScreenHandler) client.player.currentScreenHandler;
+                screenHandler.storedEMC = storedEMC;
+            }
+        });
     }
 
     public static long getClientPlayerEMC() {
