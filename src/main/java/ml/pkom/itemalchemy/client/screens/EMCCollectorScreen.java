@@ -46,7 +46,7 @@ public class EMCCollectorScreen extends SimpleHandledScreen {
         if (emc > screenHandler.maxEMC) emc = screenHandler.maxEMC;
 
         if (screenHandler != null)
-            textRenderer.draw(matrices, TextUtil.literal("" + emc ), 92, 32, 4210752);
+            textRenderer.draw(matrices, TextUtil.literal("" + String.format("%,d", emc) ), 92, 32, 4210752);
     }
 
     @Override

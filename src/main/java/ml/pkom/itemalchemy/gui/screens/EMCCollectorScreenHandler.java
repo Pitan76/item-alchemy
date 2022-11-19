@@ -1,6 +1,7 @@
 package ml.pkom.itemalchemy.gui.screens;
 
 import ml.pkom.itemalchemy.ScreenHandlers;
+import ml.pkom.itemalchemy.gui.inventory.TargetSlot;
 import ml.pkom.itemalchemy.tiles.EMCCollectorTile;
 import ml.pkom.mcpitanlibarch.api.gui.SimpleScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,12 +12,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCCollectorScreenHandler extends SimpleScreenHandler {
-    private Inventory inventory;
-    private PlayerInventory playerInventory;
+    public Inventory inventory;
+    public PlayerInventory playerInventory;
     public EMCCollectorTile tile = null;
 
     public long storedEMC = 0;
@@ -47,9 +49,14 @@ public class EMCCollectorScreenHandler extends SimpleScreenHandler {
         addPlayerMainInventorySlots(playerInventory, 24, 84);
         addPlayerHotbarSlots(playerInventory, 24, 142);
         addNormalSlot(inventory, 0, 149, 12);
-        addNormalSlot(inventory, 1, 177, 35);
+        addTargetSlot(inventory, 1, 177, 35);
         addNormalSlot(inventory, 2, 149, 58);
         addSlots(inventory, 3, 14, 8, -1, 4, 4);
+    }
+
+    protected Slot addTargetSlot(Inventory inventory, int index, int x, int y) {
+        Slot slot = new TargetSlot(inventory, index, x, y, this);
+        return this.addSlot(slot);
     }
 
     @Override
@@ -57,11 +64,27 @@ public class EMCCollectorScreenHandler extends SimpleScreenHandler {
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasStack()) {
             ItemStack originalStack = slot.getStack();
+            // TargetSlot
+            if (index == 37) {
+                Slot targetSlot = this.slots.get(37);
+                targetSlot.setStack(ItemStack.EMPTY);
+                return ItemStack.EMPTY;
+            }
+
             if (index < 36) {
                 if (!this.insertItem(originalStack, 36 + 3, 36 + 16 + 3, false)) {
                     if (!this.insertItem(originalStack, 36, 36 + 3, false)) {
                         return ItemStack.EMPTY;
                     }
+                }
+
+                // TargetSlot
+                Slot targetSlot = this.slots.get(37);
+                if (targetSlot.getStack().isEmpty()) {
+                    ItemStack newTargetStack = originalStack.copy();
+                    newTargetStack.setCount(37);
+                    targetSlot.setStack(newTargetStack);
+                    return ItemStack.EMPTY;
                 }
             } else if (!this.insertItem(originalStack, 0, 36, false)) {
                 return ItemStack.EMPTY;
@@ -74,5 +97,18 @@ public class EMCCollectorScreenHandler extends SimpleScreenHandler {
             }
         }
         return ItemStack.EMPTY;
+    }
+
+    @Override
+    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
+        if (slotIndex == 37) { // Target Slot
+            ItemStack oldStack = getCursorStack().copy();
+            super.onSlotClick(slotIndex, button, actionType, player);
+            if (!oldStack.isEmpty()) {
+                setCursorStack(oldStack);
+            }
+            return;
+        }
+        super.onSlotClick(slotIndex, button, actionType, player);
     }
 }

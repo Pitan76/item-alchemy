@@ -181,32 +181,32 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
         if (!inventory.get(1).isEmpty() && inventory.get(1).getItem() == stack.getItem()) return ItemStack.EMPTY;
 
         if (net.minecraft.item.Items.COAL == stack.getItem()) {
-            if (storedEMC >= 32 || test) {
-                if (!test) storedEMC -= 32;
+            if (storedEMC >= 16 || test) {
+                if (!test) storedEMC -= 16;
                 return new ItemStack(net.minecraft.item.Items.REDSTONE, 1);
             }
         }
         if (net.minecraft.item.Items.REDSTONE == stack.getItem()) {
-            if (storedEMC >= 64 || test) {
-                if (!test) storedEMC -= 64;
+            if (storedEMC >= 32 || test) {
+                if (!test) storedEMC -= 32;
                 return new ItemStack(net.minecraft.item.Items.GUNPOWDER, 1);
             }
         }
         if (net.minecraft.item.Items.GUNPOWDER == stack.getItem()) {
-            if (storedEMC >= 64 || test) {
-                if (!test) storedEMC -= 64;
+            if (storedEMC >= 256 || test) {
+                if (!test) storedEMC -= 256;
                 return new ItemStack(Items.ALCHEMICAL_FUEL.getOrNull(), 1);
             }
         }
         if (Items.ALCHEMICAL_FUEL.getOrNull() == stack.getItem()) {
-            if (storedEMC >= 256 || test) {
-                if (!test) storedEMC -= 256;
+            if (storedEMC >= 1024 || test) {
+                if (!test) storedEMC -= 1024;
                 return new ItemStack(Items.MOBIUS_FUEL.getOrNull(), 1);
             }
         }
         if (Items.MOBIUS_FUEL.getOrNull() == stack.getItem()) {
-            if (storedEMC >= 1024 || test) {
-                if (!test) storedEMC -= 1024;
+            if (storedEMC >= 4096 || test) {
+                if (!test) storedEMC -= 4096;
                 return new ItemStack(Items.AETERNALIS_FUEL.getOrNull(), 1);
             }
         }

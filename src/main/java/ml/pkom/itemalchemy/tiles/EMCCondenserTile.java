@@ -40,6 +40,7 @@ import java.util.List;
 
 public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTicker<EMCCondenserTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
     public long storedEMC = 0;
+    public long maxEMC = 0;
     public int coolDown = 0; // tick
 
     public int getMaxCoolDown() {
@@ -87,9 +88,18 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
     public void tick(World world, BlockPos pos, BlockState state, EMCCondenserTile blockEntity) {
         if (world.isClient) return;
         long oldStoredEMC = storedEMC;
-        long maxEMC = ((EMCCondenser) state.getBlock()).maxEMC;
+        long oldMaxEMC = maxEMC;
 
-        if (maxEMC > storedEMC) {
+        if (!inventory.isEmpty()) {
+            ItemStack targetStack = inventory.get(0);
+            if (!targetStack.isEmpty()) {
+                maxEMC = EMCManager.get(targetStack.getItem());
+            } else {
+                maxEMC = 0;
+            }
+        }
+
+        //if (maxEMC > storedEMC) {
             BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
             for (BlockPos nearPos : nearPoses) {
                 BlockState nearState = world.getBlockState(nearPos);
@@ -99,16 +109,16 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
                         EMCCollectorTile nearCollectorTile = ((EMCCollectorTile) nearTile);
                         if (nearCollectorTile.storedEMC > 0) {
                             long receiveEMC = nearCollectorTile.storedEMC;
-                            if (storedEMC + receiveEMC > maxEMC) {
-                                receiveEMC = maxEMC - storedEMC;
-                            }
+                            //if (storedEMC + receiveEMC > maxEMC) {
+                            //    receiveEMC = maxEMC - storedEMC;
+                            //}
                             nearCollectorTile.storedEMC -= receiveEMC;
                             storedEMC += receiveEMC;
                         }
                     }
                 }
             }
-        }
+        //}
 
         if (!inventory.isEmpty()) {
             ItemStack targetStack = inventory.get(0);
@@ -121,14 +131,16 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
                             if (stack.isEmpty()) continue;
                             if (stack.getItem() == targetStack.getItem()) continue;
                             long emc = EMCManager.get(stack.getItem());
-                            if (emc + storedEMC <= maxEMC) {
+                            //if (emc + storedEMC <= maxEMC) {
                                 storedEMC += emc;
                                 stack.decrement(1);
-                            }
+                                break;
+                            //}
                         }
                     }
 
                     long useEMC = EMCManager.get(targetStack.getItem());
+                    if (useEMC == 0) useEMC = 1;
                     if (storedEMC >= useEMC) {
                         ItemStack newStack = targetStack.copy();
                         newStack.setCount(1);
@@ -146,11 +158,12 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
             }
         }
 
-        if (oldStoredEMC != storedEMC) {
+        if (oldStoredEMC != storedEMC || oldMaxEMC != maxEMC) {
             for (ServerPlayerEntity player : ((ServerWorld) world).getPlayers()) {
                 if (player.networkHandler != null && player.currentScreenHandler instanceof EMCCondenserScreenHandler && ((EMCCondenserScreenHandler) player.currentScreenHandler).tile == this ) {
                     PacketByteBuf buf = PacketByteBufs.create();
                     buf.writeLong(storedEMC);
+                    buf.writeLong(maxEMC);
                     ServerPlayNetworking.send(player, ItemAlchemy.id("itemalchemy_emc_condenser"), buf);
                 }
             }
@@ -196,6 +209,10 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
         return ItemStack.areNbtEqual(first, second);
     }
 
+    public ItemStack getTargetStack() {
+        return inventory.get(0);
+    }
+
     @Override
     public DefaultedList<ItemStack> getItems() {
         return inventory;
@@ -232,7 +249,7 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
         data.putLong("y", pos.getY());
         data.putLong("z", pos.getZ());
         data.putLong("stored_emc", storedEMC);
-        data.putLong("max_emc", ((EMCCondenser) getCachedState().getBlock()).maxEMC);
+        data.putLong("max_emc", maxEMC);
         buf.writeNbt(data);
     }
 }

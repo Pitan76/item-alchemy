@@ -44,7 +44,7 @@ public class EMCCondenserScreen extends SimpleHandledScreen {
         if (emc > screenHandler.maxEMC) emc = screenHandler.maxEMC;
 
         if (screenHandler != null)
-            textRenderer.draw(matrices, TextUtil.literal("" + emc ), 140, 8, 4210752);
+            textRenderer.draw(matrices, TextUtil.literal("" + String.format("%,d", emc) ), 140, 8, 4210752);
     }
 
     @Override
