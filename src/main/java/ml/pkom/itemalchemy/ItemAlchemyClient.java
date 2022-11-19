@@ -2,6 +2,7 @@ package ml.pkom.itemalchemy;
 
 import ml.pkom.itemalchemy.client.screens.AlchemyTableScreen;
 import ml.pkom.itemalchemy.client.screens.EMCCollectorScreen;
+import ml.pkom.itemalchemy.gui.screens.EMCCollectorScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
@@ -11,10 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ItemAlchemyClient {
     public static NbtCompound itemAlchemyNbt;
@@ -44,6 +42,14 @@ public class ItemAlchemyClient {
                 Map<String, Long> emcMap = new LinkedHashMap<>();
                 emcMap.put(key, nbt.getLong(key));
                 EMCManager.setMap(emcMap);
+            }
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(ItemAlchemy.id("itemalchemy_emc_collector"), (client, handler, buf, sender) -> {
+            long storedEMC = buf.readLong();
+            if (Objects.requireNonNull(client.player).currentScreenHandler instanceof EMCCollectorScreenHandler) {
+                EMCCollectorScreenHandler screenHandler = (EMCCollectorScreenHandler) client.player.currentScreenHandler;
+                screenHandler.storedEMC = storedEMC;
             }
         });
     }
