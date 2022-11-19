@@ -1,32 +1,35 @@
 package ml.pkom.itemalchemy.blocks;
 
-import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
+import ml.pkom.itemalchemy.tiles.EMCCondenserTile;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
-import ml.pkom.mcpitanlibarch.api.entity.Player;
+import ml.pkom.mcpitanlibarch.api.block.ExtendBlockEntityProvider;
 import ml.pkom.mcpitanlibarch.api.event.block.BlockUseEvent;
-import ml.pkom.mcpitanlibarch.api.event.block.ScreenHandlerCreateEvent;
+import ml.pkom.mcpitanlibarch.api.event.block.TileCreateEvent;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.Material;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCCondenser extends ExtendBlock {
+public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvider {
     public static DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
     private static final Text TITLE = TextUtil.translatable("container.itemalchemy.emc_condenser");
+
+    public long maxEMC = 100000;
 
     public EMCCondenser(Settings settings) {
         super(settings);
@@ -45,7 +48,7 @@ public class EMCCondenser extends ExtendBlock {
     }
 
     public EMCCondenser() {
-        this(FabricBlockSettings.of(Material.STONE, MapColor.YELLOW).strength(2f, 7.0f));
+        this(FabricBlockSettings.of(Material.STONE, MapColor.BLACK).strength(2f, 7.0f));
     }
 
     @Override
@@ -54,19 +57,34 @@ public class EMCCondenser extends ExtendBlock {
             return ActionResult.SUCCESS;
         }
 
-        Player player = e.player;
-        player.openGuiScreen(e.world, e.state, e.pos);
-        return ActionResult.CONSUME;
-    }
-
-    @Override
-    public @Nullable ScreenHandler createScreenHandler(ScreenHandlerCreateEvent e) {
-        return new AlchemyTableScreenHandler(e.syncId, e.inventory);
+        BlockEntity blockEntity = e.world.getBlockEntity(e.pos);
+        if (blockEntity instanceof EMCCondenserTile) {
+            EMCCondenserTile tile = (EMCCondenserTile)blockEntity;
+            e.player.openGuiScreen(tile);
+            return ActionResult.CONSUME;
+        }
+        return ActionResult.PASS;
     }
 
     @Nullable
     @Override
     public Text getScreenTitle() {
         return TITLE;
+    }
+
+    @Override
+    public @Nullable BlockEntity createBlockEntity(TileCreateEvent event) {
+        return new EMCCondenserTile(event);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return ((world1, pos, state1, blockEntity) -> {
+            if (blockEntity instanceof EMCCondenserTile) {
+                EMCCondenserTile EMCCondenserTile = (EMCCondenserTile) blockEntity;
+                EMCCondenserTile.tick(world1, pos, state1, EMCCondenserTile);
+            }
+        });
     }
 }
