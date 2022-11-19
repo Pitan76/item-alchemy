@@ -24,12 +24,13 @@ public class EMCRepeater extends ExtendBlock {
         List<BlockPos> blockPosList = new ArrayList<>();
         for (BlockPos pos : blockPoses) {
             if (emcRepeaterPosList.contains(pos)) continue;
+
             if (world.getBlockState(pos).getBlock() instanceof EMCRepeater) {
                 emcRepeaterPosList.add(pos);
                 BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
-                blockPosList.addAll(getNearPoses(world, nearPoses));
+                blockPosList.addAll(getNearPoses(world, nearPoses, emcRepeaterPosList));
             } else {
-                blockPosList.add(pos);
+                if (!blockPosList.contains(pos)) blockPosList.add(pos);
             }
         }
 

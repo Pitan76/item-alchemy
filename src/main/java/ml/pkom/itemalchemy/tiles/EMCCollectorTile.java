@@ -86,7 +86,10 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
         if (coolDown == 0) {
             if (maxEMC <= storedEMC) return;
             float skyAngle = world.getSkyAngle(0);
-            if ((!world.isRaining() && !world.isThundering() && (world.getDimension().hasSkyLight() && skyAngle <= 0.25 || skyAngle >= 0.75) && world.isSkyVisible(pos.up())) || world.getBlockState(pos.up()).getLuminance() > 10) {
+            if ((!world.isRaining() && !world.isThundering() && (world.getDimension().hasSkyLight() && skyAngle <= 0.25 || skyAngle >= 0.75) && world.isSkyVisible(pos.up()))
+                    || world.getBlockState(pos.up()).getLuminance() > 10 || world.getBlockState(pos.down()).getLuminance() > 10
+                    || world.getBlockState(pos.north()).getLuminance() > 10 || world.getBlockState(pos.south()).getLuminance() > 10
+                    || world.getBlockState(pos.east()).getLuminance() > 10 || world.getBlockState(pos.west()).getLuminance() > 10) {
                 storedEMC++;
             }
         }
