@@ -19,6 +19,7 @@ public class Items {
     public static RegistryEvent<Item> EMC_COLLECTOR_MK2;
     public static RegistryEvent<Item> EMC_COLLECTOR_MK3;
     public static RegistryEvent<Item> EMC_CONDENSER;
+    public static RegistryEvent<Item> EMC_REPEATER;
 
     // Material
     public static RegistryEvent<Item> ALCHEMICAL_FUEL;
@@ -33,6 +34,7 @@ public class Items {
         EMC_COLLECTOR_MK2 = registry.registerItem(id("emc_collector_mk2"), () -> new BlockItem(Blocks.EMC_COLLECTOR_MK2.getOrNull(), new Item.Settings().group(ItemGroups.ITEM_ALCHEMY)));
         EMC_COLLECTOR_MK3 = registry.registerItem(id("emc_collector_mk3"), () -> new BlockItem(Blocks.EMC_COLLECTOR_MK3.getOrNull(), new Item.Settings().group(ItemGroups.ITEM_ALCHEMY)));
         EMC_CONDENSER = registry.registerItem(id("emc_condenser"), () -> new BlockItem(Blocks.EMC_CONDENSER.getOrNull(), new Item.Settings().group(ItemGroups.ITEM_ALCHEMY)));
+        EMC_REPEATER = registry.registerItem(id("emc_repeater"), () -> new BlockItem(Blocks.EMC_REPEATER.getOrNull(), new Item.Settings().group(ItemGroups.ITEM_ALCHEMY)));
         ALCHEMY_PAD = registry.registerItem(id("alchemy_pad"), () -> new AlchemyPad(new FabricItemSettings().maxCount(1).group(ItemGroups.ITEM_ALCHEMY)));
 
         ALCHEMICAL_FUEL = registry.registerItem(id("alchemical_fuel"), () -> new Item(new FabricItemSettings().group(ItemGroups.ITEM_ALCHEMY)));

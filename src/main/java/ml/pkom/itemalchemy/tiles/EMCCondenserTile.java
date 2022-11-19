@@ -3,7 +3,7 @@ package ml.pkom.itemalchemy.tiles;
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.itemalchemy.blocks.EMCCollector;
-import ml.pkom.itemalchemy.blocks.EMCCondenser;
+import ml.pkom.itemalchemy.blocks.EMCRepeater;
 import ml.pkom.itemalchemy.gui.inventory.IInventory;
 import ml.pkom.itemalchemy.gui.screens.EMCCondenserScreenHandler;
 import ml.pkom.mcpitanlibarch.api.event.block.TileCreateEvent;
@@ -16,7 +16,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.HopperBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
@@ -99,26 +98,22 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
             }
         }
 
-        //if (maxEMC > storedEMC) {
-            BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
-            for (BlockPos nearPos : nearPoses) {
-                BlockState nearState = world.getBlockState(nearPos);
-                if (nearState.getBlock() instanceof EMCCollector) {
-                    BlockEntity nearTile = world.getBlockEntity(nearPos);
-                    if (nearTile instanceof EMCCollectorTile) {
-                        EMCCollectorTile nearCollectorTile = ((EMCCollectorTile) nearTile);
-                        if (nearCollectorTile.storedEMC > 0) {
-                            long receiveEMC = nearCollectorTile.storedEMC;
-                            //if (storedEMC + receiveEMC > maxEMC) {
-                            //    receiveEMC = maxEMC - storedEMC;
-                            //}
-                            nearCollectorTile.storedEMC -= receiveEMC;
-                            storedEMC += receiveEMC;
-                        }
+        BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
+
+        for (BlockPos nearPos : EMCRepeater.getNearPoses(world, nearPoses)) {
+            BlockState nearState = world.getBlockState(nearPos);
+            if (nearState.getBlock() instanceof EMCCollector) {
+                BlockEntity nearTile = world.getBlockEntity(nearPos);
+                if (nearTile instanceof EMCCollectorTile) {
+                    EMCCollectorTile nearCollectorTile = ((EMCCollectorTile) nearTile);
+                    if (nearCollectorTile.storedEMC > 0) {
+                        long receiveEMC = nearCollectorTile.storedEMC;
+                        nearCollectorTile.storedEMC -= receiveEMC;
+                        storedEMC += receiveEMC;
                     }
                 }
             }
-        //}
+        }
 
         if (!inventory.isEmpty()) {
             ItemStack targetStack = inventory.get(0);

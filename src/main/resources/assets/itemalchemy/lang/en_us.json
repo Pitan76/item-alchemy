@@ -10,6 +10,7 @@
   "block.itemalchemy.emc_collector_mk2": "EMC Collector MK-2",
   "block.itemalchemy.emc_collector_mk3": "EMC Collector MK-3",
   "block.itemalchemy.emc_condenser": "EMC Condenser",
+  "block.itemalchemy.emc_repeater": "EMC Repeater",
   "container.itemalchemy.alchemy_table": "Alchemy Table",
   "container.itemalchemy.emc_condenser": "EMC Condenser",
   "container.itemalchemy.emc_collector": "EMC Collector"

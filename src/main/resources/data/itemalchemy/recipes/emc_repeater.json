@@ -7,17 +7,17 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:obsidian"
+      "item": "minecraft:glowstone"
     },
     "A": {
-      "item": "minecraft:chest"
+      "item": "minecraft:hopper"
     },
     "B": {
-      "item": "minecraft:diamond"
+      "item": "itemalchemy:aeternalis_fuel"
     }
   },
   "result": {
-    "item": "itemalchemy:emc_condenser",
-    "count": 1
+    "item": "itemalchemy:emc_repeater",
+    "count": 4
   }
 }

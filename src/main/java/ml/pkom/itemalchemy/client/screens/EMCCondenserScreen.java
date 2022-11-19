@@ -11,8 +11,6 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-;
-
 public class EMCCondenserScreen extends SimpleHandledScreen {
     public PlayerInventory playerInventory;
 

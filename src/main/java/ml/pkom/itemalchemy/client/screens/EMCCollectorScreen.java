@@ -1,7 +1,6 @@
 package ml.pkom.itemalchemy.client.screens;
 
 import ml.pkom.itemalchemy.ItemAlchemy;
-import ml.pkom.itemalchemy.blocks.EMCCollector;
 import ml.pkom.itemalchemy.gui.screens.EMCCollectorScreenHandler;
 import ml.pkom.mcpitanlibarch.api.client.SimpleHandledScreen;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
@@ -11,8 +10,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-
-;
 
 public class EMCCollectorScreen extends SimpleHandledScreen {
     public PlayerInventory playerInventory;

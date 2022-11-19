@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:block/cube",
+	"textures": {
+		"particle": "itemalchemy:blocks/emc_repeater/side",
+		"north": "itemalchemy:blocks/emc_repeater/side",
+		"south": "itemalchemy:blocks/emc_repeater/side",
+		"east": "itemalchemy:blocks/emc_repeater/side",
+		"west": "itemalchemy:blocks/emc_repeater/side",
+		"up": "itemalchemy:blocks/emc_repeater/top",
+		"down": "itemalchemy:blocks/emc_repeater/bottom"
+	}
+}

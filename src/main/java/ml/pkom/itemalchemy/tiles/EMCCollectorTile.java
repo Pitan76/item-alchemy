@@ -3,6 +3,7 @@ package ml.pkom.itemalchemy.tiles;
 import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.itemalchemy.Items;
 import ml.pkom.itemalchemy.blocks.EMCCollector;
+import ml.pkom.itemalchemy.blocks.EMCRepeater;
 import ml.pkom.itemalchemy.gui.inventory.IInventory;
 import ml.pkom.itemalchemy.gui.screens.EMCCollectorScreenHandler;
 import ml.pkom.mcpitanlibarch.api.event.block.TileCreateEvent;
@@ -127,7 +128,7 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
 
             if (!inventory.get(2).isEmpty()) {
                 BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
-                for (BlockPos nearPos : nearPoses) {
+                for (BlockPos nearPos : EMCRepeater.getNearPoses(world, nearPoses)) {
                     BlockState nearState = world.getBlockState(nearPos);
                     if (nearState.getBlock() instanceof EMCCollector) {
                         BlockEntity nearTile = world.getBlockEntity(nearPos);
