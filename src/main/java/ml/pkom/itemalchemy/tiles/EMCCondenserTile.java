@@ -37,6 +37,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ml.pkom.mcpitanlibarch.api.util.InventoryUtil.canMergeItems;
+
 public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTicker<EMCCondenserTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
     public long storedEMC = 0;
     public long maxEMC = 0;
@@ -189,19 +191,6 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
         }
         return isInserted;
 
-    }
-
-    public static boolean canMergeItems(ItemStack first, ItemStack second) {
-        if (!first.isOf(second.getItem())) {
-            return false;
-        }
-        if (first.getDamage() != second.getDamage()) {
-            return false;
-        }
-        if (first.getCount() + second.getCount() > first.getMaxCount()) {
-            return false;
-        }
-        return ItemStack.areNbtEqual(first, second);
     }
 
     public ItemStack getTargetStack() {

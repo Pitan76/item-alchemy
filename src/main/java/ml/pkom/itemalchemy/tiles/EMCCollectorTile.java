@@ -80,16 +80,16 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
     }
 
     @Override
-    public void tick(World world, BlockPos pos, BlockState state, EMCCollectorTile blockEntity) {
+    public void tick(World mcWorld, BlockPos pos, BlockState state, EMCCollectorTile blockEntity) {
         long maxEMC = ((EMCCollector) state.getBlock()).maxEMC;
 
         if (coolDown == 0) {
             if (maxEMC <= storedEMC) return;
-            float skyAngle = world.getSkyAngle(0);
-            if ((!world.isRaining() && !world.isThundering() && (world.getDimension().hasSkyLight() && skyAngle <= 0.25 || skyAngle >= 0.75) && world.isSkyVisible(pos.up()))
-                    || world.getBlockState(pos.up()).getLuminance() > 10 || world.getBlockState(pos.down()).getLuminance() > 10
-                    || world.getBlockState(pos.north()).getLuminance() > 10 || world.getBlockState(pos.south()).getLuminance() > 10
-                    || world.getBlockState(pos.east()).getLuminance() > 10 || world.getBlockState(pos.west()).getLuminance() > 10) {
+            float skyAngle = mcWorld.getSkyAngle(0);
+            if ((!this.world.isRaining() && !world.isThundering() && (world.hasSkyLight() && skyAngle <= 0.25 || skyAngle >= 0.75) && world.isSkyVisible(pos.up()))
+                    || mcWorld.getBlockState(pos.up()).getLuminance() > 10 || mcWorld.getBlockState(pos.down()).getLuminance() > 10
+                    || mcWorld.getBlockState(pos.north()).getLuminance() > 10 || mcWorld.getBlockState(pos.south()).getLuminance() > 10
+                    || mcWorld.getBlockState(pos.east()).getLuminance() > 10 || mcWorld.getBlockState(pos.west()).getLuminance() > 10) {
                 storedEMC++;
             }
         }
@@ -131,10 +131,10 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
 
             if (!inventory.get(2).isEmpty()) {
                 BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
-                for (BlockPos nearPos : EMCRepeater.getNearPoses(world, nearPoses)) {
-                    BlockState nearState = world.getBlockState(nearPos);
+                for (BlockPos nearPos : EMCRepeater.getNearPoses(mcWorld, nearPoses)) {
+                    BlockState nearState = mcWorld.getBlockState(nearPos);
                     if (nearState.getBlock() instanceof EMCCollector) {
-                        BlockEntity nearTile = world.getBlockEntity(nearPos);
+                        BlockEntity nearTile = mcWorld.getBlockEntity(nearPos);
                         if (nearTile instanceof EMCCollectorTile) {
                             EMCCollectorTile nearCollectorTile = ((EMCCollectorTile) nearTile);
                             if (maxEMC > storedEMC && nearCollectorTile.storedEMC > 0) {
@@ -164,8 +164,8 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
             }
 
             if (oldStoredEMC != storedEMC) {
-                if (!world.isClient) {
-                    for (ServerPlayerEntity player : ((ServerWorld) world).getPlayers()) {
+                if (!mcWorld.isClient) {
+                    for (ServerPlayerEntity player : ((ServerWorld) mcWorld).getPlayers()) {
                         if (player.networkHandler != null && player.currentScreenHandler instanceof EMCCollectorScreenHandler && ((EMCCollectorScreenHandler) player.currentScreenHandler).tile == this ) {
                             PacketByteBuf buf = PacketByteBufs.create();
                             buf.writeLong(storedEMC);
