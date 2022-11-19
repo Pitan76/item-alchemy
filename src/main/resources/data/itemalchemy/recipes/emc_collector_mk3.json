@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#A#",
+    "#B#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:glowstone"
+    },
+    "A": {
+      "item": "itemalchemy:aeternalis_fuel"
+    },
+    "B": {
+      "item": "itemalchemy:emc_collector_mk2"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:emc_collector_mk3",
+    "count": 1
+  }
+}
