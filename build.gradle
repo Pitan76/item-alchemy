@@ -114,10 +114,15 @@ curseforge {
                 requiredDependency 'mcpitanlibarch'
             }
 
+            mainArtifact(remapJar)
+
+            /*
             afterEvaluate {
-                mainArtifact(remapJar.output)
+                //mainArtifact(remapJar.outputs)
                 uploadTask.dependsOn(remapJar)
             }
+
+             */
         }
         options {
             forgeGradleIntegration = false
@@ -131,15 +136,15 @@ modrinth {
     if (System.getenv("MODRINTH_TOKEN") != null) {
         token = System.getenv("MODRINTH_TOKEN")
         projectId = 'cfQx2fbQ'
-        versionNumber = '0.1.1'
+        versionNumber = project.mod_version
         uploadFile = remapJar
         gameVersions = ['1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2']
         versionType = 'alpha'
-        loaders = ['fabric'] // 自明。
+        loaders = ['fabric']
         changelog = 'Fix'
         dependencies = [
-                new ModDependency('P7dR8mSH', 'required'), // Fabric API に必要な新しい依存関係を作成します
-                new ModDependency('uNRoUnGT', 'required')
+                new ModDependency('P7dR8mSH', 'required'), // Fabric API
+                new ModDependency('uNRoUnGT', 'required')  // MCPitanLibarch
         ]
     }
 }
