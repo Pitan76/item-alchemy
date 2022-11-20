@@ -1,6 +1,8 @@
 plugins {
     id 'fabric-loom' version '0.12-SNAPSHOT'
     id 'maven-publish'
+    id 'com.matthewprenger.cursegradle' version '1.+'
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 version = project.mod_version
@@ -91,4 +93,58 @@ publishing {
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
     }
+}
+
+curseforge {
+    if (System.getenv("CURSEFORGE_TOKEN") != null) {
+        apiKey = System.getenv("CURSEFORGE_TOKEN")
+        project {
+            id = '697926'
+            changelog = 'Fix'
+            releaseType = 'alpha'
+            addGameVersion '1.18'
+            addGameVersion '1.18.1'
+            addGameVersion '1.18.2'
+            addGameVersion '1.19'
+            addGameVersion '1.19.1'
+            addGameVersion '1.19.2'
+            addGameVersion "Fabric"
+            relations {
+                requiredDependency 'fabric-api'
+                requiredDependency 'mcpitanlibarch'
+            }
+
+            afterEvaluate {
+                mainArtifact(remapJar.output)
+                uploadTask.dependsOn(remapJar)
+            }
+        }
+        options {
+            forgeGradleIntegration = false
+        }
+    }
+}
+
+import com.modrinth.minotaur.dependencies.ModDependency
+
+modrinth {
+    if (System.getenv("MODRINTH_TOKEN") != null) {
+        token = System.getenv("MODRINTH_TOKEN")
+        projectId = 'cfQx2fbQ'
+        versionNumber = '0.1.1'
+        uploadFile = remapJar
+        gameVersions = ['1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2']
+        versionType = 'alpha'
+        loaders = ['fabric'] // 自明。
+        changelog = 'Fix'
+        dependencies = [
+                new ModDependency('P7dR8mSH', 'required'), // Fabric API に必要な新しい依存関係を作成します
+                new ModDependency('uNRoUnGT', 'required')
+        ]
+    }
+}
+
+task publishToModSites {
+    publishToModSites.dependsOn modrinth
+    publishToModSites.dependsOn curseforge
 }
