@@ -16,6 +16,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
@@ -52,7 +53,9 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
         }
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof Inventory) {
-            ItemScatterer.spawn(world, pos, (Inventory) blockEntity);
+            Inventory inventory = (Inventory) blockEntity;
+            inventory.setStack(0, ItemStack.EMPTY);
+            ItemScatterer.spawn(world, pos, inventory);
             world.updateComparators(pos, this);
         }
         super.onStateReplaced(state, world, pos, newState, moved);
