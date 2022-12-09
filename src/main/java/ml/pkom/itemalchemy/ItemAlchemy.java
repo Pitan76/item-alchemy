@@ -4,10 +4,10 @@ import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
 import ml.pkom.itemalchemy.tiles.Tiles;
 import ml.pkom.mcpitanlibarch.api.command.CommandRegistry;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
+import ml.pkom.mcpitanlibarch.api.item.CreativeTabBuilder;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.registry.ArchRegistry;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.ItemGroup;
@@ -37,7 +37,7 @@ public class ItemAlchemy {
 
     public static ArchRegistry registry = ArchRegistry.createRegistry(MOD_ID);
 
-    public static ItemGroup ITEM_ALCHEMY = FabricItemGroupBuilder.build(id("item_alchemy"), () -> new ItemStack(Items.PHILOSOPHER_STONE.getOrNull(), 1));
+    public static ItemGroup ITEM_ALCHEMY = new CreativeTabBuilder(id("item_alchemy")).setIcon(() -> new ItemStack(Items.PHILOSOPHER_STONE.getOrNull(), 1)).build();
 
     public static void init() {
         Sounds.init();
