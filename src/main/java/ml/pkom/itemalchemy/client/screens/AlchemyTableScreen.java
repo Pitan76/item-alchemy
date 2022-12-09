@@ -140,7 +140,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
     }
 
     public Identifier getTexture() {
-        return ItemAlchemy.id("textures/guis/alchemy_table.png");
+        return ItemAlchemy.id("textures/gui/alchemy_table.png");
     }
 
     @Override

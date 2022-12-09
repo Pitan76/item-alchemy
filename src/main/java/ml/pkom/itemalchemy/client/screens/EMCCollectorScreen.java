@@ -33,7 +33,7 @@ public class EMCCollectorScreen extends SimpleHandledScreen {
     }
 
     public Identifier getTexture() {
-        return ItemAlchemy.id("textures/guis/emc_collector.png");
+        return ItemAlchemy.id("textures/gui/emc_collector.png");
     }
 
     @Override

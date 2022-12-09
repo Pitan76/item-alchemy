@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "itemalchemy:items/philosopher_stone"
+        "layer0": "itemalchemy:item/philosopher_stone"
     }
 }

@@ -2,10 +2,10 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/thin_block",
 	"textures": {
-		"0": "itemalchemy:blocks/alchemy_table/top",
-		"1": "itemalchemy:blocks/alchemy_table/side",
-		"2": "itemalchemy:blocks/alchemy_table/bottom",
-		"particle": "itemalchemy:blocks/alchemy_table/top"
+		"0": "itemalchemy:block/alchemy_table/top",
+		"1": "itemalchemy:block/alchemy_table/side",
+		"2": "itemalchemy:block/alchemy_table/bottom",
+		"particle": "itemalchemy:block/alchemy_table/top"
 	},
 	"elements": [
 		{
