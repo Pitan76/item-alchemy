@@ -101,7 +101,7 @@ curseforge {
         project {
             id = '697926'
             changelog = 'Fix'
-            releaseType = 'alpha'
+            releaseType = 'beta'
             addGameVersion '1.18'
             addGameVersion '1.18.1'
             addGameVersion '1.18.2'
@@ -116,14 +116,6 @@ curseforge {
             }
 
             mainArtifact(remapJar)
-
-            /*
-            afterEvaluate {
-                //mainArtifact(remapJar.outputs)
-                uploadTask.dependsOn(remapJar)
-            }
-
-             */
         }
         options {
             forgeGradleIntegration = false
@@ -140,7 +132,7 @@ modrinth {
         versionNumber = project.mod_version
         uploadFile = remapJar
         gameVersions = ['1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.19.3']
-        versionType = 'alpha'
+        versionType = 'beta'
         loaders = ['fabric']
         changelog = 'Fix'
         dependencies = [
