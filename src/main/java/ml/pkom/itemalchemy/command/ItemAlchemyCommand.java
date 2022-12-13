@@ -1,22 +1,22 @@
 package ml.pkom.itemalchemy.command;
 
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
-import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
-import ml.pkom.mcpitanlibarch.api.command.AbstractCommand;
+import ml.pkom.mcpitanlibarch.api.command.CommandSettings;
+import ml.pkom.mcpitanlibarch.api.command.LiteralCommand;
+import ml.pkom.mcpitanlibarch.api.command.argument.IntegerCommand;
+import ml.pkom.mcpitanlibarch.api.command.argument.ItemCommand;
+import ml.pkom.mcpitanlibarch.api.event.IntegerCommandEvent;
+import ml.pkom.mcpitanlibarch.api.event.ItemCommandEvent;
 import ml.pkom.mcpitanlibarch.api.event.ServerCommandEvent;
+import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
+import net.minecraft.command.argument.ItemStackArgumentType;
+import net.minecraft.item.Item;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -24,34 +24,19 @@ import java.util.Map;
 
 import static ml.pkom.itemalchemy.EMCManager.*;
 
-public class ItemAlchemyCommand extends AbstractCommand {
+public class ItemAlchemyCommand extends LiteralCommand {
 
     @Override
     public void init() {
-        /*
-        addArgumentCommand("setemc", new AbstractCommand() {
+        addArgumentCommand("reloademc", new LiteralCommand() {
             @Override
-            public void init() {
-
-            }
-
-            @Override
-            public void execute(ServerCommandEvent event) {
-
-            }
-        });
-         */
-        addArgumentCommand("reloademc", new AbstractCommand() {
-            @Override
-            public void init() {
-
+            public void init(CommandSettings settings) {
+                settings.permissionLevel(2);
             }
 
             @Override
             public void execute(ServerCommandEvent event) {
                 if (!event.getWorld().isClient()) {
-                    //EMCManager.init(event.getEntity().getServer(), (ServerWorld) event.getWorld());
-
                     System.out.println("reload emc manager");
                     if (!EMCManager.getMap().isEmpty()) EMCManager.setMap(new LinkedHashMap<>());
 
@@ -89,10 +74,10 @@ public class ItemAlchemyCommand extends AbstractCommand {
             }
         });
 
-        addArgumentCommand("opentable", new AbstractCommand() {
+        addArgumentCommand("opentable", new LiteralCommand() {
             @Override
-            public void init() {
-
+            public void init(CommandSettings settings) {
+                settings.permissionLevel(2);
             }
 
             @Override
@@ -103,6 +88,53 @@ public class ItemAlchemyCommand extends AbstractCommand {
                     } catch (CommandSyntaxException e) {
                         event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
                     }
+                }
+            }
+        });
+
+        addArgumentCommand("setemc", new LiteralCommand() {
+            @Override
+            public void init(CommandSettings settings) {
+                settings.permissionLevel(2);
+                addArgumentCommand("item", new ItemCommand() {
+
+                    @Override
+                    public void init(CommandSettings settings) {
+                        addArgumentCommand("emc", new IntegerCommand() {
+                            @Override
+                            public void init(CommandSettings settings) {
+                                settings.permissionLevel(2);
+                            }
+
+                            @Override
+                            public void execute(IntegerCommandEvent event) {
+                                Item item = ItemStackArgumentType.getItemStackArgument(event.context, "item").getItem();
+                                EMCManager.set(item, event.getValue());
+                            }
+
+                            @Override
+                            public String getArgumentName() {
+                                return "emc";
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void execute(ItemCommandEvent event) {
+                        event.sendSuccess(TextUtil.literal("[ItemAlchemy] " + ItemUtil.toID(event.getValue()) + ": " + EMCManager.get(event.getValue()) + "EMC"), false);
+                    }
+
+                    @Override
+                    public String getArgumentName() {
+                        return "item";
+                    }
+                });
+            }
+
+            @Override
+            public void execute(ServerCommandEvent event) {
+                if (!event.getWorld().isClient()) {
+                    event.sendSuccess(TextUtil.literal("[ItemAlchemy] Example: /itemalchemy setemc [Item] [EMC]"), false);
                 }
             }
         });
