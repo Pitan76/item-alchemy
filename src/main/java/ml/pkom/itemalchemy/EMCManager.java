@@ -21,7 +21,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.io.File;
@@ -74,7 +73,7 @@ public class EMCManager {
     }
 
     public static void add2(TagKey<Item> tagKey, long emc) {
-        for (Item item : Registry.ITEM) {
+        for (Item item : ItemUtil.getAllItems()) {
             if (item.getRegistryEntry().isIn(tagKey)) {
                 add(item, emc);
             }

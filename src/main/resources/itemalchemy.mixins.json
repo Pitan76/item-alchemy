@@ -3,7 +3,8 @@
   "minVersion": "0.8",
   "package": "ml.pkom.itemalchemy.mixins",
   "mixins": [
-    "PlayerEntityMixin"
+    "PlayerEntityMixin",
+    "ServerPlayerEntityMixin"
   ],
   "client": [
     "client.ScreenMixin"

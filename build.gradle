@@ -108,6 +108,7 @@ curseforge {
             addGameVersion '1.19'
             addGameVersion '1.19.1'
             addGameVersion '1.19.2'
+            addGameVersion '1.19.3'
             addGameVersion "Fabric"
             relations {
                 requiredDependency 'fabric-api'
@@ -138,7 +139,7 @@ modrinth {
         projectId = 'cfQx2fbQ'
         versionNumber = project.mod_version
         uploadFile = remapJar
-        gameVersions = ['1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2']
+        gameVersions = ['1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.19.3']
         versionType = 'alpha'
         loaders = ['fabric']
         changelog = 'Fix'

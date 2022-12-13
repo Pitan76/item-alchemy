@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -66,7 +65,7 @@ public class ExtractInventory extends SimpleInventory {
                 }
                 Identifier id = new Identifier(keys.get(id_index));
                 //System.out.println(id);
-                if (!Registry.ITEM.containsId(id)) continue;
+                if (!ItemUtil.isExist(id)) continue;
                 ItemStack itemStack = new ItemStack(ItemUtil.fromId(id), 1);
                 setStack(i + 64, itemStack);
             }
