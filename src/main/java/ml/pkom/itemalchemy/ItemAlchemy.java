@@ -1,5 +1,6 @@
 package ml.pkom.itemalchemy;
 
+import ml.pkom.itemalchemy.command.ItemAlchemyCommand;
 import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
 import ml.pkom.itemalchemy.tiles.Tiles;
 import ml.pkom.mcpitanlibarch.api.command.CommandRegistry;

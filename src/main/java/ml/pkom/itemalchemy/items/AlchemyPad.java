@@ -1,6 +1,7 @@
 package ml.pkom.itemalchemy.items;
 
 import ml.pkom.itemalchemy.EMCManager;
+import ml.pkom.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
 import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.item.ItemUseEvent;
@@ -30,17 +31,7 @@ public class AlchemyPad extends ExtendItem {
             EMCManager.syncS2C((ServerPlayerEntity) e.user.getPlayerEntity());
         }
         Player player = e.user;
-        player.openGuiScreen(new NamedScreenHandlerFactory() {
-            @Override
-            public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-                return new AlchemyTableScreenHandler(syncId, inv);
-            }
-
-            @Override
-            public Text getDisplayName() {
-                return TextUtil.translatable("container.itemalchemy.alchemy_table");
-            }
-        });
+        player.openGuiScreen(new AlchemyTableScreenHandlerFactory());
         return TypedActionResult.consume(e.user.getPlayerEntity().getStackInHand(e.hand));
     }
 }
