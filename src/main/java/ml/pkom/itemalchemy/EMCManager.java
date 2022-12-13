@@ -48,7 +48,10 @@ public class EMCManager {
     }
 
     public static void set(String item, long emc) {
-        map.replace(item, emc);
+        if (contains(item))
+            map.replace(item, emc);
+        else
+            map.put(item, emc);
     }
 
     public static void remove(Item item) {
