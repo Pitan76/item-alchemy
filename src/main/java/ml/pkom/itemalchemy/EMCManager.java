@@ -472,6 +472,7 @@ public class EMCManager {
     }
 
     public static boolean addEmcFromRecipe(ItemStack outStack, Recipe<?> recipe, List<Recipe<?>> unsetRecipes, boolean last) {
+        if (outStack == null) return false;
         if (!contains(outStack.getItem())) {
             long totalEmc = 0;
             for (Ingredient ingredient : recipe.getIngredients()) {
