@@ -74,36 +74,8 @@ public class ItemAlchemy {
             AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
 
             // Sort
-            NbtTag nbtTag = NbtTag.create();
-            player.getPlayerEntity().writeCustomDataToNbt(nbtTag);
-
-            if (nbtTag.contains("itemalchemy")) {
-
-                NbtCompound copy = nbtTag.copy();
-                NbtCompound items = NbtTag.create();
-
-                NbtCompound itemAlchemyTag = nbtTag.getCompound("itemalchemy");
-                if (itemAlchemyTag.contains("registered_items")) {
-                    items = itemAlchemyTag.getCompound("registered_items");
-                }
-
-                List<String> ids = new ArrayList<>(items.getKeys());
-                for (String id : ids) {
-                    if (!id.contains(text) && !new ItemStack(ItemUtil.fromId(new Identifier(id))).getName().getString().contains(text)) {
-                        items.remove(id);
-                    }
-                }
-
-                itemAlchemyTag.put("registered_items", items);
-                nbtTag.put("itemalchemy", itemAlchemyTag);
-
-                player.getPlayerEntity().readCustomDataFromNbt(nbtTag);
-
-                screenHandler.extractInventory.placeExtractSlots();
-
-                player.getPlayerEntity().readCustomDataFromNbt(copy);
-            }
-
+            screenHandler.setSearchText(text);
+            screenHandler.sortBySearch();
         }));
 
         registry.allRegister();

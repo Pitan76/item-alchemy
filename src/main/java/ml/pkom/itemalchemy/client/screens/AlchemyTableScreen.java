@@ -57,36 +57,8 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
                 //
                 AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
 
-                // Sort
-                NbtTag nbtTag = NbtTag.create();
-                client.player.writeCustomDataToNbt(nbtTag);
-
-                if (nbtTag.contains("itemalchemy")) {
-
-                    NbtCompound copy = nbtTag.copy();
-                    NbtCompound items = NbtTag.create();
-
-                    NbtCompound itemAlchemyTag = nbtTag.getCompound("itemalchemy");
-                    if (itemAlchemyTag.contains("registered_items")) {
-                        items = itemAlchemyTag.getCompound("registered_items");
-                    }
-
-                    List<String> ids = new ArrayList<>(items.getKeys());
-                    for (String id : ids) {
-                        if (!id.contains(searchBox.getText()) && !new ItemStack(ItemUtil.fromId(new Identifier(id))).getName().getString().contains(searchBox.getText())) {
-                            items.remove(id);
-                        }
-                    }
-
-                    itemAlchemyTag.put("registered_items", items);
-                    nbtTag.put("itemalchemy", itemAlchemyTag);
-
-                    client.player.readCustomDataFromNbt(nbtTag);
-
-                    screenHandler.extractInventory.placeExtractSlots();
-
-                    client.player.readCustomDataFromNbt(copy);
-                }
+                screenHandler.setSearchText(searchBox.getText());
+                screenHandler.sortBySearch();
             }
         }
         return super.keyReleased(keyCode, scanCode, modifiers);
@@ -107,6 +79,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
         searchBox.setFocusUnlocked(true);
         searchBox.setTextFieldFocused(false);
         searchBox.setMaxLength(2048);
+        searchBox.setText("");
         addDrawableChild_compatibility(searchBox);
         
         addDrawableChild_compatibility(new TexturedButtonWidget(x + 113, y + 110, 18, 18, 208, 0, 18, getTexture(), (buttonWidget) -> {

@@ -15,6 +15,7 @@ public abstract class ServerPlayerEntityMixin {
 
     @Shadow public abstract void readCustomDataFromNbt(NbtCompound nbt);
 
+    // リスポーン、ワールド移動時のコピー対応
     @Inject(method = "copyFrom", at = @At("TAIL"))
     private void copyFrom(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
         NbtTag oldNbt = new NbtTag();

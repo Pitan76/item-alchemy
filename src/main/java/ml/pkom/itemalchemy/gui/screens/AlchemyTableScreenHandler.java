@@ -5,19 +5,24 @@ import ml.pkom.itemalchemy.ScreenHandlers;
 import ml.pkom.itemalchemy.api.PlayerRegisteredItemUtil;
 import ml.pkom.itemalchemy.gui.inventory.*;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
+import ml.pkom.mcpitanlibarch.api.gui.SimpleScreenHandler;
+import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
+import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlchemyTableScreenHandler extends ScreenHandler {
+public class AlchemyTableScreenHandler extends SimpleScreenHandler {
     public RegisterInventory registerInventory; // contains InputSlot(0)
     public ExtractInventory extractInventory;
     public Inventory otherInventory = new SimpleInventory(52);
@@ -31,13 +36,19 @@ public class AlchemyTableScreenHandler extends ScreenHandler {
     public void nextExtractSlots() {
         if (PlayerRegisteredItemUtil.count(extractInventory.player) < 13 * (index + 1) + 1) return;
         index++;
-        extractInventory.placeExtractSlots();
+        if (searchText.isEmpty())
+            extractInventory.placeExtractSlots();
+        else
+            sortBySearch();
     }
 
     public void prevExtractSlots() {
         if (index <= 0) return;
         index--;
-        extractInventory.placeExtractSlots();
+        if (searchText.isEmpty())
+            extractInventory.placeExtractSlots();
+        else
+            sortBySearch();
     }
 
     public AlchemyTableScreenHandler(int syncId, PlayerInventory playerInventory, RegisterInventory inventory) {
@@ -74,6 +85,7 @@ public class AlchemyTableScreenHandler extends ScreenHandler {
         addExtractSlot(extractInventory, 74, 114, 85);
         addExtractSlot(extractInventory, 75, 174, 85);
         addExtractSlot(extractInventory, 76, 144, 97);
+        setSearchText("");
     }
 
 //API
@@ -213,7 +225,7 @@ public class AlchemyTableScreenHandler extends ScreenHandler {
     int transferTime = 0;
 
     @Override
-    public ItemStack transferSlot(PlayerEntity playerEntity, int index) {
+    public ItemStack quickMoveOverride(PlayerEntity playerEntity, int index) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasStack()) {
@@ -244,5 +256,44 @@ public class AlchemyTableScreenHandler extends ScreenHandler {
             }
         }
         return ItemStack.EMPTY;
+    }
+
+    public String searchText = "";
+
+    public void setSearchText(String searchText) {
+        this.searchText = searchText;
+    }
+
+    public void sortBySearch() {
+        if (searchText.isEmpty()) return;
+        NbtTag nbtTag = NbtTag.create();
+        extractInventory.player.getPlayerEntity().writeCustomDataToNbt(nbtTag);
+
+        if (nbtTag.contains("itemalchemy")) {
+
+            NbtCompound copy = nbtTag.copy();
+            NbtCompound items = NbtTag.create();
+
+            NbtCompound itemAlchemyTag = nbtTag.getCompound("itemalchemy");
+            if (itemAlchemyTag.contains("registered_items")) {
+                items = itemAlchemyTag.getCompound("registered_items");
+            }
+
+            List<String> ids = new ArrayList<>(items.getKeys());
+            for (String id : ids) {
+                if (!id.contains(searchText) && !new ItemStack(ItemUtil.fromId(new Identifier(id))).getName().getString().contains(searchText)) {
+                    items.remove(id);
+                }
+            }
+
+            itemAlchemyTag.put("registered_items", items);
+            nbtTag.put("itemalchemy", itemAlchemyTag);
+
+            extractInventory.player.getPlayerEntity().readCustomDataFromNbt(nbtTag);
+
+            extractInventory.placeExtractSlots();
+
+            extractInventory.player.getPlayerEntity().readCustomDataFromNbt(copy);
+        }
     }
 }
