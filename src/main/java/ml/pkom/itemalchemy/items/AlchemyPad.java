@@ -2,18 +2,11 @@ package ml.pkom.itemalchemy.items;
 
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
-import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.item.ItemUseEvent;
 import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
-import ml.pkom.mcpitanlibarch.api.util.TextUtil;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.TypedActionResult;
 
 public class AlchemyPad extends ExtendItem {

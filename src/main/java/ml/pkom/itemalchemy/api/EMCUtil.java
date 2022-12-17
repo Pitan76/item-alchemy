@@ -2,9 +2,9 @@ package ml.pkom.itemalchemy.api;
 
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
+import ml.pkom.mcpitanlibarch.api.tag.TagKey;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.item.Item;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 public class EMCUtil {

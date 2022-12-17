@@ -4,7 +4,8 @@ import ml.pkom.itemalchemy.ScreenHandlers;
 import ml.pkom.itemalchemy.gui.inventory.CondenserStorageSlot;
 import ml.pkom.itemalchemy.gui.inventory.TargetSlot;
 import ml.pkom.itemalchemy.tiles.EMCCondenserTile;
-import ml.pkom.mcpitanlibarch.api.gui.SimpleScreenHandler;
+import ml.pkom.mcpitanlibarch.api.entity.Player;
+import ml.pkom.mcpitanlibarch.api.gui.ExtendedScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -20,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EMCCondenserScreenHandler extends SimpleScreenHandler {
+public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     public Inventory inventory;
     public PlayerInventory playerInventory;
     public EMCCondenserTile tile = null;
@@ -58,12 +59,12 @@ public class EMCCondenserScreenHandler extends SimpleScreenHandler {
 
     protected Slot addTargetSlot(Inventory inventory, int index, int x, int y) {
         Slot slot = new TargetSlot(inventory, index, x, y, this);
-        return this.addSlot(slot);
+        return this.callAddSlot(slot);
     }
 
     protected Slot addStorageSlot(Inventory inventory, int index, int x, int y) {
         Slot slot = new CondenserStorageSlot(inventory, index, x, y);
-        return this.addSlot(slot);
+        return this.callAddSlot(slot);
     }
 
     protected List<Slot> addStorageSlots(Inventory inventory, int firstIndex, int firstX, int firstY, int size, int maxAmountX, int maxAmountY) {
@@ -87,7 +88,7 @@ public class EMCCondenserScreenHandler extends SimpleScreenHandler {
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int index) {
+    public ItemStack quickMoveOverride(Player player, int index) {
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasStack()) {
             ItemStack originalStack = slot.getStack();
@@ -109,10 +110,10 @@ public class EMCCondenserScreenHandler extends SimpleScreenHandler {
                 }
 
 
-                if (!this.insertItem(originalStack, 36 + 1, 36 + 92, false)) {
+                if (!this.callInsertItem(originalStack, 36 + 1, 36 + 92, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.insertItem(originalStack, 0, 36, false)) {
+            } else if (!this.callInsertItem(originalStack, 0, 36, false)) {
                 return ItemStack.EMPTY;
             }
 

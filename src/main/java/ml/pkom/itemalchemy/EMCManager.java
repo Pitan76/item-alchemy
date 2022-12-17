@@ -4,6 +4,7 @@ import ml.pkom.easyapi.config.Config;
 import ml.pkom.easyapi.config.JsonConfig;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
+import ml.pkom.mcpitanlibarch.api.tag.TagKey;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -18,8 +19,6 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.tag.ItemTags;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -85,7 +84,7 @@ public class EMCManager {
 
     public static void add2(TagKey<Item> tagKey, long emc) {
         for (Item item : ItemUtil.getAllItems()) {
-            if (item.getRegistryEntry().isIn(tagKey)) {
+            if (ItemUtil.isIn(item, tagKey)) {
                 add(item, emc);
             }
         }
@@ -170,10 +169,10 @@ public class EMCManager {
         add(Items.SMOOTH_BASALT, 1);
         add(Items.END_STONE, 1);
         add(Items.MAGMA_BLOCK, 128);
-        add2(ItemTags.LEAVES, 1);
-        add2(ItemTags.SAND, 1);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("leaves")), 1);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("sand")), 1);
 
-        add2(ItemTags.BUTTONS, 2);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("buttons")), 2);
         add(Items.STONE_PRESSURE_PLATE, 2);
         add(Items.GRAVEL, 4);
         add(Items.NETHER_BRICK, 4);
@@ -184,8 +183,8 @@ public class EMCManager {
         add(Items.ROOTED_DIRT, 5);
         add(Items.LEVER, 5);
         add(Items.CACTUS, 8);
-        add2(ItemTags.PLANKS, 8);
-        add2(ItemTags.WOODEN_SLABS, 8);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("planks")), 8);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("wooden_slabs")), 8);
         add(Items.BLACK_DYE, 16);
         add(Items.WHITE_DYE, 16);
         add(Items.RED_DYE, 16);
@@ -270,38 +269,37 @@ public class EMCManager {
         add(Items.TUBE_CORAL_FAN, 16);
 
         add(Items.COBWEB, 12);
-        add2(ItemTags.FENCES, 12);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("fences")), 32);
         add(Items.FISHING_ROD, 12);
         add(Items.STRING, 12);
-        add2(ItemTags.WOODEN_STAIRS, 12);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("wooden_stairs")), 12);
 
         add(Items.LADDER, 14);
         add(Items.ARROW, 14);
 
-        add2(ItemTags.FLOWERS, 16);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("flowers")), 16);
         add(Items.ROSE_BUSH, 16);
         add(Items.LILY_PAD, 16);
-        add2(ItemTags.WOODEN_PRESSURE_PLATES, 16);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("wooden_pressure_plates")), 16);
         add(Items.BEETROOT_SEEDS, 16);
         add(Items.MELON_SEEDS, 16);
         add(Items.PUMPKIN_SEEDS, 36);
         add(Items.WHEAT_SEEDS, 16);
         add(Items.WHEAT, 24);
-        add2(ItemTags.TRAPDOORS, 24);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("trapdoors")), 24);
         add(Items.NETHER_WART, 24);
         add(Items.ROTTEN_FLESH, 24);
         add(Items.SLIME_BALL, 32);
 
         add(Items.CHARCOAL, 32);
-        add2(ItemTags.FENCES, 32);
-        add2(ItemTags.SAPLINGS, 32);
-        add2(ItemTags.LOGS, 32);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("saplings")), 32);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("logs")), 32);
         add(Items.PAPER, 32);
         add(Items.SUGAR, 15);
         add(Items.BONE, 144);
         add(Items.EGG, 32);
 
-        add2(ItemTags.WOOL, 48);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("wool")), 48);
         add(Items.BONE_MEAL, 48);
         add(Items.FEATHER, 48);
 
@@ -310,7 +308,7 @@ public class EMCManager {
         add(Items.REDSTONE, 64);
         add(Items.PORKCHOP, 64);
         add(Items.BEEF, 64);
-        add2(ItemTags.FISHES, 64);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("fishes")), 64);
         add(Items.CHICKEN, 64);
         add(Items.LEATHER, 64);
         add(Items.CLAY, 64);
@@ -403,7 +401,7 @@ public class EMCManager {
         add(Items.GOLD_NUGGET, 227);
         add(Items.ENDER_EYE, 1792);
         add(Items.BLAZE_ROD, 1536);
-        add2(ItemTags.MUSIC_DISCS, 2048);
+        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("music_discs")), 2048);
         add(Items.CRYING_OBSIDIAN, 768);
         add(Items.GHAST_TEAR, 4096);
         add(Items.PHANTOM_MEMBRANE, 192);

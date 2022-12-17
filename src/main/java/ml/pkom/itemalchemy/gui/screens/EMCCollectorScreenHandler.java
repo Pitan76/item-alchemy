@@ -3,7 +3,8 @@ package ml.pkom.itemalchemy.gui.screens;
 import ml.pkom.itemalchemy.ScreenHandlers;
 import ml.pkom.itemalchemy.gui.inventory.TargetSlot;
 import ml.pkom.itemalchemy.tiles.EMCCollectorTile;
-import ml.pkom.mcpitanlibarch.api.gui.SimpleScreenHandler;
+import ml.pkom.mcpitanlibarch.api.entity.Player;
+import ml.pkom.mcpitanlibarch.api.gui.ExtendedScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -16,7 +17,7 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCCollectorScreenHandler extends SimpleScreenHandler {
+public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
     public Inventory inventory;
     public PlayerInventory playerInventory;
     public EMCCollectorTile tile = null;
@@ -56,11 +57,11 @@ public class EMCCollectorScreenHandler extends SimpleScreenHandler {
 
     protected Slot addTargetSlot(Inventory inventory, int index, int x, int y) {
         Slot slot = new TargetSlot(inventory, index, x, y, this);
-        return this.addSlot(slot);
+        return this.callAddSlot(slot);
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int index) {
+    public ItemStack quickMoveOverride(Player player, int index) {
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasStack()) {
             ItemStack originalStack = slot.getStack();
@@ -72,8 +73,8 @@ public class EMCCollectorScreenHandler extends SimpleScreenHandler {
             }
 
             if (index < 36) {
-                if (!this.insertItem(originalStack, 36 + 3, 36 + 16 + 3, false)) {
-                    if (!this.insertItem(originalStack, 36, 36 + 3, false)) {
+                if (!this.callInsertItem(originalStack, 36 + 3, 36 + 16 + 3, false)) {
+                    if (!this.callInsertItem(originalStack, 36, 36 + 3, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
@@ -86,7 +87,7 @@ public class EMCCollectorScreenHandler extends SimpleScreenHandler {
                     targetSlot.setStack(newTargetStack);
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.insertItem(originalStack, 0, 36, false)) {
+            } else if (!this.callInsertItem(originalStack, 0, 36, false)) {
                 return ItemStack.EMPTY;
             }
 

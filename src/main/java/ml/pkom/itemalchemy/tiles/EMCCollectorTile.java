@@ -49,15 +49,15 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt) {
-        super.writeNbt(nbt);
+    public void writeNbtOverride(NbtCompound nbt) {
+        super.writeNbtOverride(nbt);
         Inventories.writeNbt(nbt, inventory);
         nbt.putLong("stored_emc", storedEMC);
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
+    public void readNbtOverride(NbtCompound nbt) {
+        super.readNbtOverride(nbt);
         storedEMC = nbt.getLong("stored_emc");
         Inventories.readNbt(nbt, inventory);
     }

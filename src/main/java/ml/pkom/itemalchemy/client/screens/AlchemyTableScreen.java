@@ -5,8 +5,6 @@ import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.itemalchemy.ItemAlchemyClient;
 import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.client.SimpleHandledScreen;
-import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
-import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import ml.pkom.mcpitanlibarch.api.util.client.ScreenUtil;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -14,17 +12,11 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-
-import java.util.ArrayList;
-import java.util.List;
-
-;
 
 public class AlchemyTableScreen extends SimpleHandledScreen {
     public PlayerInventory playerInventory;
@@ -67,7 +59,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
     public void removed() {
         super.removed();
         if (searchBox.isFocused())
-            client.keyboard.setRepeatEvents(false);
+            ScreenUtil.setRepeatEvents(false);
     }
 
     @Override

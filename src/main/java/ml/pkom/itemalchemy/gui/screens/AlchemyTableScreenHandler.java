@@ -8,7 +8,6 @@ import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.SimpleScreenHandler;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -108,22 +107,11 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
         this.inventory = inventory;
     }
 
-    @Deprecated
-    @Override
-    public boolean canUse(PlayerEntity player) {
-        return canUse(new Player(player));
-    }
-
     public boolean canUse(Player player) {
         return this.canUse;
     }
 
-    @Override
-    protected Slot addSlot(Slot slot) {
-        return super.addSlot(slot);
-    }
-
-    protected Slot addNormalSlot(Inventory inventory, int index, int x, int y) {
+    public Slot addNormalSlot(Inventory inventory, int index, int x, int y) {
         Slot slot = new Slot(inventory, index, x, y);
         return this.addSlot(slot);
     }
@@ -224,7 +212,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
     int transferTime = 0;
 
     @Override
-    public ItemStack quickMoveOverride(PlayerEntity playerEntity, int index) {
+    public ItemStack quickMoveOverride(Player playerEntity, int index) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasStack()) {
@@ -246,7 +234,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             }
 
             if (index >= 50) {
-                if (transferTime >= 63 || EMCManager.getEmcFromPlayer(new Player(playerEntity)) < EMCManager.get(newStack)) {
+                if (transferTime >= 63 || EMCManager.getEmcFromPlayer(playerEntity) < EMCManager.get(newStack)) {
                     transferTime = 0;
                     return ItemStack.EMPTY;
                 }
@@ -264,7 +252,10 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
     }
 
     public void sortBySearch() {
-        if (searchText.isEmpty()) return;
+        if (searchText.isEmpty()) {
+            extractInventory.placeExtractSlots();
+            return;
+        }
         NbtTag nbtTag = NbtTag.create();
         extractInventory.player.getPlayerEntity().writeCustomDataToNbt(nbtTag);
 
@@ -286,6 +277,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             }
 
             itemAlchemyTag.put("registered_items", items);
+
             nbtTag.put("itemalchemy", itemAlchemyTag);
 
             extractInventory.player.getPlayerEntity().readCustomDataFromNbt(nbtTag);
