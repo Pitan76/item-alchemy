@@ -4,6 +4,7 @@ import ml.pkom.itemalchemy.Sounds;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.item.ItemUseOnBlockEvent;
 import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
+import ml.pkom.mcpitanlibarch.recipe.FixedRecipeRemainder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -18,7 +19,7 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PhilosopherStone extends ExtendItem {
+public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder {
     public static Map<Block, Block> exchange_map = new HashMap<>();
     public static Map<Block, Block> shift_exchange_map = new HashMap<>();
 
@@ -126,6 +127,7 @@ public class PhilosopherStone extends ExtendItem {
         world.setBlockState(blockPos, newBlockState);
     }
 
+    /*
     @Override
     public ItemStack getRecipeRemainder(ItemStack stack) {
         stack.setDamage(stack.getDamage() + 1);
@@ -139,9 +141,19 @@ public class PhilosopherStone extends ExtendItem {
     public boolean hasRecipeRemainder() {
         return true;
     }
+     */
 
     @Override
     public Rarity getRarity(ItemStack stack) {
         return Rarity.EPIC;
+    }
+
+    @Override
+    public ItemStack getFixedRecipeRemainder(ItemStack stack) {
+        stack.setDamage(stack.getDamage() + 1);
+        if (stack.getDamage() >= stack.getMaxDamage()) {
+            return ItemStack.EMPTY;
+        }
+        return stack;
     }
 }
