@@ -3,7 +3,7 @@
   "id": "itemalchemy",
   "version": "${version}",
   "name": "Item Alchemy",
-  "description": "",
+  "description": "A developing port of Equivalent Exchange (like Project E) for FabricMC.",
   "authors": [
     "Pitan"
   ],
@@ -29,6 +29,6 @@
   "depends": {
     "fabricloader": "*",
     "minecraft": "*",
-    "mcpitanlibarch": ">1.2.7"
+    "mcpitanlibarch": ">1.2.9"
   }
 }
