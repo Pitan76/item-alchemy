@@ -136,12 +136,13 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
         }
         return stack;
     }
+     */
 
     @Override
     public boolean hasRecipeRemainder() {
         return true;
     }
-     */
+
 
     @Override
     public Rarity getRarity(ItemStack stack) {
