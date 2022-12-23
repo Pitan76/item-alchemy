@@ -57,7 +57,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
         addPlayerMainInventorySlots(playerInventory, 24, 140);
         addPlayerHotbarSlots(playerInventory, 24, 198);
         addRegisterSlot(registerInventory, 50, 42, 120); // Input
-        addSlot(new RemoveSlot(otherInventory, 51, 24, 120, player)); // Remove?
+        callAddSlot(new RemoveSlot(otherInventory, 51, 24, 120, player)); // Remove?
         addRegisterSlot(registerInventory, 52, 41, 19);
         addRegisterSlot(registerInventory, 53, 15, 30);
         addRegisterSlot(registerInventory, 54, 66, 30);
@@ -113,17 +113,17 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
     public Slot addNormalSlot(Inventory inventory, int index, int x, int y) {
         Slot slot = new Slot(inventory, index, x, y);
-        return this.addSlot(slot);
+        return this.callAddSlot(slot);
     }
 
     protected Slot addExtractSlot(ExtractInventory inventory, int index, int x, int y) {
         Slot slot = new ExtractSlot(inventory, index, x, y);
-        return this.addSlot(slot);
+        return this.callAddSlot(slot);
     }
 
     protected Slot addRegisterSlot(RegisterInventory inventory, int index, int x, int y) {
         Slot slot = new RegisterSlot(inventory, index, x, y);
-        return this.addSlot(slot);
+        return this.callAddSlot(slot);
     }
 
     public static final int DEFAULT_SLOT_SIZE = 18;
@@ -213,17 +213,17 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
     @Override
     public ItemStack quickMoveOverride(Player playerEntity, int index) {
-        ItemStack newStack = ItemStack.EMPTY;
+        ItemStack newStack;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasStack()) {
+        if (slot.hasStack()) {
             ItemStack originalStack = slot.getStack();
             newStack = originalStack.copy();
 
             if (index < 36) { // indexがRegisterサイズより小さい
-                if (!this.insertItem(originalStack, 36, 37, true)) {
+                if (!this.callInsertItem(originalStack, 36, 37, true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.insertItem(originalStack, 0, 36, false)) {
+            } else if (!this.callInsertItem(originalStack, 0, 36, false)) {
                 return ItemStack.EMPTY;
             }
 
