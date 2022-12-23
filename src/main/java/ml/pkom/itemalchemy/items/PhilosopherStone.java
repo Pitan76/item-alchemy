@@ -7,9 +7,11 @@ import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -124,11 +126,22 @@ public class PhilosopherStone extends ExtendItem {
         world.setBlockState(blockPos, newBlockState);
     }
 
-    /*
+    @Override
+    public ItemStack getRecipeRemainder(ItemStack stack) {
+        stack.setDamage(stack.getDamage() + 1);
+        if (stack.getDamage() >= stack.getMaxDamage()) {
+            return ItemStack.EMPTY;
+        }
+        return stack;
+    }
+
     @Override
     public boolean hasRecipeRemainder() {
         return true;
     }
 
-     */
+    @Override
+    public Rarity getRarity(ItemStack stack) {
+        return Rarity.EPIC;
+    }
 }

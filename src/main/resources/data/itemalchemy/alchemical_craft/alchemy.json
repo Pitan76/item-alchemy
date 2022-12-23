@@ -1,0 +1,44 @@
+[
+  {
+    "items": [
+      "minecraft:charcoal",
+      "minecraft:coal"
+    ],
+    "amount": 2
+  },
+  {
+    "items": [
+      "minecraft:coal",
+      "minecraft:redstone"
+    ],
+    "amount": 2
+  },
+  {
+    "items": [
+      "minecraft:redstone",
+      "minecraft:gunpowder"
+    ],
+    "amount": 2
+  },
+  {
+    "items": [
+      "minecraft:gunpowder",
+      "itemalchemy:alchemical_fuel"
+    ],
+    "amount": 2
+  },
+  {
+    "items": [
+      "itemalchemy:alchemical_fuel",
+      "itemalchemy:mobius_fuel"
+    ],
+    "amount": 2
+  },
+  {
+    "items": [
+      "itemalchemy:mobius_fuel",
+      "itemalchemy:aeternalis_fuel"
+    ],
+    "amount": 2
+  }
+]
