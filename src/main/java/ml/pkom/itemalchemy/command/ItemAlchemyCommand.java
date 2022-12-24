@@ -1,6 +1,7 @@
 package ml.pkom.itemalchemy.command;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import ml.pkom.easyapi.FileControl;
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
@@ -16,8 +17,11 @@ import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.argument.ItemStackArgumentType;
 import net.minecraft.item.Item;
+import net.minecraft.server.world.ServerWorld;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -87,6 +91,23 @@ public class ItemAlchemyCommand extends LiteralCommand {
                     } catch (CommandSyntaxException e) {
                         event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
                     }
+                }
+            }
+        });
+
+        addArgumentCommand("resetemc", new LiteralCommand() {
+            @Override
+            public void execute(ServerCommandEvent event) {
+                if (!event.getWorld().isClient()) {
+
+                    File dir = new File(FabricLoader.getInstance().getConfigDir().toFile(), ItemAlchemy.MOD_ID);
+                    if (!dir.exists()) dir.mkdirs();
+                    File file = new File(dir, "emc_config.json");
+                    if (file.exists()) {
+                        FileControl.fileRename(file, new File(dir, "emc_config_backup_" + DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").format(LocalDateTime.now()) + ".json"));
+                    }
+
+                    EMCManager.init(event.getWorld().getServer(), (ServerWorld) event.getWorld());
                 }
             }
         });

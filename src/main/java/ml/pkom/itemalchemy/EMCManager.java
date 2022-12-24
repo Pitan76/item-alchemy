@@ -462,6 +462,7 @@ public class EMCManager {
         add(ml.pkom.itemalchemy.Items.MOBIUS_FUEL.getOrNull(), 2048);
         add(ml.pkom.itemalchemy.Items.AETERNALIS_FUEL.getOrNull(), 8192);
         add(ml.pkom.itemalchemy.Items.EMC_COLLECTOR_MK3.getOrNull(), 114697);
+        add(ml.pkom.itemalchemy.Items.ALCHEMY_PAD.getOrNull(), 10248);
 
     }
 
