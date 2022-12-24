@@ -90,15 +90,20 @@ public class EMCManager {
         }
     }
 
-    public static Config config = new JsonConfig();
+    public static File getConfigFile() {
+        File dir = new File(FabricLoader.getInstance().getConfigDir().toFile(), ItemAlchemy.MOD_ID);
+        if (!dir.exists()) dir.mkdirs();
+        return new File(dir, "emc_config.json");
+    }
+
+    public static Config config;
 
     public static void init(MinecraftServer server, ServerWorld world) {
         System.out.println("init emc manager");
         if (!map.isEmpty()) map = new LinkedHashMap<>();
+        config = new JsonConfig();
 
-        File dir = new File(FabricLoader.getInstance().getConfigDir().toFile(), ItemAlchemy.MOD_ID);
-        if (!dir.exists()) dir.mkdirs();
-        File file = new File(dir, "emc_config.json");
+        File file = getConfigFile();
 
         if (file.exists() && config.load(file)) {
             for (Map.Entry<String, Object> entry : config.configMap.entrySet()) {

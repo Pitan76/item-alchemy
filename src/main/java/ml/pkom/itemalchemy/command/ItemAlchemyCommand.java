@@ -104,10 +104,40 @@ public class ItemAlchemyCommand extends LiteralCommand {
                     if (!dir.exists()) dir.mkdirs();
                     File file = new File(dir, "emc_config.json");
                     if (file.exists()) {
-                        FileControl.fileRename(file, new File(dir, "emc_config_backup_" + DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").format(LocalDateTime.now()) + ".json"));
+                        String fileName = "emc_config_backup_" + DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").format(LocalDateTime.now()) + ".json";
+                        FileControl.fileRename(file, new File(dir, fileName));
+                        event.sendSuccess(TextUtil.literal("[ItemAlchemy] Backup emc_config.json as " + fileName), false);
                     }
 
-                    EMCManager.init(event.getWorld().getServer(), (ServerWorld) event.getWorld());
+                    System.out.println("reload emc manager");
+                    if (!EMCManager.getMap().isEmpty()) EMCManager.setMap(new LinkedHashMap<>());
+
+                    if (file.exists() && config.load(file)) {
+                        for (Map.Entry<String, Object> entry : config.configMap.entrySet()) {
+                            if (entry.getValue() instanceof Long) {
+                                add(entry.getKey(), (Long) entry.getValue());
+                            }
+                            if (entry.getValue() instanceof Integer) {
+                                add(entry.getKey(), Long.valueOf((Integer) entry.getValue()));
+                            }
+                            if (entry.getValue() instanceof Double) {
+                                add(entry.getKey(), (Math.round((Double) entry.getValue())));
+                            }
+                            if (entry.getValue() instanceof String) {
+                                add(entry.getKey(), Long.parseLong((String) entry.getValue()));
+                            }
+                        }
+                    } else {
+                        defaultMap();
+                        for (Map.Entry<String, Long> entry : getMap().entrySet()) {
+                            config.set(entry.getKey(), entry.getValue());
+                        }
+                        config.save(file);
+                    }
+
+                    setEmcFromRecipes(event.getWorld());
+
+                    event.sendSuccess(TextUtil.literal("[ItemAlchemy] Set all emc to default emc"), false);
                 }
             }
         });
@@ -130,6 +160,10 @@ public class ItemAlchemyCommand extends LiteralCommand {
                             public void execute(IntegerCommandEvent event) {
                                 Item item = ItemStackArgumentType.getItemStackArgument(event.context, "item").getItem();
                                 EMCManager.set(item, event.getValue());
+                                for (Map.Entry<String, Long> entry : getMap().entrySet()) {
+                                    config.set(entry.getKey(), entry.getValue());
+                                }
+                                config.save(getConfigFile());
                             }
 
                             @Override
