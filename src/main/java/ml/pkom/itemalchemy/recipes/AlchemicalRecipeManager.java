@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import ml.pkom.itemalchemy.ItemAlchemy;
+import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
+import ml.pkom.mcpitanlibarch.api.util.RecipeUtil;
+import ml.pkom.mcpitanlibarch.api.util.ResourceUtil;
 import net.minecraft.datafixer.fix.BlockEntitySignTextStrictJsonFix;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
@@ -16,11 +19,10 @@ import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.registry.Registry;
 import org.apache.commons.io.IOUtils;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.Map;
 
 // Referred to "TransmutationRecipeManager (RetroExchange)"
@@ -37,14 +39,18 @@ public class AlchemicalRecipeManager {
     public void apply(ResourceManager resourceManager) {
         count = 0;
 
-        Collection<Identifier> resourceIds = resourceManager.findResources("alchemical_craft", s -> s.endsWith(".json"));
+        Map<Identifier, Resource> resourceIds;
+        try {
+            resourceIds = ResourceUtil.findResources(resourceManager, "alchemical_craft", ".json");
+        } catch (IOException e) {
+            ItemAlchemy.LOGGER.error("Failed to read alchemy.json", e);
+            return;
+        }
 
-        resourceIds.forEach(resourceId -> {
+        resourceIds.forEach((resourceId, resource) -> {
             try {
-                Resource resource = resourceManager.getResource(resourceId);
-
-                String json = IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8);
-                resource.close();
+                String json = IOUtils.toString(ResourceUtil.getResource(resourceManager, resourceId).getInputStream(), StandardCharsets.UTF_8);
+                ResourceUtil.close(resource);
                 JsonArray jsonArray = BlockEntitySignTextStrictJsonFix.GSON.fromJson(json, JsonArray.class);
                 jsonArray.forEach((jsonElement) -> handle(jsonElement.getAsJsonObject()));
             } catch (Exception e) {
@@ -60,8 +66,8 @@ public class AlchemicalRecipeManager {
         Identifier inputId = new Identifier(itemsArray.get(0).getAsString());
         Identifier outputId = new Identifier(itemsArray.get(1).getAsString());
 
-        Item input = Registry.ITEM.get(inputId);
-        Item output = Registry.ITEM.get(outputId);
+        Item input = ItemUtil.fromId(inputId);
+        Item output = ItemUtil.fromId(outputId);
 
         int amount = jsonObject.get("amount").getAsInt();
 
@@ -75,7 +81,7 @@ public class AlchemicalRecipeManager {
         }
         inputs[0] = ml.pkom.itemalchemy.Items.PHILOSOPHER_STONE.get();
 
-        ShapelessRecipe recipe = new ShapelessRecipe(ItemAlchemy.id("alchemical_craft/n" + count++), "", new ItemStack(output), buildInput(inputs));
+        ShapelessRecipe recipe = RecipeUtil.createShapelessRecipe(ItemAlchemy.id("alchemical_craft/n" + count++), "", new ItemStack(output), buildInput(inputs));
         map.get(recipe.getType()).put(recipe.getId(), recipe);
     }
 
