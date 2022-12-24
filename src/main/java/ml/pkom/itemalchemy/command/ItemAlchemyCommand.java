@@ -97,6 +97,11 @@ public class ItemAlchemyCommand extends LiteralCommand {
 
         addArgumentCommand("resetemc", new LiteralCommand() {
             @Override
+            public void init(CommandSettings settings) {
+                settings.permissionLevel(2);
+            }
+
+            @Override
             public void execute(ServerCommandEvent event) {
                 if (!event.getWorld().isClient()) {
 
