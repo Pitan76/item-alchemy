@@ -49,7 +49,7 @@ public class AlchemicalRecipeManager {
 
         resourceIds.forEach((resourceId, resource) -> {
             try {
-                String json = IOUtils.toString(ResourceUtil.getResource(resourceManager, resourceId).getInputStream(), StandardCharsets.UTF_8);
+                String json = IOUtils.toString(ResourceUtil.getInputStream(resource), StandardCharsets.UTF_8);
                 ResourceUtil.close(resource);
                 JsonArray jsonArray = BlockEntitySignTextStrictJsonFix.GSON.fromJson(json, JsonArray.class);
                 jsonArray.forEach((jsonElement) -> handle(jsonElement.getAsJsonObject()));
