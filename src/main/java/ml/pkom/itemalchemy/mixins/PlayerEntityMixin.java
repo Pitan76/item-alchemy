@@ -18,6 +18,13 @@ public class PlayerEntityMixin {
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
     public void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
         nbt.put("itemalchemy", itemAlchemy);
+
+        Player player = new Player((PlayerEntity) (Object) this);
+        if (EMCManager.playerCache.containsKey(player)) {
+            EMCManager.playerCache.replace(player, nbt);
+        } else {
+            EMCManager.playerCache.put(player, nbt);
+        }
     }
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
