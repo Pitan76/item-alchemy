@@ -518,7 +518,7 @@ public class EMCManager {
         incrementEmc(player, EMCManager.get(stack));
     }
 
-    public static Map<Player, NbtCompound> playerCache = new HashMap<>();
+    public static Map<String, NbtCompound> playerCache = new HashMap<>();
 
     public static void decrementEmc(Player player, long amount) {
         NbtCompound playerNbt = writePlayerNbt(player);
@@ -580,8 +580,6 @@ public class EMCManager {
         player.getPlayerEntity().readCustomDataFromNbt(playerNbt);
     }
 
-    //public static Map<Player, Long> playerCache = new HashMap<>();
-
     public static long getEmcFromPlayer(Player player) {
         NbtCompound playerNbt = writePlayerNbt(player);
 
@@ -598,8 +596,8 @@ public class EMCManager {
     public static NbtCompound writePlayerNbt(Player player) {
         NbtCompound playerNbt = new NbtTag();
 
-        if (playerCache.containsKey(player))
-            playerNbt = playerCache.get(player);
+        if (playerCache.containsKey(player.getName()))
+            playerNbt = playerCache.get(player.getName());
         else
             player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
 
