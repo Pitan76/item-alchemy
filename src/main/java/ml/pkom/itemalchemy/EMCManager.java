@@ -540,7 +540,7 @@ public class EMCManager {
             itemAlchemyTag.putLong("emc", emc);
             playerNbt.put("itemalchemy", itemAlchemyTag);
         }
-        player.getPlayerEntity().readCustomDataFromNbt(playerNbt);
+        readPlayerNbt(player, playerNbt);
     }
 
     public static void setEMCtoPlayer(Player player, long emc) {
@@ -554,7 +554,7 @@ public class EMCManager {
             itemAlchemyTag.putLong("emc", emc);
             playerNbt.put("itemalchemy", itemAlchemyTag);
         }
-        player.getPlayerEntity().readCustomDataFromNbt(playerNbt);
+        readPlayerNbt(player, playerNbt);
     }
 
     public static void incrementEmc(Player player, long amount) {
@@ -577,7 +577,7 @@ public class EMCManager {
             itemAlchemyTag.putLong("emc", emc);
             playerNbt.put("itemalchemy", itemAlchemyTag);
         }
-        player.getPlayerEntity().readCustomDataFromNbt(playerNbt);
+        readPlayerNbt(player, playerNbt);
     }
 
     public static long getEmcFromPlayer(Player player) {
@@ -602,6 +602,15 @@ public class EMCManager {
             player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
 
         return playerNbt;
+    }
+
+    public static void readPlayerNbt(Player player, NbtCompound playerNbt) {
+
+        if (playerCache.containsKey(player.getName()))
+            playerCache.put(player.getName(), playerNbt);
+        else
+            playerCache.replace(player.getName(), playerNbt);
+        //player.getPlayerEntity().readCustomDataFromNbt(playerNbt);
     }
 
     public static void syncS2C(ServerPlayerEntity player) {

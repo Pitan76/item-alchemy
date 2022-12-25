@@ -6,7 +6,6 @@ import ml.pkom.itemalchemy.client.screens.EMCCondenserScreen;
 import ml.pkom.itemalchemy.gui.screens.EMCCollectorScreenHandler;
 import ml.pkom.itemalchemy.gui.screens.EMCCondenserScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
-import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
@@ -34,7 +33,7 @@ public class ItemAlchemyClient {
 
             playerNbt.put("itemalchemy", nbt);
 
-            player.getPlayerEntity().readCustomDataFromNbt(playerNbt);
+            EMCManager.readPlayerNbt(player, playerNbt);
         });
 
         ClientPlayNetworking.registerGlobalReceiver(ItemAlchemy.id("sync_emc_map"), (client, handler, buf, sender) -> {

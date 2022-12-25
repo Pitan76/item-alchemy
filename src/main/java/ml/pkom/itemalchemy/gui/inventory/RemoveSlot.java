@@ -47,9 +47,7 @@ public class RemoveSlot extends Slot {
             itemAlchemyTag.put("registered_items", items);
             playerNbt.put("itemalchemy", itemAlchemyTag);
         }
-        player.getPlayerEntity().readCustomDataFromNbt(playerNbt);
-
-
+        EMCManager.readPlayerNbt(player, playerNbt);
 
         player.offerOrDrop(stack.copy());
         if (player.getCurrentScreenHandler() instanceof AlchemyTableScreenHandler) {

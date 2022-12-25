@@ -279,11 +279,11 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
             nbtTag.put("itemalchemy", itemAlchemyTag);
 
-            extractInventory.player.getPlayerEntity().readCustomDataFromNbt(nbtTag);
+            EMCManager.readPlayerNbt(extractInventory.player, nbtTag);
 
             extractInventory.placeExtractSlots();
 
-            extractInventory.player.getPlayerEntity().readCustomDataFromNbt(copy);
+            EMCManager.readPlayerNbt(extractInventory.player, copy);
         }
     }
 }

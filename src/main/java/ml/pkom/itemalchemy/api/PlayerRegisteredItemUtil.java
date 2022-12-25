@@ -60,7 +60,7 @@ public class PlayerRegisteredItemUtil {
             itemAlchemyTag.put("registered_items", items);
             playerNbt.put("itemalchemy", itemAlchemyTag);
         }
-        player.getPlayerEntity().readCustomDataFromNbt(playerNbt);
+        EMCManager.readPlayerNbt(player, playerNbt);
     }
 
     public static int count(Player player) {

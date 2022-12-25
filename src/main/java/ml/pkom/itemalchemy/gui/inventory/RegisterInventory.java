@@ -47,7 +47,7 @@ public class RegisterInventory extends SimpleInventory {
                 itemAlchemyTag.put("registered_items", items);
                 playerNbt.put("itemalchemy", itemAlchemyTag);
             }
-            player.getPlayerEntity().readCustomDataFromNbt(playerNbt);
+            EMCManager.readPlayerNbt(player, playerNbt);
             //player.getPlayerEntity().saveNbt(playerNbt);
 
             if (slot == 50) {
