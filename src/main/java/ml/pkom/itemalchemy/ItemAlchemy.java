@@ -49,7 +49,6 @@ public class ItemAlchemy {
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> {
             if (joined) {
                 EMCManager.syncS2C_emc_map(player);
-                EMCManager.syncS2C(player);
             }
         });
 
