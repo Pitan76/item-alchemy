@@ -100,7 +100,7 @@ curseforge {
         apiKey = System.getenv("CURSEFORGE_TOKEN")
         project {
             id = '697926'
-            changelog = 'Fix'
+            changelog = 'fix server sync emc'
             releaseType = 'beta'
             addGameVersion '1.17'
             addGameVersion '1.17.1'
@@ -135,7 +135,7 @@ modrinth {
         gameVersions = ['1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.19.3']
         versionType = 'beta'
         loaders = ['fabric']
-        changelog = 'Fix'
+        changelog = 'fix server sync emc'
         dependencies = [
                 new ModDependency('P7dR8mSH', 'required'), // Fabric API
                 new ModDependency('uNRoUnGT', 'required')  // MCPitanLibarch
