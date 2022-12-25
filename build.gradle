@@ -132,7 +132,7 @@ modrinth {
         projectId = 'cfQx2fbQ'
         versionNumber = project.mod_version
         uploadFile = remapJar
-        gameVersions = ['1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.19.3']
+        gameVersions = ['1.17', '1.17.1', '1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.19.3']
         versionType = 'beta'
         loaders = ['fabric']
         changelog = 'fix server sync emc'
