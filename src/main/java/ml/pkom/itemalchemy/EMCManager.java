@@ -598,8 +598,8 @@ public class EMCManager {
 
         if (playerCache.containsKey(player.getName()))
             playerNbt = playerCache.get(player.getName());
-        else
-            player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
+        //else
+        //    player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
 
         return playerNbt;
     }

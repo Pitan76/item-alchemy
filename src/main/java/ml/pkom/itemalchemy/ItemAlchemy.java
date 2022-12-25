@@ -47,9 +47,9 @@ public class ItemAlchemy {
         ServerWorldEvents.LOAD.register(EMCManager::init);
 
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> {
-            if (joined) {
+            if (joined)
                 EMCManager.syncS2C_emc_map(player);
-            }
+
         });
 
         ServerPlayNetworking.registerGlobalReceiver(id("network"), ((server, p, handler, buf, sender) -> {
