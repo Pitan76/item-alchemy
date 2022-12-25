@@ -212,7 +212,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
     int transferTime = 0;
 
     @Override
-    public ItemStack quickMoveOverride(Player playerEntity, int index) {
+    public ItemStack quickMoveOverride(Player player, int index) {
         ItemStack newStack;
         Slot slot = this.slots.get(index);
         if (slot.hasStack()) {
@@ -234,7 +234,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             }
 
             if (index >= 50) {
-                if (transferTime >= 63 || EMCManager.getEmcFromPlayer(playerEntity) < EMCManager.get(newStack)) {
+                if (transferTime >= 63 || EMCManager.getEmcFromPlayer(player) < EMCManager.get(newStack)) {
                     transferTime = 0;
                     return ItemStack.EMPTY;
                 }

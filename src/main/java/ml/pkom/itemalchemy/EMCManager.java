@@ -579,17 +579,30 @@ public class EMCManager {
         player.getPlayerEntity().readCustomDataFromNbt(playerNbt);
     }
 
+    public static Map<Player, Long> playerCache = new HashMap<>();
+
     public static long getEmcFromPlayer(Player player) {
-        NbtTag playerNbt = new NbtTag();
-        player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
-        long emc = 0;
-        if (playerNbt.contains("itemalchemy")) {
-            NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
-            if (itemAlchemyTag.contains("emc")) {
-                emc += itemAlchemyTag.getLong("emc");
+        try {
+            NbtTag playerNbt = new NbtTag();
+            player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
+            long emc = 0;
+            if (playerNbt.contains("itemalchemy")) {
+                NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
+                if (itemAlchemyTag.contains("emc")) {
+                    emc += itemAlchemyTag.getLong("emc");
+                }
             }
+            if (playerCache.containsKey(player))
+                playerCache.replace(player, emc);
+            else
+                playerCache.put(player, emc);
+
+            return emc;
+        } catch (Exception e) {
+            if (playerCache.containsKey(player))
+                return playerCache.get(player);
+            return 0;
         }
-        return emc;
     }
 
     public static void syncS2C(ServerPlayerEntity player) {
