@@ -598,11 +598,10 @@ public class EMCManager {
     public static NbtCompound writePlayerNbt(Player player) {
         NbtCompound playerNbt = new NbtTag();
 
-        try {
+        if (playerCache.containsKey(player))
+            playerNbt = playerCache.get(player);
+        else {
             player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
-        } catch (Exception e) {
-            if (playerCache.containsKey(player))
-                playerNbt = playerCache.get(player);
         }
 
         return playerNbt;
