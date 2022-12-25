@@ -98,7 +98,7 @@ public class EMCManager {
 
     public static Config config;
 
-    public static void init(MinecraftServer server, ServerWorld world) {
+    public static void init(MinecraftServer server) {
         System.out.println("init emc manager");
         if (!map.isEmpty()) map = new LinkedHashMap<>();
         config = new JsonConfig();
@@ -128,6 +128,7 @@ public class EMCManager {
             config.save(file);
         }
 
+        ServerWorld world = server.getOverworld();
         setEmcFromRecipes(world);
 
         if (!world.isClient()) {

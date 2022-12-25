@@ -9,6 +9,7 @@ import ml.pkom.mcpitanlibarch.api.item.CreativeTabBuilder;
 import ml.pkom.mcpitanlibarch.api.registry.ArchRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -44,12 +45,11 @@ public class ItemAlchemy {
         ItemGroups.init();
         Tiles.init();
 
-        ServerWorldEvents.LOAD.register(EMCManager::init);
+        ServerLifecycleEvents.SERVER_STARTED.register(EMCManager::init);
 
-        ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> {
-            if (joined)
-                EMCManager.syncS2C_emc_map(player);
-
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            if (handler.getPlayer() != null)
+                EMCManager.syncS2C_emc_map(handler.getPlayer());
         });
 
         ServerPlayNetworking.registerGlobalReceiver(id("network"), ((server, p, handler, buf, sender) -> {
