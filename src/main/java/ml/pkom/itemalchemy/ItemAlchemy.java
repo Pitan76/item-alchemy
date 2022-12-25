@@ -7,6 +7,7 @@ import ml.pkom.mcpitanlibarch.api.command.CommandRegistry;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.item.CreativeTabBuilder;
 import ml.pkom.mcpitanlibarch.api.registry.ArchRegistry;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.ItemGroup;
@@ -44,6 +45,13 @@ public class ItemAlchemy {
         Tiles.init();
 
         ServerWorldEvents.LOAD.register(EMCManager::init);
+
+        ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> {
+            if (joined) {
+                EMCManager.syncS2C_emc_map(player);
+                EMCManager.syncS2C(player);
+            }
+        });
 
         ServerPlayNetworking.registerGlobalReceiver(id("network"), ((server, p, handler, buf, sender) -> {
             NbtCompound nbt = buf.readNbt();
