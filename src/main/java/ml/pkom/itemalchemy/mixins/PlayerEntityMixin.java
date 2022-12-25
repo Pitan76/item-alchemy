@@ -1,6 +1,7 @@
 package ml.pkom.itemalchemy.mixins;
 
 import ml.pkom.itemalchemy.EMCManager;
+import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -21,6 +22,14 @@ public class PlayerEntityMixin {
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
     public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
+        Player player = new Player((PlayerEntity) (Object) this);
+
+        if (EMCManager.playerCache.containsKey(player)) {
+            EMCManager.playerCache.replace(player, nbt);
+        } else {
+            EMCManager.playerCache.put(player, nbt);
+        }
+
         itemAlchemy = nbt.getCompound("itemalchemy");
         if ((Object) this instanceof ServerPlayerEntity) {
             EMCManager.syncS2C((ServerPlayerEntity) (Object) this);

@@ -42,8 +42,7 @@ public class ExtractInventory extends SimpleInventory {
         definedStacks.clear();
         int index = screenHandler != null ?  screenHandler.index : 0;
 
-        NbtTag nbtTag = NbtTag.create();
-        player.getPlayerEntity().writeCustomDataToNbt(nbtTag);
+        NbtCompound nbtTag = EMCManager.writePlayerNbt(player);
 
         NbtCompound items = NbtTag.create();
 

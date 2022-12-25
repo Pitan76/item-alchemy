@@ -1,5 +1,6 @@
 package ml.pkom.itemalchemy.gui.inventory;
 
+import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
@@ -20,8 +21,7 @@ public class RemoveSlot extends Slot {
     @Override
     public void setStack(ItemStack stack) {
 
-        NbtTag playerNbt = NbtTag.create();
-        player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
+        NbtCompound playerNbt = EMCManager.writePlayerNbt(player);
         NbtCompound items = NbtTag.create();
 
         if (playerNbt.contains("itemalchemy")) {

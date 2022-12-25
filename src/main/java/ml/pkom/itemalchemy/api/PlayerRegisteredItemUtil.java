@@ -1,5 +1,6 @@
 package ml.pkom.itemalchemy.api;
 
+import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
@@ -13,8 +14,8 @@ import java.util.List;
 public class PlayerRegisteredItemUtil {
     public static List<String> getItemsAsString(Player player) {
 
-        NbtTag playerNbt = NbtTag.create();
-        player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
+        NbtCompound playerNbt = EMCManager.writePlayerNbt(player);
+
         NbtCompound items = NbtTag.create();
 
         if (playerNbt.contains("itemalchemy")) {
@@ -45,8 +46,7 @@ public class PlayerRegisteredItemUtil {
     }
 
     public static void setItemsForString(Player player, List<String> list) {
-        NbtTag playerNbt = NbtTag.create();
-        player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
+        NbtCompound playerNbt = EMCManager.writePlayerNbt(player);
         NbtTag items = new NbtTag();
         for (String id : list) {
             items.putBoolean(id, true);

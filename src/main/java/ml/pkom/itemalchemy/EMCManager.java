@@ -518,9 +518,11 @@ public class EMCManager {
         incrementEmc(player, EMCManager.get(stack));
     }
 
+    public static Map<Player, NbtCompound> playerCache = new HashMap<>();
+
     public static void decrementEmc(Player player, long amount) {
-        NbtCompound playerNbt = NbtTag.create();
-        player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
+        NbtCompound playerNbt = writePlayerNbt(player);
+
         long emc = 0;
         if (playerNbt.contains("itemalchemy")) {
             NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
@@ -542,8 +544,7 @@ public class EMCManager {
     }
 
     public static void setEMCtoPlayer(Player player, long emc) {
-        NbtCompound playerNbt = NbtTag.create();
-        player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
+        NbtCompound playerNbt = writePlayerNbt(player);
 
         if (playerNbt.contains("itemalchemy")) {
             NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
@@ -557,8 +558,8 @@ public class EMCManager {
     }
 
     public static void incrementEmc(Player player, long amount) {
-        NbtCompound playerNbt = NbtTag.create();
-        player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
+        NbtCompound playerNbt = writePlayerNbt(player);
+
         long emc = 0;
         if (playerNbt.contains("itemalchemy")) {
             NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
@@ -579,30 +580,32 @@ public class EMCManager {
         player.getPlayerEntity().readCustomDataFromNbt(playerNbt);
     }
 
-    public static Map<Player, Long> playerCache = new HashMap<>();
+    //public static Map<Player, Long> playerCache = new HashMap<>();
 
     public static long getEmcFromPlayer(Player player) {
-        try {
-            NbtTag playerNbt = new NbtTag();
-            player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
-            long emc = 0;
-            if (playerNbt.contains("itemalchemy")) {
-                NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
-                if (itemAlchemyTag.contains("emc")) {
-                    emc += itemAlchemyTag.getLong("emc");
-                }
-            }
-            if (playerCache.containsKey(player))
-                playerCache.replace(player, emc);
-            else
-                playerCache.put(player, emc);
+        NbtCompound playerNbt = writePlayerNbt(player);
 
-            return emc;
+        long emc = 0;
+        if (playerNbt.contains("itemalchemy")) {
+            NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
+            if (itemAlchemyTag.contains("emc")) {
+                emc += itemAlchemyTag.getLong("emc");
+            }
+        }
+        return emc;
+    }
+
+    public static NbtCompound writePlayerNbt(Player player) {
+        NbtCompound playerNbt = new NbtTag();
+
+        try {
+            player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
         } catch (Exception e) {
             if (playerCache.containsKey(player))
-                return playerCache.get(player);
-            return 0;
+                playerNbt = playerCache.get(player);
         }
+
+        return playerNbt;
     }
 
     public static void syncS2C(ServerPlayerEntity player) {
@@ -610,8 +613,7 @@ public class EMCManager {
             return;
         }
         PacketByteBuf buf = PacketByteBufs.create();
-        NbtTag playerNbt = NbtTag.create();
-        player.writeCustomDataToNbt(playerNbt);
+        NbtCompound playerNbt = writePlayerNbt(new Player(player));
 
         buf.writeNbt(playerNbt.getCompound("itemalchemy"));
         ServerPlayNetworking.send(player, ItemAlchemy.id("sync_emc"), buf);

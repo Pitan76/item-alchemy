@@ -30,8 +30,7 @@ public class ItemAlchemyClient {
 
             Player player = new Player(client.player);
 
-            NbtCompound playerNbt = NbtTag.create();
-            player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
+            NbtCompound playerNbt = EMCManager.writePlayerNbt(player);
 
             playerNbt.put("itemalchemy", nbt);
 

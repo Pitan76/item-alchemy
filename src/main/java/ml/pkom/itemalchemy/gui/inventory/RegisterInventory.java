@@ -20,8 +20,8 @@ public class RegisterInventory extends SimpleInventory {
     public void setStack(int slot, ItemStack stack) {
         if (!stack.isEmpty()) {
 
-            NbtTag playerNbt = NbtTag.create();
-            player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
+            NbtCompound playerNbt = EMCManager.writePlayerNbt(player);
+
             NbtCompound items = NbtTag.create();
 
             if (playerNbt.contains("itemalchemy")) {
