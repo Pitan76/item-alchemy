@@ -642,6 +642,7 @@ public class EMCManager {
         }
 
         buf.writeNbt(data);
+        System.out.println("send emc map to " + player.getName().getString());
         ServerPlayNetworking.send(player, ItemAlchemy.id("sync_emc_map"), buf);
     }
 }

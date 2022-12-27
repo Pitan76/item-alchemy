@@ -19,6 +19,4 @@ public class ScreenMixin {
     public void getTooltipFromItem(ItemStack stack, CallbackInfoReturnable<List<Text>> cir) {
         cir.getReturnValue().addAll(getEmcText(stack));
     }
-
-
 }

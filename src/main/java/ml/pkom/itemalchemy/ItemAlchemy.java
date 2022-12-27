@@ -48,8 +48,10 @@ public class ItemAlchemy {
         ServerLifecycleEvents.SERVER_STARTED.register(EMCManager::init);
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            if (handler.getPlayer() != null)
+            if (handler.getPlayer() != null) {
                 EMCManager.syncS2C_emc_map(handler.getPlayer());
+                System.out.println(handler.getPlayer().getName().getString() + ", syncS2Cemcmap");
+            }
         });
 
         ServerPlayNetworking.registerGlobalReceiver(id("network"), ((server, p, handler, buf, sender) -> {

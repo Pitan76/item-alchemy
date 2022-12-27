@@ -38,12 +38,14 @@ public class ItemAlchemyClient {
 
         ClientPlayNetworking.registerGlobalReceiver(ItemAlchemy.id("sync_emc_map"), (client, handler, buf, sender) -> {
             NbtCompound nbt = buf.readNbt();
+            if (nbt == null) return;
 
+            Map<String, Long> emcMap = new LinkedHashMap<>();
             for (String key : nbt.getKeys()) {
-                Map<String, Long> emcMap = new LinkedHashMap<>();
                 emcMap.put(key, nbt.getLong(key));
-                EMCManager.setMap(emcMap);
+                System.out.println(key + "=" + nbt.getLong(key));
             }
+            EMCManager.setMap(emcMap);
         });
 
         ClientPlayNetworking.registerGlobalReceiver(ItemAlchemy.id("itemalchemy_emc_collector"), (client, handler, buf, sender) -> {
