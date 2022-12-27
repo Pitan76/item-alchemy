@@ -316,6 +316,7 @@ public class EMCManager {
         add(Items.BEEF, 64);
         add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("fishes")), 64);
         add(Items.CHICKEN, 64);
+        add(Items.MUTTON, 64);
         add(Items.LEATHER, 64);
         add(Items.CLAY, 64);
         add(Items.BREAD, 72);
