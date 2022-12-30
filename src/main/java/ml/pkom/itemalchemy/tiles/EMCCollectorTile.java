@@ -35,6 +35,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTicker<EMCCollectorTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
+    private long oldStoredEMC = 0;
     public long storedEMC = 0;
     public int coolDown = 0; // tick
 
@@ -127,8 +128,6 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
                 }
             }
 
-            long oldStoredEMC = storedEMC;
-
             if (!inventory.get(2).isEmpty()) {
                 BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
                 for (BlockPos nearPos : EMCRepeater.getNearPoses(mcWorld, nearPoses)) {
@@ -164,6 +163,7 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
             }
 
             if (oldStoredEMC != storedEMC) {
+                oldStoredEMC = storedEMC;
                 if (!mcWorld.isClient) {
                     for (ServerPlayerEntity player : ((ServerWorld) mcWorld).getPlayers()) {
                         if (player.networkHandler != null && player.currentScreenHandler instanceof EMCCollectorScreenHandler && ((EMCCollectorScreenHandler) player.currentScreenHandler).tile == this ) {
