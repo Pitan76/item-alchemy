@@ -35,14 +35,16 @@ public class ExtractInventory extends SimpleInventory {
     }
 
     public void placeExtractSlots() {
+        placeExtractSlots(EMCManager.writePlayerNbt(player));
+    }
+
+    public void placeExtractSlots(NbtCompound nbtTag) {
         if (player.getPlayerEntity() instanceof ServerPlayerEntity)
             EMCManager.syncS2C((ServerPlayerEntity) player.getPlayerEntity());
         isSettingStack = true;
 
         definedStacks.clear();
         int index = screenHandler != null ?  screenHandler.index : 0;
-
-        NbtCompound nbtTag = EMCManager.writePlayerNbt(player);
 
         NbtCompound items = NbtTag.create();
 

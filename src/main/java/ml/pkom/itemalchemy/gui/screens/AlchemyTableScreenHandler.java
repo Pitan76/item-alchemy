@@ -260,7 +260,6 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
         if (nbtTag.contains("itemalchemy")) {
 
-            NbtCompound copy = nbtTag.copy();
             NbtCompound items = NbtTag.create();
 
             NbtCompound itemAlchemyTag = nbtTag.getCompound("itemalchemy");
@@ -279,11 +278,8 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
             nbtTag.put("itemalchemy", itemAlchemyTag);
 
-            EMCManager.readPlayerNbt(extractInventory.player, nbtTag);
+            extractInventory.placeExtractSlots(nbtTag);
 
-            extractInventory.placeExtractSlots();
-
-            EMCManager.readPlayerNbt(extractInventory.player, copy);
         }
     }
 }
