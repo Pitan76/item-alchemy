@@ -678,7 +678,7 @@ public class EMCManager {
         }
 
         Gson gson = new Gson();
-        Type listType = new TypeToken<HashMap<String, Long>>() { }. getType();
+        Type listType = new TypeToken<HashMap<String, Long>>(){}.getType();
 
         resourceIds.forEach((resourceId, resource) -> {
             try {
