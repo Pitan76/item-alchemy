@@ -1,14 +1,20 @@
 package ml.pkom.itemalchemy;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import ml.pkom.easyapi.config.Config;
 import ml.pkom.easyapi.config.JsonConfig;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.tag.TagKey;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
+import ml.pkom.mcpitanlibarch.api.util.ResourceUtil;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.datafixer.fix.BlockEntitySignTextStrictJsonFix;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -16,13 +22,19 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.resource.Resource;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class EMCManager {
@@ -139,6 +151,10 @@ public class EMCManager {
     }
 
     public static void defaultMap() {
+        if (!defaultEMCMap.isEmpty()) {
+            map.putAll(defaultEMCMap);
+            return;
+        }
         add(Items.COBBLESTONE, 1);
         add(Items.COARSE_DIRT, 2);
         add(Items.PODZOL, 2);
@@ -648,5 +664,37 @@ public class EMCManager {
         buf.writeNbt(data);
         //System.out.println("send emc map to " + player.getName().getString());
         ServerPlayNetworking.send(player, ItemAlchemy.id("sync_emc_map"), buf);
+    }
+
+    public static Map<String, Long> defaultEMCMap = new LinkedHashMap<>();
+
+    public static void loadDefaultEMCs(ResourceManager resourceManager) {
+        Map<Identifier, Resource> resourceIds;
+        try {
+            resourceIds = ResourceUtil.findResources(resourceManager, "default_emcs", ".json");
+        } catch (IOException e) {
+            ItemAlchemy.LOGGER.error("Failed to read default emc", e);
+            return;
+        }
+
+        Gson gson = new Gson();
+        Type listType = new TypeToken<HashMap<String, Long>>() { }. getType();
+
+        resourceIds.forEach((resourceId, resource) -> {
+            try {
+                String json = IOUtils.toString(ResourceUtil.getInputStream(resource), StandardCharsets.UTF_8);
+                ResourceUtil.close(resource);
+                HashMap<String, Long> map = gson.fromJson(json, listType);
+
+                for (Map.Entry<String, Long> entry : map.entrySet()) {
+                    if (ItemUtil.isExist(new Identifier(entry.getKey()))) {
+                        defaultEMCMap.put(entry.getKey(), entry.getValue());
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                ItemAlchemy.LOGGER.error("Failed to read {}", resourceId.toString(), e);
+            }
+        });
     }
 }

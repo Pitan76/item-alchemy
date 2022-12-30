@@ -3,6 +3,7 @@ package ml.pkom.itemalchemy.recipes;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import ml.pkom.mcpitanlibarch.api.util.RecipeUtil;
@@ -58,6 +59,9 @@ public class AlchemicalRecipeManager {
                 ItemAlchemy.LOGGER.error("Failed to read {}", resourceId.toString(), e);
             }
         });
+
+        // load EMC
+        EMCManager.loadDefaultEMCs(resourceManager);
     }
 
     private void handle(JsonObject jsonObject) {
