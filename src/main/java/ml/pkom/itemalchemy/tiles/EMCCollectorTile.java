@@ -214,6 +214,30 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
                 return new ItemStack(Items.AETERNALIS_FUEL.getOrNull(), 1);
             }
         }
+        if (Items.AETERNALIS_FUEL.getOrNull() == stack.getItem()) {
+            if (storedEMC >= 4096 || test) {
+                if (!test) storedEMC -= 4096;
+                return new ItemStack(Items.DARK_MATTER.getOrNull(), 1);
+            }
+        }
+        if (Items.DARK_MATTER.getOrNull() == stack.getItem()) {
+            if (storedEMC >= 4096 || test) {
+                if (!test) storedEMC -= 4096;
+                return new ItemStack(Items.DARK_MATTER_BLOCK.getOrNull(), 1);
+            }
+        }
+        if (Items.DARK_MATTER_BLOCK.getOrNull() == stack.getItem()) {
+            if (storedEMC >= 4096 || test) {
+                if (!test) storedEMC -= 4096;
+                return new ItemStack(Items.RED_MATTER.getOrNull(), 1);
+            }
+        }
+        if (Items.RED_MATTER.getOrNull() == stack.getItem()) {
+            if (storedEMC >= 4096 || test) {
+                if (!test) storedEMC -= 4096;
+                return new ItemStack(Items.RED_MATTER_BLOCK.getOrNull(), 1);
+            }
+        }
         return ItemStack.EMPTY;
     }
 

@@ -42,6 +42,8 @@ import static ml.pkom.mcpitanlibarch.api.util.InventoryUtil.canMergeItems;
 public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTicker<EMCCondenserTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
     public long storedEMC = 0;
     public long maxEMC = 0;
+    public long oldStoredEMC = 0;
+    public long oldMaxEMC = 0;
     public int coolDown = 0; // tick
 
     public int getMaxCoolDown() {
@@ -88,8 +90,6 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
     @Override
     public void tick(World world, BlockPos pos, BlockState state, EMCCondenserTile blockEntity) {
         if (world.isClient) return;
-        long oldStoredEMC = storedEMC;
-        long oldMaxEMC = maxEMC;
 
         if (!inventory.isEmpty()) {
             ItemStack targetStack = inventory.get(0);
@@ -156,6 +156,8 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
         }
 
         if (oldStoredEMC != storedEMC || oldMaxEMC != maxEMC) {
+            oldStoredEMC = storedEMC;
+            oldMaxEMC = maxEMC;
             for (ServerPlayerEntity player : ((ServerWorld) world).getPlayers()) {
                 if (player.networkHandler != null && player.currentScreenHandler instanceof EMCCondenserScreenHandler && ((EMCCondenserScreenHandler) player.currentScreenHandler).tile == this ) {
                     PacketByteBuf buf = PacketByteBufs.create();

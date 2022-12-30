@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:block/cube",
+	"textures": {
+		"particle": "itemalchemy:block/red_matter_block",
+		"north": "itemalchemy:block/red_matter_block",
+		"south": "itemalchemy:block/red_matter_block",
+		"east": "itemalchemy:block/red_matter_block",
+		"west": "itemalchemy:block/red_matter_block",
+		"up": "itemalchemy:block/red_matter_block",
+		"down": "itemalchemy:block/red_matter_block"
+	}
+}

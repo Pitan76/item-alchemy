@@ -5,7 +5,6 @@ import ml.pkom.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.block.BlockUseEvent;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -20,7 +19,7 @@ public class AlchemyTable extends ExtendBlock {
     }
 
     public AlchemyTable() {
-        this(FabricBlockSettings.of(Material.STONE, MapColor.BLACK).strength(1.5f, 7.0f));
+        this(AbstractBlock.Settings.of(Material.STONE, MapColor.BLACK).strength(1.5f, 7.0f));
     }
 
     @Override

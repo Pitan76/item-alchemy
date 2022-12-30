@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:block/cube",
+	"textures": {
+		"particle": "itemalchemy:block/dark_matter_block",
+		"north": "itemalchemy:block/dark_matter_block",
+		"south": "itemalchemy:block/dark_matter_block",
+		"east": "itemalchemy:block/dark_matter_block",
+		"west": "itemalchemy:block/dark_matter_block",
+		"up": "itemalchemy:block/dark_matter_block",
+		"down": "itemalchemy:block/dark_matter_block"
+	}
+}

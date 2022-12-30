@@ -6,11 +6,7 @@ import ml.pkom.mcpitanlibarch.api.block.ExtendBlockEntityProvider;
 import ml.pkom.mcpitanlibarch.api.event.block.BlockUseEvent;
 import ml.pkom.mcpitanlibarch.api.event.block.TileCreateEvent;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.MapColor;
-import net.minecraft.block.Material;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -67,7 +63,7 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
     }
 
     public EMCCondenser() {
-        this(FabricBlockSettings.of(Material.STONE, MapColor.BLACK).strength(2f, 7.0f));
+        this(AbstractBlock.Settings.of(Material.STONE, MapColor.BLACK).strength(2f, 7.0f));
     }
 
     @Override

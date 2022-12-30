@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#O#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "itemalchemy:emc_collector_mk3"
+    },
+    "O": {
+      "item": "itemalchemy:philosopher_stone"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:aegu",
+    "count": 1
+  }
+}

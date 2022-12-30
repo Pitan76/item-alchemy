@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#O#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "itemalchemy:aeternalis_fuel"
+    },
+    "O": {
+      "item": "minecraft:diamond_block"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:dark_matter",
+    "count": 1
+  }
+}

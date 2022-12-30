@@ -21,11 +21,19 @@ public class Items {
     public static RegistryEvent<Item> EMC_COLLECTOR_MK3;
     public static RegistryEvent<Item> EMC_CONDENSER;
     public static RegistryEvent<Item> EMC_REPEATER;
+    public static RegistryEvent<Item> AEGU;
+    public static RegistryEvent<Item> ADVANCED_AEGU;
+    public static RegistryEvent<Item> ULTIMATE_AEGU;
 
     // Material
     public static RegistryEvent<Item> ALCHEMICAL_FUEL;
     public static RegistryEvent<Item> MOBIUS_FUEL;
     public static RegistryEvent<Item> AETERNALIS_FUEL;
+
+    public static RegistryEvent<Item> DARK_MATTER;
+    public static RegistryEvent<Item> RED_MATTER;
+    public static RegistryEvent<Item> DARK_MATTER_BLOCK;
+    public static RegistryEvent<Item> RED_MATTER_BLOCK;
 
 
     public static void init() {
@@ -36,10 +44,18 @@ public class Items {
         EMC_COLLECTOR_MK3 = registry.registerItem(id("emc_collector_mk3"), () -> new BlockItem(Blocks.EMC_COLLECTOR_MK3.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk3"))));
         EMC_CONDENSER = registry.registerItem(id("emc_condenser"), () -> new BlockItem(Blocks.EMC_CONDENSER.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_condenser"))));
         EMC_REPEATER = registry.registerItem(id("emc_repeater"), () -> new BlockItem(Blocks.EMC_REPEATER.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_repeater"))));
+        AEGU = registry.registerItem(id("aegu"), () -> new BlockItem(Blocks.AEGU.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("aegu"))));
+        ADVANCED_AEGU = registry.registerItem(id("advanced_aegu"), () -> new BlockItem(Blocks.ADVANCED_AEGU.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("advanced_aegu"))));
+        ULTIMATE_AEGU = registry.registerItem(id("ultimate_aegu"), () -> new BlockItem(Blocks.ULTIMATE_AEGU.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("ultimate_aegu"))));
         ALCHEMY_PAD = registry.registerItem(id("alchemy_pad"), () -> new AlchemyPad(new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("alchemy_pad")).maxCount(1)));
 
         ALCHEMICAL_FUEL = registry.registerItem(id("alchemical_fuel"), () -> new Item(new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("alchemical_fuel"))));
         MOBIUS_FUEL = registry.registerItem(id("mobius_fuel"), () -> new Item(new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("mobius_fuel"))));
         AETERNALIS_FUEL = registry.registerItem(id("aeternalis_fuel"), () -> new Item(new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("aeternalis_fuel"))));
+
+        DARK_MATTER = registry.registerItem(id("dark_matter"), () -> new Item(new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("dark_matter"))));
+        RED_MATTER = registry.registerItem(id("red_matter"), () -> new Item(new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("red_matter"))));
+        DARK_MATTER_BLOCK = registry.registerItem(id("dark_matter_block"), () -> new BlockItem(Blocks.DARK_MATTER_BLOCK.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("dark_matter_block"))));
+        RED_MATTER_BLOCK = registry.registerItem(id("red_matter_block"), () -> new BlockItem(Blocks.RED_MATTER_BLOCK.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("red_matter_block"))));
     }
 }
