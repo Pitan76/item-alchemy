@@ -478,13 +478,17 @@ public class EMCManager {
         Collection<Recipe<?>> recipes = world.getRecipeManager().values();
 
         for (Recipe<?> recipe : recipes) {
-            ItemStack outStack = recipe.getOutput();
-            addEmcFromRecipe(outStack, recipe, unsetRecipes, false);
+            try {
+                ItemStack outStack = recipe.getOutput();
+                addEmcFromRecipe(outStack, recipe, unsetRecipes, false);
+            } catch (NoClassDefFoundError ignore) {}
         }
         List<Recipe<?>> dummy = new ArrayList<>();
         for (Recipe<?> recipe : unsetRecipes) {
-            ItemStack outStack = recipe.getOutput();
-            addEmcFromRecipe(outStack, recipe, dummy, true);
+            try {
+                ItemStack outStack = recipe.getOutput();
+                addEmcFromRecipe(outStack, recipe, dummy, true);
+            } catch (NoClassDefFoundError ignore) {}
         }
     }
 
