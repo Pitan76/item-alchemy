@@ -50,7 +50,7 @@ public class ItemAlchemy {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             if (handler.getPlayer() != null) {
                 EMCManager.syncS2C_emc_map(handler.getPlayer());
-                System.out.println(handler.getPlayer().getName().getString() + ", syncS2Cemcmap");
+                //System.out.println(handler.getPlayer().getName().getString() + ", syncS2Cemcmap");
             }
         });
 

@@ -149,7 +149,7 @@ public class EMCManager {
         add(Items.CALCITE, 32);
         add(Items.ANDESITE, 16);
         add(Items.DIORITE, 16);
-        add(Items.GRANITE, 16);
+        add(Items.GRANITE, 6);
         add(Items.DRIPSTONE_BLOCK, 64);
         add(Items.COBBLED_DEEPSLATE, 2);
         add(Items.DEEPSLATE, 2);
@@ -646,7 +646,7 @@ public class EMCManager {
         }
 
         buf.writeNbt(data);
-        System.out.println("send emc map to " + player.getName().getString());
+        //System.out.println("send emc map to " + player.getName().getString());
         ServerPlayNetworking.send(player, ItemAlchemy.id("sync_emc_map"), buf);
     }
 }
