@@ -256,7 +256,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             extractInventory.placeExtractSlots();
             return;
         }
-        NbtCompound nbtTag = EMCManager.writePlayerNbt(extractInventory.player);
+        NbtCompound nbtTag = EMCManager.writePlayerNbt(extractInventory.player).copy();
 
         if (nbtTag.contains("itemalchemy")) {
 
