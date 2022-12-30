@@ -445,5 +445,6 @@
   "minecraft:glow_berries": 16,
   "minecraft:honey_bottle": 48,
   "minecraft:rabbit_foot": 128,
-  "minecraft:trident": 16463
+  "minecraft:trident": 16463,
+  "minecraft:elytra": 16463
 }

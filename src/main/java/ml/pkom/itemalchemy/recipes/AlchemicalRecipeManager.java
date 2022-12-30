@@ -38,6 +38,10 @@ public class AlchemicalRecipeManager {
     }
 
     public void apply(ResourceManager resourceManager) {
+
+        // load EMC
+        EMCManager.loadDefaultEMCs(resourceManager);
+
         count = 0;
 
         Map<Identifier, Resource> resourceIds;
@@ -59,9 +63,6 @@ public class AlchemicalRecipeManager {
                 ItemAlchemy.LOGGER.error("Failed to read {}", resourceId.toString(), e);
             }
         });
-
-        // load EMC
-        EMCManager.loadDefaultEMCs(resourceManager);
     }
 
     private void handle(JsonObject jsonObject) {

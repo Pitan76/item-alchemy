@@ -1,0 +1,12 @@
+{
+  "techreborn:raw_tin": 192,
+  "techreborn:raw_lead": 256,
+  "techreborn:raw_silver": 512,
+  "techreborn:raw_tungsten": 1024,
+  "techreborn:raw_iridium": 2048,
+  "techreborn:bauxite_ore": 256,
+  "techreborn:deepslate_bauxite_ore": 256,
+  "techreborn:titanium_dust": 512,
+  "techreborn:chrome_dust": 1024,
+  "techreborn:nickel_dust": 384
+}

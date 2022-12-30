@@ -134,14 +134,14 @@ public class EMCManager {
             }
         } else {
             defaultMap();
-            for (Map.Entry<String, Long> entry : getMap().entrySet()) {
-                config.set(entry.getKey(), entry.getValue());
-            }
-            config.save(file);
         }
 
         ServerWorld world = server.getOverworld();
         setEmcFromRecipes(world);
+        for (Map.Entry<String, Long> entry : getMap().entrySet()) {
+            config.set(entry.getKey(), entry.getValue());
+        }
+        config.save(file);
 
         if (!world.isClient()) {
             for (ServerPlayerEntity player : world.getPlayers()) {
@@ -685,6 +685,20 @@ public class EMCManager {
                 String json = IOUtils.toString(ResourceUtil.getInputStream(resource), StandardCharsets.UTF_8);
                 ResourceUtil.close(resource);
                 HashMap<String, Long> map = gson.fromJson(json, listType);
+
+                if (resourceId.toString().endsWith("/tags.json")) {
+                    HashMap<String, Long> tempMap = gson.fromJson(json, listType);
+                    for (Map.Entry<String, Long> entry : map.entrySet()) {
+                        TagKey<Item> tagKey = (TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier(entry.getKey()));
+                        for (Item item : ItemUtil.getAllItems()) {
+                            if (ItemUtil.isIn(item, tagKey)) {
+                                if (tempMap.containsKey(ItemUtil.toID(item).toString())) continue;
+                                tempMap.put(ItemUtil.toID(item).toString(), entry.getValue());
+                            }
+                        }
+                    }
+                    map = tempMap;
+                }
 
                 for (Map.Entry<String, Long> entry : map.entrySet()) {
                     if (ItemUtil.isExist(new Identifier(entry.getKey()))) {
