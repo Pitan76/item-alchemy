@@ -35,7 +35,7 @@ public class Blocks {
         EMC_REPEATER = registry.registerBlock(id("emc_repeater"), EMCRepeater::new);
         AEGU = registry.registerBlock(id("aegu"), () -> new AEGUBlock(40 / 10));
         ADVANCED_AEGU = registry.registerBlock(id("advanced_aegu"), () -> new AEGUBlock(1000 / 10));
-        ULTIMATE_AEGU = registry.registerBlock(id("ultimate_aegu"),() -> new AEGUBlock(20000 / 10));
+        ULTIMATE_AEGU = registry.registerBlock(id("ultimate_aegu"), () -> new AEGUBlock(20000 / 10));
 
         DARK_MATTER_BLOCK = registry.registerBlock(id("dark_matter_block"), () -> new ExtendBlock(AbstractBlock.Settings.of(Material.STONE)));
         RED_MATTER_BLOCK = registry.registerBlock(id("red_matter_block"), () -> new ExtendBlock(AbstractBlock.Settings.of(Material.STONE)));
