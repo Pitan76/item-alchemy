@@ -33,10 +33,6 @@ public class RegisterInventory extends SimpleInventory {
 
             if (!items.contains(ItemUtil.toID(stack.getItem()).toString())) {
                 items.putBoolean(ItemUtil.toID(stack.getItem()).toString(), true);
-                if (player.getCurrentScreenHandler() instanceof AlchemyTableScreenHandler) {
-                    AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
-                    screenHandler.extractInventory.placeExtractSlots();
-                }
             }
 
             if (playerNbt.contains("itemalchemy")) {
@@ -54,6 +50,11 @@ public class RegisterInventory extends SimpleInventory {
                 EMCManager.writeEmcToPlayer(player, stack);
             } else {
                 player.offerOrDrop(stack.copy());
+            }
+
+            if (player.getCurrentScreenHandler() instanceof AlchemyTableScreenHandler) {
+                AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
+                screenHandler.extractInventory.placeExtractSlots();
             }
 
             stack = ItemStack.EMPTY;

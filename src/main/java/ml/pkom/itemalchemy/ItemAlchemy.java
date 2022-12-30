@@ -79,6 +79,7 @@ public class ItemAlchemy {
 
             // Sort
             screenHandler.setSearchText(text);
+            screenHandler.index = 0;
             screenHandler.sortBySearch();
         }));
 

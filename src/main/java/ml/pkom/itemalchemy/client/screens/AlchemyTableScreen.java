@@ -50,6 +50,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
                 AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
 
                 screenHandler.setSearchText(searchBox.getText());
+                screenHandler.index = 0;
                 screenHandler.sortBySearch();
             }
         }
