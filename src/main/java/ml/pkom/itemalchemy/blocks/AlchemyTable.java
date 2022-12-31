@@ -19,7 +19,7 @@ public class AlchemyTable extends ExtendBlock {
     }
 
     public AlchemyTable() {
-        this(AbstractBlock.Settings.of(Material.STONE, MapColor.BLACK).strength(1.5f, 7.0f));
+        this(Settings.copy(Blocks.STONE).mapColor(MapColor.BLACK).strength(1.5f, 7.0f));
     }
 
     @Override

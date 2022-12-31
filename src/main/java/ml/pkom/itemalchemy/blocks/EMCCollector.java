@@ -68,7 +68,7 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
     }
 
     public EMCCollector(long maxEMC) {
-        this(AbstractBlock.Settings.of(Material.STONE, MapColor.YELLOW).strength(2f, 7.0f), maxEMC);
+        this(AbstractBlock.Settings.copy(Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f), maxEMC);
     }
 
     @Override

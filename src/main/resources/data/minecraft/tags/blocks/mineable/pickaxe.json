@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "itemalchemy:alchemy_table",
+    "itemalchemy:emc_collector_mk1",
+    "itemalchemy:emc_collector_mk2",
+    "itemalchemy:emc_collector_mk3",
+    "itemalchemy:emc_collector_mk4",
+    "itemalchemy:emc_collector_mk5",
+    "itemalchemy:emc_condenser",
+    "itemalchemy:emc_repeater",
+    "itemalchemy:aegu",
+    "itemalchemy:advanced_aegu",
+    "itemalchemy:ultimate_aegu",
+    "itemalchemy:dark_matter_block",
+    "itemalchemy:red_matter_block"
+  ]
+}

@@ -40,7 +40,7 @@ public class Blocks {
         ADVANCED_AEGU = registry.registerBlock(id("advanced_aegu"), () -> new AEGUBlock(1000 / 10));
         ULTIMATE_AEGU = registry.registerBlock(id("ultimate_aegu"), () -> new AEGUBlock(20000 / 10));
 
-        DARK_MATTER_BLOCK = registry.registerBlock(id("dark_matter_block"), () -> new ExtendBlock(AbstractBlock.Settings.of(Material.STONE)));
-        RED_MATTER_BLOCK = registry.registerBlock(id("red_matter_block"), () -> new ExtendBlock(AbstractBlock.Settings.of(Material.STONE)));
+        DARK_MATTER_BLOCK = registry.registerBlock(id("dark_matter_block"), () -> new ExtendBlock(AbstractBlock.Settings.of(Material.STONE).strength(2.0f, 5.0f)));
+        RED_MATTER_BLOCK = registry.registerBlock(id("red_matter_block"), () -> new ExtendBlock(AbstractBlock.Settings.of(Material.STONE).strength(2.0f, 5.0f)));
     }
 }

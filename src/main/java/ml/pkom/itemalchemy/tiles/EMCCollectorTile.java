@@ -82,6 +82,8 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
 
     @Override
     public void tick(World mcWorld, BlockPos pos, BlockState state, EMCCollectorTile blockEntity) {
+        if (mcWorld.isClient()) return;
+
         long maxEMC = ((EMCCollector) state.getBlock()).maxEMC;
 
         if (coolDown == 0) {
@@ -167,13 +169,11 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
 
             if (oldStoredEMC != storedEMC) {
                 oldStoredEMC = storedEMC;
-                if (!mcWorld.isClient) {
-                    for (ServerPlayerEntity player : ((ServerWorld) mcWorld).getPlayers()) {
-                        if (player.networkHandler != null && player.currentScreenHandler instanceof EMCCollectorScreenHandler && ((EMCCollectorScreenHandler) player.currentScreenHandler).tile == this ) {
-                            PacketByteBuf buf = PacketByteBufs.create();
-                            buf.writeLong(storedEMC);
-                            ServerPlayNetworking.send(player, ItemAlchemy.id("itemalchemy_emc_collector"), buf);
-                        }
+                for (ServerPlayerEntity player : ((ServerWorld) mcWorld).getPlayers()) {
+                    if (player.networkHandler != null && player.currentScreenHandler instanceof EMCCollectorScreenHandler && ((EMCCollectorScreenHandler) player.currentScreenHandler).tile == this) {
+                        PacketByteBuf buf = PacketByteBufs.create();
+                        buf.writeLong(storedEMC);
+                        ServerPlayNetworking.send(player, ItemAlchemy.id("itemalchemy_emc_collector"), buf);
                     }
                 }
             }

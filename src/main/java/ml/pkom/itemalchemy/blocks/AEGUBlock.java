@@ -6,10 +6,7 @@ import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlockEntityProvider;
 import ml.pkom.mcpitanlibarch.api.event.block.BlockUseEvent;
 import ml.pkom.mcpitanlibarch.api.event.block.TileCreateEvent;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.MapColor;
-import net.minecraft.block.Material;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -41,7 +38,7 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
     }
 
     public AEGUBlock(long emc) {
-        this(Settings.of(Material.STONE, MapColor.YELLOW).strength(2f, 7.0f), emc);
+        this(Settings.copy(Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f), emc);
     }
 
     public static BlockState setConnected(BlockState state, boolean isConnected) {
@@ -54,16 +51,13 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
 
     @Override
     public ActionResult onRightClick(BlockUseEvent e) {
-        if (e.world.isClient()) {
-            return ActionResult.SUCCESS;
-        }
-
         BlockPos blockPos = AEGUTile.getNearEMCCondenserPos(e.world, e.pos);
         if (blockPos == null) return ActionResult.FAIL;
         BlockEntity blockEntity = e.world.getBlockEntity(blockPos);
 
         if (blockEntity instanceof EMCCondenserTile) {
             EMCCondenserTile tile = (EMCCondenserTile) blockEntity;
+            if (e.world.isClient) return ActionResult.SUCCESS;
             e.player.openGuiScreen(tile);
             return ActionResult.CONSUME;
         }

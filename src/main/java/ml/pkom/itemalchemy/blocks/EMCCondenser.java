@@ -63,7 +63,7 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
     }
 
     public EMCCondenser() {
-        this(AbstractBlock.Settings.of(Material.STONE, MapColor.BLACK).strength(2f, 7.0f));
+        this(Settings.copy(Blocks.STONE).mapColor(MapColor.BLACK).strength(2f, 7.0f));
     }
 
     @Override
