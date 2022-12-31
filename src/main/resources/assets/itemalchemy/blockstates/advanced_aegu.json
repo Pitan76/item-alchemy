@@ -1,5 +1,6 @@
 {
   "variants": {
-    "": { "model": "itemalchemy:block/advanced_aegu" }
+    "connected=true": { "model": "itemalchemy:block/connected_advanced_aegu" },
+    "connected=false": { "model": "itemalchemy:block/advanced_aegu" }
   }
 }

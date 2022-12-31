@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "itemalchemy:block/emc_collector_mk5" },
+    "facing=south": { "model": "itemalchemy:block/emc_collector_mk5", "y": 180 },
+    "facing=west":  { "model": "itemalchemy:block/emc_collector_mk5", "y": 270 },
+    "facing=east":  { "model": "itemalchemy:block/emc_collector_mk5", "y": 90 }
+  }
+}

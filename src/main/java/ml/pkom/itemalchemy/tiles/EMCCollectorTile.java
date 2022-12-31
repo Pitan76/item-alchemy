@@ -92,6 +92,9 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
                     || mcWorld.getBlockState(pos.north()).getLuminance() > 10 || mcWorld.getBlockState(pos.south()).getLuminance() > 10
                     || mcWorld.getBlockState(pos.east()).getLuminance() > 10 || mcWorld.getBlockState(pos.west()).getLuminance() > 10) {
                 storedEMC++;
+                if (maxEMC >= 100000) {
+                    storedEMC += Math.round(maxEMC / 100000) + 2;
+                }
             }
         }
         coolDown += 1 + Math.pow(maxEMC / 10000 - 1, 2);
@@ -214,6 +217,7 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
                 return new ItemStack(Items.AETERNALIS_FUEL.getOrNull(), 1);
             }
         }
+        /*
         if (Items.AETERNALIS_FUEL.getOrNull() == stack.getItem()) {
             if (storedEMC >= 4096 || test) {
                 if (!test) storedEMC -= 4096;
@@ -238,6 +242,7 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
                 return new ItemStack(Items.RED_MATTER_BLOCK.getOrNull(), 1);
             }
         }
+         */
         return ItemStack.EMPTY;
     }
 

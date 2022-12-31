@@ -38,10 +38,13 @@ public class AEGUTile extends ExtendBlockEntity implements BlockEntityTicker<AEG
         if (coolDown == 0) {
             BlockPos targetPos = getNearEMCCondenserPos(mcWorld, pos);
             if (targetPos != null) {
+                mcWorld.setBlockState(pos, AEGUBlock.setConnected(state, true));
                 EMCCondenserTile tile = (EMCCondenserTile) mcWorld.getBlockEntity(targetPos);
                 if (tile == null) return;
                 if (tile.storedEMC < tile.maxEMC)
                     tile.storedEMC += ((AEGUBlock) state.getBlock()).emc;
+            } else {
+                mcWorld.setBlockState(pos, AEGUBlock.setConnected(state, false));
             }
         }
 

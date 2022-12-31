@@ -19,6 +19,8 @@ public class Items {
     public static RegistryEvent<Item> EMC_COLLECTOR_MK1;
     public static RegistryEvent<Item> EMC_COLLECTOR_MK2;
     public static RegistryEvent<Item> EMC_COLLECTOR_MK3;
+    public static RegistryEvent<Item> EMC_COLLECTOR_MK4;
+    public static RegistryEvent<Item> EMC_COLLECTOR_MK5;
     public static RegistryEvent<Item> EMC_CONDENSER;
     public static RegistryEvent<Item> EMC_REPEATER;
     public static RegistryEvent<Item> AEGU;
@@ -42,6 +44,8 @@ public class Items {
         EMC_COLLECTOR_MK1 = registry.registerItem(id("emc_collector_mk1"), () -> new BlockItem(Blocks.EMC_COLLECTOR_MK1.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk1"))));
         EMC_COLLECTOR_MK2 = registry.registerItem(id("emc_collector_mk2"), () -> new BlockItem(Blocks.EMC_COLLECTOR_MK2.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk2"))));
         EMC_COLLECTOR_MK3 = registry.registerItem(id("emc_collector_mk3"), () -> new BlockItem(Blocks.EMC_COLLECTOR_MK3.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk3"))));
+        EMC_COLLECTOR_MK4 = registry.registerItem(id("emc_collector_mk4"), () -> new BlockItem(Blocks.EMC_COLLECTOR_MK4.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk4"))));
+        EMC_COLLECTOR_MK5 = registry.registerItem(id("emc_collector_mk5"), () -> new BlockItem(Blocks.EMC_COLLECTOR_MK5.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk5"))));
         EMC_CONDENSER = registry.registerItem(id("emc_condenser"), () -> new BlockItem(Blocks.EMC_CONDENSER.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_condenser"))));
         EMC_REPEATER = registry.registerItem(id("emc_repeater"), () -> new BlockItem(Blocks.EMC_REPEATER.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_repeater"))));
         AEGU = registry.registerItem(id("aegu"), () -> new BlockItem(Blocks.AEGU.getOrNull(), new ExtendSettings().addGroup(ItemGroups.ITEM_ALCHEMY, id("aegu"))));

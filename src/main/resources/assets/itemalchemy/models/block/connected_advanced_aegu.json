@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:block/cube",
+	"textures": {
+		"particle": "itemalchemy:block/emc_collector/top_mk5",
+		"north": "itemalchemy:block/emc_collector/top_mk5",
+		"south": "itemalchemy:block/emc_collector/top_mk5",
+		"east": "itemalchemy:block/emc_collector/top_mk5",
+		"west": "itemalchemy:block/emc_collector/top_mk5",
+		"up": "itemalchemy:block/emc_collector/top_mk5",
+		"down": "itemalchemy:block/emc_collector/top_mk5"
+	}
+}

@@ -6,22 +6,27 @@ import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlockEntityProvider;
 import ml.pkom.mcpitanlibarch.api.event.block.BlockUseEvent;
 import ml.pkom.mcpitanlibarch.api.event.block.TileCreateEvent;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider {
+    public static BooleanProperty CONNECTED = BooleanProperty.of("connected");
     public long emc;
 
     public AEGUBlock(Settings settings, long emc) {
         super(settings);
+        setDefaultState(getStateManager().getDefaultState().with(CONNECTED, false));
         this.emc = emc;
     }
 
@@ -29,8 +34,22 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
         this(10000);
     }
 
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(CONNECTED);
+        super.appendProperties(builder);
+    }
+
     public AEGUBlock(long emc) {
         this(Settings.of(Material.STONE, MapColor.YELLOW).strength(2f, 7.0f), emc);
+    }
+
+    public static BlockState setConnected(BlockState state, boolean isConnected) {
+        return state.with(CONNECTED, isConnected);
+    }
+
+    public static boolean isConnected(BlockState state) {
+        return state.get(CONNECTED);
     }
 
     @Override

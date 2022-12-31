@@ -16,12 +16,13 @@ public class Blocks {
     public static RegistryEvent<Block> EMC_COLLECTOR_MK1;
     public static RegistryEvent<Block> EMC_COLLECTOR_MK2;
     public static RegistryEvent<Block> EMC_COLLECTOR_MK3;
+    public static RegistryEvent<Block> EMC_COLLECTOR_MK4;
+    public static RegistryEvent<Block> EMC_COLLECTOR_MK5;
     public static RegistryEvent<Block> EMC_CONDENSER;
     public static RegistryEvent<Block> EMC_REPEATER;
     public static RegistryEvent<Block> AEGU;
     public static RegistryEvent<Block> ADVANCED_AEGU;
     public static RegistryEvent<Block> ULTIMATE_AEGU;
-
 
     public static RegistryEvent<Block> DARK_MATTER_BLOCK;
     public static RegistryEvent<Block> RED_MATTER_BLOCK;
@@ -31,6 +32,8 @@ public class Blocks {
         EMC_COLLECTOR_MK1 = registry.registerBlock(id("emc_collector_mk1"), () -> new EMCCollector(10000));
         EMC_COLLECTOR_MK2 = registry.registerBlock(id("emc_collector_mk2"), () -> new EMCCollector(30000));
         EMC_COLLECTOR_MK3 = registry.registerBlock(id("emc_collector_mk3"), () -> new EMCCollector(60000));
+        EMC_COLLECTOR_MK4 = registry.registerBlock(id("emc_collector_mk4"), () -> new EMCCollector(250000));
+        EMC_COLLECTOR_MK5 = registry.registerBlock(id("emc_collector_mk5"), () -> new EMCCollector(2000000));
         EMC_CONDENSER = registry.registerBlock(id("emc_condenser"), EMCCondenser::new);
         EMC_REPEATER = registry.registerBlock(id("emc_repeater"), EMCRepeater::new);
         AEGU = registry.registerBlock(id("aegu"), () -> new AEGUBlock(40 / 10));

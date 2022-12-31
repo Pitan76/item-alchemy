@@ -33,7 +33,7 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
 
     public EMCCollector(Settings settings, long maxEMC) {
         super(settings);
-        getStateManager().getDefaultState().with(FACING, Direction.NORTH);
+        setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
         this.maxEMC = maxEMC;
     }
 
