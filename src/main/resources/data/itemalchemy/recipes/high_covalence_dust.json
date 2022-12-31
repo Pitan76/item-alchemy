@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "pattern": [
+    "#O"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:diamond"
+    },
+    "O": {
+      "item": "minecraft:coal"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:high_covalence_dust",
+    "count": 40
+  }
+}

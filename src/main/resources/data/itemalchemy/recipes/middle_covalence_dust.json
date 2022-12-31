@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "pattern": [
+    "#O"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "O": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:middle_covalence_dust",
+    "count": 40
+  }
+}

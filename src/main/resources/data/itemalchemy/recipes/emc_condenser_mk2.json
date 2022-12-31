@@ -7,17 +7,17 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:obsidian"
+      "item": "itemalchemy:red_matter"
     },
     "A": {
-      "item": "itemalchemy:alchemy_chest"
+      "item": "itemalchemy:emc_condenser"
     },
     "B": {
-      "item": "minecraft:diamond"
+      "item": "itemalchemy:dark_matter"
     }
   },
   "result": {
-    "item": "itemalchemy:emc_condenser",
+    "item": "itemalchemy:emc_condenser_mk2",
     "count": 1
   }
 }

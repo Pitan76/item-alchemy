@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "pattern": [
+    "###",
+    "###",
+    "##O"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:cobblestone"
+    },
+    "O": {
+      "item": "minecraft:coal"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:low_covalence_dust",
+    "count": 40
+  }
+}

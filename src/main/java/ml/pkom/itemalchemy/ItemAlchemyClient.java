@@ -1,5 +1,6 @@
 package ml.pkom.itemalchemy;
 
+import ml.pkom.itemalchemy.client.screens.AlchemyChestScreen;
 import ml.pkom.itemalchemy.client.screens.AlchemyTableScreen;
 import ml.pkom.itemalchemy.client.screens.EMCCollectorScreen;
 import ml.pkom.itemalchemy.client.screens.EMCCondenserScreen;
@@ -22,6 +23,7 @@ public class ItemAlchemyClient {
         ScreenRegistry.register(ScreenHandlers.ALCHEMY_TABLE, AlchemyTableScreen::new);
         ScreenRegistry.register(ScreenHandlers.EMC_COLLECTOR, EMCCollectorScreen::new);
         ScreenRegistry.register(ScreenHandlers.EMC_CONDENSER, EMCCondenserScreen::new);
+        ScreenRegistry.register(ScreenHandlers.ALCHEMY_CHEST, AlchemyChestScreen::new);
 
         ClientPlayNetworking.registerGlobalReceiver(ItemAlchemy.id("sync_emc"), (client, handler, buf, sender) -> {
             NbtCompound nbt = buf.readNbt();
