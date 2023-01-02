@@ -15,6 +15,7 @@ public class AlchemyChestScreen extends SimpleHandledScreen {
 
     public AlchemyChestScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, TextUtil.literal(""));
+
         this.playerInventory = inventory;
         setBackgroundWidth(256);
         setBackgroundHeight(234);
@@ -34,6 +35,10 @@ public class AlchemyChestScreen extends SimpleHandledScreen {
     public void drawBackgroundOverride(MatrixStack matrices, float delta, int mouseX, int mouseY) {
         ScreenUtil.setBackground(getTexture());
         callDrawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
+    }
+
+    @Override
+    protected void drawForegroundOverride(MatrixStack matrices, int mouseX, int mouseY) {
     }
 
     @Override

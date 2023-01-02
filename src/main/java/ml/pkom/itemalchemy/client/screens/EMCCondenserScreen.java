@@ -37,7 +37,7 @@ public class EMCCondenserScreen extends SimpleHandledScreen {
     }
 
     @Override
-    public void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
+    public void drawForegroundOverride(MatrixStack matrices, int mouseX, int mouseY) {
         long emc = (screenHandler.storedEMC + screenHandler.tile.storedEMC);
         if (emc > screenHandler.maxEMC) emc = screenHandler.maxEMC;
 

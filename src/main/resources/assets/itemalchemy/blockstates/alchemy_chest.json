@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "itemalchemy:block/alchemy_chest" },
+    "facing=south": { "model": "itemalchemy:block/alchemy_chest", "y": 180 },
+    "facing=west":  { "model": "itemalchemy:block/alchemy_chest", "y": 270 },
+    "facing=east":  { "model": "itemalchemy:block/alchemy_chest", "y": 90 }
+  }
+}

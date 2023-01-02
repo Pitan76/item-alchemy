@@ -23,7 +23,7 @@ public class AlchemyChestScreenHandler extends SimpleScreenHandler {
         this.playerInventory = playerInventory;
         addPlayerMainInventorySlots(playerInventory, 48, 154);
         addPlayerHotbarSlots(playerInventory, 48, 212);
-        addSlots(inventory, 1, 12, 8, -1, 13, 8);
+        addSlots(inventory, 0, 12, 8, -1, 13, 8);
     }
 
     @Override
