@@ -497,14 +497,14 @@ public class EMCManager {
             try {
                 ItemStack outStack = recipe.getOutput();
                 addEmcFromRecipe(outStack, recipe, unsetRecipes, false);
-            } catch (NoClassDefFoundError ignore) {}
+            } catch (NoClassDefFoundError | Exception ignore) {}
         }
         List<Recipe<?>> dummy = new ArrayList<>();
         for (Recipe<?> recipe : unsetRecipes) {
             try {
                 ItemStack outStack = recipe.getOutput();
                 addEmcFromRecipe(outStack, recipe, dummy, true);
-            } catch (NoClassDefFoundError ignore) {}
+            } catch (NoClassDefFoundError | Exception ignore) {}
         }
     }
 
