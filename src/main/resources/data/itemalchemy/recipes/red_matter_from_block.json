@@ -1,13 +1,10 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "pattern": [
-    "#"
-  ],
-  "key": {
-    "#": {
+  "ingredients": [
+    {
       "item": "itemalchemy:red_matter_block"
     }
-  },
+  ],
   "result": {
     "item": "itemalchemy:red_matter",
     "count": 4
