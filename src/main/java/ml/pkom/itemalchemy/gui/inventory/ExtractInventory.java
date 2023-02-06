@@ -1,13 +1,17 @@
 package ml.pkom.itemalchemy.gui.inventory;
 
 import ml.pkom.itemalchemy.EMCManager;
+import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -89,6 +93,13 @@ public class ExtractInventory extends SimpleInventory {
             if (definedStack != null && stack.isEmpty()) {
                 EMCManager.decrementEmc(player, EMCManager.get(definedStack));
                 super.setStack(slot, definedStack.copy());
+
+                // sync emc
+                if (player.getEntity() instanceof ServerPlayerEntity) {
+                    ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player.getEntity();
+                    EMCManager.syncS2C(serverPlayer);
+                }
+
             }
         }
     }

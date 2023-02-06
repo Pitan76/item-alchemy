@@ -26,27 +26,4 @@ public class ExtractSlot extends Slot {
     public boolean canInsert(ItemStack stack) {
         return false;
     }
-
-    /*
-    public ItemStack definedStack = ItemStack.EMPTY;
-
-    @Override
-    public void setStack(ItemStack stack) {
-        if (!stack.isEmpty() && definedStack.isEmpty()) {
-            definedStack = stack.copy();
-            System.out.println(definedStack.getName().asString());
-        }
-        super.setStack(stack);
-        if (!inventory.isSettingStack) {
-            super.setStack(stack);
-            if (definedStack != null) {
-                EMCManager.decrementEmc(player, EMCManager.get(definedStack));
-                inventory.isSettingStack = true;
-                setStack(definedStack.copy());
-                inventory.isSettingStack = false;
-            }
-        }
-    }
-
- */
 }
