@@ -7,8 +7,8 @@ import ml.pkom.itemalchemy.client.screens.EMCCondenserScreen;
 import ml.pkom.itemalchemy.gui.screens.EMCCollectorScreenHandler;
 import ml.pkom.itemalchemy.gui.screens.EMCCondenserScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
+import ml.pkom.mcpitanlibarch.api.network.ClientNetwork;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -25,11 +25,11 @@ public class ItemAlchemyClient {
         ScreenRegistry.register(ScreenHandlers.EMC_CONDENSER, EMCCondenserScreen::new);
         ScreenRegistry.register(ScreenHandlers.ALCHEMY_CHEST, AlchemyChestScreen::new);
 
-        ClientPlayNetworking.registerGlobalReceiver(ItemAlchemy.id("sync_emc"), (client, handler, buf, sender) -> {
+        ClientNetwork.registerReceiver(ItemAlchemy.id("sync_emc"), (client, p, buf) -> {
             NbtCompound nbt = buf.readNbt();
             itemAlchemyNbt = nbt;
 
-            Player player = new Player(client.player);
+            Player player = new Player(p);
 
             NbtCompound playerNbt = EMCManager.writePlayerNbt(player);
 
@@ -38,7 +38,7 @@ public class ItemAlchemyClient {
             EMCManager.readPlayerNbt(player, playerNbt);
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(ItemAlchemy.id("sync_emc_map"), (client, handler, buf, sender) -> {
+        ClientNetwork.registerReceiver(ItemAlchemy.id("sync_emc_map"), (client, p, buf) -> {
             NbtCompound nbt = buf.readNbt();
             if (nbt == null) return;
 
@@ -50,19 +50,19 @@ public class ItemAlchemyClient {
             EMCManager.setMap(emcMap);
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(ItemAlchemy.id("itemalchemy_emc_collector"), (client, handler, buf, sender) -> {
+        ClientNetwork.registerReceiver(ItemAlchemy.id("itemalchemy_emc_collector"), (client, p, buf) -> {
             long storedEMC = buf.readLong();
-            if (Objects.requireNonNull(client.player).currentScreenHandler instanceof EMCCollectorScreenHandler) {
-                EMCCollectorScreenHandler screenHandler = (EMCCollectorScreenHandler) client.player.currentScreenHandler;
+            if (Objects.requireNonNull(p).currentScreenHandler instanceof EMCCollectorScreenHandler) {
+                EMCCollectorScreenHandler screenHandler = (EMCCollectorScreenHandler) p.currentScreenHandler;
                 screenHandler.storedEMC = storedEMC;
             }
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(ItemAlchemy.id("itemalchemy_emc_condenser"), (client, handler, buf, sender) -> {
+        ClientNetwork.registerReceiver(ItemAlchemy.id("itemalchemy_emc_condenser"), (client, p, buf) -> {
             long storedEMC = buf.readLong();
             long maxEMC = buf.readLong();
-            if (Objects.requireNonNull(client.player).currentScreenHandler instanceof EMCCondenserScreenHandler) {
-                EMCCondenserScreenHandler screenHandler = (EMCCondenserScreenHandler) client.player.currentScreenHandler;
+            if (Objects.requireNonNull(p).currentScreenHandler instanceof EMCCondenserScreenHandler) {
+                EMCCondenserScreenHandler screenHandler = (EMCCondenserScreenHandler) p.currentScreenHandler;
                 screenHandler.storedEMC = storedEMC;
                 screenHandler.maxEMC = maxEMC;
             }

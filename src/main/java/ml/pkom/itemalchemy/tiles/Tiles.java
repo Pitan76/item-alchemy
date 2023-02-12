@@ -2,7 +2,7 @@ package ml.pkom.itemalchemy.tiles;
 
 import ml.pkom.itemalchemy.Blocks;
 import ml.pkom.mcpitanlibarch.api.event.registry.RegistryEvent;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import ml.pkom.mcpitanlibarch.api.tile.BlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -25,7 +25,7 @@ public class Tiles {
         ALCHEMY_CHEST = registry.registerBlockEntityType(id("alchemy_chest"), () -> create(AlchemyChestTile::new, Blocks.ALCHEMY_CHEST.getOrNull()));
     }
 
-    public static <T extends BlockEntity> BlockEntityType<T> create(FabricBlockEntityTypeBuilder.Factory<T> supplier, Block... blocks) {
-        return FabricBlockEntityTypeBuilder.create(supplier, blocks).build(null);
+    public static <T extends BlockEntity> BlockEntityType<T> create(BlockEntityTypeBuilder.Factory<T> supplier, Block... blocks) {
+        return BlockEntityTypeBuilder.create(supplier, blocks).build();
     }
 }

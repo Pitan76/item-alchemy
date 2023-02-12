@@ -6,11 +6,10 @@ import ml.pkom.itemalchemy.tiles.Tiles;
 import ml.pkom.mcpitanlibarch.api.command.CommandRegistry;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.item.CreativeTabBuilder;
+import ml.pkom.mcpitanlibarch.api.network.ServerNetworking;
 import ml.pkom.mcpitanlibarch.api.registry.ArchRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -54,7 +53,7 @@ public class ItemAlchemy {
             }
         });
 
-        ServerPlayNetworking.registerGlobalReceiver(id("network"), ((server, p, handler, buf, sender) -> {
+        ServerNetworking.registerReceiver(id("network"), ((server, p, buf) -> {
             NbtCompound nbt = buf.readNbt();
             if (nbt.contains("control")) {
                 Player player = new Player(p);
@@ -72,7 +71,7 @@ public class ItemAlchemy {
             }
         }));
 
-        ServerPlayNetworking.registerGlobalReceiver(id("search"), ((server, p, handler, buf, sender) -> {
+        ServerNetworking.registerReceiver(id("search"), ((server, p, buf) -> {
             String text = buf.readString();
             Player player = new Player(p);
             AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
