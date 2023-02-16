@@ -5,11 +5,10 @@ import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
 import ml.pkom.itemalchemy.tiles.Tiles;
 import ml.pkom.mcpitanlibarch.api.command.CommandRegistry;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
+import ml.pkom.mcpitanlibarch.api.event.v0.EventRegistry;
 import ml.pkom.mcpitanlibarch.api.item.CreativeTabBuilder;
 import ml.pkom.mcpitanlibarch.api.network.ServerNetworking;
 import ml.pkom.mcpitanlibarch.api.registry.ArchRegistry;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -44,11 +43,11 @@ public class ItemAlchemy {
         ItemGroups.init();
         Tiles.init();
 
-        ServerLifecycleEvents.SERVER_STARTED.register(EMCManager::init);
+        EventRegistry.ServerLifecycle.serverStarted(EMCManager::init);
 
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            if (handler.getPlayer() != null) {
-                EMCManager.syncS2C_emc_map(handler.getPlayer());
+        EventRegistry.ServerConnection.join((player) -> {
+            if (player != null) {
+                EMCManager.syncS2C_emc_map(player);
                 //System.out.println(handler.getPlayer().getName().getString() + ", syncS2Cemcmap");
             }
         });

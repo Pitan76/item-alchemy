@@ -5,9 +5,9 @@ import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.itemalchemy.ItemAlchemyClient;
 import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.client.SimpleHandledScreen;
+import ml.pkom.mcpitanlibarch.api.network.ClientNetworking;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import ml.pkom.mcpitanlibarch.api.util.client.ScreenUtil;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -44,7 +44,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
             if (keyCode != 256) {
                 PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
                 buf.writeString(searchBox.getText());
-                ClientPlayNetworking.send(ItemAlchemy.id("search"), buf);
+                ClientNetworking.send(ItemAlchemy.id("search"), buf);
 
                 //
                 AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
@@ -87,7 +87,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
             NbtCompound nbt = new NbtCompound();
             nbt.putInt("control", 0);
             buf.writeNbt(nbt);
-            ClientPlayNetworking.send(ItemAlchemy.id("network"), buf);
+            ClientNetworking.send(ItemAlchemy.id("network"), buf);
         }));
 
         addDrawableChild_compatibility(new TexturedButtonWidget(x + 171, y + 110, 18, 18, 226, 0, 18, getTexture(), (buttonWidget) -> {
@@ -101,7 +101,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
             NbtCompound nbt = new NbtCompound();
             nbt.putInt("control", 1);
             buf.writeNbt(nbt);
-            ClientPlayNetworking.send(ItemAlchemy.id("network"), buf);
+            ClientNetworking.send(ItemAlchemy.id("network"), buf);
         }));
     }
 

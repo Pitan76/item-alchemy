@@ -1,20 +1,17 @@
 package ml.pkom.itemalchemy;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import ml.pkom.easyapi.config.Config;
 import ml.pkom.easyapi.config.JsonConfig;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
+import ml.pkom.mcpitanlibarch.api.network.PacketByteUtil;
+import ml.pkom.mcpitanlibarch.api.network.ServerNetworking;
 import ml.pkom.mcpitanlibarch.api.tag.TagKey;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import ml.pkom.mcpitanlibarch.api.util.ResourceUtil;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.datafixer.fix.BlockEntitySignTextStrictJsonFix;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -639,11 +636,11 @@ public class EMCManager {
         if (player.networkHandler == null) {
             return;
         }
-        PacketByteBuf buf = PacketByteBufs.create();
+        PacketByteBuf buf = PacketByteUtil.create();
         NbtCompound playerNbt = writePlayerNbt(new Player(player));
 
         buf.writeNbt(playerNbt.getCompound("itemalchemy"));
-        ServerPlayNetworking.send(player, ItemAlchemy.id("sync_emc"), buf);
+        ServerNetworking.send(player, ItemAlchemy.id("sync_emc"), buf);
     }
 
     public static void syncS2C_emc_map(ServerPlayerEntity player) {
@@ -651,7 +648,7 @@ public class EMCManager {
             return;
         }
         if (map.isEmpty()) return;
-        PacketByteBuf buf = PacketByteBufs.create();
+        PacketByteBuf buf = PacketByteUtil.create();
         NbtTag data = NbtTag.create();
 
         for (Map.Entry<String, Long> entry : map.entrySet()) {
@@ -663,7 +660,7 @@ public class EMCManager {
 
         buf.writeNbt(data);
         //System.out.println("send emc map to " + player.getName().getString());
-        ServerPlayNetworking.send(player, ItemAlchemy.id("sync_emc_map"), buf);
+        ServerNetworking.send(player, ItemAlchemy.id("sync_emc_map"), buf);
     }
 
     public static Map<String, Long> defaultEMCMap = new LinkedHashMap<>();

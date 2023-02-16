@@ -6,10 +6,10 @@ import ml.pkom.itemalchemy.client.screens.EMCCollectorScreen;
 import ml.pkom.itemalchemy.client.screens.EMCCondenserScreen;
 import ml.pkom.itemalchemy.gui.screens.EMCCollectorScreenHandler;
 import ml.pkom.itemalchemy.gui.screens.EMCCondenserScreenHandler;
+import ml.pkom.mcpitanlibarch.api.client.registry.ArchRegistryClient;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
-import ml.pkom.mcpitanlibarch.api.network.ClientNetwork;
+import ml.pkom.mcpitanlibarch.api.network.ClientNetworking;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
-import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
@@ -19,13 +19,15 @@ import java.util.*;
 public class ItemAlchemyClient {
     public static NbtCompound itemAlchemyNbt;
 
+    public static ArchRegistryClient registry = new ArchRegistryClient();
+    
     public static void init() {
-        ScreenRegistry.register(ScreenHandlers.ALCHEMY_TABLE, AlchemyTableScreen::new);
-        ScreenRegistry.register(ScreenHandlers.EMC_COLLECTOR, EMCCollectorScreen::new);
-        ScreenRegistry.register(ScreenHandlers.EMC_CONDENSER, EMCCondenserScreen::new);
-        ScreenRegistry.register(ScreenHandlers.ALCHEMY_CHEST, AlchemyChestScreen::new);
+        registry.registerScreen(ScreenHandlers.ALCHEMY_TABLE, AlchemyTableScreen::new);
+        registry.registerScreen(ScreenHandlers.EMC_COLLECTOR, EMCCollectorScreen::new);
+        registry.registerScreen(ScreenHandlers.EMC_CONDENSER, EMCCondenserScreen::new);
+        registry.registerScreen(ScreenHandlers.ALCHEMY_CHEST, AlchemyChestScreen::new);
 
-        ClientNetwork.registerReceiver(ItemAlchemy.id("sync_emc"), (client, p, buf) -> {
+        ClientNetworking.registerReceiver(ItemAlchemy.id("sync_emc"), (client, p, buf) -> {
             NbtCompound nbt = buf.readNbt();
             itemAlchemyNbt = nbt;
 
@@ -38,7 +40,7 @@ public class ItemAlchemyClient {
             EMCManager.readPlayerNbt(player, playerNbt);
         });
 
-        ClientNetwork.registerReceiver(ItemAlchemy.id("sync_emc_map"), (client, p, buf) -> {
+        ClientNetworking.registerReceiver(ItemAlchemy.id("sync_emc_map"), (client, p, buf) -> {
             NbtCompound nbt = buf.readNbt();
             if (nbt == null) return;
 
@@ -50,7 +52,7 @@ public class ItemAlchemyClient {
             EMCManager.setMap(emcMap);
         });
 
-        ClientNetwork.registerReceiver(ItemAlchemy.id("itemalchemy_emc_collector"), (client, p, buf) -> {
+        ClientNetworking.registerReceiver(ItemAlchemy.id("itemalchemy_emc_collector"), (client, p, buf) -> {
             long storedEMC = buf.readLong();
             if (Objects.requireNonNull(p).currentScreenHandler instanceof EMCCollectorScreenHandler) {
                 EMCCollectorScreenHandler screenHandler = (EMCCollectorScreenHandler) p.currentScreenHandler;
@@ -58,7 +60,7 @@ public class ItemAlchemyClient {
             }
         });
 
-        ClientNetwork.registerReceiver(ItemAlchemy.id("itemalchemy_emc_condenser"), (client, p, buf) -> {
+        ClientNetworking.registerReceiver(ItemAlchemy.id("itemalchemy_emc_condenser"), (client, p, buf) -> {
             long storedEMC = buf.readLong();
             long maxEMC = buf.readLong();
             if (Objects.requireNonNull(p).currentScreenHandler instanceof EMCCondenserScreenHandler) {

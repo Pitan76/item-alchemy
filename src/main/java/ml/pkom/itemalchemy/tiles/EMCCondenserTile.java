@@ -7,10 +7,10 @@ import ml.pkom.itemalchemy.blocks.EMCRepeater;
 import ml.pkom.itemalchemy.gui.screens.EMCCondenserScreenHandler;
 import ml.pkom.mcpitanlibarch.api.event.block.TileCreateEvent;
 import ml.pkom.mcpitanlibarch.api.gui.inventory.IInventory;
+import ml.pkom.mcpitanlibarch.api.network.PacketByteUtil;
+import ml.pkom.mcpitanlibarch.api.network.ServerNetworking;
 import ml.pkom.mcpitanlibarch.api.tile.ExtendBlockEntity;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -160,10 +160,10 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
             oldMaxEMC = maxEMC;
             for (ServerPlayerEntity player : ((ServerWorld) world).getPlayers()) {
                 if (player.networkHandler != null && player.currentScreenHandler instanceof EMCCondenserScreenHandler && ((EMCCondenserScreenHandler) player.currentScreenHandler).tile == this ) {
-                    PacketByteBuf buf = PacketByteBufs.create();
+                    PacketByteBuf buf = PacketByteUtil.create();
                     buf.writeLong(storedEMC);
                     buf.writeLong(maxEMC);
-                    ServerPlayNetworking.send(player, ItemAlchemy.id("itemalchemy_emc_condenser"), buf);
+                    ServerNetworking.send(player, ItemAlchemy.id("itemalchemy_emc_condenser"), buf);
                 }
             }
         }

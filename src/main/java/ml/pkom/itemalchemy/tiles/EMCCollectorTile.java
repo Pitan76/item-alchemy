@@ -7,10 +7,10 @@ import ml.pkom.itemalchemy.blocks.EMCRepeater;
 import ml.pkom.itemalchemy.gui.screens.EMCCollectorScreenHandler;
 import ml.pkom.mcpitanlibarch.api.event.block.TileCreateEvent;
 import ml.pkom.mcpitanlibarch.api.gui.inventory.IInventory;
+import ml.pkom.mcpitanlibarch.api.network.PacketByteUtil;
+import ml.pkom.mcpitanlibarch.api.network.ServerNetworking;
 import ml.pkom.mcpitanlibarch.api.tile.ExtendBlockEntity;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -171,9 +171,9 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
                 oldStoredEMC = storedEMC;
                 for (ServerPlayerEntity player : ((ServerWorld) mcWorld).getPlayers()) {
                     if (player.networkHandler != null && player.currentScreenHandler instanceof EMCCollectorScreenHandler && ((EMCCollectorScreenHandler) player.currentScreenHandler).tile == this) {
-                        PacketByteBuf buf = PacketByteBufs.create();
+                        PacketByteBuf buf = PacketByteUtil.create();
                         buf.writeLong(storedEMC);
-                        ServerPlayNetworking.send(player, ItemAlchemy.id("itemalchemy_emc_collector"), buf);
+                        ServerNetworking.send(player, ItemAlchemy.id("itemalchemy_emc_collector"), buf);
                     }
                 }
             }
