@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.slot.Slot;
@@ -130,6 +131,10 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
         if (slotIndex == 36) { // Target Slot
             ItemStack oldStack = getCursorStack().copy();
+
+            // もともとスロットが空のとき、カーソルのアイテムも消えてしまうのでここで適当にセットしておく。
+            setStackInSlot(slotIndex, getRevision(), new ItemStack(Items.STONE));
+
             super.onSlotClick(slotIndex, button, actionType, player);
             if (!oldStack.isEmpty()) {
                 setCursorStack(oldStack);
