@@ -8,7 +8,7 @@ import net.minecraft.screen.slot.Slot;
 
 public class TargetSlot extends Slot {
 
-    private ScreenHandler screenHandler;
+    private final ScreenHandler screenHandler;
 
     public TargetSlot(Inventory inventory, int index, int x, int y, ScreenHandler screenHandler) {
         super(inventory, index, x, y);
