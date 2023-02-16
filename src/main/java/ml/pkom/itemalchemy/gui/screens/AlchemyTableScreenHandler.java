@@ -234,7 +234,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             }
 
             if (index >= 50) {
-                if (transferTime >= 63 || EMCManager.getEmcFromPlayer(player) < EMCManager.get(newStack)) {
+                if (transferTime >= 63 || EMCManager.getEmcFromPlayer(player) < EMCManager.get(newStack.getItem())) {
                     transferTime = 0;
                     return ItemStack.EMPTY;
                 }

@@ -47,7 +47,9 @@ public class RegisterInventory extends SimpleInventory {
             //player.getPlayerEntity().saveNbt(playerNbt);
 
             if (slot == 50) {
-                EMCManager.writeEmcToPlayer(player, stack);
+                if (!player.getWorld().isClient) {
+                    EMCManager.writeEmcToPlayer(player, stack);
+                }
             } else {
                 player.offerOrDrop(stack.copy());
             }

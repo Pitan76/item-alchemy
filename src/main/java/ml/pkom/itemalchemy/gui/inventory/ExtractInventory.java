@@ -86,9 +86,12 @@ public class ExtractInventory extends SimpleInventory {
         super.setStack(slot, stack);
         if (!isSettingStack) {
             super.setStack(slot, stack);
-            if (definedStack != null && stack.isEmpty()) {
-                EMCManager.decrementEmc(player, EMCManager.get(definedStack));
-                super.setStack(slot, definedStack.copy());
+            //System.out.println(EMCManager.getEmcFromPlayer(player) + "," + EMCManager.get(definedStack));
+            if (definedStack != null && stack.isEmpty() && EMCManager.getEmcFromPlayer(player) >= EMCManager.get(definedStack)) {
+                if (!player.getWorld().isClient) {
+                    EMCManager.decrementEmc(player, EMCManager.get(definedStack));
+                    super.setStack(slot, definedStack.copy());
+                }
 
                 // sync emc
                 if (player.getEntity() instanceof ServerPlayerEntity) {

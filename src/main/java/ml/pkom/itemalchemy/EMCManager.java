@@ -549,6 +549,7 @@ public class EMCManager {
                 emc += itemAlchemyTag.getLong("emc");
             }
         }
+
         emc -= amount;
 
         if (playerNbt.contains("itemalchemy")) {

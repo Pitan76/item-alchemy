@@ -19,7 +19,7 @@ public class ExtractSlot extends Slot {
 
     @Override
     public boolean canTakeItems(PlayerEntity playerEntity) {
-        return EMCManager.getEmcFromPlayer(player) >= EMCManager.get(getStack()) && super.canTakeItems(playerEntity);
+        return EMCManager.getEmcFromPlayer(player) >= EMCManager.get(getStack().getItem());
     }
 
     @Override
