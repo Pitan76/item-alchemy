@@ -210,6 +210,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
     }
 
     int transferTime = 0;
+    public boolean quickMoved = false;
 
     @Override
     public ItemStack quickMoveOverride(Player player, int index) {
@@ -227,19 +228,26 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
                 return ItemStack.EMPTY;
             }
 
+                        /*
+            if (index >= 50) {
+                int receivable = (int) Math.min(Math.floorDiv(EMCManager.getEmcFromPlayer(player), EMCManager.get(newStack.getItem())), 64) - 1;
+                if (transferTime >= 63) {
+                    transferTime = 0;
+                    return ItemStack.EMPTY;
+                }
+
+                transferTime++;
+                if (receivable > 0) {
+                    return newStack;
+                }
+            }
+
+             */
+
             if (originalStack.isEmpty()) {
                 slot.setStack(ItemStack.EMPTY);
             } else {
                 slot.markDirty();
-            }
-
-            if (index >= 50) {
-                if (transferTime >= 63 || EMCManager.getEmcFromPlayer(player) < EMCManager.get(newStack.getItem())) {
-                    transferTime = 0;
-                    return ItemStack.EMPTY;
-                }
-                transferTime++;
-                return newStack;
             }
         }
         return ItemStack.EMPTY;

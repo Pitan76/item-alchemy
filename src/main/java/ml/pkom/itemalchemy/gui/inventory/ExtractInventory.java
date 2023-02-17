@@ -78,27 +78,42 @@ public class ExtractInventory extends SimpleInventory {
 
     @Override
     public void setStack(int slot, ItemStack stack) {
+        // 設置
         ItemStack definedStack = definedStacks.get(slot);
-        if (!stack.isEmpty() && !definedStacks.containsKey(slot)) {
+        if (isSettingStack && !stack.isEmpty() && !definedStacks.containsKey(slot)) {
             definedStack = stack.copy();
             definedStacks.put(slot, definedStack);
+            super.setStack(slot, stack);
+        } else if (isSettingStack) {
+            super.setStack(slot, ItemStack.EMPTY);
         }
-        super.setStack(slot, stack);
+
+        // 取り出し用
         if (!isSettingStack) {
             super.setStack(slot, stack);
-            //System.out.println(EMCManager.getEmcFromPlayer(player) + "," + EMCManager.get(definedStack));
-            if (definedStack != null && stack.isEmpty() && EMCManager.getEmcFromPlayer(player) >= EMCManager.get(definedStack)) {
-                if (!player.getWorld().isClient) {
-                    EMCManager.decrementEmc(player, EMCManager.get(definedStack));
-                    super.setStack(slot, definedStack.copy());
-                }
+            if (!player.getWorld().isClient) {
+                //System.out.println(EMCManager.getEmcFromPlayer(player) + "," + EMCManager.get(definedStack));
+                if (definedStack != null && stack.isEmpty() && EMCManager.getEmcFromPlayer(player) >= EMCManager.get(definedStack)) {
+                    /*if (screenHandler != null && screenHandler.quickMoved) {
+                        screenHandler.quickMoved = false;
+                        int receivable = (int) Math.min(Math.floorDiv(EMCManager.getEmcFromPlayer(player), EMCManager.get(definedStack.getItem())), 64) - 1;
+                        EMCManager.decrementEmc(player, EMCManager.get(definedStack) * receivable);
+                        ItemStack copyStack = definedStack.copy();
+                        copyStack.setCount(receivable);
+                        super.setStack(slot, copyStack);
+                    } else {
 
-                // sync emc
-                if (player.getEntity() instanceof ServerPlayerEntity) {
-                    ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player.getEntity();
-                    EMCManager.syncS2C(serverPlayer);
-                }
+                     */
+                        EMCManager.decrementEmc(player, EMCManager.get(definedStack));
+                        super.setStack(slot, definedStack.copy());
+                    //}
 
+                    // sync emc
+                    if (player.getEntity() instanceof ServerPlayerEntity) {
+                        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player.getEntity();
+                        EMCManager.syncS2C(serverPlayer);
+                    }
+                }
             }
         }
     }
