@@ -33,7 +33,7 @@ public class AlchemyChestScreenHandler extends SimpleScreenHandler {
         if (slot.hasStack()) {
             ItemStack itemStack2 = slot.getStack();
             itemStack = itemStack2.copy();
-            if (index < 9 ? !callInsertItem(itemStack2, 9, 45, true) : !this.callInsertItem(itemStack2, 0, 9, false)) {
+            if (index < 35 ? !callInsertItem(itemStack2, 36, 140, false) : !this.callInsertItem(itemStack2, 0, 35, true)) {
                 return ItemStack.EMPTY;
             }
             if (itemStack2.isEmpty()) {

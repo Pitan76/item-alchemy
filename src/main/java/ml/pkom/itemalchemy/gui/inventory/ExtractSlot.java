@@ -17,9 +17,11 @@ public class ExtractSlot extends Slot {
         this.player = inventory.player;
     }
 
+    public boolean canTakeItem = true;
+
     @Override
     public boolean canTakeItems(PlayerEntity playerEntity) {
-        return EMCManager.getEmcFromPlayer(player) >= EMCManager.get(getStack().getItem());
+        return EMCManager.getEmcFromPlayer(player) >= EMCManager.get(getStack().getItem()) && canTakeItem;
     }
 
     @Override

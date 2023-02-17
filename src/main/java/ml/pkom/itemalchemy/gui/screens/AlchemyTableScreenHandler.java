@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -210,7 +211,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
     }
 
     int transferTime = 0;
-    public boolean quickMoved = false;
+    public boolean extracted = false;
 
     @Override
     public ItemStack quickMoveOverride(Player player, int index) {
@@ -227,6 +228,39 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             } else if (!this.callInsertItem(originalStack, 0, 36, false)) {
                 return ItemStack.EMPTY;
             }
+/*
+            if (index >= 50) {
+                int receivable = (int) Math.min(Math.floorDiv(EMCManager.getEmcFromPlayer(player), EMCManager.get(newStack.getItem())), 64);
+                if (!callInsertItem(new ItemStack(newStack.getItem(), receivable), 0, 35, true)) {
+                    return ItemStack.EMPTY;
+                } else {
+
+                    System.out.println(receivable);
+                    transferTime++;
+                    extracted = true;
+                    slot.setStack(new ItemStack(newStack.getItem(), receivable));
+                    extracted = false;
+
+                    EMCManager.decrementEmc(player, EMCManager.get(newStack.getItem()) * receivable);
+
+                    if (player.getEntity() instanceof ServerPlayerEntity) {
+                        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player.getEntity();
+                        EMCManager.syncS2C(serverPlayer);
+                    }
+
+                }
+                return ItemStack.EMPTY;
+            }
+
+ */
+
+            if (originalStack.isEmpty()) {
+                slot.setStack(ItemStack.EMPTY);
+            } else {
+                slot.markDirty();
+            }
+            return ItemStack.EMPTY;
+
 
                         /*
             if (index >= 50) {
@@ -243,12 +277,6 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             }
 
              */
-
-            if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
-            } else {
-                slot.markDirty();
-            }
         }
         return ItemStack.EMPTY;
     }

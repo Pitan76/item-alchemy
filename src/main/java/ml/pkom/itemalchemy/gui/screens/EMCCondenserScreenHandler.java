@@ -114,7 +114,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
                 if (!this.callInsertItem(originalStack, 36 + 1, 36 + 92, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.callInsertItem(originalStack, 0, 36, false)) {
+            } else if (!this.callInsertItem(originalStack, 0, 36, true)) {
                 return ItemStack.EMPTY;
             }
 

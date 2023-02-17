@@ -78,9 +78,10 @@ public class ExtractInventory extends SimpleInventory {
 
     @Override
     public void setStack(int slot, ItemStack stack) {
+
         // 設置
         ItemStack definedStack = definedStacks.get(slot);
-        if (isSettingStack && !stack.isEmpty() && !definedStacks.containsKey(slot)) {
+        if (!stack.isEmpty() && !definedStacks.containsKey(slot)) {
             definedStack = stack.copy();
             definedStacks.put(slot, definedStack);
             super.setStack(slot, stack);
@@ -93,26 +94,17 @@ public class ExtractInventory extends SimpleInventory {
             super.setStack(slot, stack);
             if (!player.getWorld().isClient) {
                 //System.out.println(EMCManager.getEmcFromPlayer(player) + "," + EMCManager.get(definedStack));
-                if (definedStack != null && stack.isEmpty() && EMCManager.getEmcFromPlayer(player) >= EMCManager.get(definedStack)) {
-                    /*if (screenHandler != null && screenHandler.quickMoved) {
-                        screenHandler.quickMoved = false;
-                        int receivable = (int) Math.min(Math.floorDiv(EMCManager.getEmcFromPlayer(player), EMCManager.get(definedStack.getItem())), 64) - 1;
-                        EMCManager.decrementEmc(player, EMCManager.get(definedStack) * receivable);
-                        ItemStack copyStack = definedStack.copy();
-                        copyStack.setCount(receivable);
-                        super.setStack(slot, copyStack);
-                    } else {
 
-                     */
-                        EMCManager.decrementEmc(player, EMCManager.get(definedStack));
-                        super.setStack(slot, definedStack.copy());
-                    //}
+                if (definedStack != null && stack.isEmpty() && EMCManager.getEmcFromPlayer(player) >= EMCManager.get(definedStack)) {
+                    EMCManager.decrementEmc(player, EMCManager.get(definedStack));
+                    super.setStack(slot, definedStack.copy());
 
                     // sync emc
                     if (player.getEntity() instanceof ServerPlayerEntity) {
                         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player.getEntity();
                         EMCManager.syncS2C(serverPlayer);
                     }
+
                 }
             }
         }
