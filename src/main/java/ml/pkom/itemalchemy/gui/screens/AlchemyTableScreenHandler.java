@@ -327,7 +327,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
         Player player = new Player(playerEntity);
 
-        System.out.println("index: " + slotIndex + ", action: " + actionType.name());
+        //System.out.println("index: " + slotIndex + ", action: " + actionType.name());
 
         if (slotIndex >= 50 && !player.getWorld().isClient && (actionType == SlotActionType.PICKUP || actionType == SlotActionType.QUICK_MOVE)) {
 
