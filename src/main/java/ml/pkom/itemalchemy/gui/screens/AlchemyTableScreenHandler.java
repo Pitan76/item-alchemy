@@ -8,6 +8,7 @@ import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.SimpleScreenHandler;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -15,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
@@ -316,6 +318,48 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
             extractInventory.placeExtractSlots(nbtTag);
 
+        }
+    }
+
+    @Override
+    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity playerEntity) {
+        super.onSlotClick(slotIndex, button, actionType, playerEntity);
+
+        Player player = new Player(playerEntity);
+
+        System.out.println("index: " + slotIndex + ", action: " + actionType.name());
+
+        if (slotIndex >= 50 && !player.getWorld().isClient && (actionType == SlotActionType.PICKUP || actionType == SlotActionType.QUICK_MOVE)) {
+
+            Slot slot = callGetSlot(slotIndex);
+            if (!(slot instanceof ExtractSlot)) return;
+            ExtractSlot extractSlot = (ExtractSlot) slot;
+            ItemStack definedStack = extractSlot.inventory.definedStacks.get(slotIndex + 14);
+            ItemStack stack = extractSlot.getStack();
+
+            int receivable = 1;
+            if (actionType == SlotActionType.QUICK_MOVE) {
+                receivable = (int) Math.min(Math.floorDiv(EMCManager.getEmcFromPlayer(player), EMCManager.get(definedStack)), 64);
+            }
+
+
+            if (definedStack != null && stack.isEmpty() && EMCManager.getEmcFromPlayer(player) >= EMCManager.get(definedStack) * receivable) {
+                EMCManager.decrementEmc(player, EMCManager.get(definedStack) * receivable);
+                extractSlot.setStack(definedStack.copy());
+
+                if (receivable > 1) {
+                    ItemStack addedStack = definedStack.copy();
+                    addedStack.setCount(receivable - 1);
+                    player.offerOrDrop(addedStack);
+                }
+
+                // sync emc
+                if (player.getEntity() instanceof ServerPlayerEntity) {
+                    ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player.getEntity();
+                    EMCManager.syncS2C(serverPlayer);
+                }
+
+            }
         }
     }
 }

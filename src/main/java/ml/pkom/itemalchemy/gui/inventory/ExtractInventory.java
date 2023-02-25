@@ -78,7 +78,17 @@ public class ExtractInventory extends SimpleInventory {
 
     @Override
     public void setStack(int slot, ItemStack stack) {
+        if (!stack.isEmpty() && !definedStacks.containsKey(slot)) {
+            //definedStack = stack.copy();
+            definedStacks.put(slot, stack.copy());
+            super.setStack(slot, stack);
+        } else if (isSettingStack) {
+            super.setStack(slot, ItemStack.EMPTY);
+        } else {
+            super.setStack(slot, stack);
+        }
 
+        /*
         // 設置
         ItemStack definedStack = definedStacks.get(slot);
         if (!stack.isEmpty() && !definedStacks.containsKey(slot)) {
@@ -108,5 +118,8 @@ public class ExtractInventory extends SimpleInventory {
                 }
             }
         }
+
+         */
+        super.setStack(slot, stack);
     }
 }
