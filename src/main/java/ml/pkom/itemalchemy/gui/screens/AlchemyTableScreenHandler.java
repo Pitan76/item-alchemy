@@ -322,10 +322,8 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
     }
 
     @Override
-    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity playerEntity) {
-        super.onSlotClick(slotIndex, button, actionType, playerEntity);
-
-        Player player = new Player(playerEntity);
+    public void overrideOnSlotClick(int slotIndex, int button, SlotActionType actionType, Player player) {
+        super.overrideOnSlotClick(slotIndex, button, actionType, player);
 
         //System.out.println("index: " + slotIndex + ", action: " + actionType.name());
 
