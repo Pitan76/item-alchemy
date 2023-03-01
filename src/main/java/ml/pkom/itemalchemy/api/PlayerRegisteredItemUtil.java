@@ -2,7 +2,6 @@ package ml.pkom.itemalchemy.api;
 
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
-import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
@@ -16,7 +15,7 @@ public class PlayerRegisteredItemUtil {
 
         NbtCompound playerNbt = EMCManager.writePlayerNbt(player);
 
-        NbtCompound items = NbtTag.create();
+        NbtCompound items = new NbtCompound();
 
         if (playerNbt.contains("itemalchemy")) {
             NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
@@ -47,7 +46,7 @@ public class PlayerRegisteredItemUtil {
 
     public static void setItemsForString(Player player, List<String> list) {
         NbtCompound playerNbt = EMCManager.writePlayerNbt(player);
-        NbtTag items = new NbtTag();
+        NbtCompound items = new NbtCompound();
         for (String id : list) {
             items.putBoolean(id, true);
         }
@@ -56,7 +55,7 @@ public class PlayerRegisteredItemUtil {
             NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
             itemAlchemyTag.put("registered_items", items);
         } else {
-            NbtCompound itemAlchemyTag = new NbtTag();
+            NbtCompound itemAlchemyTag = new NbtCompound();
             itemAlchemyTag.put("registered_items", items);
             playerNbt.put("itemalchemy", itemAlchemyTag);
         }

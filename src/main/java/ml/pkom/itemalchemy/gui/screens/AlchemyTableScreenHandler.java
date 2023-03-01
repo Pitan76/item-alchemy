@@ -6,9 +6,7 @@ import ml.pkom.itemalchemy.api.PlayerRegisteredItemUtil;
 import ml.pkom.itemalchemy.gui.inventory.*;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.SimpleScreenHandler;
-import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -298,7 +296,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
         if (nbtTag.contains("itemalchemy")) {
 
-            NbtCompound items = NbtTag.create();
+            NbtCompound items = new NbtCompound();
 
             NbtCompound itemAlchemyTag = nbtTag.getCompound("itemalchemy");
             if (itemAlchemyTag.contains("registered_items")) {

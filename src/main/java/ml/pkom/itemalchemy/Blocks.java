@@ -20,7 +20,7 @@ public class Blocks {
     public static RegistryEvent<Block> EMC_COLLECTOR_MK5;
     public static RegistryEvent<Block> ALCHEMY_CHEST;
     public static RegistryEvent<Block> EMC_CONDENSER;
-    public static RegistryEvent<Block> EMC_CONDENSER_MK2;
+    //public static RegistryEvent<Block> EMC_CONDENSER_MK2;
     public static RegistryEvent<Block> EMC_REPEATER;
     public static RegistryEvent<Block> AEGU;
     public static RegistryEvent<Block> ADVANCED_AEGU;
@@ -38,7 +38,7 @@ public class Blocks {
         EMC_COLLECTOR_MK5 = registry.registerBlock(id("emc_collector_mk5"), () -> new EMCCollector(2000000));
         ALCHEMY_CHEST = registry.registerBlock(id("alchemy_chest"), AlchemyChest::new);
         EMC_CONDENSER = registry.registerBlock(id("emc_condenser"), EMCCondenser::new);
-        EMC_CONDENSER_MK2 = registry.registerBlock(id("emc_condenser_mk2"), EMCCondenserMK2::new);
+        //EMC_CONDENSER_MK2 = registry.registerBlock(id("emc_condenser_mk2"), EMCCondenserMK2::new);
         EMC_REPEATER = registry.registerBlock(id("emc_repeater"), EMCRepeater::new);
         AEGU = registry.registerBlock(id("aegu"), () -> new AEGUBlock(40 / 10));
         ADVANCED_AEGU = registry.registerBlock(id("advanced_aegu"), () -> new AEGUBlock(1000 / 10));
