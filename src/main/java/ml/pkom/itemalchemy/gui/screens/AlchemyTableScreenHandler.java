@@ -210,9 +210,6 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
         return slots;
     }
 
-    int transferTime = 0;
-    public boolean extracted = false;
-
     @Override
     public ItemStack quickMoveOverride(Player player, int index) {
         ItemStack newStack;
@@ -228,31 +225,6 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             } else if (!this.callInsertItem(originalStack, 0, 36, false)) {
                 return ItemStack.EMPTY;
             }
-/*
-            if (index >= 50) {
-                int receivable = (int) Math.min(Math.floorDiv(EMCManager.getEmcFromPlayer(player), EMCManager.get(newStack.getItem())), 64);
-                if (!callInsertItem(new ItemStack(newStack.getItem(), receivable), 0, 35, true)) {
-                    return ItemStack.EMPTY;
-                } else {
-
-                    System.out.println(receivable);
-                    transferTime++;
-                    extracted = true;
-                    slot.setStack(new ItemStack(newStack.getItem(), receivable));
-                    extracted = false;
-
-                    EMCManager.decrementEmc(player, EMCManager.get(newStack.getItem()) * receivable);
-
-                    if (player.getEntity() instanceof ServerPlayerEntity) {
-                        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player.getEntity();
-                        EMCManager.syncS2C(serverPlayer);
-                    }
-
-                }
-                return ItemStack.EMPTY;
-            }
-
- */
 
             if (originalStack.isEmpty()) {
                 slot.setStack(ItemStack.EMPTY);
@@ -260,23 +232,6 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
                 slot.markDirty();
             }
             return ItemStack.EMPTY;
-
-
-                        /*
-            if (index >= 50) {
-                int receivable = (int) Math.min(Math.floorDiv(EMCManager.getEmcFromPlayer(player), EMCManager.get(newStack.getItem())), 64) - 1;
-                if (transferTime >= 63) {
-                    transferTime = 0;
-                    return ItemStack.EMPTY;
-                }
-
-                transferTime++;
-                if (receivable > 0) {
-                    return newStack;
-                }
-            }
-
-             */
         }
         return ItemStack.EMPTY;
     }
@@ -325,7 +280,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
         //System.out.println("index: " + slotIndex + ", action: " + actionType.name());
 
-        if (slotIndex >= 50 && !player.getWorld().isClient && (actionType == SlotActionType.PICKUP || actionType == SlotActionType.QUICK_MOVE)) {
+        if (slotIndex >= 50 && !player.getWorld().isClient && (actionType == SlotActionType.SWAP || actionType == SlotActionType.PICKUP || actionType == SlotActionType.QUICK_MOVE || actionType == SlotActionType.THROW)) {
 
             Slot slot = callGetSlot(slotIndex);
             if (!(slot instanceof ExtractSlot)) return;
