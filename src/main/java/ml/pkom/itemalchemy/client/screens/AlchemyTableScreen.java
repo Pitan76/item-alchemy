@@ -70,7 +70,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
         searchBox = new TextFieldWidget(this.textRenderer, x + 85,  y + 5, 60, 9, TextUtil.literal(""));
         searchBox.setDrawsBackground(true);
         searchBox.setFocusUnlocked(true);
-        searchBox.setTextFieldFocused(false);
+        ScreenUtil.TextFieldUtil.setFocused(searchBox, false);
         searchBox.setMaxLength(2048);
         searchBox.setText("");
         addDrawableChild_compatibility(searchBox);

@@ -52,6 +52,8 @@ public class ItemAlchemy {
             }
         });
 
+        EventRegistry.ServerLifecycle.serverStopped(EMCManager::exit);
+
         ServerNetworking.registerReceiver(id("network"), ((server, p, buf) -> {
             NbtCompound nbt = buf.readNbt();
             if (nbt.contains("control")) {

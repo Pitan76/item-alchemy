@@ -10,8 +10,10 @@ import ml.pkom.mcpitanlibarch.api.network.PacketByteUtil;
 import ml.pkom.mcpitanlibarch.api.network.ServerNetworking;
 import ml.pkom.mcpitanlibarch.api.tag.TagKey;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
+import ml.pkom.mcpitanlibarch.api.util.RecipeUtil;
 import ml.pkom.mcpitanlibarch.api.util.ResourceUtil;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -145,6 +147,10 @@ public class EMCManager {
                 syncS2C_emc_map(player);
             }
         }
+    }
+
+    public static void exit(MinecraftServer server) {
+        playerCache = new HashMap<>();
     }
 
     public static void defaultMap() {
@@ -492,14 +498,14 @@ public class EMCManager {
 
         for (Recipe<?> recipe : recipes) {
             try {
-                ItemStack outStack = recipe.getOutput();
+                ItemStack outStack = RecipeUtil.getOutput((Recipe<Inventory>) recipe, world);
                 addEmcFromRecipe(outStack, recipe, unsetRecipes, false);
             } catch (NoClassDefFoundError | Exception ignore) {}
         }
         List<Recipe<?>> dummy = new ArrayList<>();
         for (Recipe<?> recipe : unsetRecipes) {
             try {
-                ItemStack outStack = recipe.getOutput();
+                ItemStack outStack = RecipeUtil.getOutput((Recipe<Inventory>) recipe, world);;
                 addEmcFromRecipe(outStack, recipe, dummy, true);
             } catch (NoClassDefFoundError | Exception ignore) {}
         }
@@ -627,9 +633,9 @@ public class EMCManager {
     public static void readPlayerNbt(Player player, NbtCompound playerNbt) {
 
         if (playerCache.containsKey(player.getName()))
-            playerCache.put(player.getName(), playerNbt);
-        else
             playerCache.replace(player.getName(), playerNbt);
+        else
+            playerCache.put(player.getName(), playerNbt);
         //player.getPlayerEntity().readCustomDataFromNbt(playerNbt);
     }
 
@@ -650,7 +656,7 @@ public class EMCManager {
         }
         if (map.isEmpty()) return;
         PacketByteBuf buf = PacketByteUtil.create();
-        NbtTag data = NbtTag.create();
+        NbtCompound data = NbtTag.create();
 
         for (Map.Entry<String, Long> entry : map.entrySet()) {
             if (entry.getValue() == 0) continue;
