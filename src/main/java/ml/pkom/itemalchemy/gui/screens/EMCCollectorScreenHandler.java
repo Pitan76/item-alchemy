@@ -5,7 +5,7 @@ import ml.pkom.itemalchemy.gui.slot.TargetSlot;
 import ml.pkom.itemalchemy.tiles.EMCCollectorTile;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.ExtendedScreenHandler;
-import net.minecraft.entity.player.PlayerEntity;
+import ml.pkom.mcpitanlibarch.api.util.SlotUtil;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -63,12 +63,12 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
     @Override
     public ItemStack quickMoveOverride(Player player, int index) {
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot.hasStack()) {
+            ItemStack originalStack = SlotUtil.getStack(slot);
             // TargetSlot
             if (index == 37) {
                 Slot targetSlot = this.slots.get(37);
-                targetSlot.setStack(ItemStack.EMPTY);
+                SlotUtil.setStack(targetSlot, ItemStack.EMPTY);
                 return ItemStack.EMPTY;
             }
 
@@ -81,10 +81,10 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
 
                 // TargetSlot
                 Slot targetSlot = this.slots.get(37);
-                if (targetSlot.getStack().isEmpty()) {
+                if (SlotUtil.getStack(targetSlot).isEmpty()) {
                     ItemStack newTargetStack = originalStack.copy();
                     newTargetStack.setCount(37);
-                    targetSlot.setStack(newTargetStack);
+                    SlotUtil.setStack(targetSlot, newTargetStack);
                     return ItemStack.EMPTY;
                 }
             } else if (!this.callInsertItem(originalStack, 0, 36, false)) {
@@ -92,7 +92,7 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                SlotUtil.setStack(slot, ItemStack.EMPTY);
             } else {
                 slot.markDirty();
             }
@@ -101,15 +101,15 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
     }
 
     @Override
-    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
+    public void overrideOnSlotClick(int slotIndex, int button, SlotActionType actionType, Player player) {
         if (slotIndex == 37) { // Target Slot
             ItemStack oldStack = getCursorStack().copy();
-            super.onSlotClick(slotIndex, button, actionType, player);
+            super.overrideOnSlotClick(slotIndex, button, actionType, player);
             if (!oldStack.isEmpty()) {
                 setCursorStack(oldStack);
             }
             return;
         }
-        super.onSlotClick(slotIndex, button, actionType, player);
+        super.overrideOnSlotClick(slotIndex, button, actionType, player);
     }
 }

@@ -6,6 +6,7 @@ import ml.pkom.itemalchemy.gui.slot.TargetSlot;
 import ml.pkom.itemalchemy.tiles.EMCCondenserTile;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.ExtendedScreenHandler;
+import ml.pkom.mcpitanlibarch.api.util.SlotUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -91,22 +92,22 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     @Override
     public ItemStack quickMoveOverride(Player player, int index) {
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot.hasStack()) {
+            ItemStack originalStack = SlotUtil.getStack(slot);
             // TargetSlot
             if (index == 36) {
                 Slot targetSlot = this.slots.get(36);
-                targetSlot.setStack(ItemStack.EMPTY);
+                SlotUtil.setStack(targetSlot, ItemStack.EMPTY);
                 return ItemStack.EMPTY;
             }
 
             if (index < 36) {
                 // TargetSlot
                 Slot targetSlot = this.slots.get(36);
-                if (targetSlot.getStack().isEmpty()) {
+                if (SlotUtil.getStack(targetSlot).isEmpty()) {
                     ItemStack newTargetStack = originalStack.copy();
                     newTargetStack.setCount(1);
-                    targetSlot.setStack(newTargetStack);
+                    SlotUtil.setStack(targetSlot, newTargetStack);
                     return ItemStack.EMPTY;
                 }
 
@@ -119,7 +120,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                SlotUtil.setStack(slot, ItemStack.EMPTY);
             } else {
                 slot.markDirty();
             }

@@ -1,10 +1,9 @@
 package ml.pkom.itemalchemy.blocks;
 
+import ml.pkom.mcpitanlibarch.api.block.CompatibleBlockSettings;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
-import net.minecraft.block.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -13,12 +12,12 @@ import java.util.List;
 
 public class EMCRepeater extends ExtendBlock {
 
-    public EMCRepeater(Settings settings) {
+    public EMCRepeater(CompatibleBlockSettings settings) {
         super(settings);
     }
 
     public EMCRepeater() {
-        this(AbstractBlock.Settings.copy(Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f));
+        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f));
     }
 
     private static List<BlockPos> getNearPoses(World world, BlockPos[] blockPoses, List<BlockPos> emcRepeaterPosList) {

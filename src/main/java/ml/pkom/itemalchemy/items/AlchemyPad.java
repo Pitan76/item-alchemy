@@ -4,6 +4,7 @@ import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.item.ItemUseEvent;
+import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;
 import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -11,7 +12,7 @@ import net.minecraft.util.TypedActionResult;
 
 public class AlchemyPad extends ExtendItem {
 
-    public AlchemyPad(Settings settings) {
+    public AlchemyPad(CompatibleItemSettings settings) {
         super(settings);
     }
 

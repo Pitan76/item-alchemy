@@ -10,6 +10,7 @@ import ml.pkom.itemalchemy.gui.slot.RemoveSlot;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.SimpleScreenHandler;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
+import ml.pkom.mcpitanlibarch.api.util.SlotUtil;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -218,7 +219,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
         ItemStack newStack;
         Slot slot = this.slots.get(index);
         if (slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+            ItemStack originalStack = SlotUtil.getStack(slot);
             newStack = originalStack.copy();
 
             if (index < 36) { // indexがRegisterサイズより小さい
@@ -230,7 +231,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                SlotUtil.setStack(slot, ItemStack.EMPTY);
             } else {
                 slot.markDirty();
             }
@@ -289,7 +290,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             if (!(slot instanceof ExtractSlot)) return;
             ExtractSlot extractSlot = (ExtractSlot) slot;
             ItemStack definedStack = extractSlot.inventory.definedStacks.get(slotIndex + 14);
-            ItemStack stack = extractSlot.getStack();
+            ItemStack stack = SlotUtil.getStack(extractSlot);
 
             int receivable = 1;
             if (actionType == SlotActionType.QUICK_MOVE) {
@@ -299,7 +300,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
             if (definedStack != null && stack.isEmpty() && EMCManager.getEmcFromPlayer(player) >= EMCManager.get(definedStack) * receivable) {
                 EMCManager.decrementEmc(player, EMCManager.get(definedStack) * receivable);
-                extractSlot.setStack(definedStack.copy());
+                SlotUtil.setStack(extractSlot, definedStack.copy());
 
                 if (receivable > 1) {
                     ItemStack addedStack = definedStack.copy();

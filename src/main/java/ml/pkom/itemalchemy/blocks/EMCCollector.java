@@ -1,6 +1,7 @@
 package ml.pkom.itemalchemy.blocks;
 
 import ml.pkom.itemalchemy.tiles.EMCCollectorTile;
+import ml.pkom.mcpitanlibarch.api.block.CompatibleBlockSettings;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlockEntityProvider;
 import ml.pkom.mcpitanlibarch.api.event.block.BlockUseEvent;
@@ -31,7 +32,7 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
 
     public long maxEMC;
 
-    public EMCCollector(Settings settings, long maxEMC) {
+    public EMCCollector(CompatibleBlockSettings settings, long maxEMC) {
         super(settings);
         setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
         this.maxEMC = maxEMC;
@@ -68,7 +69,7 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
     }
 
     public EMCCollector(long maxEMC) {
-        this(AbstractBlock.Settings.copy(Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f), maxEMC);
+        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f), maxEMC);
     }
 
     @Override

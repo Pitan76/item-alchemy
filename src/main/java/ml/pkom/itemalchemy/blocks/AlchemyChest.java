@@ -1,6 +1,7 @@
 package ml.pkom.itemalchemy.blocks;
 
 import ml.pkom.itemalchemy.tiles.AlchemyChestTile;
+import ml.pkom.mcpitanlibarch.api.block.CompatibleBlockSettings;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlockEntityProvider;
 import ml.pkom.mcpitanlibarch.api.event.block.BlockUseEvent;
@@ -29,7 +30,7 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
 
     private static final Text TITLE = TextUtil.translatable("block.itemalchemy.alchemy_chest");
 
-    public AlchemyChest(Settings settings) {
+    public AlchemyChest(CompatibleBlockSettings settings) {
         super(settings);
         setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
     }
@@ -60,7 +61,7 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
     }
 
     public AlchemyChest() {
-        this(Settings.copy(Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f));
+        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f));
     }
 
     @Override

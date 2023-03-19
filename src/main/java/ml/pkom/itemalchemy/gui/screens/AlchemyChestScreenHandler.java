@@ -3,7 +3,7 @@ package ml.pkom.itemalchemy.gui.screens;
 import ml.pkom.itemalchemy.ScreenHandlers;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.SimpleScreenHandler;
-import ml.pkom.mcpitanlibarch.api.gui.slot.CompatibleSlot;
+import ml.pkom.mcpitanlibarch.api.util.SlotUtil;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -32,13 +32,13 @@ public class AlchemyChestScreenHandler extends SimpleScreenHandler {
         ItemStack itemStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot.hasStack()) {
-            ItemStack itemStack2 = slot.getStack();
+            ItemStack itemStack2 = SlotUtil.getStack(slot);
             itemStack = itemStack2.copy();
             if (index < 35 ? !callInsertItem(itemStack2, 36, 140, false) : !this.callInsertItem(itemStack2, 0, 35, true)) {
                 return ItemStack.EMPTY;
             }
             if (itemStack2.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                SlotUtil.setStack(slot, ItemStack.EMPTY);
             } else {
                 slot.markDirty();
             }

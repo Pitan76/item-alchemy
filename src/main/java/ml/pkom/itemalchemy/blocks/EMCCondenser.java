@@ -1,6 +1,7 @@
 package ml.pkom.itemalchemy.blocks;
 
 import ml.pkom.itemalchemy.tiles.EMCCondenserTile;
+import ml.pkom.mcpitanlibarch.api.block.CompatibleBlockSettings;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlockEntityProvider;
 import ml.pkom.mcpitanlibarch.api.event.block.BlockUseEvent;
@@ -31,7 +32,7 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
 
     public long maxEMC = 100000;
 
-    public EMCCondenser(Settings settings) {
+    public EMCCondenser(CompatibleBlockSettings settings) {
         super(settings);
         getStateManager().getDefaultState().with(FACING, Direction.NORTH);
     }
@@ -63,7 +64,7 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
     }
 
     public EMCCondenser() {
-        this(Settings.copy(Blocks.STONE).mapColor(MapColor.BLACK).strength(2f, 7.0f));
+        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.BLACK).strength(2f, 7.0f));
     }
 
     @Override

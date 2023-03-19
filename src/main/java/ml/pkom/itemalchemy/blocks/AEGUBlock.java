@@ -2,6 +2,7 @@ package ml.pkom.itemalchemy.blocks;
 
 import ml.pkom.itemalchemy.tiles.AEGUTile;
 import ml.pkom.itemalchemy.tiles.EMCCondenserTile;
+import ml.pkom.mcpitanlibarch.api.block.CompatibleBlockSettings;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlockEntityProvider;
 import ml.pkom.mcpitanlibarch.api.event.block.BlockUseEvent;
@@ -21,7 +22,7 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
     public static BooleanProperty CONNECTED = BooleanProperty.of("connected");
     public long emc;
 
-    public AEGUBlock(Settings settings, long emc) {
+    public AEGUBlock(CompatibleBlockSettings settings, long emc) {
         super(settings);
         setDefaultState(getStateManager().getDefaultState().with(CONNECTED, false));
         this.emc = emc;
@@ -38,7 +39,7 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
     }
 
     public AEGUBlock(long emc) {
-        this(Settings.copy(Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f), emc);
+        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f), emc);
     }
 
     public static BlockState setConnected(BlockState state, boolean isConnected) {

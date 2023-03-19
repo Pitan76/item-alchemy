@@ -4,6 +4,7 @@ import ml.pkom.itemalchemy.Sounds;
 import ml.pkom.mcpitanlibarch.Dummy;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.item.ItemUseOnBlockEvent;
+import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;
 import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
 import ml.pkom.mcpitanlibarch.api.item.FixedRecipeRemainderItem;
 import net.minecraft.block.Block;
@@ -85,7 +86,7 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
         shift_exchange_map.put(Blocks.SAND, Blocks.COBBLESTONE);
     }
 
-    public PhilosopherStone(Settings settings) {
+    public PhilosopherStone(CompatibleItemSettings settings) {
         super(settings); //.recipeRemainder(Items.PHILOSOPHER_STONE.getOrNull())
     }
 
