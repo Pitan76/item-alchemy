@@ -33,7 +33,7 @@ public class ItemAlchemy {
 
     public static ArchRegistry registry = ArchRegistry.createRegistry(MOD_ID);
 
-    public static ItemGroup ITEM_ALCHEMY = new CreativeTabBuilder(id("item_alchemy")).setIcon(() -> new ItemStack(Items.PHILOSOPHER_STONE.getOrNull(), 1)).build();
+    public static ItemGroup ITEM_ALCHEMY = CreativeTabBuilder.create(id("item_alchemy")).setIcon(() -> new ItemStack(Items.PHILOSOPHER_STONE.getOrNull(), 1)).build();
 
     public static void init() {
         Sounds.init();

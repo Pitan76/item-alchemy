@@ -1,11 +1,11 @@
-package ml.pkom.itemalchemy.gui.inventory;
+package ml.pkom.itemalchemy.gui.slot;
 
 import ml.pkom.itemalchemy.tiles.EMCCondenserTile;
+import ml.pkom.mcpitanlibarch.api.gui.slot.CompatibleSlot;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
 
-public class CondenserStorageSlot extends Slot {
+public class CondenserStorageSlot extends CompatibleSlot {
     public CondenserStorageSlot(Inventory inventory, int index, int x, int y) {
         super(inventory, index, x, y);
     }

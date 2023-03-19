@@ -39,7 +39,7 @@ public class RegisterInventory extends SimpleInventory {
                 NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
                 itemAlchemyTag.put("registered_items", items);
             } else {
-                NbtCompound itemAlchemyTag = new NbtTag();
+                NbtCompound itemAlchemyTag = NbtTag.create();
                 itemAlchemyTag.put("registered_items", items);
                 playerNbt.put("itemalchemy", itemAlchemyTag);
             }

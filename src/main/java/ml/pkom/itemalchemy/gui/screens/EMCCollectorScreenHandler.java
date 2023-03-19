@@ -1,7 +1,7 @@
 package ml.pkom.itemalchemy.gui.screens;
 
 import ml.pkom.itemalchemy.ScreenHandlers;
-import ml.pkom.itemalchemy.gui.inventory.TargetSlot;
+import ml.pkom.itemalchemy.gui.slot.TargetSlot;
 import ml.pkom.itemalchemy.tiles.EMCCollectorTile;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.ExtendedScreenHandler;

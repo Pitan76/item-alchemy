@@ -3,6 +3,7 @@ package ml.pkom.itemalchemy.gui.screens;
 import ml.pkom.itemalchemy.ScreenHandlers;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.SimpleScreenHandler;
+import ml.pkom.mcpitanlibarch.api.gui.slot.CompatibleSlot;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;

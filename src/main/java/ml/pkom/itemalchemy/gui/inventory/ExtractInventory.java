@@ -87,39 +87,6 @@ public class ExtractInventory extends SimpleInventory {
         } else {
             super.setStack(slot, stack);
         }
-
-        /*
-        // 設置
-        ItemStack definedStack = definedStacks.get(slot);
-        if (!stack.isEmpty() && !definedStacks.containsKey(slot)) {
-            definedStack = stack.copy();
-            definedStacks.put(slot, definedStack);
-            super.setStack(slot, stack);
-        } else if (isSettingStack) {
-            super.setStack(slot, ItemStack.EMPTY);
-        }
-
-        // 取り出し用
-        if (!isSettingStack) {
-            super.setStack(slot, stack);
-            if (!player.getWorld().isClient) {
-                //System.out.println(EMCManager.getEmcFromPlayer(player) + "," + EMCManager.get(definedStack));
-
-                if (definedStack != null && stack.isEmpty() && EMCManager.getEmcFromPlayer(player) >= EMCManager.get(definedStack)) {
-                    EMCManager.decrementEmc(player, EMCManager.get(definedStack));
-                    super.setStack(slot, definedStack.copy());
-
-                    // sync emc
-                    if (player.getEntity() instanceof ServerPlayerEntity) {
-                        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player.getEntity();
-                        EMCManager.syncS2C(serverPlayer);
-                    }
-
-                }
-            }
-        }
-
-         */
         super.setStack(slot, stack);
     }
 }

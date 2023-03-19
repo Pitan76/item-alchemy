@@ -1,16 +1,16 @@
-package ml.pkom.itemalchemy.gui.inventory;
+package ml.pkom.itemalchemy.gui.slot;
 
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
+import ml.pkom.mcpitanlibarch.api.gui.slot.CompatibleSlot;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.slot.Slot;
 
-public class RemoveSlot extends Slot {
+public class RemoveSlot extends CompatibleSlot {
     public Player player;
 
     public RemoveSlot(Inventory inventory, int index, int x, int y, Player player) {
@@ -19,7 +19,7 @@ public class RemoveSlot extends Slot {
     }
 
     @Override
-    public void setStack(ItemStack stack) {
+    public void callSetStack(ItemStack stack) {
 
         NbtCompound playerNbt = EMCManager.writePlayerNbt(player);
         NbtCompound items = NbtTag.create();
@@ -43,7 +43,7 @@ public class RemoveSlot extends Slot {
             NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
             itemAlchemyTag.put("registered_items", items);
         } else {
-            NbtCompound itemAlchemyTag = new NbtTag();
+            NbtCompound itemAlchemyTag = NbtTag.create();
             itemAlchemyTag.put("registered_items", items);
             playerNbt.put("itemalchemy", itemAlchemyTag);
         }
@@ -54,6 +54,6 @@ public class RemoveSlot extends Slot {
             AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
             screenHandler.extractInventory.placeExtractSlots();
         }
-        super.setStack(ItemStack.EMPTY);
+        super.callSetStack(ItemStack.EMPTY);
     }
 }

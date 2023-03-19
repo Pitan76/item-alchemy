@@ -1,12 +1,12 @@
-package ml.pkom.itemalchemy.gui.inventory;
+package ml.pkom.itemalchemy.gui.slot;
 
 import ml.pkom.itemalchemy.EMCManager;
+import ml.pkom.mcpitanlibarch.api.gui.slot.CompatibleSlot;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
 
-public class TargetSlot extends Slot {
+public class TargetSlot extends CompatibleSlot {
 
     private final ScreenHandler screenHandler;
 
@@ -21,15 +21,15 @@ public class TargetSlot extends Slot {
     }
 
     @Override
-    public void setStack(ItemStack stack) {
+    public void callSetStack(ItemStack stack) {
         ItemStack newStack = stack.copy();
         newStack.setCount(1);
-        super.setStack(newStack);
+        super.callSetStack(newStack);
     }
 
     @Override
-    public ItemStack takeStack(int amount) {
-        setStack(ItemStack.EMPTY);
+    public ItemStack callTakeStack(int amount) {
+        callSetStack(ItemStack.EMPTY);
         return ItemStack.EMPTY;
     }
 
