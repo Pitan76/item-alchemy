@@ -12,6 +12,7 @@ import ml.pkom.mcpitanlibarch.api.client.registry.KeybindingRegistry;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.network.ClientNetworking;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -24,6 +25,9 @@ public class ItemAlchemyClient {
     public static NbtCompound itemAlchemyNbt;
 
     public static void init() {
+        // Mixinを使った場合、関数が1.20から変更されているために使えないのでこちらで対処しておく
+        ItemTooltipCallback.EVENT.register((stack, context, lines) -> lines.addAll(getEmcText(stack)));
+
         ArchRegistryClient.registerScreen(ScreenHandlers.ALCHEMY_TABLE, AlchemyTableScreen::new);
         ArchRegistryClient.registerScreen(ScreenHandlers.EMC_COLLECTOR, EMCCollectorScreen::new);
         ArchRegistryClient.registerScreen(ScreenHandlers.EMC_CONDENSER, EMCCondenserScreen::new);
