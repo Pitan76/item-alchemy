@@ -17,6 +17,7 @@ repositories {
     maven { url 'https://jitpack.io' }
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.pkom.ml/" }
+    maven { url "https://maven.architectury.dev/" }
 }
 
 dependencies {

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "OO",
+    "#O",
+    "# "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "O": {
+      "item": "itemalchemy:dark_matter"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:dark_matter_axe",
+    "count": 1
+  }
+}

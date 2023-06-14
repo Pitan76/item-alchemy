@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "itemalchemy:item/tools/red_matter_axe"
+  }
+}

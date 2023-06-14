@@ -1,31 +1,33 @@
 package ml.pkom.itemalchemy;
 
-import ml.pkom.itemalchemy.client.screens.AlchemyChestScreen;
-import ml.pkom.itemalchemy.client.screens.AlchemyTableScreen;
-import ml.pkom.itemalchemy.client.screens.EMCCollectorScreen;
-import ml.pkom.itemalchemy.client.screens.EMCCondenserScreen;
-import ml.pkom.itemalchemy.gui.screens.EMCCollectorScreenHandler;
-import ml.pkom.itemalchemy.gui.screens.EMCCondenserScreenHandler;
+import ml.pkom.itemalchemy.client.screen.AlchemyChestScreen;
+import ml.pkom.itemalchemy.client.screen.AlchemyTableScreen;
+import ml.pkom.itemalchemy.client.screen.EMCCollectorScreen;
+import ml.pkom.itemalchemy.client.screen.EMCCondenserScreen;
+import ml.pkom.itemalchemy.gui.screen.EMCCollectorScreenHandler;
+import ml.pkom.itemalchemy.gui.screen.EMCCondenserScreenHandler;
+import ml.pkom.itemalchemy.gui.screen.ScreenHandlers;
 import ml.pkom.mcpitanlibarch.api.client.registry.ArchRegistryClient;
+import ml.pkom.mcpitanlibarch.api.client.registry.KeybindingRegistry;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.network.ClientNetworking;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
 
 public class ItemAlchemyClient {
     public static NbtCompound itemAlchemyNbt;
 
-    public static ArchRegistryClient registry = new ArchRegistryClient();
-    
     public static void init() {
-        registry.registerScreen(ScreenHandlers.ALCHEMY_TABLE, AlchemyTableScreen::new);
-        registry.registerScreen(ScreenHandlers.EMC_COLLECTOR, EMCCollectorScreen::new);
-        registry.registerScreen(ScreenHandlers.EMC_CONDENSER, EMCCondenserScreen::new);
-        registry.registerScreen(ScreenHandlers.ALCHEMY_CHEST, AlchemyChestScreen::new);
+        ArchRegistryClient.registerScreen(ScreenHandlers.ALCHEMY_TABLE, AlchemyTableScreen::new);
+        ArchRegistryClient.registerScreen(ScreenHandlers.EMC_COLLECTOR, EMCCollectorScreen::new);
+        ArchRegistryClient.registerScreen(ScreenHandlers.EMC_CONDENSER, EMCCondenserScreen::new);
+        ArchRegistryClient.registerScreen(ScreenHandlers.ALCHEMY_CHEST, AlchemyChestScreen::new);
 
         ClientNetworking.registerReceiver(ItemAlchemy.id("sync_emc"), (client, p, buf) -> {
             NbtCompound nbt = buf.readNbt();
@@ -69,6 +71,8 @@ public class ItemAlchemyClient {
                 screenHandler.maxEMC = maxEMC;
             }
         });
+
+        KeybindingRegistry.registerOnLevelWithNetwork(new KeyBinding("key.itemalchemy.charge", GLFW.GLFW_KEY_V, "category.itemalchemy.tool"), ItemAlchemy.id("tool_charge"));
     }
 
     public static long getClientPlayerEMC() {
@@ -88,7 +92,6 @@ public class ItemAlchemyClient {
             emc = EMCManager.getMap().get(EMCManager.itemToId(stack.getItem()));
         } catch (Exception e) {
             emc = 0;
-            //System.out.println(e.getMessage());
         }
         if (emc == 0) {
             return list;

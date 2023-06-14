@@ -1,6 +1,6 @@
 package ml.pkom.itemalchemy.gui.slot;
 
-import ml.pkom.itemalchemy.tiles.EMCCondenserTile;
+import ml.pkom.itemalchemy.tile.EMCCondenserTile;
 import ml.pkom.mcpitanlibarch.api.gui.slot.CompatibleSlot;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;

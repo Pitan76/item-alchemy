@@ -1,6 +1,6 @@
 package ml.pkom.itemalchemy.gui;
 
-import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
+import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

@@ -1,7 +1,7 @@
 package ml.pkom.itemalchemy.gui.slot;
 
 import ml.pkom.itemalchemy.EMCManager;
-import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
+import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.slot.CompatibleSlot;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;

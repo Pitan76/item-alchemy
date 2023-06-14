@@ -1,8 +1,13 @@
 package ml.pkom.itemalchemy;
 
+import ml.pkom.itemalchemy.block.Blocks;
 import ml.pkom.itemalchemy.command.ItemAlchemyCommand;
-import ml.pkom.itemalchemy.gui.screens.AlchemyTableScreenHandler;
-import ml.pkom.itemalchemy.tiles.Tiles;
+import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
+import ml.pkom.itemalchemy.gui.screen.ScreenHandlers;
+import ml.pkom.itemalchemy.item.ItemGroups;
+import ml.pkom.itemalchemy.item.Items;
+import ml.pkom.itemalchemy.sound.Sounds;
+import ml.pkom.itemalchemy.tile.Tiles;
 import ml.pkom.mcpitanlibarch.api.command.CommandRegistry;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.v0.EventRegistry;
@@ -36,6 +41,8 @@ public class ItemAlchemy {
     public static ItemGroup ITEM_ALCHEMY = CreativeTabBuilder.create(id("item_alchemy")).setIcon(() -> new ItemStack(Items.PHILOSOPHER_STONE.getOrNull(), 1)).build();
 
     public static void init() {
+        registry.registerItemGroup(id("item_alchemy"), () -> ITEM_ALCHEMY);
+
         Sounds.init();
         Blocks.init();
         Items.init();

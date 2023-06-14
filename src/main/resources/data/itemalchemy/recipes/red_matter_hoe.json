@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "OO",
+    "# ",
+    "# "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "O": {
+      "item": "itemalchemy:red_matter"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:red_matter_hoe",
+    "count": 1
+  }
+}
