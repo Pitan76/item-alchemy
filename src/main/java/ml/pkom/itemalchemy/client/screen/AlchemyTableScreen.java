@@ -27,7 +27,8 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
     public TextFieldWidget searchBox;
     public AlchemyTableScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
-        this.passEvents = false;
+        ScreenUtil.setPassEvents(this, false);
+
         this.playerInventory = inventory;
         setBackgroundWidth(208);
         setBackgroundHeight(222);

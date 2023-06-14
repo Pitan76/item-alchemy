@@ -4,12 +4,12 @@ import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import ml.pkom.mcpitanlibarch.api.client.SimpleHandledScreen;
 import ml.pkom.mcpitanlibarch.api.client.render.handledscreen.DrawBackgroundArgs;
+import ml.pkom.mcpitanlibarch.api.client.render.handledscreen.DrawForegroundArgs;
 import ml.pkom.mcpitanlibarch.api.client.render.handledscreen.DrawMouseoverTooltipArgs;
 import ml.pkom.mcpitanlibarch.api.client.render.handledscreen.RenderArgs;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import ml.pkom.mcpitanlibarch.api.util.client.RenderUtil;
 import ml.pkom.mcpitanlibarch.api.util.client.ScreenUtil;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
@@ -41,13 +41,12 @@ public class EMCCollectorScreen extends SimpleHandledScreen {
     }
 
     @Override
-    public void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
+    public void drawForegroundOverride(DrawForegroundArgs args) {
         //textRenderer.draw(matrices, getTitle(), (float) titleX, (float) titleY, 4210752);
         long emc = (screenHandler.storedEMC + screenHandler.tile.storedEMC);
         if (emc > screenHandler.maxEMC) emc = screenHandler.maxEMC;
 
-        if (screenHandler != null)
-            textRenderer.draw(matrices, TextUtil.literal("" + String.format("%,d", emc) ), 92, 32, 4210752);
+        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, TextUtil.literal("" + String.format("%,d", emc) ), 92, 32, 4210752);
     }
 
     @Override

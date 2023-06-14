@@ -10,7 +10,6 @@ import ml.pkom.mcpitanlibarch.api.client.render.handledscreen.RenderArgs;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import ml.pkom.mcpitanlibarch.api.util.client.RenderUtil;
 import ml.pkom.mcpitanlibarch.api.util.client.ScreenUtil;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
