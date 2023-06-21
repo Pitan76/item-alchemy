@@ -3,6 +3,7 @@ package ml.pkom.itemalchemy.client.renderer;
 import ml.pkom.itemalchemy.api.ItemCharge;
 import ml.pkom.itemalchemy.item.PhilosopherStone;
 import ml.pkom.itemalchemy.util.ItemUtils;
+import ml.pkom.itemalchemy.util.WorldUtils;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.block.BlockState;
@@ -62,10 +63,14 @@ public class BlockRenderer implements WorldRenderEvents.BeforeBlockOutline{
             return true;
         }
 
+        if(!PhilosopherStone.isExchange(blockState.getBlock())) {
+            return true;
+        }
+
         VoxelShape sharp = blockState.getOutlineShape(world, blockPos);
         VertexConsumer consumer = context.consumers().getBuffer(RenderLayer.getLines());
 
-        List<BlockPos> blocks = PhilosopherStone.getTargetBlocks(context.world(), blockPos, ((ItemCharge)itemStack.getItem()).getCharge(itemStack));
+        List<BlockPos> blocks = WorldUtils.getTargetBlocks(context.world(), blockPos, ((ItemCharge)itemStack.getItem()).getCharge(itemStack), true);
 
         for (BlockPos block : blocks) {
             double x = block.getX() - camera.getPos().x;
