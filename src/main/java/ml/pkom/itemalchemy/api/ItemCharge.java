@@ -1,4 +1,4 @@
-package ml.pkom.itemalchemy.item;
+package ml.pkom.itemalchemy.api;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;

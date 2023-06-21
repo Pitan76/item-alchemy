@@ -4,10 +4,9 @@ import ml.pkom.itemalchemy.block.Blocks;
 import ml.pkom.itemalchemy.command.ItemAlchemyCommand;
 import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import ml.pkom.itemalchemy.gui.screen.ScreenHandlers;
-import ml.pkom.itemalchemy.item.ItemCharge;
+import ml.pkom.itemalchemy.api.ItemCharge;
 import ml.pkom.itemalchemy.item.ItemGroups;
 import ml.pkom.itemalchemy.item.Items;
-import ml.pkom.itemalchemy.item.PhilosopherStone;
 import ml.pkom.itemalchemy.sound.Sounds;
 import ml.pkom.itemalchemy.tile.Tiles;
 import ml.pkom.itemalchemy.util.ItemUtils;
@@ -101,9 +100,10 @@ public class ItemAlchemy {
             }
 
             if(itemStack.getItem() instanceof ItemCharge) {
-                int chargeLevel = ((ItemCharge) itemStack.getItem()).getCharge(itemStack);
+                ItemCharge itemCharge = (ItemCharge)itemStack.getItem();
+                int chargeLevel = itemCharge.getCharge(itemStack);
 
-                ((ItemCharge)itemStack.getItem()).setCharge(itemStack, player.isSneaking() ? chargeLevel - 1 : chargeLevel + 1);
+                itemCharge.setCharge(itemStack, player.isSneaking() ? chargeLevel - 1 : chargeLevel + 1);
             }
         });
 

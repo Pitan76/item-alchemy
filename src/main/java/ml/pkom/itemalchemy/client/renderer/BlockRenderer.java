@@ -1,6 +1,6 @@
 package ml.pkom.itemalchemy.client.renderer;
 
-import ml.pkom.itemalchemy.item.ItemCharge;
+import ml.pkom.itemalchemy.api.ItemCharge;
 import ml.pkom.itemalchemy.item.PhilosopherStone;
 import ml.pkom.itemalchemy.util.ItemUtils;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;

@@ -1,6 +1,7 @@
 package ml.pkom.itemalchemy.item;
 
 import com.google.common.collect.Lists;
+import ml.pkom.itemalchemy.api.ItemCharge;
 import ml.pkom.itemalchemy.sound.Sounds;
 import ml.pkom.mcpitanlibarch.Dummy;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
@@ -11,9 +12,7 @@ import ml.pkom.mcpitanlibarch.api.item.FixedRecipeRemainderItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
@@ -115,10 +114,6 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
 
             for (BlockPos pos : blocks) {
                 exchangeBlock(world, pos, replaceBlock.getDefaultState(), world.getBlockState(pos));
-
-                if (event.player != null) {
-                    event.stack.damage(1, event.player.getEntity(), (e) -> e.sendToolBreakStatus(event.hand));
-                }
             }
 
             world.playSound(null, targetPos, Sounds.EXCHANGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 1f);
