@@ -1,5 +1,7 @@
 package ml.pkom.itemalchemy;
 
+import dev.architectury.event.events.client.ClientTickEvent;
+import ml.pkom.itemalchemy.client.renderer.BlockRenderer;
 import ml.pkom.itemalchemy.client.screen.AlchemyChestScreen;
 import ml.pkom.itemalchemy.client.screen.AlchemyTableScreen;
 import ml.pkom.itemalchemy.client.screen.EMCCollectorScreen;
@@ -13,6 +15,7 @@ import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.network.ClientNetworking;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -32,6 +35,8 @@ public class ItemAlchemyClient {
         ArchRegistryClient.registerScreen(ScreenHandlers.EMC_COLLECTOR, EMCCollectorScreen::new);
         ArchRegistryClient.registerScreen(ScreenHandlers.EMC_CONDENSER, EMCCondenserScreen::new);
         ArchRegistryClient.registerScreen(ScreenHandlers.ALCHEMY_CHEST, AlchemyChestScreen::new);
+
+        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(new BlockRenderer());
 
         ClientNetworking.registerReceiver(ItemAlchemy.id("sync_emc"), (client, p, buf) -> {
             NbtCompound nbt = buf.readNbt();

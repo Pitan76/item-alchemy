@@ -1,5 +1,6 @@
 package ml.pkom.itemalchemy.item;
 
+import com.google.common.collect.Lists;
 import ml.pkom.itemalchemy.sound.Sounds;
 import ml.pkom.mcpitanlibarch.Dummy;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
@@ -10,18 +11,20 @@ import ml.pkom.mcpitanlibarch.api.item.FixedRecipeRemainderItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainderItem {
+public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainderItem, ItemCharge {
     public static Map<Block, Block> exchange_map = new HashMap<>();
     public static Map<Block, Block> shift_exchange_map = new HashMap<>();
 
@@ -94,27 +97,35 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
     public ActionResult onRightClickOnBlock(ItemUseOnBlockEvent event) {
         World world = event.world;
         if (!world.isClient()) {
-            BlockPos blockPos = event.hit.getBlockPos();
-            BlockState blockState = world.getBlockState(blockPos);
-            Block block = blockState.getBlock();
+            BlockPos targetPos = event.hit.getBlockPos();
+            BlockState targetBlockState = world.getBlockState(targetPos);
             Player player = event.player;
-            if (player.getPlayerEntity().isSneaking()) {
-                if (shift_exchange_map.containsKey(block)) {
-                    BlockState newBlockState = shift_exchange_map.get(block).getDefaultState();
-                    exchangeBlock(world, blockPos, newBlockState, blockState);
 
-                    if (event.player != null) event.stack.damage(1, event.player.getEntity(), (e) -> e.sendToolBreakStatus(event.hand));
-                    return ActionResult.SUCCESS;
-                }
-            }
-            if (exchange_map.containsKey(block)) {
-                BlockState newBlockState = exchange_map.get(block).getDefaultState();
-                exchangeBlock(world, blockPos, newBlockState, blockState);
-
-                if (event.player != null) event.stack.damage(1, event.player.getEntity(), (e) -> e.sendToolBreakStatus(event.hand));
+            if(!isExchange(targetBlockState.getBlock())) {
                 return ActionResult.SUCCESS;
             }
+
+            List<BlockPos> blocks = getTargetBlocks(world, targetPos, ((ItemCharge)event.stack.getItem()).getCharge(event.stack));
+
+            Block replaceBlock = getExchangeBlock(targetBlockState.getBlock(), player.getPlayerEntity().isSneaking());
+
+            if(replaceBlock == null) {
+                return ActionResult.SUCCESS;
+            }
+
+            for (BlockPos pos : blocks) {
+                exchangeBlock(world, pos, replaceBlock.getDefaultState(), world.getBlockState(pos));
+
+                if (event.player != null) {
+                    event.stack.damage(1, event.player.getEntity(), (e) -> e.sendToolBreakStatus(event.hand));
+                }
+            }
+
+            world.playSound(null, targetPos, Sounds.EXCHANGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 1f);
+
+            return ActionResult.SUCCESS;
         }
+
         return super.onRightClickOnBlock(event);
     }
 
@@ -146,10 +157,65 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
 
     @Override
     public ItemStack getFixedRecipeRemainder(ItemStack stack) {
-        stack.setDamage(stack.getDamage() + 1);
-        if (stack.getDamage() >= stack.getMaxDamage()) {
-            return ItemStack.EMPTY;
-        }
         return stack;
+    }
+
+    @Nullable
+    public static Block getExchangeBlock(Block target, boolean isSneaking) {
+        if(isSneaking) {
+            if(shift_exchange_map.containsKey(target)) {
+                return shift_exchange_map.get(target);
+            }
+        }
+
+        if(exchange_map.containsKey(target)) {
+            return exchange_map.get(target);
+        }
+
+        return null;
+    }
+
+    public static List<BlockPos> getTargetBlocks(World world, BlockPos pos, int range) {
+        BlockState baseBlock = world.getBlockState(pos);
+
+        if(!isExchange(baseBlock.getBlock())) {
+            return Collections.emptyList();
+        }
+
+        if(range <= 0) {
+            return Lists.newArrayList(pos);
+        }
+
+        List<BlockPos> blocks = new ArrayList<>();
+
+        for (int y = 0; y < 1 + range * 2; y++) {
+            for (int x = 0; x < 1 + range * 2; x++) {
+                for (int z = 0; z < 1 + range * 2; z++) {
+                    int offsetX = range - x;
+                    int offsetY = range - y;
+                    int offsetZ = range - z;
+
+                    BlockPos targetPos = pos.add(offsetX, offsetY, offsetZ);
+
+                    BlockState block = world.getBlockState(targetPos);
+
+                    if(block.isAir()) {
+                        continue;
+                    }
+
+                    if(!block.isOf(baseBlock.getBlock())) {
+                        continue;
+                    }
+
+                    blocks.add(targetPos);
+                }
+            }
+        }
+
+        return blocks;
+    }
+
+    public static boolean isExchange(Block block) {
+        return exchange_map.containsKey(block) || shift_exchange_map.containsKey(block);
     }
 }

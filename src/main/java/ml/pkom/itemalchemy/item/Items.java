@@ -53,7 +53,7 @@ public class Items {
     public static RegistryEvent<Item> RED_MATTER_SHOVEL;
     public static RegistryEvent<Item> RED_MATTER_HOE;
     public static void init() {
-        PHILOSOPHER_STONE = registry.registerItem(id("philosopher_stone"), () -> new PhilosopherStone(CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("philosopher_stone")).maxDamage(256)));
+        PHILOSOPHER_STONE = registry.registerItem(id("philosopher_stone"), () -> new PhilosopherStone(CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("philosopher_stone")).maxDamage(8)));
         ALCHEMY_TABLE = registry.registerItem(id("alchemy_table"), () -> ItemUtil.ofBlock(Blocks.ALCHEMY_TABLE.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("alchemy_table"))));
         EMC_COLLECTOR_MK1 = registry.registerItem(id("emc_collector_mk1"), () -> ItemUtil.ofBlock(Blocks.EMC_COLLECTOR_MK1.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk1"))));
         EMC_COLLECTOR_MK2 = registry.registerItem(id("emc_collector_mk2"), () -> ItemUtil.ofBlock(Blocks.EMC_COLLECTOR_MK2.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk2"))));
