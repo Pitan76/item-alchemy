@@ -20,6 +20,10 @@ public class ItemUtils {
     }
 
     public static int getCharge(ItemStack stack) {
+        if(!(stack.getItem() instanceof ItemCharge)) {
+            return 0;
+        }
+
         NbtCompound nbt = stack.getOrCreateSubNbt("itemalchemy");
 
         if(!nbt.contains("charge")) {
@@ -30,6 +34,10 @@ public class ItemUtils {
     }
 
     public static void setCharge(ItemStack stack, int charge) {
+        if(!(stack.getItem() instanceof ItemCharge)) {
+            return;
+        }
+
         NbtCompound nbt = stack.getOrCreateSubNbt("itemalchemy");
 
         if(charge < 0 || charge > 4) {
