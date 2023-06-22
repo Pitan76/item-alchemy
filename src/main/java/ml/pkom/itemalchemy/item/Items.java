@@ -1,6 +1,6 @@
 package ml.pkom.itemalchemy.item;
 
-import ml.pkom.itemalchemy.api.ChargeItemSettings;
+import ml.pkom.itemalchemy.util.ChargeItemSettings;
 import ml.pkom.itemalchemy.block.Blocks;
 import ml.pkom.mcpitanlibarch.api.event.registry.RegistryEvent;
 import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;

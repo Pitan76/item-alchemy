@@ -1,6 +1,5 @@
 package ml.pkom.itemalchemy.client.renderer;
 
-import ml.pkom.itemalchemy.api.ItemCharge;
 import ml.pkom.itemalchemy.item.PhilosopherStone;
 import ml.pkom.itemalchemy.util.ItemUtils;
 import ml.pkom.itemalchemy.util.WorldUtils;
@@ -70,7 +69,7 @@ public class BlockRenderer implements WorldRenderEvents.BeforeBlockOutline{
         VoxelShape sharp = blockState.getOutlineShape(world, blockPos);
         VertexConsumer consumer = context.consumers().getBuffer(RenderLayer.getLines());
 
-        List<BlockPos> blocks = WorldUtils.getTargetBlocks(context.world(), blockPos, ((ItemCharge)itemStack.getItem()).getCharge(itemStack), true);
+        List<BlockPos> blocks = WorldUtils.getTargetBlocks(context.world(), blockPos, ItemUtils.getCharge(itemStack), true, true);
 
         for (BlockPos block : blocks) {
             double x = block.getX() - camera.getPos().x;

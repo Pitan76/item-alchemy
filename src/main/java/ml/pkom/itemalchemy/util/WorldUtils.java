@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WorldUtils {
-    public static List<BlockPos> getTargetBlocks(World world, BlockPos pos, int range, boolean isSameBlock) {
+    public static List<BlockPos> getTargetBlocks(World world, BlockPos pos, int range, boolean isHeightScan, boolean isSameBlock) {
         BlockState baseBlock = world.getBlockState(pos);
 
         if(range <= 0) {
@@ -18,11 +18,11 @@ public class WorldUtils {
 
         List<BlockPos> blocks = new ArrayList<>();
 
-        for (int y = 0; y < 1 + range * 2; y++) {
+        for (int y = 0; y < 1 + (isHeightScan ? range * 2 : 0); y++) {
             for (int x = 0; x < 1 + range * 2; x++) {
                 for (int z = 0; z < 1 + range * 2; z++) {
                     int offsetX = range - x;
-                    int offsetY = range - y;
+                    int offsetY = isHeightScan ? range - y : 0;
                     int offsetZ = range - z;
 
                     BlockPos targetPos = pos.add(offsetX, offsetY, offsetZ);

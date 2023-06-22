@@ -1,8 +1,8 @@
 package ml.pkom.itemalchemy.item;
 
-import com.google.common.collect.Lists;
-import ml.pkom.itemalchemy.api.ItemCharge;
+import ml.pkom.itemalchemy.util.ItemCharge;
 import ml.pkom.itemalchemy.sound.Sounds;
+import ml.pkom.itemalchemy.util.ItemUtils;
 import ml.pkom.itemalchemy.util.WorldUtils;
 import ml.pkom.mcpitanlibarch.Dummy;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
@@ -105,7 +105,7 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
                 return ActionResult.SUCCESS;
             }
 
-            List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, targetPos, ((ItemCharge)event.stack.getItem()).getCharge(event.stack), true);
+            List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, targetPos, ItemUtils.getCharge(event.stack), true, true);
 
             Block replaceBlock = getExchangeBlock(targetBlockState.getBlock(), player.getPlayerEntity().isSneaking());
 
