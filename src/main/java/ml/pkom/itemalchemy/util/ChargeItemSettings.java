@@ -4,7 +4,7 @@ import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;
 
 public class ChargeItemSettings extends CompatibleItemSettings {
     public ChargeItemSettings() {
-        maxDamage(15);
+        maxDamage(16);
     }
 
     public static ChargeItemSettings of() {

@@ -91,8 +91,9 @@ public class ItemAlchemy {
             screenHandler.sortBySearch();
         }));
 
-        ServerNetworking.registerReceiver(id("tool_charge"), (server, player, buf) -> {
-            ItemStack itemStack = ItemUtils.getCurrentHandItem(player);
+        ServerNetworking.registerReceiver(id("tool_charge"), (server, p, buf) -> {
+            Player player = new Player(p);
+            ItemStack itemStack = ItemUtils.getCurrentHandItem(p);
 
             if(itemStack == null) {
                 return;
@@ -105,7 +106,7 @@ public class ItemAlchemy {
                 ItemUtils.setCharge(itemStack, afterChargeLevel);
 
                 if (ItemUtils.getCharge(itemStack) == afterChargeLevel) {
-                    player.world.playSound(null, player.getBlockPos(), player.isSneaking() ? Sounds.UNCHARGE_SOUND.getOrNull() : Sounds.CHARGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 0.4f + chargeLevel / 5f);
+                    player.getWorld().playSound(null, player.getBlockPos(), player.isSneaking() ? Sounds.UNCHARGE_SOUND.getOrNull() : Sounds.CHARGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 0.4f + chargeLevel / 5f);
                 }
             }
         });

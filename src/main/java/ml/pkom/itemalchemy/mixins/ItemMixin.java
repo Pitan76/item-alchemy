@@ -26,7 +26,7 @@ public class ItemMixin {
             }
 
             int charge = ItemUtils.getCharge(stack);
-            stack.setDamage(Math.max(stack.getMaxDamage() - charge * 4, 1));
+            stack.setDamage(Math.max(stack.getMaxDamage() - charge * 4, 0));
         }
     }
 }
