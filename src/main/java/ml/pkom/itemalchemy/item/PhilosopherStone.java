@@ -132,7 +132,7 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
         if (newBlockState.contains(Properties.HORIZONTAL_FACING) && blockState.contains(Properties.HORIZONTAL_FACING)) {
             newBlockState = newBlockState.with(Properties.HORIZONTAL_FACING, blockState.get(Properties.HORIZONTAL_FACING));
         }
-        world.playSound(null, blockPos, Sounds.EXCHANGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 1f);
+        //world.playSound(null, blockPos, Sounds.EXCHANGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 1f);
         world.setBlockState(blockPos, newBlockState);
     }
 
