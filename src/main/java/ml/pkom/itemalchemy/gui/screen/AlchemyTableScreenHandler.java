@@ -266,13 +266,17 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             for (String id : ids) {
                 String translatedName = "";
 
-                ItemStack itemStack = new ItemStack(ItemUtil.fromId(new Identifier(id)));
+                Identifier itemIdentifier = new Identifier(id);
+                ItemStack itemStack = new ItemStack(ItemUtil.fromId(itemIdentifier));
                 String itemTranslationKey = itemStack.getTranslationKey();
 
                 // If the item has a translation, we should use that instead of the identifier.
                 if (I18n.hasTranslation(itemTranslationKey)) {
                     translatedName = I18n.translate(itemTranslationKey);
                 }
+
+                // Include only the name of the item in the id when searching
+                String itemId = itemIdentifier.getPath();
 
                 // Make sure everything is lower-case so capitalization doesn't matter for searching
                 searchText = searchText.toLowerCase();
@@ -283,7 +287,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
                 // the search term. Checking both the id and the translated name
                 // makes sure that people can search in both their native language
                 // and in English.
-                if (id.contains(searchText) || translatedName.contains(searchText) || itemStack.getName().asString().contains(searchText)) continue;
+                if (itemId.contains(searchText) || translatedName.contains(searchText) || itemStack.getName().asString().contains(searchText)) continue;
 
                 items.remove(id);
             }
