@@ -174,4 +174,9 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
     public static boolean isExchange(Block block) {
         return exchange_map.containsKey(block) || shift_exchange_map.containsKey(block);
     }
+
+    @Override
+    public boolean isItemBarVisible(ItemStack stack) {
+        return true;
+    }
 }
