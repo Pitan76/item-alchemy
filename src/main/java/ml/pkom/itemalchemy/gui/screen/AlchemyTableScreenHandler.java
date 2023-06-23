@@ -293,7 +293,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
             int receivable = 1;
             if (actionType == SlotActionType.QUICK_MOVE) {
-                receivable = (int) Math.min(Math.floorDiv(EMCManager.getEmcFromPlayer(player), EMCManager.get(definedStack)), 64);
+                receivable = (int) Math.min(Math.floorDiv(EMCManager.getEmcFromPlayer(player), EMCManager.get(definedStack)), definedStack.getMaxCount());
             }
 
 
