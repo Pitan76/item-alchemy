@@ -58,7 +58,6 @@ public class ItemAlchemyClient {
             Map<String, Long> emcMap = new LinkedHashMap<>();
             for (String key : nbt.getKeys()) {
                 emcMap.put(key, nbt.getLong(key));
-                //System.out.println(key + "=" + nbt.getLong(key));
             }
             EMCManager.setMap(emcMap);
         });
@@ -94,6 +93,7 @@ public class ItemAlchemyClient {
         return emc;
     }
 
+    // display emc to the item's tooltip
     public static List<Text> getEmcText(ItemStack stack) {
         List<Text> list = new ArrayList<>();
         long emc;
