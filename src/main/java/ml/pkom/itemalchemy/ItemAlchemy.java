@@ -19,6 +19,7 @@ import ml.pkom.mcpitanlibarch.api.registry.ArchRegistry;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -43,13 +44,12 @@ public class ItemAlchemy {
     public static ItemGroup ITEM_ALCHEMY = CreativeTabBuilder.create(id("item_alchemy")).setIcon(() -> new ItemStack(Items.PHILOSOPHER_STONE.getOrNull(), 1)).build();
 
     public static void init() {
-        registry.registerItemGroup(id("item_alchemy"), () -> ITEM_ALCHEMY);
 
+        ItemGroups.init();
         Sounds.init();
         Blocks.init();
         Items.init();
         ScreenHandlers.init();
-        ItemGroups.init();
         Tiles.init();
 
         EventRegistry.ServerLifecycle.serverStarted(EMCManager::init);
@@ -57,7 +57,6 @@ public class ItemAlchemy {
         EventRegistry.ServerConnection.join((player) -> {
             if (player != null) {
                 EMCManager.syncS2C_emc_map(player);
-                //System.out.println(handler.getPlayer().getName().getString() + ", syncS2Cemcmap");
             }
         });
 
@@ -102,12 +101,18 @@ public class ItemAlchemy {
             if(itemStack.getItem() instanceof ItemCharge) {
                 int chargeLevel = ItemUtils.getCharge(itemStack);
 
-                ItemUtils.setCharge(itemStack, player.isSneaking() ? chargeLevel - 1 : chargeLevel + 1);
+                int afterChargeLevel = player.isSneaking() ? chargeLevel - 1 : chargeLevel + 1;
+                ItemUtils.setCharge(itemStack, afterChargeLevel);
+
+                if (ItemUtils.getCharge(itemStack) == afterChargeLevel) {
+                    player.world.playSound(null, player.getBlockPos(), player.isSneaking() ? Sounds.UNCHARGE_SOUND.getOrNull() : Sounds.CHARGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 0.4f + chargeLevel / 5f);
+                }
             }
         });
 
-        registry.allRegister();
-
+        // Registry commands
         CommandRegistry.register("itemalchemy", new ItemAlchemyCommand());
+
+        registry.allRegister();
     }
 }
