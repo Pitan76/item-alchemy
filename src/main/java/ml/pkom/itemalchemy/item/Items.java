@@ -1,5 +1,6 @@
 package ml.pkom.itemalchemy.item;
 
+import ml.pkom.itemalchemy.util.ChargeItemSettings;
 import ml.pkom.itemalchemy.block.Blocks;
 import ml.pkom.mcpitanlibarch.api.event.registry.RegistryEvent;
 import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;
@@ -53,7 +54,7 @@ public class Items {
     public static RegistryEvent<Item> RED_MATTER_SHOVEL;
     public static RegistryEvent<Item> RED_MATTER_HOE;
     public static void init() {
-        PHILOSOPHER_STONE = registry.registerItem(id("philosopher_stone"), () -> new PhilosopherStone(CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("philosopher_stone")).maxDamage(256)));
+        PHILOSOPHER_STONE = registry.registerItem(id("philosopher_stone"), () -> new PhilosopherStone(ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("philosopher_stone"))));
         ALCHEMY_TABLE = registry.registerItem(id("alchemy_table"), () -> ItemUtil.ofBlock(Blocks.ALCHEMY_TABLE.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("alchemy_table"))));
         EMC_COLLECTOR_MK1 = registry.registerItem(id("emc_collector_mk1"), () -> ItemUtil.ofBlock(Blocks.EMC_COLLECTOR_MK1.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk1"))));
         EMC_COLLECTOR_MK2 = registry.registerItem(id("emc_collector_mk2"), () -> ItemUtil.ofBlock(Blocks.EMC_COLLECTOR_MK2.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk2"))));
@@ -80,16 +81,16 @@ public class Items {
         DARK_MATTER_BLOCK = registry.registerItem(id("dark_matter_block"), () -> ItemUtil.ofBlock(Blocks.DARK_MATTER_BLOCK.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("dark_matter_block"))));
         RED_MATTER_BLOCK = registry.registerItem(id("red_matter_block"), () -> ItemUtil.ofBlock(Blocks.RED_MATTER_BLOCK.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("red_matter_block"))));
 
-        DARK_MATTER_SWORD = registry.registerItem(id("dark_matter_sword"), () -> new AlchemicalSword(AlchemicalToolMaterials.DARK_MATTER, 3, -2.4f, CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("dark_matter_sword")).maxCount(1)));
-        DARK_MATTER_PICKAXE = registry.registerItem(id("dark_matter_pickaxe"), () -> new AlchemicalPickaxe(AlchemicalToolMaterials.DARK_MATTER, 1, -2.8f, CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("dark_matter_pickaxe")).maxCount(1)));
-        DARK_MATTER_AXE = registry.registerItem(id("dark_matter_axe"), () -> new AlchemicalAxe(AlchemicalToolMaterials.DARK_MATTER, 5.0f, -3.0f, CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("dark_matter_axe")).maxCount(1)));
-        DARK_MATTER_SHOVEL = registry.registerItem(id("dark_matter_shovel"), () -> new AlchemicalShovel(AlchemicalToolMaterials.DARK_MATTER, 1.5F, -3f, CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("dark_matter_shovel")).maxCount(1)));
-        DARK_MATTER_HOE = registry.registerItem(id("dark_matter_hoe"), () -> new AlchemicalHoe(AlchemicalToolMaterials.DARK_MATTER, -3, 0f, CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("dark_matter_hoe")).maxCount(1)));
-        RED_MATTER_SWORD = registry.registerItem(id("red_matter_sword"), () -> new AlchemicalSword(AlchemicalToolMaterials.RED_MATTER, 3, -2.4f, CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("red_matter_sword")).maxCount(1)));
-        RED_MATTER_PICKAXE = registry.registerItem(id("red_matter_pickaxe"), () -> new AlchemicalPickaxe(AlchemicalToolMaterials.RED_MATTER, 1, -2.8f, CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("red_matter_pickaxe")).maxCount(1)));
-        RED_MATTER_AXE = registry.registerItem(id("red_matter_axe"), () -> new AlchemicalAxe(AlchemicalToolMaterials.RED_MATTER, 5.0f, -3.0f, CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("red_matter_axe")).maxCount(1)));
-        RED_MATTER_SHOVEL = registry.registerItem(id("red_matter_shovel"), () -> new AlchemicalShovel(AlchemicalToolMaterials.RED_MATTER, 1.5F, -3f, CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("red_matter_shovel")).maxCount(1)));
-        RED_MATTER_HOE = registry.registerItem(id("red_matter_hoe"), () -> new AlchemicalHoe(AlchemicalToolMaterials.RED_MATTER, -3, 0f, CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("red_matter_hoe")).maxCount(1)));
+        DARK_MATTER_SWORD = registry.registerItem(id("dark_matter_sword"), () -> new AlchemicalSword(AlchemicalToolMaterials.DARK_MATTER, 3, -2.4f, ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("dark_matter_sword"))));
+        DARK_MATTER_PICKAXE = registry.registerItem(id("dark_matter_pickaxe"), () -> new AlchemicalPickaxe(AlchemicalToolMaterials.DARK_MATTER, 1, -2.8f, ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("dark_matter_pickaxe"))));
+        DARK_MATTER_AXE = registry.registerItem(id("dark_matter_axe"), () -> new AlchemicalAxe(AlchemicalToolMaterials.DARK_MATTER, 5.0f, -3.0f, ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("dark_matter_axe"))));
+        DARK_MATTER_SHOVEL = registry.registerItem(id("dark_matter_shovel"), () -> new AlchemicalShovel(AlchemicalToolMaterials.DARK_MATTER, 1.5F, -3f, ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("dark_matter_shovel"))));
+        DARK_MATTER_HOE = registry.registerItem(id("dark_matter_hoe"), () -> new AlchemicalHoe(AlchemicalToolMaterials.DARK_MATTER, -3, 0f, ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("dark_matter_hoe"))));
+        RED_MATTER_SWORD = registry.registerItem(id("red_matter_sword"), () -> new AlchemicalSword(AlchemicalToolMaterials.RED_MATTER, 3, -2.4f, ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("red_matter_sword"))));
+        RED_MATTER_PICKAXE = registry.registerItem(id("red_matter_pickaxe"), () -> new AlchemicalPickaxe(AlchemicalToolMaterials.RED_MATTER, 1, -2.8f, ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("red_matter_pickaxe"))));
+        RED_MATTER_AXE = registry.registerItem(id("red_matter_axe"), () -> new AlchemicalAxe(AlchemicalToolMaterials.RED_MATTER, 5.0f, -3.0f, ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("red_matter_axe"))));
+        RED_MATTER_SHOVEL = registry.registerItem(id("red_matter_shovel"), () -> new AlchemicalShovel(AlchemicalToolMaterials.RED_MATTER, 1.5F, -3f, ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("red_matter_shovel"))));
+        RED_MATTER_HOE = registry.registerItem(id("red_matter_hoe"), () -> new AlchemicalHoe(AlchemicalToolMaterials.RED_MATTER, -3, 0f, ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("red_matter_hoe"))));
         //net.minecraft.item.Items.DIAMOND_SWORD
     }
 }

@@ -1,6 +1,9 @@
 package ml.pkom.itemalchemy.item;
 
+import ml.pkom.itemalchemy.util.ItemCharge;
 import ml.pkom.itemalchemy.sound.Sounds;
+import ml.pkom.itemalchemy.util.ItemUtils;
+import ml.pkom.itemalchemy.util.WorldUtils;
 import ml.pkom.mcpitanlibarch.Dummy;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.item.ItemUseOnBlockEvent;
@@ -17,11 +20,11 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainderItem {
+public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainderItem, ItemCharge {
     public static Map<Block, Block> exchange_map = new HashMap<>();
     public static Map<Block, Block> shift_exchange_map = new HashMap<>();
 
@@ -94,27 +97,31 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
     public ActionResult onRightClickOnBlock(ItemUseOnBlockEvent event) {
         World world = event.world;
         if (!world.isClient()) {
-            BlockPos blockPos = event.hit.getBlockPos();
-            BlockState blockState = world.getBlockState(blockPos);
-            Block block = blockState.getBlock();
+            BlockPos targetPos = event.hit.getBlockPos();
+            BlockState targetBlockState = world.getBlockState(targetPos);
             Player player = event.player;
-            if (player.getPlayerEntity().isSneaking()) {
-                if (shift_exchange_map.containsKey(block)) {
-                    BlockState newBlockState = shift_exchange_map.get(block).getDefaultState();
-                    exchangeBlock(world, blockPos, newBlockState, blockState);
 
-                    if (event.player != null) event.stack.damage(1, event.player.getEntity(), (e) -> e.sendToolBreakStatus(event.hand));
-                    return ActionResult.SUCCESS;
-                }
-            }
-            if (exchange_map.containsKey(block)) {
-                BlockState newBlockState = exchange_map.get(block).getDefaultState();
-                exchangeBlock(world, blockPos, newBlockState, blockState);
-
-                if (event.player != null) event.stack.damage(1, event.player.getEntity(), (e) -> e.sendToolBreakStatus(event.hand));
+            if(!isExchange(targetBlockState.getBlock())) {
                 return ActionResult.SUCCESS;
             }
+
+            List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, targetPos, ItemUtils.getCharge(event.stack), true, true);
+
+            Block replaceBlock = getExchangeBlock(targetBlockState.getBlock(), player.getPlayerEntity().isSneaking());
+
+            if(replaceBlock == null) {
+                return ActionResult.SUCCESS;
+            }
+
+            for (BlockPos pos : blocks) {
+                exchangeBlock(world, pos, replaceBlock.getDefaultState(), world.getBlockState(pos));
+            }
+
+            world.playSound(null, targetPos, Sounds.EXCHANGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 1f);
+
+            return ActionResult.SUCCESS;
         }
+
         return super.onRightClickOnBlock(event);
     }
 
@@ -146,10 +153,25 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
 
     @Override
     public ItemStack getFixedRecipeRemainder(ItemStack stack) {
-        stack.setDamage(stack.getDamage() + 1);
-        if (stack.getDamage() >= stack.getMaxDamage()) {
-            return ItemStack.EMPTY;
-        }
         return stack;
+    }
+
+    @Nullable
+    public static Block getExchangeBlock(Block target, boolean isSneaking) {
+        if(isSneaking) {
+            if(shift_exchange_map.containsKey(target)) {
+                return shift_exchange_map.get(target);
+            }
+        }
+
+        if(exchange_map.containsKey(target)) {
+            return exchange_map.get(target);
+        }
+
+        return null;
+    }
+
+    public static boolean isExchange(Block block) {
+        return exchange_map.containsKey(block) || shift_exchange_map.containsKey(block);
     }
 }

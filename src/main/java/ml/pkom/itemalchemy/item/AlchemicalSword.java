@@ -7,7 +7,6 @@ import ml.pkom.mcpitanlibarch.api.item.ExtendItemProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
-
 public class AlchemicalSword extends SwordItem implements ExtendItemProvider {
     public AlchemicalSword(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, CompatibleItemSettings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings.build());
@@ -16,10 +15,5 @@ public class AlchemicalSword extends SwordItem implements ExtendItemProvider {
 
             return EventResult.pass();
         });
-    }
-
-    @Override
-    public boolean isDamageable() {
-        return false;
     }
 }
