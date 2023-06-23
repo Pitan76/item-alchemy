@@ -10,6 +10,7 @@ import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.SimpleScreenHandler;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import ml.pkom.mcpitanlibarch.api.util.SlotUtil;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -263,9 +264,23 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
             List<String> ids = new ArrayList<>(items.getKeys());
             for (String id : ids) {
-                if (!id.contains(searchText) && !new ItemStack(ItemUtil.fromId(new Identifier(id))).getName().getString().contains(searchText)) {
-                    items.remove(id);
+                String translatedName = "";
+
+                ItemStack itemStack = new ItemStack(ItemUtil.fromId(new Identifier(id)));
+                String itemTranslationKey = itemStack.getTranslationKey();
+
+                // If the item has a translation, we should use that instead of the identifier.
+                if (I18n.hasTranslation(itemTranslationKey)) {
+                    translatedName = I18n.translate(itemTranslationKey);
                 }
+
+                // Display the item if the items id, translated name or custom name contains
+                // the search term. Checking both the id and the translated name
+                // makes sure that people can search in both their native language
+                // and in English.
+                if (id.contains(searchText) || translatedName.contains(searchText) || itemStack.getName().asString().contains(searchText)) continue;
+
+                items.remove(id);
             }
 
             itemAlchemyTag.put("registered_items", items);
