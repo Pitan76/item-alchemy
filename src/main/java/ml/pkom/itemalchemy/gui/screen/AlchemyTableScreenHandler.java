@@ -274,6 +274,11 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
                     translatedName = I18n.translate(itemTranslationKey);
                 }
 
+                // Make sure everything is lower-case so capitalization doesn't matter for searching
+                searchText = searchText.toLowerCase();
+                translatedName = translatedName.toLowerCase();
+                id = id.toLowerCase();
+
                 // Display the item if the items id, translated name or custom name contains
                 // the search term. Checking both the id and the translated name
                 // makes sure that people can search in both their native language
