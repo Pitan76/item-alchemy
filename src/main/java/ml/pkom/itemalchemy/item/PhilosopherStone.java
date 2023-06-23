@@ -177,6 +177,6 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
 
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
-        return true;
+        return stack.getSubNbt("itemalchemy") != null;
     }
 }
