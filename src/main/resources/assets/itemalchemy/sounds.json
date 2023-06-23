@@ -4,5 +4,17 @@
     "sounds": [
       "itemalchemy:exchange"
     ]
+  },
+  "charge": {
+    "subtitle": "subtitles.itemalchemy.charge",
+    "sounds": [
+      "itemalchemy:charge"
+    ]
+  },
+  "uncharge": {
+    "subtitle": "subtitles.itemalchemy.uncharge",
+    "sounds": [
+      "itemalchemy:uncharge"
+    ]
   }
 }
