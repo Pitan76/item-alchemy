@@ -16,6 +16,7 @@ import ml.pkom.mcpitanlibarch.api.event.v0.EventRegistry;
 import ml.pkom.mcpitanlibarch.api.item.CreativeTabBuilder;
 import ml.pkom.mcpitanlibarch.api.network.ServerNetworking;
 import ml.pkom.mcpitanlibarch.api.registry.ArchRegistry;
+import ml.pkom.mcpitanlibarch.api.util.WorldUtil;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -106,7 +107,7 @@ public class ItemAlchemy {
                 ItemUtils.setCharge(itemStack, afterChargeLevel);
 
                 if (ItemUtils.getCharge(itemStack) == afterChargeLevel) {
-                    player.getWorld().playSound(null, player.getBlockPos(), player.isSneaking() ? Sounds.UNCHARGE_SOUND.getOrNull() : Sounds.CHARGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 0.4f + chargeLevel / 5f);
+                    WorldUtil.playSound(player.getWorld(), null, player.getBlockPos(), player.isSneaking() ? Sounds.UNCHARGE_SOUND.getOrNull() : Sounds.CHARGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 0.4f + chargeLevel / 5f);
                 }
             }
         });

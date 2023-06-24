@@ -10,6 +10,7 @@ import ml.pkom.mcpitanlibarch.api.event.item.ItemUseOnBlockEvent;
 import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;
 import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
 import ml.pkom.mcpitanlibarch.api.item.FixedRecipeRemainderItem;
+import ml.pkom.mcpitanlibarch.api.util.WorldUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -117,7 +118,7 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
                 exchangeBlock(world, pos, replaceBlock.getDefaultState(), world.getBlockState(pos));
             }
 
-            world.playSound(null, targetPos, Sounds.EXCHANGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 1f);
+            WorldUtil.playSound(world, null, targetPos, Sounds.EXCHANGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 1f);
 
             return ActionResult.SUCCESS;
         }
