@@ -20,10 +20,14 @@ public abstract class ServerPlayerEntityMixin {
     private void copyFrom(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
         NbtCompound oldNbt = NbtTag.create();
         NbtCompound newNbt = NbtTag.create();
-        oldPlayer.writeCustomDataToNbt(oldNbt);
-        NbtCompound itemAlchemy = oldNbt.getCompound("itemalchemy");
-        this.writeCustomDataToNbt(newNbt);
-        newNbt.put("itemalchemy", itemAlchemy);
-        this.readCustomDataFromNbt(newNbt);
+        try {
+            oldPlayer.writeCustomDataToNbt(oldNbt);
+            NbtCompound itemAlchemy = oldNbt.getCompound("itemalchemy");
+            this.writeCustomDataToNbt(newNbt);
+            newNbt.put("itemalchemy", itemAlchemy);
+            this.readCustomDataFromNbt(newNbt);
+        } catch (NullPointerException ignore) {
+
+        }
     }
 }
