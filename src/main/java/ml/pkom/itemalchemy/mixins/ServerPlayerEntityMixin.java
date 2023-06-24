@@ -20,6 +20,8 @@ public abstract class ServerPlayerEntityMixin {
     private void copyFrom(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
         NbtCompound oldNbt = NbtTag.create();
         NbtCompound newNbt = NbtTag.create();
+
+        // Avoid conflict with Prefab
         try {
             oldPlayer.writeCustomDataToNbt(oldNbt);
             NbtCompound itemAlchemy = oldNbt.getCompound("itemalchemy");
