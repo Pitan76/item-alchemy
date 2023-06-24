@@ -37,5 +37,7 @@
   "block.itemalchemy.red_matter_block": "Red Matter Block",
   "container.itemalchemy.alchemy_table": "Alchemy Table",
   "container.itemalchemy.emc_condenser": "EMC Condenser",
-  "container.itemalchemy.emc_collector": "EMC Collector"
+  "container.itemalchemy.emc_collector": "EMC Collector",
+  "category.itemalchemy.all": "Item Alchemy",
+  "key.itemalchemy.charge": "Charge"
 }

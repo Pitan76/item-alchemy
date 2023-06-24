@@ -80,7 +80,7 @@ public class ItemAlchemyClient {
             }
         });
 
-        KeybindingRegistry.registerOnLevelWithNetwork(new KeyBinding("key.itemalchemy.charge", GLFW.GLFW_KEY_V, "category.itemalchemy.tool"), ItemAlchemy.id("tool_charge"));
+        KeybindingRegistry.registerOnLevelWithNetwork(new KeyBinding("key.itemalchemy.charge", GLFW.GLFW_KEY_V, "category.itemalchemy.all"), ItemAlchemy.id("tool_charge"));
     }
 
     public static long getClientPlayerEMC() {

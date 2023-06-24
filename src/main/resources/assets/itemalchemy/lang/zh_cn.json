@@ -27,5 +27,7 @@
   "block.itemalchemy.red_matter_block": "红物质块",
   "container.itemalchemy.alchemy_table": "转换桌",
   "container.itemalchemy.emc_condenser": "EMC冷凝器",
-  "container.itemalchemy.emc_collector": "EMC收集器"
+  "container.itemalchemy.emc_collector": "EMC收集器",
+  "category.itemalchemy.all": "Item Alchemy",
+  "key.itemalchemy.charge": "充电"
 }

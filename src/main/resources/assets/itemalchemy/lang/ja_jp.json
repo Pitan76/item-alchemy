@@ -37,5 +37,7 @@
   "block.itemalchemy.red_matter_block": "レッドマター",
   "container.itemalchemy.alchemy_table": "錬金テーブル",
   "container.itemalchemy.emc_condenser": "EMCコンデンサー",
-  "container.itemalchemy.emc_collector": "EMCコレクター"
+  "container.itemalchemy.emc_collector": "EMCコレクター",
+  "category.itemalchemy.all": "Item Alchemy",
+  "key.itemalchemy.charge": "チャージ"
 }
