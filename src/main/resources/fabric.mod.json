@@ -29,6 +29,6 @@
   "depends": {
     "fabricloader": "*",
     "minecraft": "*",
-    "mcpitanlibarch": ">1.5.4"
+    "mcpitanlibarch": ">1.6.9"
   }
 }
