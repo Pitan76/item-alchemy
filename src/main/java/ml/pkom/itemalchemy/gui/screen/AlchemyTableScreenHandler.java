@@ -10,6 +10,7 @@ import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.SimpleScreenHandler;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import ml.pkom.mcpitanlibarch.api.util.SlotUtil;
+import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -304,7 +305,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
                         (searchNamespace.isEmpty() || itemNamespace.contains(searchNamespace)) &&
                         (itemId.contains(searchText) ||
                         translatedName.contains(searchText) ||
-                        itemStack.getName().asString().contains(searchText))
+                                TextUtil.txt2str(itemStack.getName()).contains(searchText))
                 ) continue;
 
                 items.remove(id);
