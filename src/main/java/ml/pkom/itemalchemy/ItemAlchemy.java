@@ -107,7 +107,7 @@ public class ItemAlchemy {
                 ItemUtils.setCharge(itemStack, afterChargeLevel);
 
                 if (ItemUtils.getCharge(itemStack) == afterChargeLevel) {
-                    WorldUtil.playSound(player.getWorld(), null, player.getBlockPos(), player.isSneaking() ? Sounds.UNCHARGE_SOUND.getOrNull() : Sounds.CHARGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 0.4f + chargeLevel / 5f);
+                    player.getWorld().playSound(null, player.getBlockPos(), player.isSneaking() ? Sounds.UNCHARGE_SOUND.getOrNull() : Sounds.CHARGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 0.4f + chargeLevel / 5f);
                 }
             }
         });

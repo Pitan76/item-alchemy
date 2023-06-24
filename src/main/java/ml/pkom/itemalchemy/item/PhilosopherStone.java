@@ -118,7 +118,7 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
                 exchangeBlock(world, pos, replaceBlock.getDefaultState(), world.getBlockState(pos));
             }
 
-            WorldUtil.playSound(world, null, targetPos, Sounds.EXCHANGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 1f);
+            world.playSound(null, targetPos, Sounds.EXCHANGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 1f);
 
             return ActionResult.SUCCESS;
         }
