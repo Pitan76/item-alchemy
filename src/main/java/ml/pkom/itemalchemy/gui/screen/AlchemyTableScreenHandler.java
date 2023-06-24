@@ -24,6 +24,8 @@ import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AlchemyTableScreenHandler extends SimpleScreenHandler {
     public RegisterInventory registerInventory; // contains InputSlot(0)
@@ -240,7 +242,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
         return ItemStack.EMPTY;
     }
 
-    public String searchText = "";
+    public String searchText, searchNamespace = "";
 
     public void setSearchText(String searchText) {
         this.searchText = searchText;
@@ -263,6 +265,15 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             }
 
             List<String> ids = new ArrayList<>(items.getKeys());
+
+            // Extract namespace from searchText [@(NAMESPACE)]
+            Pattern pattern = Pattern.compile("@([a-zA-Z0-9_-]+)");
+            Matcher matcher = pattern.matcher(searchText);
+            if (matcher.find()) {
+                searchNamespace = matcher.group(1);
+                searchText = searchText.replaceFirst("@" + searchNamespace + " ?", "");
+            }
+
             for (String id : ids) {
                 String translatedName = "";
 
@@ -283,11 +294,18 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
                 translatedName = translatedName.toLowerCase();
                 id = id.toLowerCase();
 
+                String itemNamespace = itemIdentifier.getNamespace();
+
                 // Display the item if the items id, translated name or custom name contains
                 // the search term. Checking both the id and the translated name
                 // makes sure that people can search in both their native language
                 // and in English.
-                if (itemId.contains(searchText) || translatedName.contains(searchText) || itemStack.getName().asString().contains(searchText)) continue;
+                if (
+                        (searchNamespace.isEmpty() || itemNamespace.contains(searchNamespace)) &&
+                        (itemId.contains(searchText) ||
+                        translatedName.contains(searchText) ||
+                        itemStack.getName().asString().contains(searchText))
+                ) continue;
 
                 items.remove(id);
             }
