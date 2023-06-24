@@ -10,6 +10,7 @@ import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.SimpleScreenHandler;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import ml.pkom.mcpitanlibarch.api.util.SlotUtil;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -23,6 +24,8 @@ import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AlchemyTableScreenHandler extends SimpleScreenHandler {
     public RegisterInventory registerInventory; // contains InputSlot(0)
@@ -239,7 +242,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
         return ItemStack.EMPTY;
     }
 
-    public String searchText = "";
+    public String searchText, searchNamespace = "";
 
     public void setSearchText(String searchText) {
         this.searchText = searchText;
@@ -262,10 +265,49 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             }
 
             List<String> ids = new ArrayList<>(items.getKeys());
+
+            // Extract namespace from searchText [@(NAMESPACE)]
+            Pattern pattern = Pattern.compile("@([a-zA-Z0-9_-]+)");
+            Matcher matcher = pattern.matcher(searchText);
+            if (matcher.find()) {
+                searchNamespace = matcher.group(1);
+                searchText = searchText.replaceFirst("@" + searchNamespace + " ?", "");
+            }
+
             for (String id : ids) {
-                if (!id.contains(searchText) && !new ItemStack(ItemUtil.fromId(new Identifier(id))).getName().getString().contains(searchText)) {
-                    items.remove(id);
+                String translatedName = "";
+
+                Identifier itemIdentifier = new Identifier(id);
+                ItemStack itemStack = new ItemStack(ItemUtil.fromId(itemIdentifier));
+                String itemTranslationKey = itemStack.getTranslationKey();
+
+                // If the item has a translation, we should use that instead of the identifier.
+                if (I18n.hasTranslation(itemTranslationKey)) {
+                    translatedName = I18n.translate(itemTranslationKey);
                 }
+
+                // Include only the name of the item in the id when searching
+                String itemId = itemIdentifier.getPath();
+
+                // Make sure everything is lower-case so capitalization doesn't matter for searching
+                searchText = searchText.toLowerCase();
+                translatedName = translatedName.toLowerCase();
+                id = id.toLowerCase();
+
+                String itemNamespace = itemIdentifier.getNamespace();
+
+                // Display the item if the items id, translated name or custom name contains
+                // the search term. Checking both the id and the translated name
+                // makes sure that people can search in both their native language
+                // and in English.
+                if (
+                        (searchNamespace.isEmpty() || itemNamespace.contains(searchNamespace)) &&
+                        (itemId.contains(searchText) ||
+                        translatedName.contains(searchText) ||
+                        itemStack.getName().asString().contains(searchText))
+                ) continue;
+
+                items.remove(id);
             }
 
             itemAlchemyTag.put("registered_items", items);
