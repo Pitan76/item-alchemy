@@ -11,7 +11,6 @@ import ml.pkom.mcpitanlibarch.api.gui.SimpleScreenHandler;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import ml.pkom.mcpitanlibarch.api.util.SlotUtil;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
