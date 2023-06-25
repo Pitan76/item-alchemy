@@ -1,26 +1,34 @@
 package ml.pkom.itemalchemy.client.screen;
 
 import io.netty.buffer.Unpooled;
+import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.itemalchemy.ItemAlchemyClient;
+import ml.pkom.itemalchemy.api.PlayerRegisteredItemUtil;
 import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.client.SimpleHandledScreen;
 import ml.pkom.mcpitanlibarch.api.client.render.handledscreen.DrawBackgroundArgs;
 import ml.pkom.mcpitanlibarch.api.client.render.handledscreen.DrawForegroundArgs;
 import ml.pkom.mcpitanlibarch.api.client.render.handledscreen.DrawMouseoverTooltipArgs;
 import ml.pkom.mcpitanlibarch.api.client.render.handledscreen.RenderArgs;
+import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.network.ClientNetworking;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import ml.pkom.mcpitanlibarch.api.util.client.RenderUtil;
 import ml.pkom.mcpitanlibarch.api.util.client.ScreenUtil;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+
+import java.util.List;
 
 public class AlchemyTableScreen extends SimpleHandledScreen {
     public PlayerInventory playerInventory;
@@ -47,14 +55,27 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
         if (searchBox.isFocused()) {
             if (keyCode != 256) {
+                NbtCompound translations = new NbtCompound();
+
+                List<Item> items = PlayerRegisteredItemUtil.getItems(new Player(playerInventory.player));
+                for (Item item : items) {
+                    ItemStack stack = new ItemStack(item);
+                    String itemTranslationKey = stack.getTranslationKey();
+                    if (I18n.hasTranslation(itemTranslationKey)) {
+                        translations.putString(itemTranslationKey, I18n.translate(itemTranslationKey));
+                    }
+                }
+
+
                 PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
                 buf.writeString(searchBox.getText());
+                buf.writeNbt(translations);
                 ClientNetworking.send(ItemAlchemy.id("search"), buf);
 
-                //
                 AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
 
                 screenHandler.setSearchText(searchBox.getText());
+                screenHandler.setTranslations(translations);
                 screenHandler.index = 0;
                 screenHandler.sortBySearch();
             }

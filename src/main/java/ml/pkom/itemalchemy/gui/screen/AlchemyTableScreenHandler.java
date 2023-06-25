@@ -29,6 +29,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AlchemyTableScreenHandler extends SimpleScreenHandler {
+    public Player player;
+
     public RegisterInventory registerInventory; // contains InputSlot(0)
     public ExtractInventory extractInventory;
     public Inventory otherInventory = new SimpleInventory(52);
@@ -40,7 +42,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
     public int index = 0;
 
     public void nextExtractSlots() {
-        if (PlayerRegisteredItemUtil.count(extractInventory.player) < 13 * (index + 1) + 1) return;
+        if (PlayerRegisteredItemUtil.count(player) < 13 * (index + 1) + 1) return;
         index++;
         if (searchText.isEmpty())
             extractInventory.placeExtractSlots();
@@ -59,7 +61,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
     public AlchemyTableScreenHandler(int syncId, PlayerInventory playerInventory, RegisterInventory inventory) {
         this(ScreenHandlers.ALCHEMY_TABLE, syncId, playerInventory, inventory);
-        Player player = new Player(playerInventory.player);
+        player = new Player(playerInventory.player);
         extractInventory = new ExtractInventory(13 + 80, player, this);
         registerInventory = inventory;
         addPlayerMainInventorySlots(playerInventory, 24, 140);
@@ -249,12 +251,17 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
         this.searchText = searchText;
     }
 
+    public NbtCompound translations = new NbtCompound();
+    public void setTranslations(NbtCompound translations) {
+        this.translations = translations;
+    }
+
     public void sortBySearch() {
         if (searchText.isEmpty()) {
             extractInventory.placeExtractSlots();
             return;
         }
-        NbtCompound nbtTag = EMCManager.writePlayerNbt(extractInventory.player).copy();
+        NbtCompound nbtTag = EMCManager.writePlayerNbt(player).copy();
 
         if (nbtTag.contains("itemalchemy")) {
 
@@ -283,8 +290,8 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
                 String itemTranslationKey = itemStack.getTranslationKey();
 
                 // If the item has a translation, we should use that instead of the identifier.
-                if (I18n.hasTranslation(itemTranslationKey)) {
-                    translatedName = I18n.translate(itemTranslationKey);
+                if (translations.contains(itemTranslationKey)) {
+                    translatedName = translations.getString(itemTranslationKey);
                 }
 
                 // Include only the name of the item in the id when searching

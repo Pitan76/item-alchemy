@@ -83,11 +83,13 @@ public class ItemAlchemy {
 
         ServerNetworking.registerReceiver(id("search"), ((server, p, buf) -> {
             String text = buf.readString();
+            NbtCompound translations = buf.readNbt();
             Player player = new Player(p);
             AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
 
             // Sort
             screenHandler.setSearchText(text);
+            screenHandler.setTranslations(translations);
             screenHandler.index = 0;
             screenHandler.sortBySearch();
         }));

@@ -13,11 +13,11 @@ import java.util.List;
 public class PlayerRegisteredItemUtil {
     public static List<String> getItemsAsString(Player player) {
 
-        NbtCompound playerNbt = EMCManager.writePlayerNbt(player);
+        NbtCompound playerNbt = EMCManager.writePlayerNbt(player).copy();
 
         NbtCompound items = new NbtCompound();
 
-        if (playerNbt.contains("itemalchemy")) {
+        if (hasIANbt(playerNbt)) {
             NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
             if (itemAlchemyTag.contains("registered_items")) {
                 items = itemAlchemyTag.getCompound("registered_items");
@@ -25,6 +25,15 @@ public class PlayerRegisteredItemUtil {
         }
         if (items.isEmpty()) return new ArrayList<>();
         return new ArrayList<>(items.getKeys());
+    }
+
+    public static boolean hasIANbt(Player player) {
+        NbtCompound playerNbt = EMCManager.writePlayerNbt(player).copy();
+        return hasIANbt(playerNbt);
+    }
+
+    public static boolean hasIANbt(NbtCompound nbt) {
+        return nbt.contains("itemalchemy");
     }
 
     public static List<Item> getItems(Player player) {
