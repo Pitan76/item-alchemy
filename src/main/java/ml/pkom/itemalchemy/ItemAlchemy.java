@@ -63,10 +63,6 @@ public class ItemAlchemy {
 
                 serverState.createPlayer(new Player(player));
 
-                System.out.println("fuck list");
-                serverState.teams.forEach(teamState -> System.out.println(teamState.storedEMC));
-                System.out.println("end");
-
                 EMCManager.syncS2C(player);
             }
         });

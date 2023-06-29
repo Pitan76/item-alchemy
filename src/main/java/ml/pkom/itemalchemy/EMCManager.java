@@ -625,9 +625,6 @@ public class EMCManager {
 
         buf.writeNbt(nbt);
 
-        System.out.println("generated s2c");
-        System.out.println(nbt);
-
         ServerNetworking.send(player, ItemAlchemy.id("sync_emc"), buf);
     }
 
