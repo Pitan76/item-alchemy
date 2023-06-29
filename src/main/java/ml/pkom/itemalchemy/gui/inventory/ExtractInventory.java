@@ -1,6 +1,10 @@
 package ml.pkom.itemalchemy.gui.inventory;
 
 import ml.pkom.itemalchemy.EMCManager;
+import ml.pkom.itemalchemy.ItemAlchemyClient;
+import ml.pkom.itemalchemy.data.PlayerState;
+import ml.pkom.itemalchemy.data.ServerState;
+import ml.pkom.itemalchemy.data.TeamState;
 import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
@@ -12,10 +16,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ExtractInventory extends SimpleInventory {
     public Player player;
@@ -35,27 +36,21 @@ public class ExtractInventory extends SimpleInventory {
     }
 
     public void placeExtractSlots() {
-        placeExtractSlots(EMCManager.writePlayerNbt(player));
+        TeamState teamState = EMCManager
+                .getModState(player.getWorld().getServer())
+                .getTeamByPlayer(player.getUUID())
+                .get();
+
+        placeExtractSlots(teamState.registeredItems);
     }
 
-    public void placeExtractSlots(NbtCompound nbtTag) {
+    public void placeExtractSlots(List<String> keys) {
         if (player.getPlayerEntity() instanceof ServerPlayerEntity)
             EMCManager.syncS2C((ServerPlayerEntity) player.getPlayerEntity());
         isSettingStack = true;
 
         definedStacks.clear();
         int index = screenHandler != null ?  screenHandler.index : 0;
-
-        NbtCompound items = NbtTag.create();
-
-        if (nbtTag.contains("itemalchemy")) {
-            NbtCompound itemAlchemyTag = nbtTag.getCompound("itemalchemy");
-            if (itemAlchemyTag.contains("registered_items")) {
-                items = itemAlchemyTag.getCompound("registered_items");
-            }
-        }
-
-        List<String> keys = new ArrayList<>(items.getKeys());
 
         for (int i = 0; i < 13; i++) {
             int id_index = i + (index * 13);

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class ServerState extends PersistentState {
+public class ServerState extends PersistentState implements ModState {
     public List<TeamState> teams = new ArrayList<>();
     public List<PlayerState> players = new ArrayList<>();
 
@@ -20,7 +20,7 @@ public class ServerState extends PersistentState {
 
         NbtCompound modNBT = nbt.getCompound("itemalchemy");
 
-        for (NbtElement item : modNBT.getList("teams", NbtElement.LIST_TYPE)) {
+        for (NbtElement item : (NbtList)modNBT.get("teams")) {
             if(!(item instanceof NbtCompound)) {
                 continue;
             }
@@ -31,16 +31,14 @@ public class ServerState extends PersistentState {
             serverState.teams.add(teamState);
         }
 
-        for (NbtElement item : modNBT.getList("players", NbtElement.LIST_TYPE)) {
+        for (NbtElement item : (NbtList)modNBT.get("players")) {
             if(!(item instanceof NbtCompound)) {
                 continue;
             }
 
-            NbtCompound playerNBT = (NbtCompound)item;
-
             PlayerState playerState = new PlayerState();
 
-            playerState.readNBT(playerNBT);
+            playerState.readNBT((NbtCompound)item);
 
             serverState.players.add(playerState);
         }
@@ -83,7 +81,7 @@ public class ServerState extends PersistentState {
         return manager.getOrCreate(
                 ServerState::create,
                 ServerState::new,
-                ItemAlchemy.id("stats_nbt").toString()
+                "itemalchemy"
         );
     }
 
@@ -101,10 +99,16 @@ public class ServerState extends PersistentState {
 
         teams.add(team);
 
+        markDirty();
+
         return team;
     }
 
     public PlayerState createPlayer(Player player) {
+        if(getPlayer(player.getUUID()).isPresent()) {
+            return getPlayer(player.getUUID()).get();
+        }
+
         PlayerState state = new PlayerState();
 
         state.playerUUID = player.getUUID();
@@ -114,14 +118,28 @@ public class ServerState extends PersistentState {
 
         players.add(state);
 
+        markDirty();
+
         return state;
     }
 
+    @Override
     public Optional<TeamState> getTeam(UUID teamID) {
-        return teams.stream().filter(teamState -> teamState.teamID == teamID).findFirst();
+        return teams.stream().filter(teamState -> teamState.teamID.equals(teamID)).findFirst();
+    }
+    @Override
+    public Optional<TeamState> getTeamByPlayer(UUID playerUUID) {
+        Optional<PlayerState> playerState = getPlayer(playerUUID);
+
+        if(!playerState.isPresent()) {
+            return Optional.empty();
+        }
+
+        return getTeam(playerState.get().teamID);
     }
 
+    @Override
     public Optional<PlayerState> getPlayer(UUID uuid) {
-        return players.stream().filter(playerState -> playerState.playerUUID == uuid).findFirst();
+        return players.stream().filter(playerState -> playerState.playerUUID.equals(uuid)).findFirst();
     }
 }

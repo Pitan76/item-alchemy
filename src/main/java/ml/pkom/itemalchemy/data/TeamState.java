@@ -5,9 +5,7 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TeamState {
@@ -25,7 +23,7 @@ public class TeamState {
         owner = nbt.getUuid("owner");
         storedEMC = nbt.getLong("emc");
 
-        List<String> registeredItems = nbt.getList("registered_items", NbtElement.LIST_TYPE).stream()
+        List<String> registeredItems = ((NbtList)nbt.get("registered_items")).stream()
                 .filter(nbtElement -> nbtElement instanceof NbtString)
                 .map(NbtElement::asString)
                 .collect(Collectors.toList());

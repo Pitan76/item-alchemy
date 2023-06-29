@@ -6,6 +6,7 @@ import ml.pkom.itemalchemy.client.screen.AlchemyChestScreen;
 import ml.pkom.itemalchemy.client.screen.AlchemyTableScreen;
 import ml.pkom.itemalchemy.client.screen.EMCCollectorScreen;
 import ml.pkom.itemalchemy.client.screen.EMCCondenserScreen;
+import ml.pkom.itemalchemy.data.TeamState;
 import ml.pkom.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import ml.pkom.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import ml.pkom.itemalchemy.gui.screen.ScreenHandlers;
@@ -39,16 +40,7 @@ public class ItemAlchemyClient {
         WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(new BlockRenderer());
 
         ClientNetworking.registerReceiver(ItemAlchemy.id("sync_emc"), (client, p, buf) -> {
-            NbtCompound nbt = buf.readNbt();
-            itemAlchemyNbt = nbt;
-
-            Player player = new Player(p);
-
-            NbtCompound playerNbt = EMCManager.writePlayerNbt(player);
-
-            playerNbt.put("itemalchemy", nbt);
-
-            EMCManager.readPlayerNbt(player, playerNbt);
+            itemAlchemyNbt = buf.readNbt();
         });
 
         ClientNetworking.registerReceiver(ItemAlchemy.id("sync_emc_map"), (client, p, buf) -> {
@@ -81,16 +73,6 @@ public class ItemAlchemyClient {
         });
 
         KeybindingRegistry.registerOnLevelWithNetwork(new KeyBinding("key.itemalchemy.charge", GLFW.GLFW_KEY_V, "category.itemalchemy.all"), ItemAlchemy.id("tool_charge"));
-    }
-
-    public static long getClientPlayerEMC() {
-        long emc = 0;
-        if (ItemAlchemyClient.itemAlchemyNbt != null) {
-            if (ItemAlchemyClient.itemAlchemyNbt.contains("emc")) {
-                emc = ItemAlchemyClient.itemAlchemyNbt.getLong("emc");
-            }
-        }
-        return emc;
     }
 
     // display emc to the item's tooltip

@@ -1,13 +1,19 @@
 package ml.pkom.itemalchemy.gui.inventory;
 
 import ml.pkom.itemalchemy.EMCManager;
+import ml.pkom.itemalchemy.data.PlayerState;
+import ml.pkom.itemalchemy.data.ServerState;
+import ml.pkom.itemalchemy.data.TeamState;
 import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
+import ml.pkom.itemalchemy.util.ItemUtils;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+
+import java.util.Optional;
 
 public class RegisterInventory extends SimpleInventory {
     public Player player;
@@ -19,32 +25,18 @@ public class RegisterInventory extends SimpleInventory {
     @Override
     public void setStack(int slot, ItemStack stack) {
         if (!stack.isEmpty()) {
+            if(!player.getWorld().isClient) {
+                ServerState state = ServerState.getServerState(player.getWorld().getServer());
+                PlayerState playerState = state.getPlayer(player.getUUID()).get();
 
-            NbtCompound playerNbt = EMCManager.writePlayerNbt(player);
+                TeamState teamState = state.getTeam(playerState.teamID).get();
 
-            NbtCompound items = NbtTag.create();
-
-            if (playerNbt.contains("itemalchemy")) {
-                NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
-                if (itemAlchemyTag.contains("registered_items")) {
-                    items = itemAlchemyTag.getCompound("registered_items");
+                if(!teamState.registeredItems.contains(ItemUtil.toID(stack.getItem()).toString())) {
+                    teamState.registeredItems.add(ItemUtil.toID(stack.getItem()).toString());
                 }
-            }
 
-            if (!items.contains(ItemUtil.toID(stack.getItem()).toString())) {
-                items.putBoolean(ItemUtil.toID(stack.getItem()).toString(), true);
+                state.markDirty();
             }
-
-            if (playerNbt.contains("itemalchemy")) {
-                NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
-                itemAlchemyTag.put("registered_items", items);
-            } else {
-                NbtCompound itemAlchemyTag = NbtTag.create();
-                itemAlchemyTag.put("registered_items", items);
-                playerNbt.put("itemalchemy", itemAlchemyTag);
-            }
-            EMCManager.readPlayerNbt(player, playerNbt);
-            //player.getPlayerEntity().saveNbt(playerNbt);
 
             if (slot == 50) {
                 if (!player.getWorld().isClient) {

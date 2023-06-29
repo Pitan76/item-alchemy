@@ -18,18 +18,6 @@ public abstract class ServerPlayerEntityMixin {
     // リスポーン、ワールド移動時のコピー対応
     @Inject(method = "copyFrom", at = @At("TAIL"))
     private void copyFrom(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
-        NbtCompound oldNbt = NbtTag.create();
-        NbtCompound newNbt = NbtTag.create();
 
-        // Avoid conflict with Prefab
-        try {
-            oldPlayer.writeCustomDataToNbt(oldNbt);
-            NbtCompound itemAlchemy = oldNbt.getCompound("itemalchemy");
-            this.writeCustomDataToNbt(newNbt);
-            newNbt.put("itemalchemy", itemAlchemy);
-            this.readCustomDataFromNbt(newNbt);
-        } catch (NullPointerException ignore) {
-
-        }
     }
 }

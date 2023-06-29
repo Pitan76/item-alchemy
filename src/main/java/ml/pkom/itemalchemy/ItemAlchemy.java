@@ -2,6 +2,7 @@ package ml.pkom.itemalchemy;
 
 import ml.pkom.itemalchemy.block.Blocks;
 import ml.pkom.itemalchemy.command.ItemAlchemyCommand;
+import ml.pkom.itemalchemy.data.ServerState;
 import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import ml.pkom.itemalchemy.gui.screen.ScreenHandlers;
 import ml.pkom.itemalchemy.util.ItemCharge;
@@ -58,6 +59,15 @@ public class ItemAlchemy {
         EventRegistry.ServerConnection.join((player) -> {
             if (player != null) {
                 EMCManager.syncS2C_emc_map(player);
+                ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
+
+                serverState.createPlayer(new Player(player));
+
+                System.out.println("fuck list");
+                serverState.teams.forEach(teamState -> System.out.println(teamState.storedEMC));
+                System.out.println("end");
+
+                EMCManager.syncS2C(player);
             }
         });
 

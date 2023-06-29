@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import ml.pkom.easyapi.config.Config;
 import ml.pkom.easyapi.config.JsonConfig;
+import ml.pkom.itemalchemy.data.*;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.network.PacketByteUtil;
@@ -29,6 +30,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -546,107 +548,86 @@ public class EMCManager {
     public static Map<String, NbtCompound> playerCache = new HashMap<>();
 
     public static void decrementEmc(Player player, long amount) {
-        NbtCompound playerNbt = writePlayerNbt(player);
+        ServerState state = ServerState.getServerState(player.getWorld().getServer());
 
-        long emc = 0;
-        if (playerNbt.contains("itemalchemy")) {
-            NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
-            if (itemAlchemyTag.contains("emc")) {
-                emc += itemAlchemyTag.getLong("emc");
-            }
+        if(!state.getPlayer(player.getUUID()).isPresent()) {
+            return;
         }
 
-        emc -= amount;
+        PlayerState playerState = state.getPlayer(player.getUUID()).get();
+        TeamState teamState = state.getTeam(playerState.teamID).get();
 
-        if (playerNbt.contains("itemalchemy")) {
-            NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
-            itemAlchemyTag.putLong("emc", emc);
-        } else {
-            NbtCompound itemAlchemyTag = NbtTag.create();
-            itemAlchemyTag.putLong("emc", emc);
-            playerNbt.put("itemalchemy", itemAlchemyTag);
-        }
-        readPlayerNbt(player, playerNbt);
+        teamState.storedEMC -= amount;
+
+        state.markDirty();
     }
 
     public static void setEMCtoPlayer(Player player, long emc) {
-        NbtCompound playerNbt = writePlayerNbt(player);
+        ServerState state = ServerState.getServerState(player.getWorld().getServer());
 
-        if (playerNbt.contains("itemalchemy")) {
-            NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
-            itemAlchemyTag.putLong("emc", emc);
-        } else {
-            NbtCompound itemAlchemyTag = NbtTag.create();
-            itemAlchemyTag.putLong("emc", emc);
-            playerNbt.put("itemalchemy", itemAlchemyTag);
+        if(!state.getPlayer(player.getUUID()).isPresent()) {
+            return;
         }
-        readPlayerNbt(player, playerNbt);
+
+        PlayerState playerState = state.getPlayer(player.getUUID()).get();
+        TeamState teamState = state.getTeam(playerState.teamID).get();
+
+        teamState.storedEMC = emc;
+
+        state.markDirty();
     }
 
     public static void incrementEmc(Player player, long amount) {
-        NbtCompound playerNbt = writePlayerNbt(player);
+        ServerState state = ServerState.getServerState(player.getWorld().getServer());
 
-        long emc = 0;
-        if (playerNbt.contains("itemalchemy")) {
-            NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
-            if (itemAlchemyTag.contains("emc")) {
-                emc += itemAlchemyTag.getLong("emc");
-            }
+        if(!state.getPlayer(player.getUUID()).isPresent()) {
+            return;
         }
-        emc += amount;
 
-        if (playerNbt.contains("itemalchemy")) {
-            NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
-            itemAlchemyTag.putLong("emc", emc);
-        } else {
-            NbtCompound itemAlchemyTag = NbtTag.create();
-            itemAlchemyTag.putLong("emc", emc);
-            playerNbt.put("itemalchemy", itemAlchemyTag);
+        PlayerState playerState = state.getPlayer(player.getUUID()).get();
+        TeamState teamState = state.getTeam(playerState.teamID).get();
+
+        teamState.storedEMC += amount;
+
+        state.markDirty();
+    }
+
+    public static ModState getModState(@Nullable MinecraftServer server) {
+        if(server != null) {
+            return ServerState.getServerState(server);
         }
-        readPlayerNbt(player, playerNbt);
+
+        return new ClientState();
     }
 
     public static long getEmcFromPlayer(Player player) {
-        NbtCompound playerNbt = writePlayerNbt(player);
+        Optional<TeamState> teamState = getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
 
-        long emc = 0;
-        if (playerNbt.contains("itemalchemy")) {
-            NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
-            if (itemAlchemyTag.contains("emc")) {
-                emc += itemAlchemyTag.getLong("emc");
-            }
-        }
-        return emc;
-    }
-
-    public static NbtCompound writePlayerNbt(Player player) {
-        NbtCompound playerNbt = new NbtTag();
-
-        if (playerCache.containsKey(player.getName()))
-            playerNbt = playerCache.get(player.getName());
-        //else
-        //    player.getPlayerEntity().writeCustomDataToNbt(playerNbt);
-
-        return playerNbt;
-    }
-
-    public static void readPlayerNbt(Player player, NbtCompound playerNbt) {
-
-        if (playerCache.containsKey(player.getName()))
-            playerCache.replace(player.getName(), playerNbt);
-        else
-            playerCache.put(player.getName(), playerNbt);
-        //player.getPlayerEntity().readCustomDataFromNbt(playerNbt);
+        return teamState.map(state -> state.storedEMC).orElse(0L);
     }
 
     public static void syncS2C(ServerPlayerEntity player) {
         if (player.networkHandler == null) {
             return;
         }
-        PacketByteBuf buf = PacketByteUtil.create();
-        NbtCompound playerNbt = writePlayerNbt(new Player(player));
 
-        buf.writeNbt(playerNbt.getCompound("itemalchemy"));
+        ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
+        PacketByteBuf buf = PacketByteUtil.create();
+
+        TeamState teamState = serverState.getTeamByPlayer(player.getUuid()).get();
+
+        NbtCompound nbt = new NbtCompound();
+        NbtCompound teamNBT = new NbtCompound();
+
+        teamState.writeNBT(teamNBT);
+
+        nbt.put("team", teamNBT);
+
+        buf.writeNbt(nbt);
+
+        System.out.println("generated s2c");
+        System.out.println(nbt);
+
         ServerNetworking.send(player, ItemAlchemy.id("sync_emc"), buf);
     }
 

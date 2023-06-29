@@ -13,32 +13,5 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin {
-    public NbtCompound itemAlchemy = NbtTag.create();
 
-    @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
-    public void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
-        Player player = new Player((PlayerEntity) (Object) this);
-
-        NbtCompound cachedPlayerNbt = EMCManager.writePlayerNbt(player);
-        if (cachedPlayerNbt.contains("itemalchemy")) {
-            itemAlchemy = cachedPlayerNbt.getCompound("itemalchemy");
-            nbt.put("itemalchemy", itemAlchemy);
-        }
-
-    }
-
-    @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
-    public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
-        Player player = new Player((PlayerEntity) (Object) this);
-
-        itemAlchemy = nbt.getCompound("itemalchemy");
-        if (EMCManager.playerCache.containsKey(player.getName())) {
-            EMCManager.playerCache.replace(player.getName(), nbt);
-        } else {
-            EMCManager.playerCache.put(player.getName(), nbt);
-        }
-        if ((Object) this instanceof ServerPlayerEntity) {
-            EMCManager.syncS2C((ServerPlayerEntity) (Object) this);
-        }
-    }
 }
