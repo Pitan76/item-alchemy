@@ -262,7 +262,9 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             extractInventory.placeExtractSlots();
             return;
         }
+
         List<String> ids = new ArrayList<>(EMCManager.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID()).get().registeredItems);
+        List<String> sortedIds = new ArrayList<>();
 
         // Extract namespace from searchText [@(NAMESPACE)]
         Pattern pattern = Pattern.compile("@([a-zA-Z0-9_-]+)");
@@ -303,13 +305,12 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
                             (itemId.contains(searchText) ||
                                     translatedName.contains(searchText) ||
                                     TextUtil.txt2str(itemStack.getName()).contains(searchText))
-            ) continue;
-
-            ids.remove(id);
-
-            extractInventory.placeExtractSlots(ids);
-
+            ) {
+                sortedIds.add(id);
+            }
         }
+
+        extractInventory.placeExtractSlots(sortedIds);
     }
 
     @Override

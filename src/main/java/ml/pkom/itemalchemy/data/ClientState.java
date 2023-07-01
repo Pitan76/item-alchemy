@@ -1,14 +1,13 @@
 package ml.pkom.itemalchemy.data;
 
 import ml.pkom.itemalchemy.ItemAlchemyClient;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public class ClientState implements ModState {
     @Override
-    public Optional<TeamState> getTeamByPlayer(@Nullable UUID playerUUID) {
+    public Optional<TeamState> getTeamByPlayer(UUID playerUUID) {
         if (ItemAlchemyClient.itemAlchemyNbt != null) {
             TeamState team = new TeamState();
             team.readNBT(ItemAlchemyClient.itemAlchemyNbt.getCompound("team"));
