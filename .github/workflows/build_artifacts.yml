@@ -16,6 +16,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Make gradle wrapper excecutable
+      if: ${{ runner.os != "Windows" }}
+      run: chmod +x ./gradlew
+
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
