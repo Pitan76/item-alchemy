@@ -592,16 +592,8 @@ public class EMCManager {
         state.markDirty();
     }
 
-    public static ModState getModState(@Nullable MinecraftServer server) {
-        if(server != null) {
-            return ServerState.getServerState(server);
-        }
-
-        return new ClientState();
-    }
-
     public static long getEmcFromPlayer(Player player) {
-        Optional<TeamState> teamState = getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
+        Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
 
         return teamState.map(state -> state.storedEMC).orElse(0L);
     }

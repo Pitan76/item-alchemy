@@ -4,7 +4,8 @@
   "package": "ml.pkom.itemalchemy.mixins",
   "mixins": [
     "RecipeManagerMixin",
-    "ItemMixin"
+    "ItemMixin",
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

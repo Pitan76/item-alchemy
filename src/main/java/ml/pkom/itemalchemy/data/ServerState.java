@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ServerState extends PersistentState implements ModState {
     public List<TeamState> teams = new ArrayList<>();
@@ -89,11 +90,13 @@ public class ServerState extends PersistentState implements ModState {
         TeamState team = new TeamState();
 
         if(name == null) {
-            name = owner.getName();
+            team.name = owner.getName();
+        } else {
+            team.name = name;
+            team.isDefault = false;
         }
 
         team.owner = owner.getUUID();
-        team.name = name;
         team.createdAt = System.currentTimeMillis();
         team.teamID = UUID.randomUUID();
 
@@ -127,6 +130,12 @@ public class ServerState extends PersistentState implements ModState {
     public Optional<TeamState> getTeam(UUID teamID) {
         return teams.stream().filter(teamState -> teamState.teamID.equals(teamID)).findFirst();
     }
+
+    @Override
+    public List<TeamState> getTeamsByOwner(UUID playerUUID) {
+        return teams.stream().filter(teamState -> teamState.owner == playerUUID).collect(Collectors.toList());
+    }
+
     @Override
     public Optional<TeamState> getTeamByPlayer(UUID playerUUID) {
         Optional<PlayerState> playerState = getPlayer(playerUUID);

@@ -1,6 +1,7 @@
 package ml.pkom.itemalchemy.api;
 
 import ml.pkom.itemalchemy.EMCManager;
+import ml.pkom.itemalchemy.data.ModState;
 import ml.pkom.itemalchemy.data.ServerState;
 import ml.pkom.itemalchemy.data.TeamState;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 public class PlayerRegisteredItemUtil {
     public static List<String> getItemsAsString(Player player) {
-        Optional<TeamState> teamState = EMCManager.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
+        Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
 
         if(!teamState.isPresent()) {
             return new ArrayList<>();
@@ -42,7 +43,7 @@ public class PlayerRegisteredItemUtil {
     }
 
     public static void setItemsForString(Player player, List<String> list) {
-        Optional<TeamState> teamState = EMCManager.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
+        Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
 
         if(!teamState.isPresent()) {
             return;

@@ -14,6 +14,7 @@ public class TeamState {
     public long createdAt;
     public UUID owner;
     public long storedEMC = 0;
+    public boolean isDefault = true;
     public List<String> registeredItems = new ArrayList<>();
 
     public void readNBT(NbtCompound nbt) {
@@ -22,6 +23,7 @@ public class TeamState {
         teamID = nbt.getUuid("id");
         owner = nbt.getUuid("owner");
         storedEMC = nbt.getLong("emc");
+        isDefault = nbt.getBoolean("is_default");
 
         List<String> registeredItems = ((NbtList)nbt.get("registered_items")).stream()
                 .filter(nbtElement -> nbtElement instanceof NbtString)
@@ -37,6 +39,7 @@ public class TeamState {
         nbt.putUuid("id", teamID);
         nbt.putUuid("owner", owner);
         nbt.putLong("emc", storedEMC);
+        nbt.putBoolean("is_default", isDefault);
 
         NbtList registeredItems = new NbtList();
 

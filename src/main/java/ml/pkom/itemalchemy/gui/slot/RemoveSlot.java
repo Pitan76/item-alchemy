@@ -1,6 +1,7 @@
 package ml.pkom.itemalchemy.gui.slot;
 
 import ml.pkom.itemalchemy.EMCManager;
+import ml.pkom.itemalchemy.data.ModState;
 import ml.pkom.itemalchemy.data.ServerState;
 import ml.pkom.itemalchemy.data.TeamState;
 import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
@@ -24,7 +25,7 @@ public class RemoveSlot extends CompatibleSlot {
 
     @Override
     public void callSetStack(ItemStack stack) {
-        Optional<TeamState> teamState = EMCManager.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
+        Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
 
         if(!teamState.isPresent()) {
             return;

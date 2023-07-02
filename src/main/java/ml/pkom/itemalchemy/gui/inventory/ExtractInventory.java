@@ -2,6 +2,7 @@ package ml.pkom.itemalchemy.gui.inventory;
 
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.ItemAlchemyClient;
+import ml.pkom.itemalchemy.data.ModState;
 import ml.pkom.itemalchemy.data.PlayerState;
 import ml.pkom.itemalchemy.data.ServerState;
 import ml.pkom.itemalchemy.data.TeamState;
@@ -36,7 +37,7 @@ public class ExtractInventory extends SimpleInventory {
     }
 
     public void placeExtractSlots() {
-        TeamState teamState = EMCManager
+        TeamState teamState = ModState
                 .getModState(player.getWorld().getServer())
                 .getTeamByPlayer(player.getUUID())
                 .get();
