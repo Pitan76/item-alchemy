@@ -1,7 +1,6 @@
 /.gradle/
 /.idea/
 /build/
-/gradle/wrapper/
 /out/production/itemalchemy.main/
 /run/
 /local.properties
