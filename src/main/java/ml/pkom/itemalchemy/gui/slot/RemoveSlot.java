@@ -1,6 +1,9 @@
 package ml.pkom.itemalchemy.gui.slot;
 
 import ml.pkom.itemalchemy.EMCManager;
+import ml.pkom.itemalchemy.data.ModState;
+import ml.pkom.itemalchemy.data.ServerState;
+import ml.pkom.itemalchemy.data.TeamState;
 import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.slot.CompatibleSlot;
@@ -9,6 +12,8 @@ import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+
+import java.util.Optional;
 
 public class RemoveSlot extends CompatibleSlot {
     public Player player;
@@ -20,34 +25,23 @@ public class RemoveSlot extends CompatibleSlot {
 
     @Override
     public void callSetStack(ItemStack stack) {
+        Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
 
-        NbtCompound playerNbt = EMCManager.writePlayerNbt(player);
-        NbtCompound items = NbtTag.create();
-
-        if (playerNbt.contains("itemalchemy")) {
-            NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
-            if (itemAlchemyTag.contains("registered_items")) {
-                items = itemAlchemyTag.getCompound("registered_items");
-            }
+        if(!teamState.isPresent()) {
+            return;
         }
 
-        if (items.contains(ItemUtil.toID(stack.getItem()).toString())) {
-            items.remove(ItemUtil.toID(stack.getItem()).toString());
+        if (teamState.get().registeredItems.contains(ItemUtil.toID(stack.getItem()).toString())) {
+            teamState.get().registeredItems.remove(ItemUtil.toID(stack.getItem()).toString());
             if (player.getCurrentScreenHandler() instanceof AlchemyTableScreenHandler) {
                 AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
                 screenHandler.extractInventory.placeExtractSlots();
             }
         }
 
-        if (playerNbt.contains("itemalchemy")) {
-            NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
-            itemAlchemyTag.put("registered_items", items);
-        } else {
-            NbtCompound itemAlchemyTag = NbtTag.create();
-            itemAlchemyTag.put("registered_items", items);
-            playerNbt.put("itemalchemy", itemAlchemyTag);
+        if(!player.isClient()) {
+            ServerState.getServerState(player.getWorld().getServer()).markDirty();
         }
-        EMCManager.readPlayerNbt(player, playerNbt);
 
         player.offerOrDrop(stack.copy());
         if (player.getCurrentScreenHandler() instanceof AlchemyTableScreenHandler) {

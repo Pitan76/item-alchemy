@@ -138,8 +138,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
     @Override
     public void drawForegroundOverride(DrawForegroundArgs args) {
         ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, getTitle(), this.titleX, this.titleY, 4210752);
-        long emc;
-        emc = ItemAlchemyClient.getClientPlayerEMC();
+        long emc = EMCManager.getEmcFromPlayer(new Player(playerInventory.player));
         ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, TextUtil.literal("EMC: " + String.format("%,d", emc)), this.titleX, backgroundHeight / 2, 4210752);
     }
 

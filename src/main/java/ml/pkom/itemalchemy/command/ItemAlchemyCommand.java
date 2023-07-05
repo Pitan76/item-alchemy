@@ -4,26 +4,36 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import ml.pkom.easyapi.FileControl;
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.ItemAlchemy;
+import ml.pkom.itemalchemy.api.TeamUtil;
+import ml.pkom.itemalchemy.data.PlayerState;
+import ml.pkom.itemalchemy.data.ServerState;
+import ml.pkom.itemalchemy.data.TeamState;
 import ml.pkom.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
 import ml.pkom.mcpitanlibarch.api.command.CommandSettings;
 import ml.pkom.mcpitanlibarch.api.command.LiteralCommand;
 import ml.pkom.mcpitanlibarch.api.command.argument.IntegerCommand;
 import ml.pkom.mcpitanlibarch.api.command.argument.ItemCommand;
-import ml.pkom.mcpitanlibarch.api.event.IntegerCommandEvent;
-import ml.pkom.mcpitanlibarch.api.event.ItemCommandEvent;
-import ml.pkom.mcpitanlibarch.api.event.ServerCommandEvent;
+import ml.pkom.mcpitanlibarch.api.command.argument.PlayerCommand;
+import ml.pkom.mcpitanlibarch.api.command.argument.StringCommand;
+import ml.pkom.mcpitanlibarch.api.entity.Player;
+import ml.pkom.mcpitanlibarch.api.event.*;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.argument.ItemStackArgumentType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.server.world.ServerWorld;
+import org.apache.logging.log4j.core.jmx.Server;
+import org.lwjgl.system.CallbackI;
 
 import java.io.File;
+import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static ml.pkom.itemalchemy.EMCManager.*;
 
@@ -198,6 +208,166 @@ public class ItemAlchemyCommand extends LiteralCommand {
             }
         });
 
+        addArgumentCommand("team", new LiteralCommand() {
+            @Override
+            public void init(CommandSettings settings) {
+                addArgumentCommand("create", new LiteralCommand() {
+                    @Override
+                    public void init(CommandSettings settings) {
+                        addArgumentCommand("name", new StringCommand() {
+                            @Override
+                            public void execute(StringCommandEvent event) {
+                                try {
+                                    if (!event.getWorld().isClient()) {
+                                        if(TeamUtil.createTeam(event.getPlayer(), event.getValue(), true)) {
+                                            event.sendSuccess(TextUtil.literal("[ItemAlchemy] Created Team"), false);
+
+                                            return;
+                                        }
+
+                                        event.sendFailure(TextUtil.literal("[ItemAlchemy] Failed Create Team"));
+                                    }
+                                } catch (CommandSyntaxException e) {
+                                    event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
+                                }
+                            }
+
+                            @Override
+                            public String getArgumentName() {
+                                return "name";
+                            }
+
+                        });
+                    }
+
+                    @Override
+                    public void execute(ServerCommandEvent event) {
+                        event.sendSuccess(TextUtil.literal("[ItemAlchemy] Example: /itemalchemy team create [Team Name]"), false);
+                    }
+                });
+
+                addArgumentCommand("join", new LiteralCommand() {
+
+                    @Override
+                    public void init(CommandSettings settings) {
+                        addArgumentCommand("team", new StringCommand() {
+                            @Override
+                            public void execute(StringCommandEvent event) {
+                                try {
+                                    if (!event.getWorld().isClient()) {
+                                        if(TeamUtil.joinTeam(event.getPlayer(), event.getValue())) {
+                                            event.sendFailure(TextUtil.literal("[ItemAlchemy] Joined Team"));
+
+                                            return;
+                                        }
+
+                                        event.sendSuccess(TextUtil.literal("[ItemAlchemy] Failed join"), false);
+                                    }
+                                } catch (CommandSyntaxException e) {
+                                    event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
+                                }
+                            }
+
+                            @Override
+                            public String getArgumentName() {
+                                return "team";
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void execute(ServerCommandEvent event) {
+                        event.sendSuccess(TextUtil.literal("[ItemAlchemy] Example: /itemalchemy team join [Team Name]"), false);
+                    }
+                });
+
+                addArgumentCommand("leave", new LiteralCommand() {
+                    @Override
+                    public void execute(ServerCommandEvent event) {
+                        try {
+                            if (!event.getWorld().isClient()) {
+                                if(TeamUtil.leaveTeam(event.getPlayer())) {
+                                    event.sendSuccess(TextUtil.literal("[ItemAlchemy] Leaved team"), false);
+
+                                    return;
+                                }
+
+                                event.sendFailure(TextUtil.literal("[ItemAlchemy] Failed leave"));
+                            }
+                        } catch (CommandSyntaxException e) {
+                            event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
+                        }
+                    }
+                });
+
+                addArgumentCommand("kick", new LiteralCommand() {
+                    @Override
+                    public void init(CommandSettings settings) {
+                        addArgumentCommand("player", new PlayerCommand() {
+                            @Override
+                            public void execute(PlayerCommandEvent event) {
+                                try {
+                                    if (!event.getWorld().isClient()) {
+                                        Player player = event.getPlayer();
+                                        Player targetPlayer = new Player((PlayerEntity) event.getValue());
+
+                                        ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
+                                        Optional<TeamState> teamState = serverState.getTeamByPlayer(player.getUUID());
+
+                                        if(!teamState.isPresent()) {
+                                            event.sendFailure(TextUtil.literal("[ItemAlchemy] Not Found Team"));
+
+                                            return;
+                                        }
+
+                                        if(teamState.get().owner != player.getUUID()) {
+                                            event.sendFailure(TextUtil.literal("[ItemAlchemy] You don't have permission"));
+
+                                            return;
+                                        }
+
+                                        if(!serverState.getPlayer(targetPlayer.getUUID()).filter(playerState -> playerState.teamID == teamState.get().teamID).isPresent()) {
+                                            event.sendFailure(TextUtil.literal("[ItemAlchemy] You don't have permission"));
+
+                                            return;
+                                        }
+
+                                        if(TeamUtil.leaveTeam(targetPlayer)) {
+                                            event.sendSuccess(TextUtil.literal("[ItemAlchemy] Kicked " + player.getName()), false);
+
+                                            return;
+                                        }
+
+                                        event.sendFailure(TextUtil.literal("[ItemAlchemy] Failed leave"));
+                                    }
+                                } catch (CommandSyntaxException e) {
+                                    event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
+                                }
+                            }
+
+                            @Override
+                            public String getArgumentName() {
+                                return "player";
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void execute(ServerCommandEvent event) {
+                        event.sendSuccess(TextUtil.literal("[ItemAlchemy] Example: /itemalchemy team kick [Player Name]"), false);
+                    }
+                });
+            }
+
+            @Override
+            public void execute(ServerCommandEvent event) {
+                event.sendSuccess(TextUtil.literal("[ItemAlchemy] Example:"), false);
+                event.sendSuccess(TextUtil.literal("/itemalchemy team create [Team Name]"), false);
+                event.sendSuccess(TextUtil.literal("/itemalchemy team join [Team Name]"), false);
+                event.sendSuccess(TextUtil.literal("/itemalchemy team kick [Player Name]"), false);
+                event.sendSuccess(TextUtil.literal("/itemalchemy team leave"), false);
+            }
+        });
     }
 
     @Override

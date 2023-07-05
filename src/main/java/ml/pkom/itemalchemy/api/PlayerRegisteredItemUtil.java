@@ -1,6 +1,9 @@
 package ml.pkom.itemalchemy.api;
 
 import ml.pkom.itemalchemy.EMCManager;
+import ml.pkom.itemalchemy.data.ModState;
+import ml.pkom.itemalchemy.data.ServerState;
+import ml.pkom.itemalchemy.data.TeamState;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.item.Item;
@@ -9,31 +12,17 @@ import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PlayerRegisteredItemUtil {
     public static List<String> getItemsAsString(Player player) {
+        Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
 
-        NbtCompound playerNbt = EMCManager.writePlayerNbt(player).copy();
-
-        NbtCompound items = new NbtCompound();
-
-        if (hasIANbt(playerNbt)) {
-            NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
-            if (itemAlchemyTag.contains("registered_items")) {
-                items = itemAlchemyTag.getCompound("registered_items");
-            }
+        if(!teamState.isPresent()) {
+            return new ArrayList<>();
         }
-        if (items.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(items.getKeys());
-    }
 
-    public static boolean hasIANbt(Player player) {
-        NbtCompound playerNbt = EMCManager.writePlayerNbt(player).copy();
-        return hasIANbt(playerNbt);
-    }
-
-    public static boolean hasIANbt(NbtCompound nbt) {
-        return nbt.contains("itemalchemy");
+        return new ArrayList<>(teamState.get().registeredItems);
     }
 
     public static List<Item> getItems(Player player) {
@@ -54,21 +43,17 @@ public class PlayerRegisteredItemUtil {
     }
 
     public static void setItemsForString(Player player, List<String> list) {
-        NbtCompound playerNbt = EMCManager.writePlayerNbt(player);
-        NbtCompound items = new NbtCompound();
-        for (String id : list) {
-            items.putBoolean(id, true);
+        Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
+
+        if(!teamState.isPresent()) {
+            return;
         }
 
-        if (playerNbt.contains("itemalchemy")) {
-            NbtCompound itemAlchemyTag = playerNbt.getCompound("itemalchemy");
-            itemAlchemyTag.put("registered_items", items);
-        } else {
-            NbtCompound itemAlchemyTag = new NbtCompound();
-            itemAlchemyTag.put("registered_items", items);
-            playerNbt.put("itemalchemy", itemAlchemyTag);
+        teamState.get().registeredItems = list;
+
+        if(!player.isClient()) {
+            ServerState.getServerState(player.getWorld().getServer()).markDirty();
         }
-        EMCManager.readPlayerNbt(player, playerNbt);
     }
 
     public static int count(Player player) {
