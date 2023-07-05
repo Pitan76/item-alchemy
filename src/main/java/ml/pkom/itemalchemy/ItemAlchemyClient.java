@@ -1,18 +1,15 @@
 package ml.pkom.itemalchemy;
 
-import dev.architectury.event.events.client.ClientTickEvent;
 import ml.pkom.itemalchemy.client.renderer.BlockRenderer;
 import ml.pkom.itemalchemy.client.screen.AlchemyChestScreen;
 import ml.pkom.itemalchemy.client.screen.AlchemyTableScreen;
 import ml.pkom.itemalchemy.client.screen.EMCCollectorScreen;
 import ml.pkom.itemalchemy.client.screen.EMCCondenserScreen;
-import ml.pkom.itemalchemy.data.TeamState;
 import ml.pkom.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import ml.pkom.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import ml.pkom.itemalchemy.gui.screen.ScreenHandlers;
 import ml.pkom.mcpitanlibarch.api.client.registry.ArchRegistryClient;
 import ml.pkom.mcpitanlibarch.api.client.registry.KeybindingRegistry;
-import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.network.ClientNetworking;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;

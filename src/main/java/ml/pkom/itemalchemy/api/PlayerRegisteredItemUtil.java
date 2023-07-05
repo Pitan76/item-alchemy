@@ -1,13 +1,11 @@
 package ml.pkom.itemalchemy.api;
 
-import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.data.ModState;
 import ml.pkom.itemalchemy.data.ServerState;
 import ml.pkom.itemalchemy.data.TeamState;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.item.Item;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
