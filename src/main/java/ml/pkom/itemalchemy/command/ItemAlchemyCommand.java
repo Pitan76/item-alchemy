@@ -367,6 +367,12 @@ public class ItemAlchemyCommand extends LiteralCommand {
 
     @Override
     public void execute(ServerCommandEvent event) {
-        event.sendSuccess(TextUtil.literal("[ItemAlchemy]\n- /itemalchemy reloademc...Reload emc_config.json"), false);
+        event.sendSuccess(TextUtil.literal("[ItemAlchemy]"
+                + "\n- /itemalchemy reloademc...Reload emc_config.json"
+                + "\n- /itemalchemy opentable...Reload emc_config.json"
+                + "\n- /itemalchemy resetemc...Set all emc to default emc"
+                + "\n- /itemalchemy setemc [Item] [EMC]...Set emc of the item"
+                + "\n- /itemalchemy team [create | join | kick | leave] [Team Name/Player Name]"
+        ), false);
     }
 }
