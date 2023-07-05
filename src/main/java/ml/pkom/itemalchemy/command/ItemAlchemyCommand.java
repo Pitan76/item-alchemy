@@ -221,7 +221,11 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                     if (!event.getWorld().isClient()) {
                                         if(TeamUtil.createTeam(event.getPlayer(), event.getValue(), true)) {
                                             event.sendSuccess(TextUtil.literal("[ItemAlchemy] Created Team"), false);
+
+                                            return;
                                         }
+
+                                        event.sendFailure(TextUtil.literal("[ItemAlchemy] Failed Create Team"));
                                     }
                                 } catch (CommandSyntaxException e) {
                                     event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
@@ -252,7 +256,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                 try {
                                     if (!event.getWorld().isClient()) {
                                         if(TeamUtil.joinTeam(event.getPlayer(), event.getValue())) {
-                                            event.sendSuccess(TextUtil.literal("[ItemAlchemy] Joined Team"), false);
+                                            event.sendFailure(TextUtil.literal("[ItemAlchemy] Joined Team"));
 
                                             return;
                                         }
@@ -288,7 +292,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                     return;
                                 }
 
-                                event.sendSuccess(TextUtil.literal("[ItemAlchemy] Failed leave"), false);
+                                event.sendFailure(TextUtil.literal("[ItemAlchemy] Failed leave"));
                             }
                         } catch (CommandSyntaxException e) {
                             event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
@@ -311,17 +315,19 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                         Optional<TeamState> teamState = serverState.getTeamByPlayer(player.getUUID());
 
                                         if(!teamState.isPresent()) {
+                                            event.sendFailure(TextUtil.literal("[ItemAlchemy] Not Found Team"));
+
                                             return;
                                         }
 
                                         if(teamState.get().owner != player.getUUID()) {
-                                            event.sendSuccess(TextUtil.literal("[ItemAlchemy] You don't have permission"), false);
+                                            event.sendFailure(TextUtil.literal("[ItemAlchemy] You don't have permission"));
 
                                             return;
                                         }
 
                                         if(!serverState.getPlayer(targetPlayer.getUUID()).filter(playerState -> playerState.teamID == teamState.get().teamID).isPresent()) {
-                                            event.sendSuccess(TextUtil.literal("[ItemAlchemy] You don't have permission"), false);
+                                            event.sendFailure(TextUtil.literal("[ItemAlchemy] You don't have permission"));
 
                                             return;
                                         }
@@ -332,7 +338,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                             return;
                                         }
 
-                                        event.sendSuccess(TextUtil.literal("[ItemAlchemy] Failed leave"), false);
+                                        event.sendFailure(TextUtil.literal("[ItemAlchemy] Failed leave"));
                                     }
                                 } catch (CommandSyntaxException e) {
                                     event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
