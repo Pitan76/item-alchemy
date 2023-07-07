@@ -55,14 +55,15 @@ public class ItemAlchemy {
 
         EventRegistry.ServerLifecycle.serverStarted(EMCManager::init);
 
-        EventRegistry.ServerConnection.join((player) -> {
-            if (player != null) {
-                EMCManager.syncS2C_emc_map(player);
+        EventRegistry.ServerConnection.join((p) -> {
+            if (p != null) {
+                Player player = new Player(p);
+                EMCManager.syncS2C_emc_map(p);
                 ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
 
-                serverState.createPlayer(new Player(player));
+                serverState.createPlayer(player);
 
-                EMCManager.syncS2C(player);
+                EMCManager.syncS2C(p);
             }
         });
 

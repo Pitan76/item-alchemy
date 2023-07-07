@@ -598,15 +598,17 @@ public class EMCManager {
         return teamState.map(state -> state.storedEMC).orElse(0L);
     }
 
-    public static void syncS2C(ServerPlayerEntity player) {
-        if (player.networkHandler == null) {
+    public static void syncS2C(ServerPlayerEntity serverPlayer) {
+        if (serverPlayer.networkHandler == null) {
             return;
         }
+
+        Player player = new Player(serverPlayer);
 
         ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
         PacketByteBuf buf = PacketByteUtil.create();
 
-        TeamState teamState = serverState.getTeamByPlayer(player.getUuid()).get();
+        TeamState teamState = serverState.getTeamByPlayer(player.getUUID()).get();
 
         NbtCompound nbt = new NbtCompound();
         NbtCompound teamNBT = new NbtCompound();
@@ -617,7 +619,7 @@ public class EMCManager {
 
         buf.writeNbt(nbt);
 
-        ServerNetworking.send(player, ItemAlchemy.id("sync_emc"), buf);
+        ServerNetworking.send(serverPlayer, ItemAlchemy.id("sync_emc"), buf);
     }
 
     public static void syncS2C_emc_map(ServerPlayerEntity player) {
