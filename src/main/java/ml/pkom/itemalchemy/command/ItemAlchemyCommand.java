@@ -24,7 +24,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.argument.ItemStackArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
 import java.io.File;
@@ -35,7 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static ml.pkom.itemalchemy.EMCManager.*;
 

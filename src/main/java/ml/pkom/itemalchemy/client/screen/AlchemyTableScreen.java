@@ -3,7 +3,6 @@ package ml.pkom.itemalchemy.client.screen;
 import io.netty.buffer.Unpooled;
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.ItemAlchemy;
-import ml.pkom.itemalchemy.ItemAlchemyClient;
 import ml.pkom.itemalchemy.api.PlayerRegisteredItemUtil;
 import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import ml.pkom.mcpitanlibarch.api.client.SimpleHandledScreen;
