@@ -1,15 +1,19 @@
 package ml.pkom.itemalchemy.data;
 
-import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ServerState extends PersistentState implements ModState {
@@ -129,6 +133,11 @@ public class ServerState extends PersistentState implements ModState {
     @Override
     public Optional<TeamState> getTeam(UUID teamID) {
         return teams.stream().filter(teamState -> teamState.teamID.equals(teamID)).findFirst();
+    }
+
+    @Override
+    public Optional<TeamState> getTeamByName(String teamName) {
+        return teams.stream().filter(state -> state.name.equalsIgnoreCase(teamName)).findFirst();
     }
 
     @Override

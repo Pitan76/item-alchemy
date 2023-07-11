@@ -31,6 +31,11 @@ public class ClientState implements ModState {
     }
 
     @Override
+    public Optional<TeamState> getTeamByName(String teamName) {
+        return Optional.empty();
+    }
+
+    @Override
     public List<TeamState> getTeamsByOwner(UUID playerUUID) {
         return Collections.emptyList();
     }

@@ -12,6 +12,8 @@ public interface ModState {
     Optional<PlayerState> getPlayer(UUID uuid);
     Optional<TeamState> getTeam(UUID teamID);
 
+    Optional<TeamState> getTeamByName(String teamName);
+
     List<TeamState> getTeamsByOwner(UUID playerUUID);
 
     static ModState getModState(@Nullable MinecraftServer server) {

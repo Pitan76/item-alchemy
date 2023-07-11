@@ -46,7 +46,7 @@ public class TeamUtil {
 
         ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
 
-        Optional<TeamState> teamState = serverState.teams.stream().filter(state -> state.name.equalsIgnoreCase(teamName)).findFirst();
+        Optional<TeamState> teamState = serverState.getTeamByName(teamName);
 
         if(!teamState.isPresent()) {
             return false;

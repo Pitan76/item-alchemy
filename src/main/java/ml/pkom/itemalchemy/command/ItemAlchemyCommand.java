@@ -5,6 +5,7 @@ import ml.pkom.easyapi.FileControl;
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.itemalchemy.api.TeamUtil;
+import ml.pkom.itemalchemy.data.PlayerState;
 import ml.pkom.itemalchemy.data.ServerState;
 import ml.pkom.itemalchemy.data.TeamState;
 import ml.pkom.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
@@ -18,17 +19,23 @@ import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.*;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
+import ml.pkom.mcpitanlibarch.api.util.WorldUtil;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.argument.ItemStackArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static ml.pkom.itemalchemy.EMCManager.*;
 
@@ -220,7 +227,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                             return;
                                         }
 
-                                        event.sendFailure(TextUtil.literal("[ItemAlchemy] Failed Create Team"));
+                                        event.sendFailure(TextUtil.literal("§c[ItemAlchemy] Failed Create Team"));
                                     }
                                 } catch (CommandSyntaxException e) {
                                     event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
@@ -256,7 +263,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                             return;
                                         }
 
-                                        event.sendSuccess(TextUtil.literal("[ItemAlchemy] Failed join"), false);
+                                        event.sendSuccess(TextUtil.literal("§c[ItemAlchemy] Failed join"), false);
                                     }
                                 } catch (CommandSyntaxException e) {
                                     event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
@@ -287,7 +294,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                     return;
                                 }
 
-                                event.sendFailure(TextUtil.literal("[ItemAlchemy] Failed leave"));
+                                event.sendFailure(TextUtil.literal("§c[ItemAlchemy] Failed leave"));
                             }
                         } catch (CommandSyntaxException e) {
                             event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
@@ -333,7 +340,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                             return;
                                         }
 
-                                        event.sendFailure(TextUtil.literal("[ItemAlchemy] Failed leave"));
+                                        event.sendFailure(TextUtil.literal("§c[ItemAlchemy] Failed leave"));
                                     }
                                 } catch (CommandSyntaxException e) {
                                     event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
@@ -352,6 +359,63 @@ public class ItemAlchemyCommand extends LiteralCommand {
                         event.sendSuccess(TextUtil.literal("[ItemAlchemy] Example: /itemalchemy team kick [Player Name]"), false);
                     }
                 });
+
+                addArgumentCommand("list", new LiteralCommand() {
+
+                    @Override
+                    public void execute(ServerCommandEvent event) {
+                        World world = event.getWorld();
+                        if (WorldUtil.isClient(world)) return;
+                        ServerState serverState = ServerState.getServerState(world.getServer());
+                        event.sendSuccess(TextUtil.literal("[ItemAlchemy] Team List"), false);
+                        for (TeamState state : serverState.teams) {
+                            PlayerEntity playerEntity = world.getServer().getPlayerManager().getPlayer(state.owner);
+                            if (playerEntity == null) continue;
+                            Player player = new Player(playerEntity);
+                            event.sendSuccess(TextUtil.literal("- §a§l" + state.name + "§7 - §rOwner: §c" + player.getName() + "§r"), false);
+                        }
+                    }
+                });
+
+                addArgumentCommand("members", new LiteralCommand() {
+                    @Override
+                    public void init() {
+                        addArgumentCommand("team", new StringCommand() {
+                            @Override
+                            public String getArgumentName() {
+                                return "team";
+                            }
+
+                            @Override
+                            public void execute(StringCommandEvent event) {
+                                World world = event.getWorld();
+                                if (WorldUtil.isClient(world)) return;
+                                ServerState serverState = ServerState.getServerState(world.getServer());
+                                Optional<TeamState> teamState = serverState.getTeamByName(event.getValue());
+                                if(!teamState.isPresent()) {
+                                    event.sendSuccess(TextUtil.literal("§c[ItemAlchemy] Not found the team named \"" + event.getValue() + "\""), false);
+                                    return;
+                                }
+
+                                event.sendSuccess(TextUtil.literal("[ItemAlchemy] §a§l" + event.getValue() + "§r's Members List"), false);
+
+                                List<PlayerState> playerStates = serverState.players.stream().filter(state -> state.teamID.equals(teamState.get().teamID)).collect(Collectors.toList());
+
+                                for (PlayerState state : playerStates) {
+                                    PlayerEntity playerEntity = world.getServer().getPlayerManager().getPlayer(state.playerUUID);
+                                    if (playerEntity == null) continue;
+                                    Player player = new Player(playerEntity);
+                                    event.sendSuccess(TextUtil.literal("- §c" + player.getName()), false);
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void execute(ServerCommandEvent event) {
+                        event.sendSuccess(TextUtil.literal("[ItemAlchemy] Example: /itemalchemy team members [Team Name]"), false);
+                    }
+                });
             }
 
             @Override
@@ -361,6 +425,8 @@ public class ItemAlchemyCommand extends LiteralCommand {
                 event.sendSuccess(TextUtil.literal("/itemalchemy team join [Team Name]"), false);
                 event.sendSuccess(TextUtil.literal("/itemalchemy team kick [Player Name]"), false);
                 event.sendSuccess(TextUtil.literal("/itemalchemy team leave"), false);
+                event.sendSuccess(TextUtil.literal("/itemalchemy team list"), false);
+                event.sendSuccess(TextUtil.literal("/itemalchemy team members [Team Name]"), false);
             }
         });
     }
@@ -372,7 +438,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                 + "\n- /itemalchemy opentable...Reload emc_config.json"
                 + "\n- /itemalchemy resetemc...Set all emc to default emc"
                 + "\n- /itemalchemy setemc [Item] [EMC]...Set emc of the item"
-                + "\n- /itemalchemy team [create | join | kick | leave] [Team Name/Player Name]"
+                + "\n- /itemalchemy team [create | join | kick | leave | list | members] ([Team Name/Player Name])"
         ), false);
     }
 }
