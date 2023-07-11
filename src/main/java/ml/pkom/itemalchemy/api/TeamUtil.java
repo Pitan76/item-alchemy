@@ -30,6 +30,10 @@ public class TeamUtil {
             return false;
         }
 
+        if(serverState.getTeamByName(teamName).isPresent()) {
+            return false;
+        }
+        
         TeamState teamState = serverState.createTeam(player, teamName);
 
         if(isAutoMove) {
