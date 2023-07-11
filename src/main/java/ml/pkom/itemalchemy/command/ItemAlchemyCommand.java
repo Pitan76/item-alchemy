@@ -227,7 +227,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                             return;
                                         }
 
-                                        event.sendFailure(TextUtil.literal("§c[ItemAlchemy] Failed Create Team"));
+                                        event.sendFailure(TextUtil.literal("[ItemAlchemy]§c Failed Create Team"));
                                     }
                                 } catch (CommandSyntaxException e) {
                                     event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
@@ -263,7 +263,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                             return;
                                         }
 
-                                        event.sendSuccess(TextUtil.literal("§c[ItemAlchemy] Failed join"), false);
+                                        event.sendSuccess(TextUtil.literal("[ItemAlchemy]§c Failed join"), false);
                                     }
                                 } catch (CommandSyntaxException e) {
                                     event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
@@ -294,7 +294,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                     return;
                                 }
 
-                                event.sendFailure(TextUtil.literal("§c[ItemAlchemy] Failed leave"));
+                                event.sendFailure(TextUtil.literal("[ItemAlchemy]§c Failed leave"));
                             }
                         } catch (CommandSyntaxException e) {
                             event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
@@ -340,7 +340,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                             return;
                                         }
 
-                                        event.sendFailure(TextUtil.literal("§c[ItemAlchemy] Failed leave"));
+                                        event.sendFailure(TextUtil.literal("[ItemAlchemy]§c Failed leave"));
                                     }
                                 } catch (CommandSyntaxException e) {
                                     event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
@@ -393,7 +393,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                 ServerState serverState = ServerState.getServerState(world.getServer());
                                 Optional<TeamState> teamState = serverState.getTeamByName(event.getValue());
                                 if(!teamState.isPresent()) {
-                                    event.sendSuccess(TextUtil.literal("§c[ItemAlchemy] Not found the team named \"" + event.getValue() + "\""), false);
+                                    event.sendSuccess(TextUtil.literal("[ItemAlchemy]§c Not found the team named \"" + event.getValue() + "\""), false);
                                     return;
                                 }
 
