@@ -101,11 +101,8 @@ curseforge {
         apiKey = System.getenv("CURSEFORGE_TOKEN")
         project {
             id = '697926'
-            changelog = 'fix bugs'
-            releaseType = 'beta'
-            addGameVersion '1.17'
-            addGameVersion '1.17.1'
-            addGameVersion '1.18.1'
+            changelog = 'fix'
+            releaseType = 'release'
             addGameVersion '1.18.2'
             addGameVersion '1.19'
             addGameVersion '1.19.1'
@@ -136,10 +133,10 @@ modrinth {
         projectId = 'cfQx2fbQ'
         versionNumber = project.mod_version
         uploadFile = remapJar
-        gameVersions = ['1.17', '1.17.1', '1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.19.3', '1.19.4', '1.20', '1.20.1']
-        versionType = 'beta'
+        gameVersions = ['1.18.2', '1.19', '1.19.1', '1.19.2', '1.19.3', '1.19.4', '1.20', '1.20.1']
+        versionType = 'release'
         loaders = ['fabric']
-        changelog = 'fix bugs'
+        changelog = 'fix'
         dependencies = [
                 new ModDependency('P7dR8mSH', 'required'), // Fabric API
                 new ModDependency('uNRoUnGT', 'required')  // MCPitanLibarch

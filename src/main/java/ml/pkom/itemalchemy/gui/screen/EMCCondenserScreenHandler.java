@@ -128,19 +128,19 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     }
 
     @Override
-    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
+    public void overrideOnSlotClick(int slotIndex, int button, SlotActionType actionType, Player player) {
         if (slotIndex == 36) { // Target Slot
             ItemStack oldStack = getCursorStack().copy();
 
             // もともとスロットが空のとき、カーソルのアイテムも消えてしまうのでここで適当にセットしておく。
             setStackInSlot(slotIndex, getRevision(), new ItemStack(Items.STONE));
 
-            super.onSlotClick(slotIndex, button, actionType, player);
+            super.overrideOnSlotClick(slotIndex, button, actionType, player);
             if (!oldStack.isEmpty()) {
                 setCursorStack(oldStack);
             }
             return;
         }
-        super.onSlotClick(slotIndex, button, actionType, player);
+        super.overrideOnSlotClick(slotIndex, button, actionType, player);
     }
 }
