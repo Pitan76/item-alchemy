@@ -10,7 +10,7 @@ This MOD adds philosopher's stone etc. which can be equivalently exchanged with 
 - https://wikichree.com/pitan76/?Item+Alchemy/en
 
 ## Contributor (Thanks!)
-- [Developer＆Designer] OffsetMonkey538 Improved the textures, bug fix
+- [Developer & Designer] OffsetMonkey538 Improved the textures, bug fix
 - [Developer] mymai1208 Implemented team function and charge function, bug fix
 - [Designer] Murderman25 Provided the textures
 - [Translator] 54sda Translated to Chinese (zh_cn.json)
