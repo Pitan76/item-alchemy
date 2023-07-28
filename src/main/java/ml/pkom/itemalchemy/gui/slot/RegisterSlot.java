@@ -2,6 +2,7 @@ package ml.pkom.itemalchemy.gui.slot;
 
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.gui.inventory.RegisterInventory;
+import ml.pkom.itemalchemy.item.ILearnableItem;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.slot.CompatibleSlot;
 import net.minecraft.item.ItemStack;
@@ -19,6 +20,6 @@ public class RegisterSlot extends CompatibleSlot {
 
     @Override
     public boolean canInsert(ItemStack stack) {
-        return EMCManager.get(stack) != 0;
+        return EMCManager.get(stack) != 0 || stack.getItem() instanceof ILearnableItem;
     }
 }

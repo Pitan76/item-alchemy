@@ -5,15 +5,11 @@ import ml.pkom.itemalchemy.data.PlayerState;
 import ml.pkom.itemalchemy.data.ServerState;
 import ml.pkom.itemalchemy.data.TeamState;
 import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
-import ml.pkom.itemalchemy.util.ItemUtils;
+import ml.pkom.itemalchemy.item.ILearnableItem;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
-import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-
-import java.util.Optional;
 
 public class RegisterInventory extends SimpleInventory {
     public Player player;
@@ -31,15 +27,19 @@ public class RegisterInventory extends SimpleInventory {
 
                 TeamState teamState = state.getTeam(playerState.teamID).get();
 
-                if(!teamState.registeredItems.contains(ItemUtil.toID(stack.getItem()).toString())) {
+                if(EMCManager.get(stack) != 0 && !teamState.registeredItems.contains(ItemUtil.toID(stack.getItem()).toString())) {
                     teamState.registeredItems.add(ItemUtil.toID(stack.getItem()).toString());
+                }
+
+                if (stack.getItem() instanceof ILearnableItem) {
+                    ((ILearnableItem) stack.getItem()).onLearn(player);
                 }
 
                 state.markDirty();
             }
 
             if (slot == 50) {
-                if (!player.getWorld().isClient) {
+                if (!player.getWorld().isClient && EMCManager.get(stack) != 0) {
                     EMCManager.writeEmcToPlayer(player, stack);
                 }
             } else {
