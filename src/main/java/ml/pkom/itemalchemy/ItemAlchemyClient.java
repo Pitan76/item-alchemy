@@ -17,6 +17,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
@@ -41,14 +42,10 @@ public class ItemAlchemyClient {
         });
 
         ClientNetworking.registerReceiver(ItemAlchemy.id("sync_emc_map"), (client, p, buf) -> {
-            NbtCompound nbt = buf.readNbt();
-            if (nbt == null) return;
+            Map<String, Long> map = buf.readMap(PacketByteBuf::readString, PacketByteBuf::readLong);
+            if (map == null) return;
 
-            Map<String, Long> emcMap = new LinkedHashMap<>();
-            for (String key : nbt.getKeys()) {
-                emcMap.put(key, nbt.getLong(key));
-            }
-            EMCManager.setMap(emcMap);
+            EMCManager.setMap(map);
         });
 
         ClientNetworking.registerReceiver(ItemAlchemy.id("itemalchemy_emc_collector"), (client, p, buf) -> {
