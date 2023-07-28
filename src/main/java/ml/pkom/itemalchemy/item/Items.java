@@ -7,11 +7,14 @@ import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;
 import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.item.Item;
+import net.minecraft.util.Rarity;
 
 import static ml.pkom.itemalchemy.ItemAlchemy.id;
 import static ml.pkom.itemalchemy.ItemAlchemy.registry;
 
 public class Items {
+
+    public static RegistryEvent<Item> TOME_OF_KNOWLEDGE;
 
     public static RegistryEvent<Item> PHILOSOPHER_STONE;
     public static RegistryEvent<Item> ALCHEMY_PAD;
@@ -54,6 +57,7 @@ public class Items {
     public static RegistryEvent<Item> RED_MATTER_SHOVEL;
     public static RegistryEvent<Item> RED_MATTER_HOE;
     public static void init() {
+        TOME_OF_KNOWLEDGE = registry.registerItem(id("tome_of_knowledge"), () -> new TomeOfKnowledge(CompatibleItemSettings.of().rarity(Rarity.EPIC).addGroup(ItemGroups.ITEM_ALCHEMY, id("tome_of_knowledge"))));
         PHILOSOPHER_STONE = registry.registerItem(id("philosopher_stone"), () -> new PhilosopherStone(ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("philosopher_stone"))));
         ALCHEMY_TABLE = registry.registerItem(id("alchemy_table"), () -> ItemUtil.ofBlock(Blocks.ALCHEMY_TABLE.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("alchemy_table"))));
         EMC_COLLECTOR_MK1 = registry.registerItem(id("emc_collector_mk1"), () -> ItemUtil.ofBlock(Blocks.EMC_COLLECTOR_MK1.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk1"))));
