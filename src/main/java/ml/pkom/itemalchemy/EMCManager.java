@@ -630,16 +630,17 @@ public class EMCManager {
         }
         if (map.isEmpty()) return;
         PacketByteBuf buf = PacketByteUtil.create();
-        NbtCompound data = NbtTag.create();
 
+        /*
         for (Map.Entry<String, Long> entry : map.entrySet()) {
             if (entry.getValue() == 0) continue;
             if (ItemUtil.isExist(new Identifier(entry.getKey()))) {
                 data.putLong(entry.getKey(), entry.getValue());
             }
         }
+         */
 
-        buf.writeNbt(data);
+        buf.writeMap(map, PacketByteBuf::writeString, PacketByteBuf::writeLong);
         //System.out.println("send emc map to " + player.getName().getString());
         ServerNetworking.send(player, ItemAlchemy.id("sync_emc_map"), buf);
     }
