@@ -14,10 +14,10 @@ import static ml.pkom.itemalchemy.ItemAlchemy.registry;
 
 public class Items {
 
-    public static RegistryEvent<Item> TOME_OF_KNOWLEDGE;
-
     public static RegistryEvent<Item> PHILOSOPHER_STONE;
     public static RegistryEvent<Item> ALCHEMY_PAD;
+
+    public static RegistryEvent<Item> TOME_OF_KNOWLEDGE;
 
     public static RegistryEvent<Item> ALCHEMY_TABLE;
     public static RegistryEvent<Item> EMC_COLLECTOR_MK1;
@@ -57,9 +57,9 @@ public class Items {
     public static RegistryEvent<Item> RED_MATTER_SHOVEL;
     public static RegistryEvent<Item> RED_MATTER_HOE;
     public static void init() {
-        TOME_OF_KNOWLEDGE = registry.registerItem(id("tome_of_knowledge"), () -> new TomeOfKnowledge(CompatibleItemSettings.of().rarity(Rarity.EPIC).addGroup(ItemGroups.ITEM_ALCHEMY, id("tome_of_knowledge"))));
         PHILOSOPHER_STONE = registry.registerItem(id("philosopher_stone"), () -> new PhilosopherStone(ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("philosopher_stone"))));
         ALCHEMY_TABLE = registry.registerItem(id("alchemy_table"), () -> ItemUtil.ofBlock(Blocks.ALCHEMY_TABLE.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("alchemy_table"))));
+        TOME_OF_KNOWLEDGE = registry.registerItem(id("tome_of_knowledge"), () -> new TomeOfKnowledge(CompatibleItemSettings.of().rarity(Rarity.EPIC).addGroup(ItemGroups.ITEM_ALCHEMY, id("tome_of_knowledge"))));
         EMC_COLLECTOR_MK1 = registry.registerItem(id("emc_collector_mk1"), () -> ItemUtil.ofBlock(Blocks.EMC_COLLECTOR_MK1.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk1"))));
         EMC_COLLECTOR_MK2 = registry.registerItem(id("emc_collector_mk2"), () -> ItemUtil.ofBlock(Blocks.EMC_COLLECTOR_MK2.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk2"))));
         EMC_COLLECTOR_MK3 = registry.registerItem(id("emc_collector_mk3"), () -> ItemUtil.ofBlock(Blocks.EMC_COLLECTOR_MK3.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk3"))));
