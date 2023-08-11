@@ -1,5 +1,7 @@
 package ml.pkom.itemalchemy.gui.inventory;
 
+import java.util.ArrayList;
+import java.util.List;
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.data.PlayerState;
 import ml.pkom.itemalchemy.data.ServerState;
@@ -21,18 +23,24 @@ public class RegisterInventory extends SimpleInventory {
     @Override
     public void setStack(int slot, ItemStack stack) {
         if (!stack.isEmpty()) {
+            boolean consumedItem = false;
             if(!player.getWorld().isClient) {
                 ServerState state = ServerState.getServerState(player.getWorld().getServer());
                 PlayerState playerState = state.getPlayer(player.getUUID()).get();
 
                 TeamState teamState = state.getTeam(playerState.teamID).get();
 
-                if(EMCManager.get(stack) != 0 && !teamState.registeredItems.contains(ItemUtil.toID(stack.getItem()).toString())) {
-                    teamState.registeredItems.add(ItemUtil.toID(stack.getItem()).toString());
+                List<String> items = new ArrayList<>();
+                if (stack.getItem() instanceof ILearnableItem) {
+                    items.addAll(((ILearnableItem) stack.getItem()).onLearn(player));
+                } else if (EMCManager.get(stack) != 0) {
+                    items.add(ItemUtil.toID(stack.getItem()).toString());
                 }
 
-                if (stack.getItem() instanceof ILearnableItem) {
-                    ((ILearnableItem) stack.getItem()).onLearn(player);
+                for (String itemId : items) {
+                    if (teamState.registeredItems.contains(itemId)) continue;
+                    consumedItem  = true;
+                    teamState.registeredItems.add(itemId);
                 }
 
                 state.markDirty();
@@ -51,7 +59,7 @@ public class RegisterInventory extends SimpleInventory {
                 screenHandler.extractInventory.placeExtractSlots();
             }
 
-            stack = ItemStack.EMPTY;
+            if (consumedItem) stack = ItemStack.EMPTY;
         }
         super.setStack(slot, stack);
     }

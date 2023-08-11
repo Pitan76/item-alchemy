@@ -1,5 +1,6 @@
 package ml.pkom.itemalchemy.item;
 
+import java.util.List;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 
 /**
@@ -9,7 +10,9 @@ public interface ILearnableItem {
 
     /**
      * Called when the item is put into the input slot of an Alchemy Table.
+     *
      * @param user The player
+     * @return the item ids to be learned.
      */
-    void onLearn(Player user);
+    List<String> onLearn(Player user);
 }
