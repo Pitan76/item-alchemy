@@ -59,7 +59,7 @@ public class Items {
     public static void init() {
         PHILOSOPHER_STONE = registry.registerItem(id("philosopher_stone"), () -> new PhilosopherStone(ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("philosopher_stone"))));
         ALCHEMY_TABLE = registry.registerItem(id("alchemy_table"), () -> ItemUtil.ofBlock(Blocks.ALCHEMY_TABLE.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("alchemy_table"))));
-        TOME_OF_KNOWLEDGE = registry.registerItem(id("tome_of_knowledge"), () -> new TomeOfKnowledge(CompatibleItemSettings.of().rarity(Rarity.EPIC).addGroup(ItemGroups.ITEM_ALCHEMY, id("tome_of_knowledge"))));
+        TOME_OF_KNOWLEDGE = registry.registerItem(id("tome_of_knowledge"), () -> new TomeOfKnowledge(CompatibleItemSettings.of().rarity(Rarity.EPIC).maxCount(1).addGroup(ItemGroups.ITEM_ALCHEMY, id("tome_of_knowledge"))));
         EMC_COLLECTOR_MK1 = registry.registerItem(id("emc_collector_mk1"), () -> ItemUtil.ofBlock(Blocks.EMC_COLLECTOR_MK1.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk1"))));
         EMC_COLLECTOR_MK2 = registry.registerItem(id("emc_collector_mk2"), () -> ItemUtil.ofBlock(Blocks.EMC_COLLECTOR_MK2.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk2"))));
         EMC_COLLECTOR_MK3 = registry.registerItem(id("emc_collector_mk3"), () -> ItemUtil.ofBlock(Blocks.EMC_COLLECTOR_MK3.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("emc_collector_mk3"))));
