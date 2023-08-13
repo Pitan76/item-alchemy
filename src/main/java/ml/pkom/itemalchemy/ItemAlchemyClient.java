@@ -11,6 +11,7 @@ import ml.pkom.itemalchemy.gui.screen.ScreenHandlers;
 import ml.pkom.mcpitanlibarch.api.client.registry.ArchRegistryClient;
 import ml.pkom.mcpitanlibarch.api.client.registry.KeybindingRegistry;
 import ml.pkom.mcpitanlibarch.api.network.ClientNetworking;
+import ml.pkom.mcpitanlibarch.api.network.PacketByteUtil;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -42,7 +43,7 @@ public class ItemAlchemyClient {
         });
 
         ClientNetworking.registerReceiver(ItemAlchemy.id("sync_emc_map"), (client, p, buf) -> {
-            Map<String, Long> map = buf.readMap(PacketByteBuf::readString, PacketByteBuf::readLong);
+            Map<String, Long> map = PacketByteUtil.readMap(buf, PacketByteBuf::readString, PacketByteBuf::readLong);
             if (map == null) return;
 
             EMCManager.setMap(map);

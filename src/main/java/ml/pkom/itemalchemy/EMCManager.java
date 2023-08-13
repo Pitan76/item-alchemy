@@ -9,7 +9,6 @@ import ml.pkom.itemalchemy.data.PlayerState;
 import ml.pkom.itemalchemy.data.ServerState;
 import ml.pkom.itemalchemy.data.TeamState;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
-import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.network.PacketByteUtil;
 import ml.pkom.mcpitanlibarch.api.network.ServerNetworking;
 import ml.pkom.mcpitanlibarch.api.tag.TagKey;
@@ -631,16 +630,7 @@ public class EMCManager {
         if (map.isEmpty()) return;
         PacketByteBuf buf = PacketByteUtil.create();
 
-        /*
-        for (Map.Entry<String, Long> entry : map.entrySet()) {
-            if (entry.getValue() == 0) continue;
-            if (ItemUtil.isExist(new Identifier(entry.getKey()))) {
-                data.putLong(entry.getKey(), entry.getValue());
-            }
-        }
-         */
-
-        buf.writeMap(map, PacketByteBuf::writeString, PacketByteBuf::writeLong);
+        PacketByteUtil.writeMap(buf, map);
         //System.out.println("send emc map to " + player.getName().getString());
         ServerNetworking.send(player, ItemAlchemy.id("sync_emc_map"), buf);
     }
