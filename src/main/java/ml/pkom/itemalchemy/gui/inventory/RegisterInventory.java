@@ -1,19 +1,17 @@
 package ml.pkom.itemalchemy.gui.inventory;
 
+import java.util.ArrayList;
+import java.util.List;
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.data.PlayerState;
 import ml.pkom.itemalchemy.data.ServerState;
 import ml.pkom.itemalchemy.data.TeamState;
 import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
-import ml.pkom.itemalchemy.util.ItemUtils;
+import ml.pkom.itemalchemy.item.ILearnableItem;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
-import ml.pkom.mcpitanlibarch.api.nbt.NbtTag;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-
-import java.util.Optional;
 
 public class RegisterInventory extends SimpleInventory {
     public Player player;
@@ -25,21 +23,33 @@ public class RegisterInventory extends SimpleInventory {
     @Override
     public void setStack(int slot, ItemStack stack) {
         if (!stack.isEmpty()) {
+            boolean consumedItem = false,
+                    learning = stack.getItem() instanceof ILearnableItem;
+
             if(!player.getWorld().isClient) {
                 ServerState state = ServerState.getServerState(player.getWorld().getServer());
                 PlayerState playerState = state.getPlayer(player.getUUID()).get();
 
                 TeamState teamState = state.getTeam(playerState.teamID).get();
 
-                if(!teamState.registeredItems.contains(ItemUtil.toID(stack.getItem()).toString())) {
-                    teamState.registeredItems.add(ItemUtil.toID(stack.getItem()).toString());
+                List<String> items = new ArrayList<>();
+                if (learning) {
+                    items.addAll(((ILearnableItem) stack.getItem()).onLearn(player));
+                } else if (EMCManager.get(stack) != 0) {
+                    items.add(ItemUtil.toID(stack.getItem()).toString());
+                }
+
+                for (String itemId : items) {
+                    if (teamState.registeredItems.contains(itemId)) continue;
+                    consumedItem = true;
+                    teamState.registeredItems.add(itemId);
                 }
 
                 state.markDirty();
             }
 
             if (slot == 50) {
-                if (!player.getWorld().isClient) {
+                if (!player.getWorld().isClient && EMCManager.get(stack) != 0) {
                     EMCManager.writeEmcToPlayer(player, stack);
                 }
             } else {
@@ -51,7 +61,7 @@ public class RegisterInventory extends SimpleInventory {
                 screenHandler.extractInventory.placeExtractSlots();
             }
 
-            stack = ItemStack.EMPTY;
+            if (consumedItem || !learning) stack = ItemStack.EMPTY;
         }
         super.setStack(slot, stack);
     }

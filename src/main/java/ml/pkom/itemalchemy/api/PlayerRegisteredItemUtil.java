@@ -1,5 +1,6 @@
 package ml.pkom.itemalchemy.api;
 
+import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.data.ModState;
 import ml.pkom.itemalchemy.data.ServerState;
 import ml.pkom.itemalchemy.data.TeamState;
@@ -70,6 +71,12 @@ public class PlayerRegisteredItemUtil {
         setItems(player, items);
     }
 
+    public static void addAll(Player player) {
+        List<String> items = new ArrayList<>(EMCManager.getMap().keySet());
+
+        setItemsForString(player, items);
+    }
+
     public static void remove(Player player, String id) {
         List<String> ids = getItemsAsString(player);
         ids.remove(id);
@@ -80,6 +87,11 @@ public class PlayerRegisteredItemUtil {
         List<Item> items = getItems(player);
         items.remove(item);
         setItems(player, items);
+    }
+
+    public static void removeAll(Player player) {
+        // Use empty list
+        setItems(player, new ArrayList<>());
     }
 
     public static boolean contains(Player player, String id) {
