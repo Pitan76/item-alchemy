@@ -52,16 +52,21 @@ public class ExtractInventory extends SimpleInventory {
 
         definedStacks.clear();
         int index = screenHandler != null ?  screenHandler.index : 0;
+        int notExists = 0;
 
         for (int i = 0; i < 13; i++) {
-            int id_index = i + (index * 13);
+            int id_index = i + (index * 13) + notExists;
             if (keys.size() < id_index + 1) {
                 setStack(i + 64, ItemStack.EMPTY);
                 continue;
             }
             Identifier id = new Identifier(keys.get(id_index));
             //System.out.println(id);
-            if (!ItemUtil.isExist(id)) continue;
+            if (!ItemUtil.isExist(id)) {
+                i--;
+                notExists++;
+                continue;
+            }
             ItemStack itemStack = new ItemStack(ItemUtil.fromId(id), 1);
             setStack(i + 64, itemStack);
         }

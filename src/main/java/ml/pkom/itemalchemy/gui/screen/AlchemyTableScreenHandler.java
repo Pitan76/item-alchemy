@@ -1,11 +1,10 @@
 package ml.pkom.itemalchemy.gui.screen;
 
 import ml.pkom.itemalchemy.EMCManager;
-import ml.pkom.itemalchemy.ItemAlchemyClient;
 import ml.pkom.itemalchemy.api.PlayerRegisteredItemUtil;
 import ml.pkom.itemalchemy.data.ModState;
-import ml.pkom.itemalchemy.data.ServerState;
-import ml.pkom.itemalchemy.gui.inventory.*;
+import ml.pkom.itemalchemy.gui.inventory.ExtractInventory;
+import ml.pkom.itemalchemy.gui.inventory.RegisterInventory;
 import ml.pkom.itemalchemy.gui.slot.ExtractSlot;
 import ml.pkom.itemalchemy.gui.slot.RegisterSlot;
 import ml.pkom.itemalchemy.gui.slot.RemoveSlot;

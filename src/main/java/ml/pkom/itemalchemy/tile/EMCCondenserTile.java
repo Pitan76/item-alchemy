@@ -142,6 +142,8 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
                     if (storedEMC >= useEMC) {
                         ItemStack newStack = targetStack.copy();
                         newStack.setCount(1);
+                        // Remove NBT
+                        newStack.setNbt(new NbtCompound());
                         if (insertItem(newStack, inventory, true)) {
                             insertItem(newStack, inventory);
                             storedEMC -= useEMC;

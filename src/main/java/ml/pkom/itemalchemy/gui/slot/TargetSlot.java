@@ -17,7 +17,7 @@ public class TargetSlot extends CompatibleSlot {
 
     @Override
     public boolean canInsert(ItemStack stack) {
-        return EMCManager.get(stack) != 0 || stack.isEmpty();
+        return EMCManager.get(stack) != 0 && !stack.isEmpty();
     }
 
     @Override
