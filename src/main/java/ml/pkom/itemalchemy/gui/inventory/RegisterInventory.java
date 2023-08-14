@@ -23,6 +23,7 @@ public class RegisterInventory extends SimpleInventory {
     @Override
     public void setStack(int slot, ItemStack stack) {
         if (!stack.isEmpty()) {
+            boolean consumedItem = true;
             if(!player.getWorld().isClient) {
                 ServerState state = ServerState.getServerState(player.getWorld().getServer());
                 PlayerState playerState = state.getPlayer(player.getUUID()).get();
@@ -32,12 +33,14 @@ public class RegisterInventory extends SimpleInventory {
                 List<String> items = new ArrayList<>();
                 if (stack.getItem() instanceof ILearnableItem) {
                     items.addAll(((ILearnableItem) stack.getItem()).onLearn(player));
+                    consumedItem  = false;
                 } else if (EMCManager.get(stack) != 0) {
                     items.add(ItemUtil.toID(stack.getItem()).toString());
                 }
 
                 for (String itemId : items) {
                     if (teamState.registeredItems.contains(itemId)) continue;
+                    consumedItem = true;
                     teamState.registeredItems.add(itemId);
                 }
 
@@ -57,7 +60,7 @@ public class RegisterInventory extends SimpleInventory {
                 screenHandler.extractInventory.placeExtractSlots();
             }
 
-            stack = ItemStack.EMPTY;
+            if (consumedItem) stack = ItemStack.EMPTY;
         }
         super.setStack(slot, stack);
     }
