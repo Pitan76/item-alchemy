@@ -23,7 +23,6 @@ public class RegisterInventory extends SimpleInventory {
     @Override
     public void setStack(int slot, ItemStack stack) {
         if (!stack.isEmpty()) {
-            boolean consumedItem = false;
             if(!player.getWorld().isClient) {
                 ServerState state = ServerState.getServerState(player.getWorld().getServer());
                 PlayerState playerState = state.getPlayer(player.getUUID()).get();
@@ -39,7 +38,6 @@ public class RegisterInventory extends SimpleInventory {
 
                 for (String itemId : items) {
                     if (teamState.registeredItems.contains(itemId)) continue;
-                    consumedItem  = true;
                     teamState.registeredItems.add(itemId);
                 }
 
@@ -59,7 +57,7 @@ public class RegisterInventory extends SimpleInventory {
                 screenHandler.extractInventory.placeExtractSlots();
             }
 
-            if (consumedItem) stack = ItemStack.EMPTY;
+            stack = ItemStack.EMPTY;
         }
         super.setStack(slot, stack);
     }
