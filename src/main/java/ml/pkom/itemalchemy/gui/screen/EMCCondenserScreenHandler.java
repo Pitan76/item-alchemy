@@ -6,7 +6,6 @@ import ml.pkom.itemalchemy.tile.EMCCondenserTile;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.ExtendedScreenHandler;
 import ml.pkom.mcpitanlibarch.api.util.SlotUtil;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
