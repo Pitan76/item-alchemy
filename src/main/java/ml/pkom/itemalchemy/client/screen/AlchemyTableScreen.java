@@ -16,7 +16,6 @@ import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import ml.pkom.mcpitanlibarch.api.util.client.RenderUtil;
 import ml.pkom.mcpitanlibarch.api.util.client.ScreenUtil;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
@@ -100,7 +99,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
         searchBox.setText("");
         addDrawableChild_compatibility(searchBox);
         
-        addDrawableChild_compatibility(new TexturedButtonWidget(x + 113, y + 110, 18, 18, 208, 0, 18, getTexture(), (buttonWidget) -> {
+        addDrawableChild_compatibility(ScreenUtil.createTexturedButtonWidget(x + 113, y + 110, 18, 18, 208, 0, 18, getTexture(), (buttonWidget) -> {
             // クライアントの反映
             if (this.getScreenHandler() instanceof AlchemyTableScreenHandler) {
                 AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
@@ -115,7 +114,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
             ClientNetworking.send(ItemAlchemy.id("network"), buf);
         }));
 
-        addDrawableChild_compatibility(new TexturedButtonWidget(x + 171, y + 110, 18, 18, 226, 0, 18, getTexture(), (buttonWidget) -> {
+        addDrawableChild_compatibility(ScreenUtil.createTexturedButtonWidget(x + 171, y + 110, 18, 18, 226, 0, 18, getTexture(), (buttonWidget) -> {
             // クライアントの反映
             if (this.getScreenHandler() instanceof AlchemyTableScreenHandler) {
                 AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
@@ -153,7 +152,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
 
     @Override
     public void renderOverride(RenderArgs args) {
-        callRenderBackground(args.drawObjectDM);
+        callRenderBackground(args);
         super.renderOverride(args);
         callDrawMouseoverTooltip(new DrawMouseoverTooltipArgs(args.drawObjectDM, args.mouseX, args.mouseY));
     }

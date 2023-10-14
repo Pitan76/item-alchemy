@@ -63,7 +63,7 @@ public class EMCCollectorScreen extends SimpleHandledScreen {
 
     @Override
     public void renderOverride(RenderArgs args) {
-        callRenderBackground(args.drawObjectDM);
+        callRenderBackground(args);
         super.renderOverride(args);
         callDrawMouseoverTooltip(new DrawMouseoverTooltipArgs(args.drawObjectDM, args.mouseX, args.mouseY));
     }
