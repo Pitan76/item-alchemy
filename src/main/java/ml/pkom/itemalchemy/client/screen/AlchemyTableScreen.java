@@ -98,8 +98,8 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
         searchBox.setMaxLength(2048);
         searchBox.setText("");
         addDrawableChild_compatibility(searchBox);
-        
-        addDrawableChild_compatibility(ScreenUtil.createTexturedButtonWidget(x + 113, y + 110, 18, 18, 208, 0, 18, getTexture(), (buttonWidget) -> {
+
+        addDrawableCTBW(ScreenUtil.createTexturedButtonWidget(x + 113, y + 110, 18, 18, 208, 0, 18, getTexture(), (buttonWidget) -> {
             // クライアントの反映
             if (this.getScreenHandler() instanceof AlchemyTableScreenHandler) {
                 AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
@@ -114,7 +114,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
             ClientNetworking.send(ItemAlchemy.id("network"), buf);
         }));
 
-        addDrawableChild_compatibility(ScreenUtil.createTexturedButtonWidget(x + 171, y + 110, 18, 18, 226, 0, 18, getTexture(), (buttonWidget) -> {
+        addDrawableCTBW(ScreenUtil.createTexturedButtonWidget(x + 171, y + 110, 18, 18, 226, 0, 18, getTexture(), (buttonWidget) -> {
             // クライアントの反映
             if (this.getScreenHandler() instanceof AlchemyTableScreenHandler) {
                 AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
