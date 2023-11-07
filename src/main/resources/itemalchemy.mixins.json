@@ -5,8 +5,7 @@
   "mixins": [
     "RecipeManagerMixin",
     "ItemMixin",
-    "PlayerEntityMixin",
-    "ItemStackMixin"
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

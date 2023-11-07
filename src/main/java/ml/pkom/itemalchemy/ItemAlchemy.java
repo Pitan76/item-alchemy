@@ -14,6 +14,7 @@ import ml.pkom.itemalchemy.util.ItemUtils;
 import ml.pkom.mcpitanlibarch.api.command.CommandRegistry;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.v0.EventRegistry;
+import ml.pkom.mcpitanlibarch.api.event.v0.event.ItemStackActionEvent;
 import ml.pkom.mcpitanlibarch.api.item.CreativeTabBuilder;
 import ml.pkom.mcpitanlibarch.api.network.ServerNetworking;
 import ml.pkom.mcpitanlibarch.api.registry.ArchRegistry;
@@ -68,6 +69,12 @@ public class ItemAlchemy {
         });
 
         EventRegistry.ServerLifecycle.serverStopped(EMCManager::exit);
+
+        ItemStackActionEvent.register((stack) -> {
+            if (stack.getItem() instanceof ItemCharge) {
+                ItemStackActionEvent.setReturnValue(false);
+            }
+        });
 
         ServerNetworking.registerReceiver(id("network"), ((server, p, buf) -> {
             NbtCompound nbt = buf.readNbt();
