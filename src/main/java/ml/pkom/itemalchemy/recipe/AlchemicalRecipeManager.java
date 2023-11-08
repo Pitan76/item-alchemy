@@ -36,7 +36,10 @@ public class AlchemicalRecipeManager {
 
     public AlchemicalRecipeManager(Map<RecipeType<?>, ImmutableMap.Builder<Identifier, Recipe<?>>> map) {
         this.map = map;
+        INSTANCE = this;
     }
+
+    public static AlchemicalRecipeManager INSTANCE;
 
     public void apply(ResourceManager resourceManager) {
 
@@ -87,8 +90,10 @@ public class AlchemicalRecipeManager {
         }
         inputs[0] = Items.PHILOSOPHER_STONE.get();
 
-        ShapelessRecipe recipe = RecipeUtil.createShapelessRecipe(ItemAlchemy.id("alchemical_craft/n" + count++), "", new ItemStack(output), buildInput(inputs));
-        map.get(recipe.getType()).put(recipe.getId(), recipe);
+        Identifier id = ItemAlchemy.id("alchemical_craft/n" + count++);
+
+        ShapelessRecipe recipe = RecipeUtil.createShapelessRecipe(id, "", new ItemStack(output), buildInput(inputs));
+        map.get(recipe.getType()).put(id, recipe);
     }
 
     private DefaultedList<Ingredient> buildInput(Object[] input) {

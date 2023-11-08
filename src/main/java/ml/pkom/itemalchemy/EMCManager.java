@@ -497,7 +497,7 @@ public class EMCManager {
 
     public static void setEmcFromRecipes(World world) {
         List<Recipe<?>> unsetRecipes = new ArrayList<>();
-        Collection<Recipe<?>> recipes = world.getRecipeManager().values();
+        List<Recipe<?>> recipes = RecipeUtil.getAllRecipes(world);
 
         for (Recipe<?> recipe : recipes) {
             try {
