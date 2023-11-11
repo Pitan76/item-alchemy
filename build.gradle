@@ -101,7 +101,7 @@ curseforge {
         apiKey = System.getenv("CURSEFORGE_TOKEN")
         project {
             id = '697926'
-            changelog = 'fix'
+            changelog = "Fix bugs\nMCPitanLib version: " + mcpitanlib_version.split(":")[1]
             releaseType = 'release'
             addGameVersion '1.18.2'
             addGameVersion '1.19'
@@ -111,6 +111,7 @@ curseforge {
             addGameVersion '1.19.4'
             addGameVersion '1.20'
             addGameVersion '1.20.1'
+            addGameVersion '1.20.2'
             addGameVersion "Fabric"
             relations {
                 requiredDependency 'fabric-api'
@@ -133,10 +134,10 @@ modrinth {
         projectId = 'cfQx2fbQ'
         versionNumber = project.mod_version
         uploadFile = remapJar
-        gameVersions = ['1.18.2', '1.19', '1.19.1', '1.19.2', '1.19.3', '1.19.4', '1.20', '1.20.1']
+        gameVersions = ['1.18.2', '1.19', '1.19.1', '1.19.2', '1.19.3', '1.19.4', '1.20', '1.20.1', '1.20.2']
         versionType = 'release'
         loaders = ['fabric']
-        changelog = 'fix'
+        changelog = "Fix bugs\nMCPitanLib version: " + mcpitanlib_version.split(":")[1]
         dependencies = [
                 new ModDependency('P7dR8mSH', 'required'), // Fabric API
                 new ModDependency('uNRoUnGT', 'required')  // MCPitanLibarch

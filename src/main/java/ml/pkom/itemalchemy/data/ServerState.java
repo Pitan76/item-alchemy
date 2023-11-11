@@ -1,6 +1,7 @@
 package ml.pkom.itemalchemy.data;
 
 import ml.pkom.mcpitanlibarch.api.entity.Player;
+import ml.pkom.mcpitanlibarch.api.util.PersistentStateUtil;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -81,13 +82,8 @@ public class ServerState extends PersistentState implements ModState {
     }
 
     public static ServerState getServerState(MinecraftServer server) {
-        PersistentStateManager manager = server.getWorld(World.OVERWORLD).getPersistentStateManager();
-
-        return manager.getOrCreate(
-                ServerState::create,
-                ServerState::new,
-                "itemalchemy"
-        );
+        PersistentStateManager manager = PersistentStateUtil.getManagerFromServer(server);
+        return manager.getOrCreate(ServerState::create, ServerState::new, "itemalchemy");
     }
 
     public TeamState createTeam(Player owner, @Nullable String name) {
