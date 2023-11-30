@@ -4,6 +4,7 @@ import ml.pkom.itemalchemy.gui.slot.TargetSlot;
 import ml.pkom.itemalchemy.tile.EMCCollectorTile;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.gui.ExtendedScreenHandler;
+import ml.pkom.mcpitanlibarch.api.network.PacketByteUtil;
 import ml.pkom.mcpitanlibarch.api.util.SlotUtil;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -26,7 +27,7 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
 
     public EMCCollectorScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
         this(syncId, playerInventory, null, new SimpleInventory(16 + 3));
-        NbtCompound data = buf.readNbt();
+        NbtCompound data = PacketByteUtil.readNbt(buf);
         if (data == null) return;
         int x, y, z;
         if (data.contains("x") && data.contains("y") && data.contains("z")) {

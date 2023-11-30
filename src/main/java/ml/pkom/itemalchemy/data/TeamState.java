@@ -17,7 +17,7 @@ public class TeamState {
     public boolean isDefault = true;
     public List<String> registeredItems = new ArrayList<>();
 
-    public void readNBT(NbtCompound nbt) {
+    public void readNbt(NbtCompound nbt) {
         name = nbt.getString("name");
         createdAt = nbt.getLong("created_at");
         teamID = nbt.getUuid("id");
@@ -33,7 +33,7 @@ public class TeamState {
         this.registeredItems.addAll(registeredItems);
     }
 
-    public void writeNBT(NbtCompound nbt) {
+    public void writeNbt(NbtCompound nbt) {
         nbt.putString("name", name);
         nbt.putLong("created_at", createdAt);
         nbt.putUuid("id", teamID);

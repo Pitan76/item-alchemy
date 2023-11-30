@@ -164,8 +164,8 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
             for (ServerPlayerEntity player : ((ServerWorld) world).getPlayers()) {
                 if (player.networkHandler != null && player.currentScreenHandler instanceof EMCCondenserScreenHandler && ((EMCCondenserScreenHandler) player.currentScreenHandler).tile == this ) {
                     PacketByteBuf buf = PacketByteUtil.create();
-                    buf.writeLong(storedEMC);
-                    buf.writeLong(maxEMC);
+                    PacketByteUtil.writeLong(buf, storedEMC);
+                    PacketByteUtil.writeLong(buf, maxEMC);
                     ServerNetworking.send(player, ItemAlchemy.id("itemalchemy_emc_condenser"), buf);
                 }
             }
@@ -239,6 +239,6 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
         data.putLong("z", pos.getZ());
         data.putLong("stored_emc", storedEMC);
         data.putLong("max_emc", maxEMC);
-        buf.writeNbt(data);
+        PacketByteUtil.writeNbt(buf, data);
     }
 }

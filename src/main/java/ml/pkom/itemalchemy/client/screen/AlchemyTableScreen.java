@@ -12,6 +12,7 @@ import ml.pkom.mcpitanlibarch.api.client.render.handledscreen.DrawMouseoverToolt
 import ml.pkom.mcpitanlibarch.api.client.render.handledscreen.RenderArgs;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.network.ClientNetworking;
+import ml.pkom.mcpitanlibarch.api.network.PacketByteUtil;
 import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import ml.pkom.mcpitanlibarch.api.util.client.RenderUtil;
 import ml.pkom.mcpitanlibarch.api.util.client.ScreenUtil;
@@ -66,8 +67,9 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
 
 
                 PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-                buf.writeString(searchBox.getText());
-                buf.writeNbt(translations);
+
+                PacketByteUtil.writeString(buf, searchBox.getText());
+                PacketByteUtil.writeNbt(buf, translations);
                 ClientNetworking.send(ItemAlchemy.id("search"), buf);
 
                 AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
@@ -110,7 +112,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
             NbtCompound nbt = new NbtCompound();
             nbt.putInt("control", 0);
-            buf.writeNbt(nbt);
+            PacketByteUtil.writeNbt(buf, nbt);
             ClientNetworking.send(ItemAlchemy.id("network"), buf);
         }));
 
@@ -124,7 +126,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
             NbtCompound nbt = new NbtCompound();
             nbt.putInt("control", 1);
-            buf.writeNbt(nbt);
+            PacketByteUtil.writeNbt(buf, nbt);
             ClientNetworking.send(ItemAlchemy.id("network"), buf);
         }));
     }

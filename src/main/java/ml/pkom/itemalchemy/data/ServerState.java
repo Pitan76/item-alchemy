@@ -8,7 +8,6 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class ServerState extends PersistentState implements ModState {
             }
 
             TeamState teamState = new TeamState();
-            teamState.readNBT((NbtCompound)item);
+            teamState.readNbt((NbtCompound)item);
 
             serverState.teams.add(teamState);
         }
@@ -44,7 +43,7 @@ public class ServerState extends PersistentState implements ModState {
 
             PlayerState playerState = new PlayerState();
 
-            playerState.readNBT((NbtCompound)item);
+            playerState.readNbt((NbtCompound)item);
 
             serverState.players.add(playerState);
         }
@@ -61,7 +60,7 @@ public class ServerState extends PersistentState implements ModState {
         for (TeamState teamState : teams) {
             NbtCompound teamNBT = new NbtCompound();
 
-            teamState.writeNBT(teamNBT);
+            teamState.writeNbt(teamNBT);
 
             teamNBTList.add(teamNBT);
         }

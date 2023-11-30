@@ -39,18 +39,18 @@ public class ItemAlchemyClient {
         WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(new BlockRenderer());
 
         ClientNetworking.registerReceiver(ItemAlchemy.id("sync_emc"), (client, p, buf) -> {
-            itemAlchemyNbt = buf.readNbt();
+            itemAlchemyNbt = PacketByteUtil.readNbt(buf);
         });
 
         ClientNetworking.registerReceiver(ItemAlchemy.id("sync_emc_map"), (client, p, buf) -> {
-            Map<String, Long> map = PacketByteUtil.readMap(buf, PacketByteBuf::readString, PacketByteBuf::readLong);
+            Map<String, Long> map = PacketByteUtil.readMap(buf, PacketByteUtil::readString, PacketByteBuf::readLong);
             if (map == null) return;
 
             EMCManager.setMap(map);
         });
 
         ClientNetworking.registerReceiver(ItemAlchemy.id("itemalchemy_emc_collector"), (client, p, buf) -> {
-            long storedEMC = buf.readLong();
+            long storedEMC = PacketByteUtil.readLong(buf);
             if (Objects.requireNonNull(p).currentScreenHandler instanceof EMCCollectorScreenHandler) {
                 EMCCollectorScreenHandler screenHandler = (EMCCollectorScreenHandler) p.currentScreenHandler;
                 screenHandler.storedEMC = storedEMC;
@@ -58,8 +58,8 @@ public class ItemAlchemyClient {
         });
 
         ClientNetworking.registerReceiver(ItemAlchemy.id("itemalchemy_emc_condenser"), (client, p, buf) -> {
-            long storedEMC = buf.readLong();
-            long maxEMC = buf.readLong();
+            long storedEMC = PacketByteUtil.readLong(buf);
+            long maxEMC = PacketByteUtil.readLong(buf);
             if (Objects.requireNonNull(p).currentScreenHandler instanceof EMCCondenserScreenHandler) {
                 EMCCondenserScreenHandler screenHandler = (EMCCondenserScreenHandler) p.currentScreenHandler;
                 screenHandler.storedEMC = storedEMC;

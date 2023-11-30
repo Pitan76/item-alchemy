@@ -614,11 +614,11 @@ public class EMCManager {
         NbtCompound nbt = new NbtCompound();
         NbtCompound teamNBT = new NbtCompound();
 
-        teamState.writeNBT(teamNBT);
+        teamState.writeNbt(teamNBT);
 
         nbt.put("team", teamNBT);
 
-        buf.writeNbt(nbt);
+        PacketByteUtil.writeNbt(buf, nbt);
 
         ServerNetworking.send(serverPlayer, ItemAlchemy.id("sync_emc"), buf);
     }

@@ -12,7 +12,7 @@ public class ClientState implements ModState {
     public Optional<TeamState> getTeamByPlayer(UUID playerUUID) {
         if (ItemAlchemyClient.itemAlchemyNbt != null) {
             TeamState team = new TeamState();
-            team.readNBT(ItemAlchemyClient.itemAlchemyNbt.getCompound("team"));
+            team.readNbt(ItemAlchemyClient.itemAlchemyNbt.getCompound("team"));
 
             return Optional.of(team);
         }

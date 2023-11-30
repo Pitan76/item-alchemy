@@ -8,7 +8,7 @@ public class PlayerState {
     public UUID playerUUID;
     public UUID teamID;
 
-    public void readNBT(NbtCompound nbt) {
+    public void readNbt(NbtCompound nbt) {
         playerUUID = nbt.getUuid("uuid");
         teamID = nbt.getUuid("team");
     }

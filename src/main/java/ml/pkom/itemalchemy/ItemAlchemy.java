@@ -16,6 +16,7 @@ import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.v0.EventRegistry;
 import ml.pkom.mcpitanlibarch.api.event.v0.event.ItemStackActionEvent;
 import ml.pkom.mcpitanlibarch.api.item.CreativeTabBuilder;
+import ml.pkom.mcpitanlibarch.api.network.PacketByteUtil;
 import ml.pkom.mcpitanlibarch.api.network.ServerNetworking;
 import ml.pkom.mcpitanlibarch.api.registry.ArchRegistry;
 import net.minecraft.item.ItemGroup;
@@ -77,7 +78,7 @@ public class ItemAlchemy {
         });
 
         ServerNetworking.registerReceiver(id("network"), ((server, p, buf) -> {
-            NbtCompound nbt = buf.readNbt();
+            NbtCompound nbt = PacketByteUtil.readNbt(buf);
             if (nbt.contains("control")) {
                 Player player = new Player(p);
                 int ctrl = nbt.getInt("control");
@@ -95,8 +96,8 @@ public class ItemAlchemy {
         }));
 
         ServerNetworking.registerReceiver(id("search"), ((server, p, buf) -> {
-            String text = buf.readString();
-            NbtCompound translations = buf.readNbt();
+            String text = PacketByteUtil.readString(buf);
+            NbtCompound translations = PacketByteUtil.readNbt(buf);
             Player player = new Player(p);
             AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
 

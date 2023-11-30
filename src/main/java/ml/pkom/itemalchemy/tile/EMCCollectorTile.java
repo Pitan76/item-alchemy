@@ -172,7 +172,7 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
                 for (ServerPlayerEntity player : ((ServerWorld) mcWorld).getPlayers()) {
                     if (player.networkHandler != null && player.currentScreenHandler instanceof EMCCollectorScreenHandler && ((EMCCollectorScreenHandler) player.currentScreenHandler).tile == this) {
                         PacketByteBuf buf = PacketByteUtil.create();
-                        buf.writeLong(storedEMC);
+                        PacketByteUtil.writeLong(buf, storedEMC);
                         ServerNetworking.send(player, ItemAlchemy.id("itemalchemy_emc_collector"), buf);
                     }
                 }
@@ -258,6 +258,6 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
         data.putLong("z", pos.getZ());
         data.putLong("stored_emc", storedEMC);
         data.putLong("max_emc", ((EMCCollector) getCachedState().getBlock()).maxEMC);
-        buf.writeNbt(data);
+        PacketByteUtil.writeNbt(buf, data);
     }
 }
