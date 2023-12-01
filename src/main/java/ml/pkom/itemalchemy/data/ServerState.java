@@ -82,7 +82,8 @@ public class ServerState extends PersistentState implements ModState {
 
     public static ServerState getServerState(MinecraftServer server) {
         PersistentStateManager manager = PersistentStateUtil.getManagerFromServer(server);
-        return manager.getOrCreate(ServerState::create, ServerState::new, "itemalchemy");
+
+        return PersistentStateUtil.getOrCreate(manager, "itemalchemy", ServerState::new, ServerState::create);
     }
 
     public TeamState createTeam(Player owner, @Nullable String name) {
