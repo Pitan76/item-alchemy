@@ -10,6 +10,7 @@ import ml.pkom.mcpitanlibarch.api.event.item.ItemUseOnBlockEvent;
 import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;
 import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
 import ml.pkom.mcpitanlibarch.api.item.FixedRecipeRemainderItem;
+import ml.pkom.mcpitanlibarch.api.util.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -17,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,65 +32,101 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
     public static Map<Block, Block> exchange_map = new HashMap<>();
     public static Map<Block, Block> shift_exchange_map = new HashMap<>();
 
+    public static void addExchangeInMap(Block target, Block replace) {
+        exchange_map.put(target, replace);
+    }
+
+    // 賢者の石の等価変換に追加する
+    public static boolean addExchangeInMap(Identifier target, Identifier replace) {
+        if (BlockUtil.isExist(target) && BlockUtil.isExist(replace)) {
+            addExchangeInMap(BlockUtil.block(target), BlockUtil.block(replace));
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean addExchangeInMap(String target, String replace) {
+        return addExchangeInMap(new Identifier(target), new Identifier(replace));
+    }
+
+    public static boolean addShiftExchangeInMap(Block target, Block replace) {
+        shift_exchange_map.put(target, replace);
+        return true;
+    }
+
+    public static boolean addShiftExchangeInMap(Identifier target, Identifier replace) {
+        if (BlockUtil.isExist(target) && BlockUtil.isExist(replace)) {
+            addShiftExchangeInMap(BlockUtil.block(target), BlockUtil.block(replace));
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean addShiftExchangeInMap(String target, String replace) {
+        return addShiftExchangeInMap(new Identifier(target), new Identifier(replace));
+    }
+
     static {
-        exchange_map.put(Blocks.DIRT, Blocks.GRASS_BLOCK);
+        addExchangeInMap("minecraft:dirt", "minecraft:grass_block");
+        addExchangeInMap("minecraft:cobblestone", "minecraft:stone");
+        addExchangeInMap("minecraft:stone", "minecraft:cobblestone");
+        addExchangeInMap("minecraft:grass_block", "minecraft:sand");
+        addExchangeInMap("minecraft:sand", "minecraft:grass_block");
+        addExchangeInMap("minecraft:glass", "minecraft:sand");
 
-        exchange_map.put(Blocks.COBBLESTONE, Blocks.STONE);
-        exchange_map.put(Blocks.STONE, Blocks.COBBLESTONE);
-        exchange_map.put(Blocks.GRASS_BLOCK, Blocks.SAND);
-        exchange_map.put(Blocks.SAND, Blocks.GRASS_BLOCK);
-        exchange_map.put(Blocks.GLASS, Blocks.SAND);
-        exchange_map.put(Blocks.NETHERRACK, Blocks.COBBLESTONE);
-        exchange_map.put(Blocks.SANDSTONE, Blocks.GRAVEL);
-        exchange_map.put(Blocks.PUMPKIN, Blocks.MELON);
-        exchange_map.put(Blocks.MELON, Blocks.PUMPKIN);
-        exchange_map.put(Blocks.TALL_GRASS, Blocks.DEAD_BUSH);
-        exchange_map.put(Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM);
-        exchange_map.put(Blocks.POPPY, Blocks.DANDELION);
+        addExchangeInMap("minecraft:nettherack", "minecraft:cobblestone");
+        addExchangeInMap("minecraft:sandstone", "minecraft:gravel");
+        addExchangeInMap("minecraft:pumpkin", "minecraft:melon");
+        addExchangeInMap("minecraft:melon", "minecraft:pumpkin");
+        addExchangeInMap("minecraft:tall_grass", "minecraft:dead_bush");
+        addExchangeInMap("minecraft:red_mushroom", "minecraft:brown_mushroom");
+        addExchangeInMap("minecraft:poppy", "minecraft:dandelion");
 
-        exchange_map.put(Blocks.OAK_LOG, Blocks.SPRUCE_LOG);
-        exchange_map.put(Blocks.SPRUCE_LOG, Blocks.BIRCH_LOG);
-        exchange_map.put(Blocks.BIRCH_LOG, Blocks.JUNGLE_LOG);
-        exchange_map.put(Blocks.JUNGLE_LOG, Blocks.ACACIA_LOG);
-        exchange_map.put(Blocks.ACACIA_LOG, Blocks.DARK_OAK_LOG);
-        exchange_map.put(Blocks.DARK_OAK_LOG, Blocks.OAK_LOG);
+        addExchangeInMap("minecraft:oak_log", "minecraft:spruce_log");
+        addExchangeInMap("minecraft:spruce_log", "minecraft:birch_log");
+        addExchangeInMap("minecraft:birch_log", "minecraft:jungle_log");
+        addExchangeInMap("minecraft:jungle_log", "minecraft:acacia_log");
+        addExchangeInMap("minecraft:acacia_log", "minecraft:dark_oak_log");
+        addExchangeInMap("minecraft:dark_oak_log", "minecraft:oak_log");
 
-        exchange_map.put(Blocks.OAK_WOOD, Blocks.SPRUCE_WOOD);
-        exchange_map.put(Blocks.SPRUCE_WOOD, Blocks.BIRCH_WOOD);
-        exchange_map.put(Blocks.BIRCH_WOOD, Blocks.JUNGLE_WOOD);
-        exchange_map.put(Blocks.JUNGLE_WOOD, Blocks.ACACIA_WOOD);
-        exchange_map.put(Blocks.ACACIA_WOOD, Blocks.DARK_OAK_WOOD);
-        exchange_map.put(Blocks.DARK_OAK_WOOD, Blocks.OAK_WOOD);
+        addExchangeInMap("minecraft:oak_wood", "minecraft:spruce_wood");
+        addExchangeInMap("minecraft:spruce_wood", "minecraft:birch_wood");
+        addExchangeInMap("minecraft:birch_wood", "minecraft:jungle_wood");
+        addExchangeInMap("minecraft:jungle_wood", "minecraft:acacia_wood");
+        addExchangeInMap("minecraft:acacia_wood", "minecraft:dark_oak_wood");
+        addExchangeInMap("minecraft:dark_oak_wood", "minecraft:oak_wood");
 
-        exchange_map.put(Blocks.STRIPPED_OAK_LOG, Blocks.STRIPPED_SPRUCE_LOG);
-        exchange_map.put(Blocks.STRIPPED_SPRUCE_LOG, Blocks.STRIPPED_BIRCH_LOG);
-        exchange_map.put(Blocks.STRIPPED_BIRCH_LOG, Blocks.STRIPPED_JUNGLE_LOG);
-        exchange_map.put(Blocks.STRIPPED_JUNGLE_LOG, Blocks.STRIPPED_ACACIA_LOG);
-        exchange_map.put(Blocks.STRIPPED_ACACIA_LOG, Blocks.STRIPPED_DARK_OAK_LOG);
-        exchange_map.put(Blocks.STRIPPED_DARK_OAK_LOG, Blocks.STRIPPED_OAK_LOG);
+        addExchangeInMap("minecraft:stripped_oak_log", "minecraft:stripped_spruce_log");
+        addExchangeInMap("minecraft:stripped_spruce_log", "minecraft:stripped_birch_log");
+        addExchangeInMap("minecraft:stripped_birch_log", "minecraft:stripped_jungle_log");
+        addExchangeInMap("minecraft:stripped_jungle_log", "minecraft:stripped_acacia_log");
+        addExchangeInMap("minecraft:stripped_acacia_log", "minecraft:stripped_dark_oak_log");
+        addExchangeInMap("minecraft:stripped_dark_oak_log", "minecraft:stripped_oak_log");
 
-        exchange_map.put(Blocks.OAK_LEAVES, Blocks.SPRUCE_LEAVES);
-        exchange_map.put(Blocks.SPRUCE_LEAVES, Blocks.BIRCH_LEAVES);
-        exchange_map.put(Blocks.BIRCH_LEAVES, Blocks.JUNGLE_LEAVES);
-        exchange_map.put(Blocks.JUNGLE_LEAVES, Blocks.ACACIA_LEAVES);
-        exchange_map.put(Blocks.ACACIA_LEAVES, Blocks.DARK_OAK_LEAVES);
-        exchange_map.put(Blocks.DARK_OAK_LEAVES, Blocks.OAK_LEAVES);
+        addExchangeInMap("minecraft:oak_leaves", "minecraft:spruce_leaves");
+        addExchangeInMap("minecraft:spruce_leaves", "minecraft:birch_leaves");
+        addExchangeInMap("minecraft:birch_leaves", "minecraft:jungle_leaves");
+        addExchangeInMap("minecraft:jungle_leaves", "minecraft:acacia_leaves");
+        addExchangeInMap("minecraft:acacia_leaves", "minecraft:dark_oak_leaves");
+        addExchangeInMap("minecraft:dark_oak_leaves", "minecraft:oak_leaves");
 
-        exchange_map.put(Blocks.OAK_PLANKS, Blocks.SPRUCE_PLANKS);
-        exchange_map.put(Blocks.SPRUCE_PLANKS, Blocks.BIRCH_PLANKS);
-        exchange_map.put(Blocks.BIRCH_PLANKS, Blocks.JUNGLE_PLANKS);
-        exchange_map.put(Blocks.JUNGLE_PLANKS, Blocks.ACACIA_PLANKS);
-        exchange_map.put(Blocks.ACACIA_PLANKS, Blocks.DARK_OAK_PLANKS);
-        exchange_map.put(Blocks.DARK_OAK_PLANKS, Blocks.OAK_PLANKS);
+        addExchangeInMap("minecraft:oak_planks", "minecraft:spruce_planks");
+        addExchangeInMap("minecraft:spruce_planks", "minecraft:birch_planks");
+        addExchangeInMap("minecraft:birch_planks", "minecraft:jungle_planks");
+        addExchangeInMap("minecraft:jungle_planks", "minecraft:acacia_planks");
+        addExchangeInMap("minecraft:acacia_planks", "minecraft:dark_oak_planks");
+        addExchangeInMap("minecraft:dark_oak_planks", "minecraft:oak_planks");
 
-        exchange_map.put(Blocks.ANDESITE, Blocks.GRANITE);
-        exchange_map.put(Blocks.GRANITE, Blocks.DIORITE);
-        exchange_map.put(Blocks.DIORITE, Blocks.ANDESITE);
+        addExchangeInMap("minecraft:andesite", "minecraft:granite");
+        addExchangeInMap("minecraft:granite", "minecraft:diorite");
+        addExchangeInMap("minecraft:diorite", "minecraft:andesite");
 
-        shift_exchange_map.put(Blocks.STONE, Blocks.GRASS_BLOCK);
-        shift_exchange_map.put(Blocks.COBBLESTONE, Blocks.GRASS_BLOCK);
-        shift_exchange_map.put(Blocks.GRASS_BLOCK, Blocks.COBBLESTONE);
-        shift_exchange_map.put(Blocks.SAND, Blocks.COBBLESTONE);
+        addShiftExchangeInMap("minecraft:stone", "minecraft:grass_block");
+        addShiftExchangeInMap("minecraft:cobblestone", "minecraft:grass_block");
+        addShiftExchangeInMap("minecraft:grass_block", "minecraft:cobblestone");
+        addShiftExchangeInMap("minecraft:sand", "minecraft:cobblestone");
     }
 
     public PhilosopherStone(CompatibleItemSettings settings) {
