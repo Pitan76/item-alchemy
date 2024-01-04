@@ -1,5 +1,6 @@
 package ml.pkom.itemalchemy.gui.screen;
 
+import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.gui.slot.CondenserStorageSlot;
 import ml.pkom.itemalchemy.gui.slot.TargetSlot;
 import ml.pkom.itemalchemy.tile.EMCCondenserTile;
@@ -94,7 +95,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
         if (slot.hasStack()) {
             ItemStack originalStack = SlotUtil.getStack(slot);
             // TargetSlot
-            if (index == 36) {
+            if (index == 36 && EMCManager.get(originalStack.getItem()) != 0) {
                 Slot targetSlot = this.slots.get(36);
                 SlotUtil.setStack(targetSlot, ItemStack.EMPTY);
                 return ItemStack.EMPTY;
@@ -103,7 +104,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
             if (index < 36) {
                 // TargetSlot
                 Slot targetSlot = this.slots.get(36);
-                if (SlotUtil.getStack(targetSlot).isEmpty()) {
+                if (SlotUtil.getStack(targetSlot).isEmpty() && EMCManager.get(originalStack.getItem()) != 0) {
                     ItemStack newTargetStack = originalStack.copy();
                     newTargetStack.setCount(1);
                     SlotUtil.setStack(targetSlot, newTargetStack);
