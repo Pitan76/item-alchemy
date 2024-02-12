@@ -3,7 +3,7 @@ package ml.pkom.itemalchemy.block;
 import ml.pkom.mcpitanlibarch.api.block.CompatibleBlockSettings;
 import ml.pkom.mcpitanlibarch.api.block.CompatibleMaterial;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
-import ml.pkom.mcpitanlibarch.api.event.registry.RegistryEvent;
+import ml.pkom.mcpitanlibarch.api.event.registry.RegistryResult;
 import net.minecraft.block.Block;
 
 import static ml.pkom.itemalchemy.ItemAlchemy.id;
@@ -11,22 +11,22 @@ import static ml.pkom.itemalchemy.ItemAlchemy.registry;
 
 public class Blocks {
 
-    public static RegistryEvent<Block> ALCHEMY_TABLE;
-    public static RegistryEvent<Block> EMC_COLLECTOR_MK1;
-    public static RegistryEvent<Block> EMC_COLLECTOR_MK2;
-    public static RegistryEvent<Block> EMC_COLLECTOR_MK3;
-    public static RegistryEvent<Block> EMC_COLLECTOR_MK4;
-    public static RegistryEvent<Block> EMC_COLLECTOR_MK5;
-    public static RegistryEvent<Block> ALCHEMY_CHEST;
-    public static RegistryEvent<Block> EMC_CONDENSER;
-    //public static RegistryEvent<Block> EMC_CONDENSER_MK2;
-    public static RegistryEvent<Block> EMC_REPEATER;
-    public static RegistryEvent<Block> AEGU;
-    public static RegistryEvent<Block> ADVANCED_AEGU;
-    public static RegistryEvent<Block> ULTIMATE_AEGU;
+    public static RegistryResult<Block> ALCHEMY_TABLE;
+    public static RegistryResult<Block> EMC_COLLECTOR_MK1;
+    public static RegistryResult<Block> EMC_COLLECTOR_MK2;
+    public static RegistryResult<Block> EMC_COLLECTOR_MK3;
+    public static RegistryResult<Block> EMC_COLLECTOR_MK4;
+    public static RegistryResult<Block> EMC_COLLECTOR_MK5;
+    public static RegistryResult<Block> ALCHEMY_CHEST;
+    public static RegistryResult<Block> EMC_CONDENSER;
+    //public static RegistryResult<Block> EMC_CONDENSER_MK2;
+    public static RegistryResult<Block> EMC_REPEATER;
+    public static RegistryResult<Block> AEGU;
+    public static RegistryResult<Block> ADVANCED_AEGU;
+    public static RegistryResult<Block> ULTIMATE_AEGU;
 
-    public static RegistryEvent<Block> DARK_MATTER_BLOCK;
-    public static RegistryEvent<Block> RED_MATTER_BLOCK;
+    public static RegistryResult<Block> DARK_MATTER_BLOCK;
+    public static RegistryResult<Block> RED_MATTER_BLOCK;
 
     public static void init() {
         ALCHEMY_TABLE = registry.registerBlock(id("alchemy_table"), AlchemyTable::new);

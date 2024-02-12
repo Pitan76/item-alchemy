@@ -7,6 +7,7 @@ import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import ml.pkom.itemalchemy.gui.screen.ScreenHandlers;
 import ml.pkom.itemalchemy.item.ItemGroups;
 import ml.pkom.itemalchemy.item.Items;
+import ml.pkom.itemalchemy.recipe.AlchemicalRecipeManager;
 import ml.pkom.itemalchemy.sound.Sounds;
 import ml.pkom.itemalchemy.tile.Tiles;
 import ml.pkom.itemalchemy.util.ItemCharge;
@@ -14,6 +15,7 @@ import ml.pkom.itemalchemy.util.ItemUtils;
 import ml.pkom.mcpitanlibarch.api.command.CommandRegistry;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.v0.EventRegistry;
+import ml.pkom.mcpitanlibarch.api.event.v0.RecipeManagerRegistry;
 import ml.pkom.mcpitanlibarch.api.event.v0.event.ItemStackActionEvent;
 import ml.pkom.mcpitanlibarch.api.item.CreativeTabBuilder;
 import ml.pkom.mcpitanlibarch.api.network.PacketByteUtil;
@@ -47,7 +49,7 @@ public class ItemAlchemy {
     public static ItemGroup ITEM_ALCHEMY = CreativeTabBuilder.create(id("item_alchemy")).setIcon(() -> new ItemStack(Items.PHILOSOPHER_STONE.getOrNull(), 1)).build();
 
     public static void init() {
-
+        RecipeManagerRegistry.register(AlchemicalRecipeManager::new);
         ItemGroups.init();
         Sounds.init();
         Blocks.init();
