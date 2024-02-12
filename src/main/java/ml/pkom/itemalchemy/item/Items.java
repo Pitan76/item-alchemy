@@ -2,7 +2,7 @@ package ml.pkom.itemalchemy.item;
 
 import ml.pkom.itemalchemy.util.ChargeItemSettings;
 import ml.pkom.itemalchemy.block.Blocks;
-import ml.pkom.mcpitanlibarch.api.event.registry.RegistryEvent;
+import ml.pkom.mcpitanlibarch.api.event.registry.RegistryResult;
 import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;
 import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
@@ -14,48 +14,48 @@ import static ml.pkom.itemalchemy.ItemAlchemy.registry;
 
 public class Items {
 
-    public static RegistryEvent<Item> PHILOSOPHER_STONE;
-    public static RegistryEvent<Item> ALCHEMY_PAD;
+    public static RegistryResult<Item> PHILOSOPHER_STONE;
+    public static RegistryResult<Item> ALCHEMY_PAD;
 
-    public static RegistryEvent<Item> TOME_OF_KNOWLEDGE;
+    public static RegistryResult<Item> TOME_OF_KNOWLEDGE;
 
-    public static RegistryEvent<Item> ALCHEMY_TABLE;
-    public static RegistryEvent<Item> EMC_COLLECTOR_MK1;
-    public static RegistryEvent<Item> EMC_COLLECTOR_MK2;
-    public static RegistryEvent<Item> EMC_COLLECTOR_MK3;
-    public static RegistryEvent<Item> EMC_COLLECTOR_MK4;
-    public static RegistryEvent<Item> EMC_COLLECTOR_MK5;
-    public static RegistryEvent<Item> ALCHEMY_CHEST;
-    public static RegistryEvent<Item> EMC_CONDENSER;
-    //public static RegistryEvent<Item> EMC_CONDENSER_MK2;
-    public static RegistryEvent<Item> EMC_REPEATER;
-    public static RegistryEvent<Item> AEGU;
-    public static RegistryEvent<Item> ADVANCED_AEGU;
-    public static RegistryEvent<Item> ULTIMATE_AEGU;
+    public static RegistryResult<Item> ALCHEMY_TABLE;
+    public static RegistryResult<Item> EMC_COLLECTOR_MK1;
+    public static RegistryResult<Item> EMC_COLLECTOR_MK2;
+    public static RegistryResult<Item> EMC_COLLECTOR_MK3;
+    public static RegistryResult<Item> EMC_COLLECTOR_MK4;
+    public static RegistryResult<Item> EMC_COLLECTOR_MK5;
+    public static RegistryResult<Item> ALCHEMY_CHEST;
+    public static RegistryResult<Item> EMC_CONDENSER;
+    //public static RegistryResult<Item> EMC_CONDENSER_MK2;
+    public static RegistryResult<Item> EMC_REPEATER;
+    public static RegistryResult<Item> AEGU;
+    public static RegistryResult<Item> ADVANCED_AEGU;
+    public static RegistryResult<Item> ULTIMATE_AEGU;
 
     // Material
-    public static RegistryEvent<Item> ALCHEMICAL_FUEL;
-    public static RegistryEvent<Item> MOBIUS_FUEL;
-    public static RegistryEvent<Item> AETERNALIS_FUEL;
-    public static RegistryEvent<Item> LOW_COVALENCE_DUST;
-    public static RegistryEvent<Item> MIDDLE_COVALENCE_DUST;
-    public static RegistryEvent<Item> HIGH_COVALENCE_DUST;
-    public static RegistryEvent<Item> DARK_MATTER;
-    public static RegistryEvent<Item> RED_MATTER;
-    public static RegistryEvent<Item> DARK_MATTER_BLOCK;
-    public static RegistryEvent<Item> RED_MATTER_BLOCK;
+    public static RegistryResult<Item> ALCHEMICAL_FUEL;
+    public static RegistryResult<Item> MOBIUS_FUEL;
+    public static RegistryResult<Item> AETERNALIS_FUEL;
+    public static RegistryResult<Item> LOW_COVALENCE_DUST;
+    public static RegistryResult<Item> MIDDLE_COVALENCE_DUST;
+    public static RegistryResult<Item> HIGH_COVALENCE_DUST;
+    public static RegistryResult<Item> DARK_MATTER;
+    public static RegistryResult<Item> RED_MATTER;
+    public static RegistryResult<Item> DARK_MATTER_BLOCK;
+    public static RegistryResult<Item> RED_MATTER_BLOCK;
 
-    public static RegistryEvent<Item> DARK_MATTER_SWORD;
-    public static RegistryEvent<Item> DARK_MATTER_PICKAXE;
-    public static RegistryEvent<Item> DARK_MATTER_AXE;
-    public static RegistryEvent<Item> DARK_MATTER_SHOVEL;
-    public static RegistryEvent<Item> DARK_MATTER_HOE;
+    public static RegistryResult<Item> DARK_MATTER_SWORD;
+    public static RegistryResult<Item> DARK_MATTER_PICKAXE;
+    public static RegistryResult<Item> DARK_MATTER_AXE;
+    public static RegistryResult<Item> DARK_MATTER_SHOVEL;
+    public static RegistryResult<Item> DARK_MATTER_HOE;
 
-    public static RegistryEvent<Item> RED_MATTER_SWORD;
-    public static RegistryEvent<Item> RED_MATTER_PICKAXE;
-    public static RegistryEvent<Item> RED_MATTER_AXE;
-    public static RegistryEvent<Item> RED_MATTER_SHOVEL;
-    public static RegistryEvent<Item> RED_MATTER_HOE;
+    public static RegistryResult<Item> RED_MATTER_SWORD;
+    public static RegistryResult<Item> RED_MATTER_PICKAXE;
+    public static RegistryResult<Item> RED_MATTER_AXE;
+    public static RegistryResult<Item> RED_MATTER_SHOVEL;
+    public static RegistryResult<Item> RED_MATTER_HOE;
     public static void init() {
         PHILOSOPHER_STONE = registry.registerItem(id("philosopher_stone"), () -> new PhilosopherStone(ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("philosopher_stone"))));
         ALCHEMY_TABLE = registry.registerItem(id("alchemy_table"), () -> ItemUtil.ofBlock(Blocks.ALCHEMY_TABLE.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY, id("alchemy_table"))));

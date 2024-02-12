@@ -3,7 +3,6 @@ package ml.pkom.itemalchemy.mixins;
 import ml.pkom.itemalchemy.util.ItemCharge;
 import ml.pkom.itemalchemy.util.ItemUtils;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -16,9 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ItemMixin {
     @Inject(method = "inventoryTick", at = @At("TAIL"))
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected, CallbackInfo ci) {
-        if(world.isClient) {
-            return;
-        }
+        if(world.isClient) return;
 
         if(stack.getItem() instanceof ItemCharge) {
             if(stack.getSubNbt("itemalchemy") == null) {

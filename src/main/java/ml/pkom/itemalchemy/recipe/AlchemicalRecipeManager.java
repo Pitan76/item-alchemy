@@ -1,11 +1,13 @@
 package ml.pkom.itemalchemy.recipe;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.itemalchemy.item.Items;
+import ml.pkom.mcpitanlibarch.api.event.v0.event.RecipeManagerEvent;
+import ml.pkom.mcpitanlibarch.api.recipe.CompatibleRecipeEntry;
+import ml.pkom.mcpitanlibarch.api.util.CompatibleRecipeEntryUtil;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import ml.pkom.mcpitanlibarch.api.util.RecipeUtil;
 import ml.pkom.mcpitanlibarch.api.util.ResourceUtil;
@@ -14,11 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.recipe.ShapelessRecipe;
 import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import org.apache.commons.io.IOUtils;
@@ -32,25 +30,27 @@ import java.util.Map;
 public class AlchemicalRecipeManager {
 
     private int count = 0;
-    private final Map<RecipeType<?>, ImmutableMap.Builder<Identifier, Recipe<?>>> map;
-
-    public AlchemicalRecipeManager(Map<RecipeType<?>, ImmutableMap.Builder<Identifier, Recipe<?>>> map) {
-        this.map = map;
-        INSTANCE = this;
-    }
 
     public static AlchemicalRecipeManager INSTANCE;
 
-    public void apply(ResourceManager resourceManager) {
+    public RecipeManagerEvent event;
+
+    public AlchemicalRecipeManager(RecipeManagerEvent e) {
+        INSTANCE = this;
+        this.event = e;
+        apply();
+    }
+
+    public void apply() {
 
         // load EMC
-        EMCManager.loadDefaultEMCs(resourceManager);
+        EMCManager.loadDefaultEMCs(event.getResourceManager());
 
         count = 0;
 
         Map<Identifier, Resource> resourceIds;
         try {
-            resourceIds = ResourceUtil.findResources(resourceManager, "alchemical_craft", ".json");
+            resourceIds = ResourceUtil.findResources(event.getResourceManager(), "alchemical_craft", ".json");
         } catch (IOException e) {
             ItemAlchemy.LOGGER.error("Failed to read alchemy.json", e);
             return;
@@ -92,8 +92,8 @@ public class AlchemicalRecipeManager {
 
         Identifier id = ItemAlchemy.id("alchemical_craft/n" + count++);
 
-        ShapelessRecipe recipe = RecipeUtil.createShapelessRecipe(id, "", new ItemStack(output), buildInput(inputs));
-        map.get(recipe.getType()).put(id, recipe);
+        CompatibleRecipeEntry recipe = CompatibleRecipeEntryUtil.createShapelessRecipe(id, "", RecipeUtil.CompatibilityCraftingRecipeCategory.MISC, new ItemStack(output), buildInput(inputs));
+        event.putCompatibleRecipeEntry(recipe);
     }
 
     private DefaultedList<Ingredient> buildInput(Object[] input) {

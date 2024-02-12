@@ -1,7 +1,7 @@
 package ml.pkom.itemalchemy.tile;
 
 import ml.pkom.itemalchemy.block.Blocks;
-import ml.pkom.mcpitanlibarch.api.event.registry.RegistryEvent;
+import ml.pkom.mcpitanlibarch.api.event.registry.RegistryResult;
 import ml.pkom.mcpitanlibarch.api.tile.BlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -11,11 +11,11 @@ import static ml.pkom.itemalchemy.ItemAlchemy.id;
 import static ml.pkom.itemalchemy.ItemAlchemy.registry;
 
 public class Tiles {
-    public static RegistryEvent<BlockEntityType<?>> EMC_COLLECTOR;
-    public static RegistryEvent<BlockEntityType<?>> EMC_CONDENSER;
-    //public static RegistryEvent<BlockEntityType<?>> EMC_CONDENSER_MK2;
-    public static RegistryEvent<BlockEntityType<?>> AEGU;
-    public static RegistryEvent<BlockEntityType<?>> ALCHEMY_CHEST;
+    public static RegistryResult<BlockEntityType<?>> EMC_COLLECTOR;
+    public static RegistryResult<BlockEntityType<?>> EMC_CONDENSER;
+    //public static RegistryResult<BlockEntityType<?>> EMC_CONDENSER_MK2;
+    public static RegistryResult<BlockEntityType<?>> AEGU;
+    public static RegistryResult<BlockEntityType<?>> ALCHEMY_CHEST;
 
     public static void init() {
         EMC_COLLECTOR = registry.registerBlockEntityType(id("emc_collector"), () -> create(EMCCollectorTile::new, Blocks.EMC_COLLECTOR_MK1.getOrNull(), Blocks.EMC_COLLECTOR_MK2.getOrNull(), Blocks.EMC_COLLECTOR_MK3.getOrNull(), Blocks.EMC_COLLECTOR_MK4.getOrNull(), Blocks.EMC_COLLECTOR_MK5.getOrNull()));
