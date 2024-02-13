@@ -1,7 +1,7 @@
 package ml.pkom.itemalchemy.tile;
 
 import ml.pkom.itemalchemy.block.Blocks;
-import ml.pkom.mcpitanlibarch.api.event.registry.RegistryResult;
+import net.pitan76.mcpitanlib.api.registry.result.RegistryResult;
 import ml.pkom.mcpitanlibarch.api.tile.BlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
