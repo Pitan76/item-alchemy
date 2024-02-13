@@ -2,12 +2,12 @@ package ml.pkom.itemalchemy.item;
 
 import ml.pkom.itemalchemy.util.ChargeItemSettings;
 import ml.pkom.itemalchemy.block.Blocks;
-import ml.pkom.mcpitanlibarch.api.event.registry.RegistryResult;
 import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;
 import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import net.minecraft.item.Item;
 import net.minecraft.util.Rarity;
+import net.pitan76.mcpitanlib.api.registry.result.RegistryResult;
 
 import static ml.pkom.itemalchemy.ItemAlchemy.id;
 import static ml.pkom.itemalchemy.ItemAlchemy.registry;

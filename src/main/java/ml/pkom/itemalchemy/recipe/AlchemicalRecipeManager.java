@@ -7,7 +7,6 @@ import ml.pkom.itemalchemy.ItemAlchemy;
 import ml.pkom.itemalchemy.item.Items;
 import ml.pkom.mcpitanlibarch.api.event.v0.event.RecipeManagerEvent;
 import ml.pkom.mcpitanlibarch.api.recipe.CompatibleRecipeEntry;
-import ml.pkom.mcpitanlibarch.api.util.CompatibleRecipeEntryUtil;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
 import ml.pkom.mcpitanlibarch.api.util.RecipeUtil;
 import ml.pkom.mcpitanlibarch.api.util.ResourceUtil;
@@ -19,6 +18,7 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
+import net.pitan76.mcpitanlib.api.util.CompatibleRecipeEntryUtil;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;

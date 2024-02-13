@@ -1,7 +1,7 @@
 package ml.pkom.itemalchemy.sound;
 
 import ml.pkom.itemalchemy.ItemAlchemy;
-import ml.pkom.mcpitanlibarch.api.event.registry.RegistryResult;
+import net.pitan76.mcpitanlib.api.registry.result.RegistryResult;
 import net.minecraft.sound.SoundEvent;
 
 public class Sounds {

@@ -3,7 +3,7 @@ package ml.pkom.itemalchemy.block;
 import ml.pkom.mcpitanlibarch.api.block.CompatibleBlockSettings;
 import ml.pkom.mcpitanlibarch.api.block.CompatibleMaterial;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
-import ml.pkom.mcpitanlibarch.api.event.registry.RegistryResult;
+import net.pitan76.mcpitanlib.api.registry.result.RegistryResult;
 import net.minecraft.block.Block;
 
 import static ml.pkom.itemalchemy.ItemAlchemy.id;

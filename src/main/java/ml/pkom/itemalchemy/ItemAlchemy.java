@@ -15,17 +15,17 @@ import ml.pkom.itemalchemy.util.ItemUtils;
 import ml.pkom.mcpitanlibarch.api.command.CommandRegistry;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.event.v0.EventRegistry;
-import ml.pkom.mcpitanlibarch.api.event.v0.RecipeManagerRegistry;
 import ml.pkom.mcpitanlibarch.api.event.v0.event.ItemStackActionEvent;
 import ml.pkom.mcpitanlibarch.api.item.CreativeTabBuilder;
 import ml.pkom.mcpitanlibarch.api.network.PacketByteUtil;
 import ml.pkom.mcpitanlibarch.api.network.ServerNetworking;
-import ml.pkom.mcpitanlibarch.api.registry.ArchRegistry;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
+import net.pitan76.mcpitanlib.api.event.v1.RecipeManagerRegistry;
+import net.pitan76.mcpitanlib.api.registry.CompatRegistry;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,7 +44,7 @@ public class ItemAlchemy {
         return new Identifier(MOD_ID, id);
     }
 
-    public static ArchRegistry registry = ArchRegistry.createRegistry(MOD_ID);
+    public static CompatRegistry registry = CompatRegistry.createRegistry(MOD_ID);
 
     public static ItemGroup ITEM_ALCHEMY = CreativeTabBuilder.create(id("item_alchemy")).setIcon(() -> new ItemStack(Items.PHILOSOPHER_STONE.getOrNull(), 1)).build();
 
