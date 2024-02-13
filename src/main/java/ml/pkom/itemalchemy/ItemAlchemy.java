@@ -1,8 +1,11 @@
 package ml.pkom.itemalchemy;
 
+import ml.pkom.itemalchemy.api.EMCUtil;
 import ml.pkom.itemalchemy.block.Blocks;
 import ml.pkom.itemalchemy.command.ItemAlchemyCommand;
 import ml.pkom.itemalchemy.data.ServerState;
+import ml.pkom.itemalchemy.emcs.itemalchemy.ItemAlchemyEMCDef;
+import ml.pkom.itemalchemy.emcs.vanilla.VanillaEMCDef;
 import ml.pkom.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import ml.pkom.itemalchemy.gui.screen.ScreenHandlers;
 import ml.pkom.itemalchemy.item.ItemGroups;
@@ -56,6 +59,8 @@ public class ItemAlchemy {
         Items.init();
         ScreenHandlers.init();
         Tiles.init();
+
+        EMCUtil.addDef(new VanillaEMCDef(), new ItemAlchemyEMCDef());
 
         EventRegistry.ServerLifecycle.serverStarted(EMCManager::init);
 

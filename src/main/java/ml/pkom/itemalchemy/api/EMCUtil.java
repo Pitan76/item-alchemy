@@ -1,6 +1,7 @@
 package ml.pkom.itemalchemy.api;
 
 import ml.pkom.itemalchemy.EMCManager;
+import ml.pkom.itemalchemy.emcs.EMCDef;
 import ml.pkom.mcpitanlibarch.api.entity.Player;
 import ml.pkom.mcpitanlibarch.api.tag.TagKey;
 import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
@@ -50,4 +51,13 @@ public class EMCUtil {
         }
     }
 
+    public static void addDef(EMCDef def) {
+        EMCManager.addDef(def);
+    }
+
+    public static void addDef(EMCDef... defs) {
+        for (EMCDef def : defs) {
+            EMCManager.addDef(def);
+        }
+    }
 }
