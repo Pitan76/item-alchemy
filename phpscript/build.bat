@@ -10,7 +10,7 @@ copy /y ".\build\publications\mavenJava\pom-default.xml" ".\build\publications\m
 
 timeout /T 1
 
-cd ".\php"
+cd ".\phpscript"
 
 start upload_maven.bat
 pause
