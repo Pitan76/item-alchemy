@@ -3,6 +3,8 @@ package ml.pkom.itemalchemy.emcs;
 import ml.pkom.itemalchemy.EMCManager;
 import ml.pkom.mcpitanlibarch.api.tag.TagKey;
 import net.minecraft.item.Item;
+import net.minecraft.util.Identifier;
+import net.pitan76.mcpitanlib.api.util.ItemUtil;
 
 public abstract class EMCDef {
     public abstract void addAll();
@@ -15,7 +17,17 @@ public abstract class EMCDef {
         EMCManager.add(item, emc);
     }
 
-    public static void add2(TagKey<Item> tagKey, long emc) {
+    public static void addByTag(TagKey<Item> tagKey, long emc) {
         EMCManager.add2(tagKey, emc);
+    }
+
+    public static void addByTag(Identifier identifier, long emc) {
+        ItemUtil.getItems(identifier).forEach(item -> {
+            add(item, emc);
+        });
+    }
+
+    public static void addByTag(String id, long emc) {
+        addByTag(new Identifier(id), emc);
     }
 }
