@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "ml.pkom.itemalchemy.FabricMain"
+      "net.pitan76.itemalchemy.FabricMain"
     ]
   },
   "mixins": [

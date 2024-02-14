@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "ml.pkom.itemalchemy.mixins",
+  "package": "net.pitan76.itemalchemy.mixins",
   "mixins": [
     "ItemMixin",
     "PlayerEntityMixin"

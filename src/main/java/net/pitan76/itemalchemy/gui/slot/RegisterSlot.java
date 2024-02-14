@@ -1,0 +1,25 @@
+package net.pitan76.itemalchemy.gui.slot;
+
+import net.pitan76.itemalchemy.EMCManager;
+import net.pitan76.itemalchemy.gui.inventory.RegisterInventory;
+import net.pitan76.itemalchemy.item.ILearnableItem;
+import ml.pkom.mcpitanlibarch.api.entity.Player;
+import ml.pkom.mcpitanlibarch.api.gui.slot.CompatibleSlot;
+import net.minecraft.item.ItemStack;
+
+public class RegisterSlot extends CompatibleSlot {
+
+    public RegisterInventory inventory;
+    public Player player;
+
+    public RegisterSlot(RegisterInventory inventory, int index, int x, int y) {
+        super(inventory, index, x, y);
+        this.inventory = inventory;
+        this.player = inventory.player;
+    }
+
+    @Override
+    public boolean canInsert(ItemStack stack) {
+        return EMCManager.get(stack) != 0 || stack.getItem() instanceof ILearnableItem;
+    }
+}
