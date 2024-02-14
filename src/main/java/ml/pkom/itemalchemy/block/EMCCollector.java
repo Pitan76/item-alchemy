@@ -5,8 +5,8 @@ import ml.pkom.mcpitanlibarch.api.block.CompatibleBlockSettings;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlockEntityProvider;
 import ml.pkom.mcpitanlibarch.api.event.block.BlockUseEvent;
+import ml.pkom.mcpitanlibarch.api.event.block.StateReplacedEvent;
 import ml.pkom.mcpitanlibarch.api.event.block.TileCreateEvent;
-import ml.pkom.mcpitanlibarch.api.util.TextUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -26,6 +26,7 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvider {
@@ -48,10 +49,12 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
     }
 
     @Override
-    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-        if (state.isOf(newState.getBlock())) {
+    public void onStateReplaced(StateReplacedEvent e) {
+        World world = e.world;
+        BlockPos pos = e.pos;
+        if (e.state.isOf(e.newState.getBlock()))
             return;
-        }
+
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof Inventory) {
             Inventory inventory = (Inventory) blockEntity;
@@ -59,7 +62,7 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
             ItemScatterer.spawn(world, pos, inventory);
             world.updateComparators(pos, this);
         }
-        super.onStateReplaced(state, world, pos, newState, moved);
+        super.onStateReplaced(e);
     }
 
     @Override
