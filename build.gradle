@@ -30,7 +30,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     include "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation "ml.pkom:mcpitanlibarch-fabric${rootProject.mcpitanlib_version}"
+    modImplementation "net.pitan76:mcpitanlib-fabric${rootProject.mcpitanlib_version}"
 }
 
 processResources {
