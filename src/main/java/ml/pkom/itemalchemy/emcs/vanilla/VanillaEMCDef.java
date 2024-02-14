@@ -1,10 +1,8 @@
 package ml.pkom.itemalchemy.emcs.vanilla;
 
 import ml.pkom.itemalchemy.emcs.EMCDef;
-import ml.pkom.mcpitanlibarch.api.tag.TagKey;
-import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import net.pitan76.mcpitanlib.api.util.ItemUtil;
 
 public class VanillaEMCDef extends EMCDef {
     public void addAll() {
@@ -44,10 +42,9 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.SMOOTH_BASALT, 1);
         add(Items.END_STONE, 1);
         add(Items.MAGMA_BLOCK, 128);
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("leaves")), 1);
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("sand")), 1);
-
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("buttons")), 2);
+        ItemUtil.getItems("leaves").forEach((item) -> add(item, 1));
+        ItemUtil.getItems("sand").forEach((item) -> add(item, 1));
+        ItemUtil.getItems("buttons").forEach((item) -> add(item, 2));
         add(Items.STONE_PRESSURE_PLATE, 2);
         add(Items.GRAVEL, 4);
         add(Items.NETHER_BRICK, 4);
@@ -58,8 +55,8 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.ROOTED_DIRT, 5);
         add(Items.LEVER, 5);
         add(Items.CACTUS, 8);
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("planks")), 8);
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("wooden_slabs")), 8);
+        ItemUtil.getItems("planks").forEach((item) -> add(item, 8));
+        ItemUtil.getItems("wooden_slabs").forEach((item) -> add(item, 8));
         add(Items.BLACK_DYE, 16);
         add(Items.WHITE_DYE, 16);
         add(Items.RED_DYE, 16);
@@ -144,37 +141,38 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.TUBE_CORAL_FAN, 16);
 
         add(Items.COBWEB, 12);
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("fences")), 32);
+        ItemUtil.getItems("fences").forEach((item) -> add(item, 32));
         add(Items.FISHING_ROD, 12);
         add(Items.STRING, 12);
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("wooden_stairs")), 12);
+
+        ItemUtil.getItems("wooden_stairs").forEach((item) -> add(item, 12));
 
         add(Items.LADDER, 14);
         add(Items.ARROW, 14);
 
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("flowers")), 16);
+        ItemUtil.getItems("flowers").forEach((item) -> add(item, 16));
         add(Items.ROSE_BUSH, 16);
         add(Items.LILY_PAD, 16);
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("wooden_pressure_plates")), 16);
+        ItemUtil.getItems("wooden_pressure_plates").forEach((item) -> add(item, 16));
         add(Items.BEETROOT_SEEDS, 16);
         add(Items.MELON_SEEDS, 16);
         add(Items.PUMPKIN_SEEDS, 36);
         add(Items.WHEAT_SEEDS, 16);
         add(Items.WHEAT, 24);
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("trapdoors")), 24);
+        ItemUtil.getItems("trapdoors").forEach((item) -> add(item, 24));
         add(Items.NETHER_WART, 24);
         add(Items.ROTTEN_FLESH, 24);
         add(Items.SLIME_BALL, 32);
 
         add(Items.CHARCOAL, 32);
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("saplings")), 32);
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("logs")), 32);
+        ItemUtil.getItems("saplings").forEach((item) -> add(item, 32));
+        ItemUtil.getItems("logs").forEach((item) -> add(item, 32));
         add(Items.PAPER, 32);
         add(Items.SUGAR, 15);
         add(Items.BONE, 144);
         add(Items.EGG, 32);
 
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("wool")), 48);
+        ItemUtil.getItems("wool").forEach((item) -> add(item, 48));
         add(Items.BONE_MEAL, 48);
         add(Items.FEATHER, 48);
 
@@ -183,7 +181,7 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.REDSTONE, 64);
         add(Items.PORKCHOP, 64);
         add(Items.BEEF, 64);
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("fishes")), 64);
+        ItemUtil.getItems("fishes").forEach((item) -> add(item, 64));
         add(Items.CHICKEN, 64);
         add(Items.MUTTON, 64);
         add(Items.LEATHER, 64);
@@ -277,7 +275,7 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.GOLD_NUGGET, 227);
         add(Items.ENDER_EYE, 1792);
         add(Items.BLAZE_ROD, 1536);
-        add2((TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier("music_discs")), 2048);
+        ItemUtil.getItems("music_discs").forEach((item) -> add(item, 2048));
         add(Items.CRYING_OBSIDIAN, 768);
         add(Items.GHAST_TEAR, 4096);
         add(Items.PHANTOM_MEMBRANE, 192);
