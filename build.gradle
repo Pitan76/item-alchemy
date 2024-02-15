@@ -28,10 +28,8 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    include "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation "net.pitan76:mcpitanlib-fabric${rootProject.mcpitanlib_version}"
-
     include "net.pitan76:mcpitanlib_checker-fabric:${rootProject.mcpitanlib_checker_version}"
 }
 
@@ -56,7 +54,7 @@ tasks.withType(JavaCompile).configureEach {
     options.release = 8
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
     options.release = 8
     sourceCompatibility = JavaVersion.VERSION_1_8
