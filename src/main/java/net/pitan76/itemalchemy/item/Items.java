@@ -2,9 +2,9 @@ package net.pitan76.itemalchemy.item;
 
 import net.pitan76.itemalchemy.util.ChargeItemSettings;
 import net.pitan76.itemalchemy.block.Blocks;
-import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;
-import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
-import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
+import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.item.ExtendItem;
+import net.pitan76.mcpitanlib.api.util.ItemUtil;
 import net.minecraft.item.Item;
 import net.minecraft.util.Rarity;
 import net.pitan76.mcpitanlib.api.registry.result.RegistryResult;

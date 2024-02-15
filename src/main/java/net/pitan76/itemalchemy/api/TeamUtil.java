@@ -3,7 +3,7 @@ package net.pitan76.itemalchemy.api;
 import net.pitan76.itemalchemy.data.PlayerState;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
-import ml.pkom.mcpitanlibarch.api.entity.Player;
+import net.pitan76.mcpitanlib.api.entity.Player;
 import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,7 +1,7 @@
 package net.pitan76.itemalchemy.gui.slot;
 
 import net.pitan76.itemalchemy.EMCManager;
-import ml.pkom.mcpitanlibarch.api.gui.slot.CompatibleSlot;
+import net.pitan76.mcpitanlib.api.gui.slot.CompatibleSlot;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;

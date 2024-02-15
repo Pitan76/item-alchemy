@@ -2,10 +2,10 @@ package net.pitan76.itemalchemy.block;
 
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
-import ml.pkom.mcpitanlibarch.api.block.CompatibleBlockSettings;
-import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
-import ml.pkom.mcpitanlibarch.api.entity.Player;
-import ml.pkom.mcpitanlibarch.api.event.block.BlockUseEvent;
+import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
+import net.pitan76.mcpitanlib.api.block.ExtendBlock;
+import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.minecraft.block.*;
 import net.minecraft.block.Blocks;
 import net.minecraft.server.network.ServerPlayerEntity;

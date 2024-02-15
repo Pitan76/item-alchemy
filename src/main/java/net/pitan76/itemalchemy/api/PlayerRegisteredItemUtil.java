@@ -4,7 +4,7 @@ import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.data.ModState;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
-import ml.pkom.mcpitanlibarch.api.entity.Player;
+import net.pitan76.mcpitanlib.api.entity.Player;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;

@@ -1,7 +1,7 @@
 package net.pitan76.itemalchemy.item;
 
 import java.util.List;
-import ml.pkom.mcpitanlibarch.api.entity.Player;
+import net.pitan76.mcpitanlib.api.entity.Player;
 
 /**
  * Item that doesn't have EMC, but can be learned in the Alchemy Table.

@@ -5,11 +5,11 @@ import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.block.EMCCollector;
 import net.pitan76.itemalchemy.block.EMCRepeater;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
-import ml.pkom.mcpitanlibarch.api.event.block.TileCreateEvent;
-import ml.pkom.mcpitanlibarch.api.gui.inventory.IInventory;
-import ml.pkom.mcpitanlibarch.api.network.PacketByteUtil;
-import ml.pkom.mcpitanlibarch.api.network.ServerNetworking;
-import ml.pkom.mcpitanlibarch.api.tile.ExtendBlockEntity;
+import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
+import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
+import net.pitan76.mcpitanlib.api.network.ServerNetworking;
+import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -37,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ml.pkom.mcpitanlibarch.api.util.InventoryUtil.canMergeItems;
+import static net.pitan76.mcpitanlib.api.util.InventoryUtil.canMergeItems;
 
 public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTicker<EMCCondenserTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
     public long storedEMC = 0;

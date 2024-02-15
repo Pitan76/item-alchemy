@@ -31,6 +31,8 @@ dependencies {
     include "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation "net.pitan76:mcpitanlib-fabric${rootProject.mcpitanlib_version}"
+
+    include "net.pitan76:mcpitanlib_checker-fabric:${rootProject.mcpitanlib_checker_version}"
 }
 
 processResources {
@@ -103,15 +105,14 @@ curseforge {
             id = '697926'
             changelog = "Fix bugs\nMCPitanLib version: " + mcpitanlib_version.split(":")[1]
             releaseType = 'release'
+            addGameVersion '1.18.1'
             addGameVersion '1.18.2'
             addGameVersion '1.19'
             addGameVersion '1.19.1'
             addGameVersion '1.19.2'
-            addGameVersion '1.19.3'
-            addGameVersion '1.19.4'
             addGameVersion '1.20'
             addGameVersion '1.20.1'
-            addGameVersion '1.20.2'
+            addGameVersion '1.20.4'
             addGameVersion "Fabric"
             relations {
                 requiredDependency 'fabric-api'
@@ -134,7 +135,7 @@ modrinth {
         projectId = 'cfQx2fbQ'
         versionNumber = project.mod_version
         uploadFile = remapJar
-        gameVersions = ['1.18.2', '1.19', '1.19.1', '1.19.2', '1.19.3', '1.19.4', '1.20', '1.20.1', '1.20.2']
+        gameVersions = ['1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.20', '1.20.1', '1.20.4']
         versionType = 'release'
         loaders = ['fabric']
         changelog = "Fix bugs\nMCPitanLib version: " + mcpitanlib_version.split(":")[1]

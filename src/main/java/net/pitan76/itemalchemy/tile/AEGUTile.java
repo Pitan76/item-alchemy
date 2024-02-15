@@ -1,8 +1,8 @@
 package net.pitan76.itemalchemy.tile;
 
 import net.pitan76.itemalchemy.block.AEGUBlock;
-import ml.pkom.mcpitanlibarch.api.event.block.TileCreateEvent;
-import ml.pkom.mcpitanlibarch.api.tile.ExtendBlockEntity;
+import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;

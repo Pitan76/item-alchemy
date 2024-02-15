@@ -1,6 +1,6 @@
 package net.pitan76.itemalchemy.tile;
 
-import ml.pkom.mcpitanlibarch.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;

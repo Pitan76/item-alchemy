@@ -2,10 +2,10 @@ package net.pitan76.itemalchemy.gui.screen;
 
 import net.pitan76.itemalchemy.gui.slot.TargetSlot;
 import net.pitan76.itemalchemy.tile.EMCCollectorTile;
-import ml.pkom.mcpitanlibarch.api.entity.Player;
-import ml.pkom.mcpitanlibarch.api.gui.ExtendedScreenHandler;
-import ml.pkom.mcpitanlibarch.api.network.PacketByteUtil;
-import ml.pkom.mcpitanlibarch.api.util.SlotUtil;
+import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
+import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
+import net.pitan76.mcpitanlib.api.util.SlotUtil;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;

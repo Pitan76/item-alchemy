@@ -1,10 +1,10 @@
 package net.pitan76.itemalchemy.tile;
 
 import net.pitan76.itemalchemy.gui.screen.AlchemyChestScreenHandler;
-import ml.pkom.mcpitanlibarch.api.event.block.TileCreateEvent;
-import ml.pkom.mcpitanlibarch.api.gui.inventory.IInventory;
-import ml.pkom.mcpitanlibarch.api.tile.ExtendBlockEntity;
-import ml.pkom.mcpitanlibarch.api.util.TextUtil;
+import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
+import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
+import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;

@@ -1,7 +1,7 @@
 package net.pitan76.itemalchemy.gui;
 
 import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
-import ml.pkom.mcpitanlibarch.api.util.TextUtil;
+import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.NamedScreenHandlerFactory;

@@ -2,9 +2,9 @@ package net.pitan76.itemalchemy.api;
 
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.emcs.EMCDef;
-import ml.pkom.mcpitanlibarch.api.entity.Player;
-import ml.pkom.mcpitanlibarch.api.tag.TagKey;
-import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
+import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.tag.TagKey;
+import net.pitan76.mcpitanlib.api.util.ItemUtil;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 
