@@ -20,6 +20,7 @@ import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.ExtendItem;
 import net.pitan76.mcpitanlib.api.item.FixedRecipeRemainderItem;
 import net.pitan76.mcpitanlib.api.util.BlockUtil;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.core.Dummy;
 import org.jetbrains.annotations.Nullable;
 
@@ -140,24 +141,19 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
             BlockState targetBlockState = world.getBlockState(targetPos);
             Player player = event.player;
 
-            if(!isExchange(targetBlockState.getBlock())) {
+            if (!isExchange(targetBlockState.getBlock()))
                 return ActionResult.SUCCESS;
-            }
 
             List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, targetPos, ItemUtils.getCharge(event.stack), true, true);
 
             Block replaceBlock = getExchangeBlock(targetBlockState.getBlock(), player.getPlayerEntity().isSneaking());
 
-            if(replaceBlock == null) {
+            if (replaceBlock == null)
                 return ActionResult.SUCCESS;
-            }
 
-            for (BlockPos pos : blocks) {
-                exchangeBlock(world, pos, replaceBlock.getDefaultState(), world.getBlockState(pos));
-            }
+            blocks.forEach(pos -> exchangeBlock(world, pos, replaceBlock.getDefaultState(), world.getBlockState(pos)));
 
-            world.playSound(null, targetPos, Sounds.EXCHANGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 1f);
-
+            WorldUtil.playSound(world, null, targetPos, Sounds.EXCHANGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 1f);
             return ActionResult.SUCCESS;
         }
 
