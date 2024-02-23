@@ -190,7 +190,6 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
             }
         }
         return isInserted;
-
     }
 
     public ItemStack getTargetStack() {

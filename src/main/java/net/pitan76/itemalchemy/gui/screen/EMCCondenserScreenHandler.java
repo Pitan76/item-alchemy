@@ -134,11 +134,11 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
             ItemStack oldStack = getCursorStack().copy();
 
             // もともとスロットが空のとき、カーソルのアイテムも消えてしまうのでここで適当にセットしておく。
-            setStackInSlot(slotIndex, getRevision(), new ItemStack(Items.STONE));
+            callSetStackInSlot(slotIndex, callGetRevision(), new ItemStack(Items.STONE));
 
             super.overrideOnSlotClick(slotIndex, button, actionType, player);
             if (!oldStack.isEmpty()) {
-                setCursorStack(oldStack);
+                callSetCursorStack(oldStack);
             }
             return;
         }
