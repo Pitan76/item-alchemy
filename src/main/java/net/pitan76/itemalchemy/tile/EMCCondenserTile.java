@@ -82,11 +82,6 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
         this(Tiles.EMC_CONDENSER.getOrNull(), event);
     }
 
-    @Nullable
-    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-        return new EMCCondenserScreenHandler(syncId, inv, this, this);
-    }
-
     @Override
     public void tick(World world, BlockPos pos, BlockState state, EMCCondenserTile blockEntity) {
         if (world.isClient) return;
@@ -224,6 +219,11 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction dir) {
         return dir == Direction.DOWN;
+    }
+
+    @Nullable
+    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
+        return new EMCCondenserScreenHandler(syncId, inv, this, this);
     }
 
     @Override
