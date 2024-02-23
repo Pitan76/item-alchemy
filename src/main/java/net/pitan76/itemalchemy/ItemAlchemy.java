@@ -49,8 +49,6 @@ public class ItemAlchemy {
 
     public static CompatRegistry registry = CompatRegistry.createRegistry(MOD_ID);
 
-    public static ItemGroup ITEM_ALCHEMY = CreativeTabBuilder.create(id("item_alchemy")).setIcon(() -> new ItemStack(Items.PHILOSOPHER_STONE.getOrNull(), 1)).build();
-
     public static void init() {
         RecipeManagerRegistry.register(AlchemicalRecipeManager::new);
         ItemGroups.init();
