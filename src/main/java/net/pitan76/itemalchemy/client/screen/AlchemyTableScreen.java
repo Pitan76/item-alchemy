@@ -16,10 +16,7 @@ import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.api.PlayerRegisteredItemUtil;
 import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import net.pitan76.mcpitanlib.api.client.SimpleHandledScreen;
-import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawBackgroundArgs;
-import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawForegroundArgs;
-import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawMouseoverTooltipArgs;
-import net.pitan76.mcpitanlib.api.client.render.handledscreen.RenderArgs;
+import net.pitan76.mcpitanlib.api.client.render.handledscreen.*;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.network.ClientNetworking;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
@@ -41,19 +38,20 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
         setBackgroundHeight(222);
     }
 
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    @Override
+    public boolean keyPressed(KeyEventArgs args) {
         if (searchBox.isFocused()) {
-            if (keyCode != 256) {
-                return searchBox.keyPressed(keyCode, scanCode, modifiers);
+            if (args.keyCode != 256) {
+                return searchBox.keyPressed(args.keyCode, args.scanCode, args.modifiers);
             }
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(args);
     }
 
     @Override
-    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+    public boolean keyReleased(KeyEventArgs args) {
         if (searchBox.isFocused()) {
-            if (keyCode != 256) {
+            if (args.keyCode != 256) {
                 NbtCompound translations = new NbtCompound();
 
                 List<Item> items = PlayerRegisteredItemUtil.getItems(new Player(playerInventory.player));
@@ -80,7 +78,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
                 screenHandler.sortBySearch();
             }
         }
-        return super.keyReleased(keyCode, scanCode, modifiers);
+        return super.keyReleased(args);
     }
 
     public void removed() {
