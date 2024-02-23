@@ -47,7 +47,7 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
     public int coolDown = 0; // tick
 
     public int getMaxCoolDown() {
-        return 1 * 2; // tick
+        return 2; // tick
     }
 
     public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1 + 91, ItemStack.EMPTY);
