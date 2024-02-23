@@ -1,10 +1,5 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.pitan76.itemalchemy.gui.screen.AlchemyChestScreenHandler;
-import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
-import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
-import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
-import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +15,11 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
+import net.pitan76.itemalchemy.gui.screen.AlchemyChestScreenHandler;
+import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
+import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
+import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class AlchemyChestTile extends ExtendBlockEntity implements SidedInventory, IInventory, NamedScreenHandlerFactory {

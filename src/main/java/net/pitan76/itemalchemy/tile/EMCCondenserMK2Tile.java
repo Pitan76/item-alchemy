@@ -1,10 +1,10 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
+import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 
 public class EMCCondenserMK2Tile extends EMCCondenserTile {
     public EMCCondenserMK2Tile(BlockEntityType<?> type, TileCreateEvent event) {

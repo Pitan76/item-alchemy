@@ -1,7 +1,7 @@
 package net.pitan76.itemalchemy.gui.slot;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.data.ModState;
 import net.pitan76.itemalchemy.data.ServerState;
@@ -10,10 +10,10 @@ import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import net.pitan76.itemalchemy.item.ILearnableItem;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.slot.CompatibleSlot;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class RemoveSlot extends CompatibleSlot {

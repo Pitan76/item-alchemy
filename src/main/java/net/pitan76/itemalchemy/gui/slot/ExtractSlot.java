@@ -1,11 +1,11 @@
 package net.pitan76.itemalchemy.gui.slot;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.gui.inventory.ExtractInventory;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.slot.CompatibleSlot;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 
 public class ExtractSlot extends CompatibleSlot {
 

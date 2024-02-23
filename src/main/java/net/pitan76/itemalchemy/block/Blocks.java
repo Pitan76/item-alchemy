@@ -1,11 +1,11 @@
 package net.pitan76.itemalchemy.block;
 
+import net.minecraft.block.Block;
+import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.CompatibleMaterial;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
-import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.mcpitanlib.api.registry.result.RegistryResult;
-import net.minecraft.block.Block;
 
 public class Blocks {
 

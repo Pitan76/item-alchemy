@@ -1,11 +1,11 @@
 package net.pitan76.itemalchemy.mixins;
 
-import net.pitan76.itemalchemy.util.ItemCharge;
-import net.pitan76.itemalchemy.util.ItemUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.pitan76.itemalchemy.util.ItemCharge;
+import net.pitan76.itemalchemy.util.ItemUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

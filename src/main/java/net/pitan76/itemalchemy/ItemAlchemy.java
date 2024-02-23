@@ -1,5 +1,9 @@
 package net.pitan76.itemalchemy;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.Identifier;
 import net.pitan76.itemalchemy.api.EMCUtil;
 import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.command.ItemAlchemyCommand;
@@ -19,15 +23,9 @@ import net.pitan76.mcpitanlib.api.command.CommandRegistry;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.v0.EventRegistry;
 import net.pitan76.mcpitanlib.api.event.v0.event.ItemStackActionEvent;
-import net.pitan76.mcpitanlib.api.item.CreativeTabBuilder;
+import net.pitan76.mcpitanlib.api.event.v1.RecipeManagerRegistry;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.ServerNetworking;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.Identifier;
-import net.pitan76.mcpitanlib.api.event.v1.RecipeManagerRegistry;
 import net.pitan76.mcpitanlib.api.registry.CompatRegistry;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

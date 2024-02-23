@@ -1,9 +1,9 @@
 package net.pitan76.itemalchemy.gui.screen;
 
+import net.minecraft.screen.ScreenHandlerType;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandlerTypeBuilder;
 import net.pitan76.mcpitanlib.api.gui.SimpleScreenHandlerTypeBuilder;
-import net.minecraft.screen.ScreenHandlerType;
 
 import static net.pitan76.itemalchemy.ItemAlchemy.registry;
 

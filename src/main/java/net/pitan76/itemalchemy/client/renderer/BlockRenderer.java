@@ -1,8 +1,5 @@
 package net.pitan76.itemalchemy.client.renderer;
 
-import net.pitan76.itemalchemy.item.PhilosopherStone;
-import net.pitan76.itemalchemy.util.ItemUtils;
-import net.pitan76.itemalchemy.util.WorldUtils;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.block.BlockState;
@@ -19,6 +16,9 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
+import net.pitan76.itemalchemy.item.PhilosopherStone;
+import net.pitan76.itemalchemy.util.ItemUtils;
+import net.pitan76.itemalchemy.util.WorldUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;

@@ -1,19 +1,19 @@
 package net.pitan76.itemalchemy.block;
 
-import net.pitan76.itemalchemy.EMCManager;
-import net.pitan76.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
-import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
-import net.pitan76.mcpitanlib.api.block.ExtendBlock;
-import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
-import net.minecraft.block.*;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
+import net.pitan76.itemalchemy.EMCManager;
+import net.pitan76.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
+import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
+import net.pitan76.mcpitanlib.api.block.ExtendBlock;
+import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 
 public class AlchemyTable extends ExtendBlock {
     public AlchemyTable(AbstractBlock.Settings settings) {

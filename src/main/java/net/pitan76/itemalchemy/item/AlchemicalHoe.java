@@ -1,11 +1,11 @@
 package net.pitan76.itemalchemy.item;
 
-import net.pitan76.itemalchemy.util.ItemCharge;
-import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
-import net.pitan76.mcpitanlib.api.item.ExtendItemProvider;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
+import net.pitan76.itemalchemy.util.ItemCharge;
+import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.item.ExtendItemProvider;
 
 public class AlchemicalHoe extends HoeItem implements ExtendItemProvider, ItemCharge {
     public AlchemicalHoe(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, CompatibleItemSettings settings) {

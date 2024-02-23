@@ -1,5 +1,12 @@
 package net.pitan76.itemalchemy;
 
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.client.renderer.BlockRenderer;
 import net.pitan76.itemalchemy.client.screen.AlchemyChestScreen;
 import net.pitan76.itemalchemy.client.screen.AlchemyTableScreen;
@@ -12,17 +19,13 @@ import net.pitan76.mcpitanlib.api.client.registry.ArchRegistryClient;
 import net.pitan76.mcpitanlib.api.client.registry.KeybindingRegistry;
 import net.pitan76.mcpitanlib.api.network.ClientNetworking;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.text.Text;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class ItemAlchemyClient {
     public static NbtCompound itemAlchemyNbt;

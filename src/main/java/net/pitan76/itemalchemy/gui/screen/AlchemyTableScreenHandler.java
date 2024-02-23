@@ -1,16 +1,5 @@
 package net.pitan76.itemalchemy.gui.screen;
 
-import net.pitan76.itemalchemy.EMCManager;
-import net.pitan76.itemalchemy.api.PlayerRegisteredItemUtil;
-import net.pitan76.itemalchemy.data.ModState;
-import net.pitan76.itemalchemy.gui.inventory.ExtractInventory;
-import net.pitan76.itemalchemy.gui.inventory.RegisterInventory;
-import net.pitan76.itemalchemy.gui.slot.ExtractSlot;
-import net.pitan76.itemalchemy.gui.slot.RegisterSlot;
-import net.pitan76.itemalchemy.gui.slot.RemoveSlot;
-import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.gui.SimpleScreenHandler;
-import net.pitan76.mcpitanlib.api.util.SlotUtil;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -21,7 +10,18 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import net.pitan76.itemalchemy.EMCManager;
+import net.pitan76.itemalchemy.api.PlayerRegisteredItemUtil;
+import net.pitan76.itemalchemy.data.ModState;
+import net.pitan76.itemalchemy.gui.inventory.ExtractInventory;
+import net.pitan76.itemalchemy.gui.inventory.RegisterInventory;
+import net.pitan76.itemalchemy.gui.slot.ExtractSlot;
+import net.pitan76.itemalchemy.gui.slot.RegisterSlot;
+import net.pitan76.itemalchemy.gui.slot.RemoveSlot;
+import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.gui.SimpleScreenHandler;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
+import net.pitan76.mcpitanlib.api.util.SlotUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 
 import java.util.ArrayList;

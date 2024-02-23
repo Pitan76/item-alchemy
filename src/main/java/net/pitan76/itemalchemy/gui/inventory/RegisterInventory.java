@@ -1,7 +1,7 @@
 package net.pitan76.itemalchemy.gui.inventory;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.data.PlayerState;
 import net.pitan76.itemalchemy.data.ServerState;
@@ -10,8 +10,9 @@ import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import net.pitan76.itemalchemy.item.ILearnableItem;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegisterInventory extends SimpleInventory {
     public Player player;

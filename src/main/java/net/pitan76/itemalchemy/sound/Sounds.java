@@ -1,8 +1,8 @@
 package net.pitan76.itemalchemy.sound;
 
+import net.minecraft.sound.SoundEvent;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.mcpitanlib.api.registry.result.RegistryResult;
-import net.minecraft.sound.SoundEvent;
 
 public class Sounds {
     public static final RegistryResult<SoundEvent> EXCHANGE_SOUND = register("exchange");

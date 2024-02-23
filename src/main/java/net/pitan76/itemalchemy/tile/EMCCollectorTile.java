@@ -1,15 +1,5 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.pitan76.itemalchemy.ItemAlchemy;
-import net.pitan76.itemalchemy.item.Items;
-import net.pitan76.itemalchemy.block.EMCCollector;
-import net.pitan76.itemalchemy.block.EMCRepeater;
-import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
-import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
-import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
-import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
-import net.pitan76.mcpitanlib.api.network.ServerNetworking;
-import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -31,6 +21,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.pitan76.itemalchemy.ItemAlchemy;
+import net.pitan76.itemalchemy.block.EMCCollector;
+import net.pitan76.itemalchemy.block.EMCRepeater;
+import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
+import net.pitan76.itemalchemy.item.Items;
+import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
+import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
+import net.pitan76.mcpitanlib.api.network.ServerNetworking;
+import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
 

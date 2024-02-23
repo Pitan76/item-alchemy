@@ -1,13 +1,13 @@
 package net.pitan76.itemalchemy.gui.screen;
 
-import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.gui.SimpleScreenHandler;
-import net.pitan76.mcpitanlib.api.util.SlotUtil;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
+import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.gui.SimpleScreenHandler;
+import net.pitan76.mcpitanlib.api.util.SlotUtil;
 
 public class AlchemyChestScreenHandler extends SimpleScreenHandler {
     public Inventory inventory;

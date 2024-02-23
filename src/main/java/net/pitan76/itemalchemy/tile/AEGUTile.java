@@ -1,14 +1,14 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.pitan76.itemalchemy.block.AEGUBlock;
-import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
-import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.pitan76.itemalchemy.block.AEGUBlock;
+import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
 
 public class AEGUTile extends ExtendBlockEntity implements BlockEntityTicker<AEGUTile> {
     public int coolDown = 0; // tick

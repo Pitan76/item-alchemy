@@ -1,11 +1,11 @@
 package net.pitan76.itemalchemy.mixins;
 
-import net.pitan76.itemalchemy.data.ServerState;
-import net.pitan76.itemalchemy.data.TeamState;
-import net.pitan76.mcpitanlib.api.entity.Player;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
+import net.pitan76.itemalchemy.data.ServerState;
+import net.pitan76.itemalchemy.data.TeamState;
+import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -1,14 +1,14 @@
 package net.pitan76.itemalchemy.item;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.TypedActionResult;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseEvent;
 import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.ExtendItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.TypedActionResult;
 
 public class AlchemyPad extends ExtendItem {
 

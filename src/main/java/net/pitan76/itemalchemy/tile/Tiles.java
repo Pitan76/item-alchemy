@@ -1,12 +1,12 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.pitan76.itemalchemy.block.Blocks;
-import net.pitan76.itemalchemy.ItemAlchemy;
-import net.pitan76.mcpitanlib.api.registry.result.RegistryResult;
-import net.pitan76.mcpitanlib.api.tile.BlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.pitan76.itemalchemy.ItemAlchemy;
+import net.pitan76.itemalchemy.block.Blocks;
+import net.pitan76.mcpitanlib.api.registry.result.RegistryResult;
+import net.pitan76.mcpitanlib.api.tile.BlockEntityTypeBuilder;
 
 public class Tiles {
     public static RegistryResult<BlockEntityType<?>> EMC_COLLECTOR;

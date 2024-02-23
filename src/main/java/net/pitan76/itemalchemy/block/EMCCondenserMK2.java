@@ -1,8 +1,8 @@
 package net.pitan76.itemalchemy.block;
 
+import net.minecraft.block.entity.BlockEntity;
 import net.pitan76.itemalchemy.tile.EMCCondenserMK2Tile;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
-import net.minecraft.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCCondenserMK2 extends EMCCondenser {

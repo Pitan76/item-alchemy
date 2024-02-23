@@ -1,9 +1,9 @@
 package net.pitan76.itemalchemy.emcs;
 
-import net.pitan76.itemalchemy.EMCManager;
-import net.pitan76.mcpitanlib.api.tag.TagKey;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
+import net.pitan76.itemalchemy.EMCManager;
+import net.pitan76.mcpitanlib.api.tag.TagKey;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 
 public abstract class EMCDef {
