@@ -1,8 +1,8 @@
 package net.pitan76.itemalchemy.recipe;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.datafixer.fix.BlockEntitySignTextStrictJsonFix;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -41,6 +41,8 @@ public class AlchemicalRecipeManager {
         apply();
     }
 
+    private final Gson gson = new Gson();
+
     public void apply() {
 
         // load EMC
@@ -60,7 +62,7 @@ public class AlchemicalRecipeManager {
             try {
                 String json = IOUtils.toString(ResourceUtil.getInputStream(resource), StandardCharsets.UTF_8);
                 ResourceUtil.close(resource);
-                JsonArray jsonArray = BlockEntitySignTextStrictJsonFix.GSON.fromJson(json, JsonArray.class);
+                JsonArray jsonArray = gson.fromJson(json, JsonArray.class);
                 jsonArray.forEach((jsonElement) -> handle(jsonElement.getAsJsonObject()));
             } catch (Exception e) {
                 e.printStackTrace();
