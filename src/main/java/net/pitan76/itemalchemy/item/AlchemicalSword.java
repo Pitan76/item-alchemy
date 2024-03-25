@@ -1,14 +1,15 @@
 package net.pitan76.itemalchemy.item;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.ToolMaterial;
 import net.pitan76.itemalchemy.util.ItemCharge;
 import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.ExtendItemProvider;
-public class AlchemicalSword extends SwordItem implements ExtendItemProvider, ItemCharge {
-    public AlchemicalSword(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, CompatibleItemSettings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings.build());
+import net.pitan76.mcpitanlib.api.item.tool.CompatibleSwordItem;
+import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
+
+public class AlchemicalSword extends CompatibleSwordItem implements ExtendItemProvider, ItemCharge {
+    public AlchemicalSword(CompatibleToolMaterial toolMaterial, int attackDamage, float attackSpeed, CompatibleItemSettings settings) {
+        super(toolMaterial, attackDamage, attackSpeed, settings);
         /*
         AttackEntityEventRegistry.register((player, world, entity, hand, hitResult) -> {
             ItemStack stack = player.getStackInHand(hand);

@@ -1,9 +1,9 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
+import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
 
-public enum AlchemicalToolMaterials implements ToolMaterial {
+public enum AlchemicalToolMaterials implements CompatibleToolMaterial {
 
     DARK_MATTER(3, 0, 10.0F, 2.0F, 16, Ingredient.ofItems(Items.DARK_MATTER.getOrNull())),
     RED_MATTER(3, 0, 15.0F, 4.0F, 20, Ingredient.ofItems(Items.RED_MATTER.getOrNull()));
@@ -24,27 +24,27 @@ public enum AlchemicalToolMaterials implements ToolMaterial {
         this.repairIngredient = repairIngredient;
     }
 
-    public int getDurability() {
+    public int getCompatDurability() {
         return this.itemDurability;
     }
 
-    public float getMiningSpeedMultiplier() {
+    public float getCompatMiningSpeedMultiplier() {
         return this.miningSpeed;
     }
 
-    public float getAttackDamage() {
+    public float getCompatAttackDamage() {
         return this.attackDamage;
     }
 
-    public int getMiningLevel() {
+    public int getCompatMiningLevel() {
         return this.miningLevel;
     }
 
-    public int getEnchantability() {
+    public int getCompatEnchantability() {
         return this.enchantability;
     }
 
-    public Ingredient getRepairIngredient() {
+    public Ingredient getCompatRepairIngredient() {
         return this.repairIngredient;
     }
 }

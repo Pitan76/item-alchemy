@@ -1,12 +1,10 @@
 package net.pitan76.itemalchemy.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
@@ -16,6 +14,7 @@ import net.pitan76.itemalchemy.tile.EMCCondenserTile;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
+import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import org.jetbrains.annotations.Nullable;
@@ -35,9 +34,9 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(CONNECTED);
-        super.appendProperties(builder);
+    public void appendProperties(AppendPropertiesArgs args) {
+        args.addProperty(CONNECTED);
+        super.appendProperties(args);
     }
 
     public AEGUBlock(long emc) {

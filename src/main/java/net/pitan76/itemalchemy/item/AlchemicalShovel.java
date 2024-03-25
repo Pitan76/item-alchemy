@@ -6,10 +6,12 @@ import net.minecraft.item.ToolMaterial;
 import net.pitan76.itemalchemy.util.ItemCharge;
 import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.ExtendItemProvider;
+import net.pitan76.mcpitanlib.api.item.tool.CompatibleShovelItem;
+import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
 
-public class AlchemicalShovel extends ShovelItem implements ExtendItemProvider, ItemCharge {
-    public AlchemicalShovel(ToolMaterial toolMaterial, float attackDamage, float attackSpeed, CompatibleItemSettings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings.build());
+public class AlchemicalShovel extends CompatibleShovelItem implements ExtendItemProvider, ItemCharge {
+    public AlchemicalShovel(CompatibleToolMaterial toolMaterial, float attackDamage, float attackSpeed, CompatibleItemSettings settings) {
+        super(toolMaterial, attackDamage, attackSpeed, settings);
     }
 
     @Override

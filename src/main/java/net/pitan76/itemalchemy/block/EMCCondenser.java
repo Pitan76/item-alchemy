@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
@@ -10,7 +9,6 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
@@ -23,6 +21,7 @@ import net.pitan76.itemalchemy.tile.EMCCondenserTile;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
+import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
@@ -41,9 +40,9 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
-        super.appendProperties(builder);
+    public void appendProperties(AppendPropertiesArgs args) {
+        args.addProperty(FACING);
+        super.appendProperties(args);
     }
 
     @Override
