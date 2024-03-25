@@ -8,6 +8,7 @@ import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.ExtendItemProvider;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleShovelItem;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
+import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 
 public class AlchemicalShovel extends CompatibleShovelItem implements ExtendItemProvider, ItemCharge {
     public AlchemicalShovel(CompatibleToolMaterial toolMaterial, float attackDamage, float attackSpeed, CompatibleItemSettings settings) {
@@ -21,6 +22,6 @@ public class AlchemicalShovel extends CompatibleShovelItem implements ExtendItem
 
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
-        return stack.getSubNbt("itemalchemy") != null;
+        return CustomDataUtil.contains(stack, "itemalchemy");
     }
 }

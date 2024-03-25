@@ -20,6 +20,7 @@ import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.ExtendItem;
 import net.pitan76.mcpitanlib.api.item.FixedRecipeRemainderItem;
 import net.pitan76.mcpitanlib.api.util.BlockUtil;
+import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.core.Dummy;
 import org.jetbrains.annotations.Nullable;
@@ -212,6 +213,7 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
 
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
-        return stack.getSubNbt("itemalchemy") != null;
+        return CustomDataUtil.contains(stack, "itemalchemy");
+        //stack.getSubNbt("itemalchemy") != null;
     }
 }

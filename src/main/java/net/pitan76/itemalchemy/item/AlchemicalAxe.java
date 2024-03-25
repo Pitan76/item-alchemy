@@ -6,6 +6,7 @@ import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.ExtendItemProvider;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleAxeItem;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
+import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 
 public class AlchemicalAxe extends CompatibleAxeItem implements ExtendItemProvider, ItemCharge {
     public AlchemicalAxe(CompatibleToolMaterial toolMaterial, float attackDamage, float attackSpeed, CompatibleItemSettings settings) {
@@ -19,6 +20,6 @@ public class AlchemicalAxe extends CompatibleAxeItem implements ExtendItemProvid
 
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
-        return stack.getSubNbt("itemalchemy") != null;
+        return CustomDataUtil.contains(stack, "itemalchemy");
     }
 }

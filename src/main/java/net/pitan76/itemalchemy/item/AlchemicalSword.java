@@ -6,6 +6,7 @@ import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.ExtendItemProvider;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleSwordItem;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
+import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 
 public class AlchemicalSword extends CompatibleSwordItem implements ExtendItemProvider, ItemCharge {
     public AlchemicalSword(CompatibleToolMaterial toolMaterial, int attackDamage, float attackSpeed, CompatibleItemSettings settings) {
@@ -25,6 +26,6 @@ public class AlchemicalSword extends CompatibleSwordItem implements ExtendItemPr
 
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
-        return stack.getSubNbt("itemalchemy") != null;
+        return CustomDataUtil.contains(stack, "itemalchemy");
     }
 }
