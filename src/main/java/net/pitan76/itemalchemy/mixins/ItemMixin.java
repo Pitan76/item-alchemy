@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.util.ItemCharge;
 import net.pitan76.itemalchemy.util.ItemUtils;
+import net.pitan76.itemalchemy.util.VersionUtils;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,8 +20,16 @@ public class ItemMixin {
         if(world.isClient) return;
 
         if(stack.getItem() instanceof ItemCharge) {
-            if(CustomDataUtil.contains(stack, "itemalchemy")) {
-                ItemUtils.setCharge(stack, 0);
+            if(VersionUtils.isSupportedComponent()) {
+                if(!CustomDataUtil.contains(stack, "itemalchemy")) {
+                    ItemUtils.setCharge(stack, 0);
+                }
+            }
+            //下位互換性を確保
+            else {
+                if (stack.getSubNbt("itemalchemy") == null) {
+                    ItemUtils.setCharge(stack, 0);
+                }
             }
 
             int charge = ItemUtils.getCharge(stack);
