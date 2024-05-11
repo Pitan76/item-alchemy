@@ -58,6 +58,8 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
         addPlayerHotbarSlots(playerInventory, 48, 212);
         addTargetSlot(inventory, 0, 12, 6);
         addStorageSlots(inventory, 1, 12, 26, -1, 13, 7);
+
+        targetStack = ItemStack.EMPTY;
     }
 
     protected Slot addTargetSlot(Inventory inventory, int index, int x, int y) {
@@ -111,7 +113,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
 
             if (index < 36) {
                 // TargetSlot
-                if ((targetStack.isEmpty() || this.slots.get(36).getStack() == null) && EMCManager.get(originalStack.getItem()) != 0) {
+                if (targetStack.isEmpty() && EMCManager.get(originalStack.getItem()) != 0) {
                     targetStack = originalStack.copy();
                     targetStack.setCount(1);
 
@@ -149,6 +151,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
             ItemStack oldStack = getCursorStack().copy();
 
             if(EMCManager.get(oldStack.getItem()) == 0) {
+                setTargetStack(ItemStack.EMPTY);
                 this.slots.get(36).setStack(ItemStack.EMPTY);
                 callSetCursorStack(oldStack);
 

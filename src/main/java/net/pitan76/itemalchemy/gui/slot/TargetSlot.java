@@ -4,6 +4,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.pitan76.itemalchemy.EMCManager;
+import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.mcpitanlib.api.gui.slot.CompatibleSlot;
 
 public class TargetSlot extends CompatibleSlot {
@@ -17,6 +18,12 @@ public class TargetSlot extends CompatibleSlot {
 
     @Override
     public boolean canInsert(ItemStack stack) {
+        if(screenHandler instanceof EMCCondenserScreenHandler) {
+            EMCCondenserScreenHandler handler = (EMCCondenserScreenHandler) screenHandler;
+
+            return EMCManager.get(stack) != 0 && !stack.isEmpty() && handler.targetStack.isEmpty();
+        }
+
         return EMCManager.get(stack) != 0 && !stack.isEmpty();
     }
 
