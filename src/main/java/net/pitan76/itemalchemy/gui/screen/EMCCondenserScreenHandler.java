@@ -111,7 +111,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
 
             if (index < 36) {
                 // TargetSlot
-                if (targetStack.isEmpty() && EMCManager.get(originalStack.getItem()) != 0) {
+                if ((targetStack.isEmpty() || this.slots.get(36).getStack() == null) && EMCManager.get(originalStack.getItem()) != 0) {
                     targetStack = originalStack.copy();
                     targetStack.setCount(1);
 
