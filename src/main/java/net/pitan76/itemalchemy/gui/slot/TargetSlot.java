@@ -22,8 +22,15 @@ public class TargetSlot extends CompatibleSlot {
 
     @Override
     public void callSetStack(ItemStack stack) {
+        if(EMCManager.get(stack) == 0) {
+            super.callSetStack(ItemStack.EMPTY);
+
+            return;
+        }
+
         ItemStack newStack = stack.copy();
         newStack.setCount(1);
+
         super.callSetStack(newStack);
     }
 
