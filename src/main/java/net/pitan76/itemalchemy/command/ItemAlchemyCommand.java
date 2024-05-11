@@ -304,40 +304,45 @@ public class ItemAlchemyCommand extends LiteralCommand {
                         addArgumentCommand("player", new PlayerCommand() {
                             @Override
                             public void execute(PlayerCommandEvent event) {
+                                if(event.getWorld().isClient()) {
+                                    return;
+                                }
+
                                 try {
-                                    if (!event.getWorld().isClient()) {
-                                        Player player = event.getPlayer();
-                                        Player targetPlayer = new Player((PlayerEntity) event.getValue());
+                                    Player player = event.getPlayer();
+                                    Player targetPlayer = new Player((PlayerEntity) event.getValue());
 
-                                        ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
-                                        Optional<TeamState> teamState = serverState.getTeamByPlayer(player.getUUID());
+                                    ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
 
-                                        if(!teamState.isPresent()) {
-                                            event.sendFailure(TextUtil.literal("[ItemAlchemy] Not Found Team"));
+                                    Optional<TeamState> senderTeam = serverState.getTeamByPlayer(player.getUUID());
+                                    Optional<TeamState> targetTeam = serverState.getTeamByPlayer(targetPlayer.getUUID());
 
-                                            return;
-                                        }
+                                    if(!senderTeam.isPresent() || !targetTeam.isPresent()) {
+                                        event.sendFailure(TextUtil.literal("[ItemAlchemy] Not Found Team"));
 
-                                        if(teamState.get().owner != player.getUUID()) {
-                                            event.sendFailure(TextUtil.literal("[ItemAlchemy] You don't have permission"));
-
-                                            return;
-                                        }
-
-                                        if(!serverState.getPlayer(targetPlayer.getUUID()).filter(playerState -> playerState.teamID == teamState.get().teamID).isPresent()) {
-                                            event.sendFailure(TextUtil.literal("[ItemAlchemy] You don't have permission"));
-
-                                            return;
-                                        }
-
-                                        if(TeamUtil.leaveTeam(targetPlayer)) {
-                                            event.sendSuccess(TextUtil.literal("[ItemAlchemy] Kicked " + player.getName()), false);
-
-                                            return;
-                                        }
-
-                                        event.sendFailure(TextUtil.literal("[ItemAlchemy]§c Failed leave"));
+                                        return;
                                     }
+
+                                    if(senderTeam.get().owner != player.getUUID()) {
+                                        event.sendFailure(TextUtil.literal("[ItemAlchemy] You don't have permission"));
+
+                                        return;
+                                    }
+
+                                    if(senderTeam.get().teamID != targetTeam.get().teamID) {
+                                        event.sendFailure(TextUtil.literal("[ItemAlchemy] " + targetPlayer.getName() + " is not in your team"));
+
+                                        return;
+                                    }
+
+                                    if(TeamUtil.kickTeam(player.getWorld().getServer(), targetTeam.get().teamID, targetPlayer.getUUID())) {
+                                        event.sendSuccess(TextUtil.literal("[ItemAlchemy] Kicked " + targetPlayer.getName()), false);
+
+                                        return;
+                                    }
+
+                                    event.sendFailure(TextUtil.literal("[ItemAlchemy]§c Failed leave"));
+
                                 } catch (CommandSyntaxException e) {
                                     event.sendFailure(TextUtil.literal("[ItemAlchemy] " + e.getMessage()));
                                 }

@@ -128,11 +128,11 @@ public class TeamUtil {
                 .filter(state -> state.owner == playerUUID && state.isDefault)
                 .findFirst();
 
-        if(currentTeamState.isDefault && currentTeamState.owner == playerUUID) {
+        if(!defaultTeamState.isPresent()) {
             return false;
         }
 
-        if(!defaultTeamState.isPresent()) {
+        if(currentTeamState.isDefault && currentTeamState.owner == playerUUID) {
             return false;
         }
 
@@ -145,6 +145,22 @@ public class TeamUtil {
         serverState.markDirty();
 
         return true;
+    }
+
+    public static boolean kickTeam(MinecraftServer server, UUID teamUUID, UUID playerUUID) {
+        ServerState serverState = ServerState.getServerState(server);
+
+        Optional<TeamState> teamState = serverState.getTeam(teamUUID);
+
+        if(!teamState.isPresent()) {
+            return false;
+        }
+
+        if(teamState.get().owner == playerUUID) {
+            return false;
+        }
+
+        return leaveTeam(server, playerUUID);
     }
 
     public static boolean leaveTeam(Player player) {
