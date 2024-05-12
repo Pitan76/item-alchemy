@@ -243,7 +243,7 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
     @Nullable
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-        return new EMCCondenserScreenHandler(syncId, inv, this, this);
+        return new EMCCondenserScreenHandler(syncId, inv, this, this, targetStack);
     }
 
     public static boolean insertItem(ItemStack insertStack, DefaultedList<ItemStack> inventory, boolean test) {
@@ -284,6 +284,11 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
 
     public ItemStack getTargetStack() {
         return targetStack;
+    }
+
+    public void setTargetStack(ItemStack stack) {
+        targetStack = stack;
+        markDirty();
     }
 
     @Override

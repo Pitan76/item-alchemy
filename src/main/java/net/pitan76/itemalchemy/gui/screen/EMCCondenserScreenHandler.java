@@ -32,7 +32,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     public ItemStack targetStack = ItemStack.EMPTY;
 
     public EMCCondenserScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, null, new SimpleInventory(92));
+        this(syncId, playerInventory, null, new SimpleInventory(92), ItemStack.EMPTY);
         NbtCompound data = PacketByteUtil.readNbt(buf);
         if (data == null) return;
         int x, y, z;
@@ -48,18 +48,17 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
         }
     }
 
-    public EMCCondenserScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCCondenserTile tile, Inventory inventory) {
+    public EMCCondenserScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCCondenserTile tile, Inventory inventory, ItemStack targetStack) {
         super(ScreenHandlers.EMC_CONDENSER, syncId);
 
         this.inventory = inventory;
         this.playerInventory = playerInventory;
         this.tile = tile;
+        this.targetStack = targetStack;
         addPlayerMainInventorySlots(playerInventory, 48, 154);
         addPlayerHotbarSlots(playerInventory, 48, 212);
         addTargetSlot(inventory, 0, 12, 6);
         addStorageSlots(inventory, 1, 12, 26, -1, 13, 7);
-
-        targetStack = ItemStack.EMPTY;
     }
 
     protected Slot addTargetSlot(Inventory inventory, int index, int x, int y) {
@@ -99,12 +98,29 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     @Override
     public ItemStack quickMoveOverride(Player player, int index) {
         Slot slot = callGetSlot(index);
+        Slot targetSlot = callGetSlot(36);
 
         if (slot.hasStack()) {
             ItemStack originalStack = SlotUtil.getStack(slot);
+
             // TargetSlot
-            if (index == 36 && EMCManager.get(originalStack.getItem()) == 0 && targetStack.isEmpty()) {
-                Slot targetSlot = this.slots.get(36);
+            if(index == 36) {
+                //増殖スロットが空だった場合
+                if(targetStack.isEmpty()) {
+                    if (EMCManager.get(originalStack.getItem()) == 0) {
+                        SlotUtil.setStack(targetSlot, ItemStack.EMPTY);
+                        return originalStack;
+                    }
+
+                    ItemStack newStack = new ItemStack(originalStack.getItem());
+                    newStack.setCount(1);
+
+                    SlotUtil.setStack(targetSlot, newStack);
+                    setTargetStack(newStack);
+
+                    return ItemStack.EMPTY;
+                }
+
                 SlotUtil.setStack(targetSlot, ItemStack.EMPTY);
                 setTargetStack(ItemStack.EMPTY);
 
@@ -113,12 +129,14 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
 
             if (index < 36) {
                 // TargetSlot
-                if (targetStack.isEmpty() && EMCManager.get(originalStack.getItem()) != 0) {
-                    targetStack = originalStack.copy();
-                    targetStack.setCount(1);
+                if(targetStack.isEmpty()) {
+                    if(EMCManager.get(originalStack.getItem()) != 0) {
+                        ItemStack newStack = new ItemStack(originalStack.getItem());
+                        newStack.setCount(1);
 
-                    this.slots.get(36).setStack(targetStack);
-                    setTargetStack(targetStack);
+                        SlotUtil.setStack(targetSlot, newStack);
+                        setTargetStack(newStack);
+                    }
 
                     return ItemStack.EMPTY;
                 }
@@ -141,37 +159,40 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
 
     @Override
     public void overrideOnSlotClick(int slotIndex, int button, SlotActionType actionType, Player player) {
+        Slot targetSlot = callGetSlot(36);
+
         if (slotIndex == 36) { // Target Slot
-            if(getCursorStack().isEmpty()) {
+            // カーソルでアイテムを持ってない場合
+            if (getCursorStack().isEmpty()) {
+                setTargetStack(ItemStack.EMPTY);
+                SlotUtil.setStack(targetSlot, ItemStack.EMPTY);
+
+                return;
+            }
+
+            ItemStack oldStack = new ItemStack(getCursorStack().getItem());
+
+            if(EMCManager.get(oldStack.getItem()) == 0) {
+                callSetCursorStack(getCursorStack());
+
                 super.overrideOnSlotClick(slotIndex, button, actionType, player);
 
                 return;
             }
 
-            ItemStack oldStack = getCursorStack().copy();
+            setTargetStack(oldStack);
+            SlotUtil.setStack(targetSlot, oldStack);
 
-            if(EMCManager.get(oldStack.getItem()) == 0) {
-                setTargetStack(ItemStack.EMPTY);
-                this.slots.get(36).setStack(ItemStack.EMPTY);
-                callSetCursorStack(oldStack);
-
-                return;
-            }
-
-            if (!oldStack.isEmpty()) {
-                setTargetStack(oldStack);
-                this.slots.get(36).setStack(targetStack);
-
-                callSetCursorStack(oldStack);
-            }
+            callSetCursorStack(getCursorStack());
 
             return;
         }
+
         super.overrideOnSlotClick(slotIndex, button, actionType, player);
     }
 
     private void setTargetStack(ItemStack stack) {
         targetStack = stack;
-        tile.targetStack = stack;
+        tile.setTargetStack(stack);
     }
 }
