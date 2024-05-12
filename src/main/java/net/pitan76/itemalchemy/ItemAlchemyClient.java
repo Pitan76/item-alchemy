@@ -63,10 +63,12 @@ public class ItemAlchemyClient {
         ClientNetworking.registerReceiver(ItemAlchemy.id("itemalchemy_emc_condenser"), (client, p, buf) -> {
             long storedEMC = PacketByteUtil.readLong(buf);
             long maxEMC = PacketByteUtil.readLong(buf);
+            ItemStack targetStack = PacketByteUtil.readItemStack(buf);
             if (Objects.requireNonNull(p).currentScreenHandler instanceof EMCCondenserScreenHandler) {
                 EMCCondenserScreenHandler screenHandler = (EMCCondenserScreenHandler) p.currentScreenHandler;
                 screenHandler.storedEMC = storedEMC;
                 screenHandler.maxEMC = maxEMC;
+                screenHandler.targetStack = targetStack;
             }
         });
 
