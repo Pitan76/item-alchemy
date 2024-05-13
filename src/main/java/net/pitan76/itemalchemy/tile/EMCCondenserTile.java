@@ -151,13 +151,13 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
                     continue;
                 }
 
-                long emc = EMCManager.get(stack.getItem()) * stack.getCount();
+                long emc = EMCManager.get(stack.getItem());
 
                 if (emc == 0) {
                     continue;
                 }
 
-                stack.decrement(stack.getCount());
+                stack.decrement(1);
 
                 storedEMC += emc;
 
