@@ -89,6 +89,7 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
 
         if(nbt.contains("target_item")) {
             targetStack = ItemStack.fromNbt(nbt.getCompound("target_item"));
+            inventory.set(0, targetStack);
         }
     }
 
