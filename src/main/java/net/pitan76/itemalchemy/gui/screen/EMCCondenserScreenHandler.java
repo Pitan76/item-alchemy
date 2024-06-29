@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     public Inventory inventory;
@@ -44,7 +45,10 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
             tile = (EMCCondenserTile) new Player(playerInventory.player).getWorld().getBlockEntity(new BlockPos(x, y, z));
             storedEMC = data.getInt("stored_emc") - tile.storedEMC;
             maxEMC = data.getInt("max_emc");
-            targetStack = ItemStack.fromNbt(data.getCompound("target_item"));
+
+
+            Optional<ItemStack> optionalItemStack = ItemStack.fromNbt(playerInventory.player.getRegistryManager(), data.getCompound("target_item"));
+            optionalItemStack.ifPresent(stack -> targetStack = stack);
         }
     }
 

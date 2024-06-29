@@ -38,6 +38,9 @@ import net.pitan76.mcpitanlib.api.util.InventoryUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static net.pitan76.mcpitanlib.api.util.InventoryUtil.canMergeItems;
 
 public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTicker<EMCCondenserTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
@@ -83,18 +86,6 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
         //Inventories.readNbt(nbt, inventory);
         if (getWorld() != null)
             InventoryUtil.readNbt(getWorld(), nbt, inventory);
-    }
-
-    public EMCCondenserTile(BlockPos pos, BlockState state) {
-        this(new TileCreateEvent(pos, state));
-    }
-
-    public EMCCondenserTile(BlockView world) {
-        this(new TileCreateEvent(world));
-    }
-
-    public EMCCondenserTile(TileCreateEvent event) {
-        this(Tiles.EMC_CONDENSER.getOrNull(), event);
     }
 
     @Override
@@ -242,7 +233,7 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
 
     @Nullable
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-        return new EMCCondenserScreenHandler(syncId, inv, this, this);
+        return new EMCCondenserScreenHandler(syncId, inv, this, this, getTargetStack());
     }
 
     @Override
@@ -259,5 +250,10 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
         data.putLong("stored_emc", storedEMC);
         data.putLong("max_emc", maxEMC);
         args.writeVar(data);
+    }
+
+    public void setTargetStack(ItemStack stack) {
+        inventory.set(0, stack);
+        markDirty();
     }
 }
