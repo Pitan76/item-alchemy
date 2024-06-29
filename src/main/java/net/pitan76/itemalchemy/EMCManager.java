@@ -28,6 +28,7 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tag.TagKey;
+import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 import net.pitan76.mcpitanlib.api.util.RecipeUtil;
 import net.pitan76.mcpitanlib.api.util.ResourceUtil;
@@ -173,14 +174,14 @@ public class EMCManager {
 
         for (Recipe<?> recipe : recipes) {
             try {
-                ItemStack outStack = RecipeUtil.getOutput((Recipe<Inventory>) recipe, world);
+                ItemStack outStack = RecipeUtil.getOutput((Recipe<?>) recipe, world);
                 addEmcFromRecipe(outStack, recipe, unsetRecipes, false);
             } catch (NoClassDefFoundError | Exception ignore) {}
         }
         List<Recipe<?>> dummy = new ArrayList<>();
         for (Recipe<?> recipe : unsetRecipes) {
             try {
-                ItemStack outStack = RecipeUtil.getOutput((Recipe<Inventory>) recipe, world);;
+                ItemStack outStack = RecipeUtil.getOutput((Recipe<?>) recipe, world);;
                 addEmcFromRecipe(outStack, recipe, dummy, true);
             } catch (NoClassDefFoundError | Exception ignore) {}
         }

@@ -21,6 +21,7 @@ import net.pitan76.mcpitanlib.api.item.ExtendItem;
 import net.pitan76.mcpitanlib.api.item.FixedRecipeRemainderItem;
 import net.pitan76.mcpitanlib.api.util.BlockUtil;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
+import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.core.Dummy;
 import org.jetbrains.annotations.Nullable;
@@ -182,7 +183,6 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
         return true;
     }
 
-    @Override
     public Rarity getRarity(ItemStack stack) {
         return Rarity.EPIC;
     }

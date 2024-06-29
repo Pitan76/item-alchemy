@@ -16,17 +16,17 @@ public class AlchemicalPickaxe extends CompatiblePickaxeItem implements ExtendIt
         super(toolMaterial, attackDamage, attackSpeed, settings);
     }
 
-    @Override
+    //@Override
     public boolean isDamageable() {
         return false;
     }
 
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
-        if(VersionUtils.isSupportedComponent()) {
-            return CustomDataUtil.contains(stack, "itemalchemy");
-        }
+        //if(VersionUtils.isSupportedComponent()) {
+        return CustomDataUtil.contains(stack, "itemalchemy");
+        //}
 
-        return stack.getSubNbt("itemalchemy") != null;
+        //return stack.getSubNbt("itemalchemy") != null;
     }
 }

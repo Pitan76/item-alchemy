@@ -16,6 +16,7 @@ import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.ScreenHandlers;
 import net.pitan76.mcpitanlib.api.client.registry.ArchRegistryClient;
+import net.pitan76.mcpitanlib.api.client.registry.CompatRegistryClient;
 import net.pitan76.mcpitanlib.api.client.registry.KeybindingRegistry;
 import net.pitan76.mcpitanlib.api.network.ClientNetworking;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
@@ -32,12 +33,12 @@ public class ItemAlchemyClient {
 
     public static void init() {
         // Mixinを使った場合、関数が1.20から変更されているために使えないのでこちらで対処しておく
-        ItemTooltipCallback.EVENT.register((stack, context, lines) -> lines.addAll(getEmcText(stack)));
+        ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> lines.addAll(getEmcText(stack)));
 
-        ArchRegistryClient.registerScreen(ScreenHandlers.ALCHEMY_TABLE, AlchemyTableScreen::new);
-        ArchRegistryClient.registerScreen(ScreenHandlers.EMC_COLLECTOR, EMCCollectorScreen::new);
-        ArchRegistryClient.registerScreen(ScreenHandlers.EMC_CONDENSER, EMCCondenserScreen::new);
-        ArchRegistryClient.registerScreen(ScreenHandlers.ALCHEMY_CHEST, AlchemyChestScreen::new);
+        CompatRegistryClient.registerScreen(ScreenHandlers.ALCHEMY_TABLE, AlchemyTableScreen::new);
+        CompatRegistryClient.registerScreen(ScreenHandlers.EMC_COLLECTOR, EMCCollectorScreen::new);
+        CompatRegistryClient.registerScreen(ScreenHandlers.EMC_CONDENSER, EMCCondenserScreen::new);
+        CompatRegistryClient.registerScreen(ScreenHandlers.ALCHEMY_CHEST, AlchemyChestScreen::new);
 
         WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(new BlockRenderer());
 
