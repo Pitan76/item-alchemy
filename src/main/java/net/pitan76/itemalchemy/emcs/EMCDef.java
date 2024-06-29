@@ -4,6 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.mcpitanlib.api.tag.TagKey;
+import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 
 public abstract class EMCDef {
@@ -28,6 +29,6 @@ public abstract class EMCDef {
     }
 
     public static void addByTag(String id, long emc) {
-        addByTag(new Identifier(id), emc);
+        addByTag(IdentifierUtil.id(id), emc);
     }
 }

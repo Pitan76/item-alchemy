@@ -1,12 +1,12 @@
 package net.pitan76.itemalchemy.api;
 
 import net.minecraft.item.Item;
-import net.minecraft.util.Identifier;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.data.ModState;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class PlayerRegisteredItemUtil {
     public static List<Item> getItems(Player player) {
         List<Item> items = new ArrayList<>();
         for (String id : getItemsAsString(player)) {
-            items.add(ItemUtil.fromId(new Identifier(id)));
+            items.add(ItemUtil.fromId(IdentifierUtil.id(id)));
         }
 
         return items;

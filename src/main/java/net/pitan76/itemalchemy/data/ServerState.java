@@ -3,11 +3,13 @@ package net.pitan76.itemalchemy.data;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
+import net.pitan76.mcpitanlib.api.world.CompatiblePersistentState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class ServerState extends PersistentState implements ModState {
+public class ServerState extends CompatiblePersistentState implements ModState {
     public List<TeamState> teams = new ArrayList<>();
     public List<PlayerState> players = new ArrayList<>();
 
@@ -155,5 +157,15 @@ public class ServerState extends PersistentState implements ModState {
     @Override
     public Optional<PlayerState> getPlayer(UUID uuid) {
         return players.stream().filter(playerState -> playerState.playerUUID.equals(uuid)).findFirst();
+    }
+
+    @Override
+    public void readNbt(NbtCompound tag) {
+
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        return null;
     }
 }

@@ -1,11 +1,11 @@
 package net.pitan76.itemalchemy.api;
 
 import net.minecraft.item.Item;
-import net.minecraft.util.Identifier;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.emcs.EMCDef;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.tag.TagKey;
+import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 
 public class EMCUtil {
@@ -29,7 +29,7 @@ public class EMCUtil {
         }
 
         public static long getEMC(String id) {
-            return EMCManager.get(ItemUtil.fromId(new Identifier(id)));
+            return EMCManager.get(ItemUtil.fromId(IdentifierUtil.id(id)));
         }
     }
 

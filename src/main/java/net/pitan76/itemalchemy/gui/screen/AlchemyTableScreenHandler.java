@@ -20,6 +20,7 @@ import net.pitan76.itemalchemy.gui.slot.RegisterSlot;
 import net.pitan76.itemalchemy.gui.slot.RemoveSlot;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.SimpleScreenHandler;
+import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 import net.pitan76.mcpitanlib.api.util.SlotUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
@@ -277,7 +278,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
         for (String id : ids) {
             String translatedName = "";
 
-            Identifier itemIdentifier = new Identifier(id);
+            Identifier itemIdentifier = IdentifierUtil.id(id);
             ItemStack itemStack = new ItemStack(ItemUtil.fromId(itemIdentifier));
             String itemTranslationKey = itemStack.getTranslationKey();
 

@@ -48,7 +48,7 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
     }
 
     public static boolean addExchangeInMap(String target, String replace) {
-        return addExchangeInMap(new Identifier(target), new Identifier(replace));
+        return addExchangeInMap(IdentifierUtil.id(target), IdentifierUtil.id(replace));
     }
 
     public static boolean addShiftExchangeInMap(Block target, Block replace) {
@@ -66,7 +66,7 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
     }
 
     public static boolean addShiftExchangeInMap(String target, String replace) {
-        return addShiftExchangeInMap(new Identifier(target), new Identifier(replace));
+        return addShiftExchangeInMap(IdentifierUtil.id(target), IdentifierUtil.id(replace));
     }
 
     static {

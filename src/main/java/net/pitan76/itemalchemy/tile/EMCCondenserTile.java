@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -27,10 +26,15 @@ import net.pitan76.itemalchemy.block.EMCCollector;
 import net.pitan76.itemalchemy.block.EMCRepeater;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.event.container.factory.DisplayNameArgs;
+import net.pitan76.mcpitanlib.api.event.container.factory.ExtraDataArgs;
+import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
+import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
+import net.pitan76.mcpitanlib.api.util.InventoryUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,13 +47,12 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
     public long oldMaxEMC = 0;
     public int coolDown = 0; // tick
 
-    public ItemStack targetStack = ItemStack.EMPTY;
-
     public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1 + 91, ItemStack.EMPTY);
 
     public EMCCondenserTile(BlockEntityType<?> type, TileCreateEvent event) {
         super(type, event);
     }
+
     public EMCCondenserTile(BlockPos pos, BlockState state) {
         this(new TileCreateEvent(pos, state));
     }
@@ -67,68 +70,54 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
     @Override
     public void writeNbtOverride(NbtCompound nbt) {
         super.writeNbtOverride(nbt);
-
-        Inventories.writeNbt(nbt, inventory);
+        //Inventories.writeNbt(nbt, inventory);
+        if (getWorld() != null)
+            InventoryUtil.writeNbt(getWorld(), nbt, inventory);
         nbt.putLong("stored_emc", storedEMC);
-
-        NbtCompound targetStackNbt = new NbtCompound();
-        targetStack.writeNbt(targetStackNbt);
-        nbt.put("target_item", targetStackNbt);
     }
 
     @Override
     public void readNbtOverride(NbtCompound nbt) {
         super.readNbtOverride(nbt);
         storedEMC = nbt.getLong("stored_emc");
-        Inventories.readNbt(nbt, inventory);
-
-        //旧仕様の対応
-        if(!inventory.get(0).isEmpty() && !nbt.contains("target_item")) {
-            targetStack = inventory.get(0);
-        }
-
-        if(nbt.contains("target_item")) {
-            targetStack = ItemStack.fromNbt(nbt.getCompound("target_item"));
-            inventory.set(0, targetStack);
-        }
+        //Inventories.readNbt(nbt, inventory);
+        if (getWorld() != null)
+            InventoryUtil.readNbt(getWorld(), nbt, inventory);
     }
 
-    @Override
-    public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
-        NbtCompound data = new NbtCompound();
-        data.putLong("x", pos.getX());
-        data.putLong("y", pos.getY());
-        data.putLong("z", pos.getZ());
-        data.putLong("stored_emc", storedEMC);
-        data.putLong("max_emc", maxEMC);
+    public EMCCondenserTile(BlockPos pos, BlockState state) {
+        this(new TileCreateEvent(pos, state));
+    }
 
-        NbtCompound targetStackNbt = new NbtCompound();
+    public EMCCondenserTile(BlockView world) {
+        this(new TileCreateEvent(world));
+    }
 
-        targetStack.writeNbt(targetStackNbt);
-
-        data.put("target_item", targetStackNbt);
-
-        PacketByteUtil.writeNbt(buf, data);
+    public EMCCondenserTile(TileCreateEvent event) {
+        this(Tiles.EMC_CONDENSER.getOrNull(), event);
     }
 
     @Override
     public void tick(World world, BlockPos pos, BlockState state, EMCCondenserTile blockEntity) {
-        if(world.isClient()) {
-            return;
+        if (world.isClient) return;
+
+        if (!inventory.isEmpty()) {
+            ItemStack targetStack = inventory.get(0);
+            if (!targetStack.isEmpty()) {
+                maxEMC = EMCManager.get(targetStack.getItem());
+            } else {
+                maxEMC = 0;
+            }
         }
 
-        maxEMC = EMCManager.get(targetStack.getItem());
-
-        BlockPos[] nearPoses = { pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west() };
+        BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
 
         for (BlockPos nearPos : EMCRepeater.getNearPoses(world, nearPoses)) {
             BlockState nearState = world.getBlockState(nearPos);
-
             if (nearState.getBlock() instanceof EMCCollector) {
                 BlockEntity nearTile = world.getBlockEntity(nearPos);
                 if (nearTile instanceof EMCCollectorTile) {
                     EMCCollectorTile nearCollectorTile = ((EMCCollectorTile) nearTile);
-
                     if (nearCollectorTile.storedEMC > 0) {
                         long receiveEMC = nearCollectorTile.storedEMC;
                         nearCollectorTile.storedEMC -= receiveEMC;
@@ -138,60 +127,49 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
             }
         }
 
-        if (coolDown == 0) {
-            for (ItemStack stack : inventory) {
-                if (targetStack.isEmpty()) {
-                    break;
+        if (!inventory.isEmpty()) {
+            ItemStack targetStack = inventory.get(0);
+            if (!targetStack.isEmpty()) {
+                if (coolDown == 0) {
+                    List<ItemStack> storageInventory = new ArrayList<>(inventory);
+
+                    if (!storageInventory.isEmpty()) {
+                        for (ItemStack stack : inventory) {
+                            if (stack.isEmpty()) continue;
+                            if (stack.getItem() == targetStack.getItem()) continue;
+
+                            long emc = EMCManager.get(stack.getItem());
+                            if (emc == 0) continue;
+                            //if (emc + storedEMC <= maxEMC) {
+                            storedEMC += emc;
+                            stack.decrement(1);
+                            break;
+                            //}
+                        }
+                    }
+
+                    long useEMC = EMCManager.get(targetStack.getItem());
+                    if (useEMC == 0) useEMC = 1;
+                    if (storedEMC >= useEMC) {
+                        ItemStack newStack = targetStack.copy();
+                        newStack.setCount(1);
+                        // Remove NBT
+                        CustomDataUtil.setNbt(newStack, new NbtCompound());
+                        //newStack.setNbt(new NbtCompound());
+                        if (insertItem(newStack, inventory, true)) {
+                            insertItem(newStack, inventory);
+                            storedEMC -= useEMC;
+
+                            markDirty();
+                        }
+
+                    }
                 }
-
-                if (stack.isEmpty()) {
-                    continue;
+                coolDown++;
+                if (coolDown >= getMaxCoolDown()) {
+                    coolDown = 0;
                 }
-
-                if (targetStack.getItem() == stack.getItem()) {
-                    continue;
-                }
-
-                long emc = EMCManager.get(stack.getItem());
-
-                if (emc == 0) {
-                    continue;
-                }
-
-                stack.decrement(1);
-
-                storedEMC += emc;
-
-                break;
             }
-        }
-
-        if(targetStack.isEmpty()) {
-            return;
-        }
-
-        long useEMC = EMCManager.get(targetStack.getItem());
-
-        if (useEMC == 0) {
-            return;
-        }
-
-        if (storedEMC >= useEMC) {
-            ItemStack newStack = new ItemStack(targetStack.getItem());
-
-            newStack.setCount(1);
-
-            if (insertItem(newStack, inventory, true)) {
-                insertItem(newStack, inventory);
-                storedEMC -= useEMC;
-
-                markDirty();
-            }
-        }
-
-        coolDown++;
-        if (coolDown >= getMaxCoolDown()) {
-            coolDown = 0;
         }
 
         if (oldStoredEMC != storedEMC || oldMaxEMC != maxEMC) {
@@ -203,18 +181,44 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
                     PacketByteBuf buf = PacketByteUtil.create();
                     PacketByteUtil.writeLong(buf, storedEMC);
                     PacketByteUtil.writeLong(buf, maxEMC);
-
-                    if(!targetStack.isEmpty()) {
-                        PacketByteUtil.writeItemStack(buf, targetStack);
-                    }
-                    else {
-                        PacketByteUtil.writeItemStack(buf, inventory.get(0));
-                    }
-
                     ServerNetworking.send(player, ItemAlchemy.id("itemalchemy_emc_condenser"), buf);
                 }
             }
         }
+    }
+
+    public static boolean insertItem(ItemStack insertStack, DefaultedList<ItemStack> inventory) {
+        return insertItem(insertStack, inventory, false);
+    }
+
+    public static boolean insertItem(ItemStack insertStack, DefaultedList<ItemStack> inventory, boolean test) {
+        boolean isInserted = false;
+        for (int i = 0; i < inventory.size(); i++) {
+            // EMC Condenser Target slot
+            if (i == 0) continue;
+            //
+            ItemStack stack = inventory.get(i);
+            if (stack.isEmpty()) {
+                if (!test) inventory.set(i, insertStack);
+                isInserted = true;
+                break;
+            } else if (canMergeItems(stack, insertStack)) {
+                int j = insertStack.getCount();
+                if (!test) stack.increment(j);
+                isInserted = j > 0;
+                break;
+            }
+        }
+        return isInserted;
+    }
+
+    public ItemStack getTargetStack() {
+        return inventory.get(0);
+    }
+
+    @Override
+    public DefaultedList<ItemStack> getItems() {
+        return inventory;
     }
 
     @Override
@@ -236,64 +240,24 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
         return dir == Direction.DOWN;
     }
 
+    @Nullable
+    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
+        return new EMCCondenserScreenHandler(syncId, inv, this, this);
+    }
+
     @Override
-    public Text getDisplayName() {
+    public Text getDisplayName(DisplayNameArgs args) {
         return TextUtil.translatable("block.itemalchemy.emc_condenser");
     }
 
-    @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-        return new EMCCondenserScreenHandler(syncId, inv, this, this, targetStack);
-    }
-
-    public static boolean insertItem(ItemStack insertStack, DefaultedList<ItemStack> inventory, boolean test) {
-        boolean isInserted = false;
-        for (int slot = 0; slot < inventory.size(); slot++) {
-            // EMC Condenser Target slot
-            if (slot == 0) {
-                continue;
-            }
-
-            ItemStack stack = inventory.get(slot);
-            if (stack.isEmpty()) {
-                if (!test) {
-                    inventory.set(slot, insertStack);
-                }
-
-                isInserted = true;
-
-                break;
-            } else if (canMergeItems(stack, insertStack)) {
-                int j = insertStack.getCount();
-
-                if (!test){
-                    stack.increment(j);
-                }
-
-                isInserted = j > 0;
-
-                break;
-            }
-        }
-        return isInserted;
-    }
-
-    public static boolean insertItem(ItemStack insertStack, DefaultedList<ItemStack> inventory) {
-        return insertItem(insertStack, inventory, false);
-    }
-
-    public ItemStack getTargetStack() {
-        return targetStack;
-    }
-
-    public void setTargetStack(ItemStack stack) {
-        targetStack = stack;
-        markDirty();
-    }
-
-    @Override
-    public DefaultedList<ItemStack> getItems() {
-        return inventory;
+    public void writeExtraData(ExtraDataArgs args) {
+        NbtCompound data = new NbtCompound();
+        data.putLong("x", pos.getX());
+        data.putLong("y", pos.getY());
+        data.putLong("z", pos.getZ());
+        data.putLong("stored_emc", storedEMC);
+        data.putLong("max_emc", maxEMC);
+        args.writeVar(data);
     }
 }

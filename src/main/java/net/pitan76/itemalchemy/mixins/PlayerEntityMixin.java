@@ -46,7 +46,7 @@ public class PlayerEntityMixin {
         if(modNBT.contains("registered_items")) {
             NbtCompound registeredItems = modNBT.getCompound("registered_items");
 
-            List<String> keys = registeredItems.getKeys().stream().filter(key -> ItemUtil.isExist(new Identifier(key))).collect(Collectors.toList());
+            List<String> keys = registeredItems.getKeys().stream().filter(key -> ItemUtil.isExist(IdentifierUtil.id(key))).collect(Collectors.toList());
 
             teamState.registeredItems.clear();
             teamState.registeredItems.addAll(keys);

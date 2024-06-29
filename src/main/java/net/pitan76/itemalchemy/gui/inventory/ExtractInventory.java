@@ -9,6 +9,7 @@ import net.pitan76.itemalchemy.data.ModState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,7 +58,7 @@ public class ExtractInventory extends SimpleInventory {
                 setStack(i + 64, ItemStack.EMPTY);
                 continue;
             }
-            Identifier id = new Identifier(keys.get(id_index));
+            Identifier id = IdentifierUtil.id(keys.get(id_index));
             //System.out.println(id);
             if (!ItemUtil.isExist(id)) {
                 i--;

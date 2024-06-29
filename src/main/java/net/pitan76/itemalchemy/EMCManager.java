@@ -330,7 +330,7 @@ public class EMCManager {
                 if (resourceId.toString().endsWith("/tags.json")) {
                     HashMap<String, Long> tempMap = gson.fromJson(json, listType);
                     for (Map.Entry<String, Long> entry : map.entrySet()) {
-                        TagKey<Item> tagKey = (TagKey<Item>) TagKey.create(TagKey.Type.ITEM, new Identifier(entry.getKey()));
+                        TagKey<Item> tagKey = (TagKey<Item>) TagKey.create(TagKey.Type.ITEM, IdentifierUtil.id(entry.getKey()));
                         for (Item item : ItemUtil.getAllItems()) {
                             if (ItemUtil.isIn(item, tagKey)) {
                                 if (tempMap.containsKey(ItemUtil.toID(item).toString())) continue;
@@ -342,7 +342,7 @@ public class EMCManager {
                 }
 
                 for (Map.Entry<String, Long> entry : map.entrySet()) {
-                    if (ItemUtil.isExist(new Identifier(entry.getKey()))) {
+                    if (ItemUtil.isExist(IdentifierUtil.id(entry.getKey()))) {
                         defaultEMCMap.put(entry.getKey(), entry.getValue());
                     }
                 }

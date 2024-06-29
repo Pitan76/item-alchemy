@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -27,10 +26,14 @@ import net.pitan76.itemalchemy.block.EMCRepeater;
 import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import net.pitan76.itemalchemy.item.Items;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.event.container.factory.DisplayNameArgs;
+import net.pitan76.mcpitanlib.api.event.container.factory.ExtraDataArgs;
+import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
+import net.pitan76.mcpitanlib.api.util.InventoryUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,7 +55,9 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
     @Override
     public void writeNbtOverride(NbtCompound nbt) {
         super.writeNbtOverride(nbt);
-        Inventories.writeNbt(nbt, inventory);
+        //Inventories.writeNbt(nbt, inventory);
+        if (getWorld() != null)
+            InventoryUtil.writeNbt(getWorld(), nbt, inventory);
         nbt.putLong("stored_emc", storedEMC);
     }
 
@@ -60,7 +65,9 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
     public void readNbtOverride(NbtCompound nbt) {
         super.readNbtOverride(nbt);
         storedEMC = nbt.getLong("stored_emc");
-        Inventories.readNbt(nbt, inventory);
+        //Inventories.readNbt(nbt, inventory);
+        if (getWorld() != null)
+            InventoryUtil.readNbt(getWorld(), nbt, inventory);
     }
 
     public EMCCollectorTile(BlockPos pos, BlockState state) {
@@ -246,18 +253,18 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
     }
 
     @Override
-    public Text getDisplayName() {
+    public Text getDisplayName(DisplayNameArgs args) {
         return TextUtil.translatable("block.itemalchemy.emc_collector");
     }
 
     @Override
-    public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
+    public void writeExtraData(ExtraDataArgs args) {
         NbtCompound data = new NbtCompound();
         data.putLong("x", pos.getX());
         data.putLong("y", pos.getY());
         data.putLong("z", pos.getZ());
         data.putLong("stored_emc", storedEMC);
         data.putLong("max_emc", ((EMCCollector) getCachedState().getBlock()).maxEMC);
-        PacketByteUtil.writeNbt(buf, data);
+        args.writeVar(data);
     }
 }
