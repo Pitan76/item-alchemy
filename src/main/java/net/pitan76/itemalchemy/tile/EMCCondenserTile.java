@@ -171,7 +171,8 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
                     PacketByteBuf buf = PacketByteUtil.create();
                     PacketByteUtil.writeLong(buf, storedEMC);
                     PacketByteUtil.writeLong(buf, maxEMC);
-                    PacketByteUtil.writeItemStack(buf, getTargetStack());
+                    //if (!getTargetStack().isEmpty())
+                    //    PacketByteUtil.writeItemStack(buf, getTargetStack());
 
                     ServerNetworking.send(player, ItemAlchemy.id("itemalchemy_emc_condenser"), buf);
                 }
