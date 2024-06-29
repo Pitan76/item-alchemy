@@ -16,12 +16,12 @@ import net.pitan76.itemalchemy.tile.EMCCondenserTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.SlotUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     public Inventory inventory;
@@ -46,9 +46,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
             storedEMC = data.getInt("stored_emc") - tile.storedEMC;
             maxEMC = data.getInt("max_emc");
 
-
-            Optional<ItemStack> optionalItemStack = ItemStack.fromNbt(playerInventory.player.getRegistryManager(), data.getCompound("target_item"));
-            optionalItemStack.ifPresent(stack -> targetStack = stack);
+            targetStack = ItemStackUtil.fromNbt(playerInventory.player.getWorld(), data.getCompound("target_item"));
         }
     }
 
