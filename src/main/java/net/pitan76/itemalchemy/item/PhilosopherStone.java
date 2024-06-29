@@ -7,7 +7,6 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.sound.Sounds;
@@ -181,10 +180,6 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
     @Override
     public boolean hasRecipeRemainder(Dummy dummy) {
         return true;
-    }
-
-    public Rarity getRarity(ItemStack stack) {
-        return Rarity.EPIC;
     }
 
     @Override

@@ -86,7 +86,7 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
         BlockEntity blockEntity = e.world.getBlockEntity(e.pos);
         if (blockEntity instanceof EMCCollectorTile) {
             EMCCollectorTile tile = (EMCCollectorTile)blockEntity;
-            e.player.openGuiScreen(tile);
+            e.player.openExtendedMenu(tile);
             return ActionResult.CONSUME;
         }
         return ActionResult.PASS;

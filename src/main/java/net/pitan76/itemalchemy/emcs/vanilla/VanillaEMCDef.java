@@ -2,9 +2,13 @@ package net.pitan76.itemalchemy.emcs.vanilla;
 
 import net.minecraft.item.Items;
 import net.pitan76.itemalchemy.emcs.EMCDef;
+import net.pitan76.mcpitanlib.api.item.CompatItems;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 
 public class VanillaEMCDef extends EMCDef {
+
+    CompatItems compatItems = new CompatItems();
+
     public void addAll() {
         add(Items.COBBLESTONE, 1);
         add(Items.COARSE_DIRT, 2);
@@ -23,10 +27,10 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.COBBLESTONE_SLAB, 1);
         add(Items.DEAD_BUSH, 1);
         add(Items.FERN, 1);
-        add(Items.TALL_GRASS, 1);
+        add(compatItems.TALL_GRASS, 1);
         add(Items.DIRT, 1);
         add(Items.GLASS, 1);
-        add(Items.SHORT_GRASS, 1);
+        add(compatItems.SHORT_GRASS, 1);
         add(Items.GRASS_BLOCK, 1);
         add(Items.ICE, 1);
         add(Items.MYCELIUM, 2);
@@ -235,7 +239,7 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.NETHER_STAR, 139264);
         add(Items.TURTLE_EGG, 192);
         add(Items.CONDUIT, 40960);
-        add(Items.TURTLE_SCUTE, 96);
+        add(compatItems.TURTLE_SCUTE, 96);
 
         add(Items.WATER_BUCKET, 768);
         add(Items.LAVA_BUCKET, 832);

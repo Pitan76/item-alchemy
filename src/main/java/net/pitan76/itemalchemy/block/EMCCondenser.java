@@ -78,7 +78,7 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
         BlockEntity blockEntity = e.world.getBlockEntity(e.pos);
         if (blockEntity instanceof EMCCondenserTile) {
             EMCCondenserTile tile = (EMCCondenserTile)blockEntity;
-            e.player.openGuiScreen(tile);
+            e.player.openExtendedMenu(tile);
             return ActionResult.CONSUME;
         }
         return ActionResult.PASS;
