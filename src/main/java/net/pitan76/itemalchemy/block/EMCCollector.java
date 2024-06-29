@@ -25,6 +25,7 @@ import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.api.event.block.StateReplacedEvent;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,7 +38,7 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
 
     public EMCCollector(CompatibleBlockSettings settings, long maxEMC) {
         super(settings);
-        setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
+        setDefaultState(BlockStateUtil.getDefaultState(this).with(FACING, Direction.NORTH));
         this.maxEMC = maxEMC;
     }
 

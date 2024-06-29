@@ -17,6 +17,7 @@ import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
 import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider {
@@ -25,7 +26,7 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
 
     public AEGUBlock(CompatibleBlockSettings settings, long emc) {
         super(settings);
-        setDefaultState(getStateManager().getDefaultState().with(CONNECTED, false));
+        setNewDefaultState(BlockStateUtil.getDefaultState(this).with(CONNECTED, false));
         this.emc = emc;
     }
 

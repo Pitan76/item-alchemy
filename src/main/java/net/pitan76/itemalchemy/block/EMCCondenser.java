@@ -24,6 +24,7 @@ import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
 import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +37,7 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
 
     public EMCCondenser(CompatibleBlockSettings settings) {
         super(settings);
-        getStateManager().getDefaultState().with(FACING, Direction.NORTH);
+        BlockStateUtil.getDefaultState(this).with(FACING, Direction.NORTH);
     }
 
     @Override
