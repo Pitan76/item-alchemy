@@ -16,17 +16,16 @@ public class AlchemicalAxe extends CompatibleAxeItem implements ExtendItemProvid
         super(toolMaterial, attackDamage, attackSpeed, settings);;
     }
 
-    @Override
     public boolean isDamageable() {
         return false;
     }
 
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
-        if(VersionUtils.isSupportedComponent()) {
-            return CustomDataUtil.contains(stack, "itemalchemy");
-        }
+        //if (VersionUtils.isSupportedComponent()) {
+        return CustomDataUtil.contains(stack, "itemalchemy");
+        //}
 
-        return stack.getSubNbt("itemalchemy") != null;
+        //return stack.getSubNbt("itemalchemy") != null;
     }
 }

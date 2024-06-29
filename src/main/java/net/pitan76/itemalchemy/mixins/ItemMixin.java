@@ -26,11 +26,14 @@ public class ItemMixin {
                 }
             }
             //下位互換性を確保
+            /*
             else {
                 if (stack.getSubNbt("itemalchemy") == null) {
                     ItemUtils.setCharge(stack, 0);
                 }
             }
+
+             */
 
             int charge = ItemUtils.getCharge(stack);
             stack.setDamage(stack.getMaxDamage() - charge * 4);
