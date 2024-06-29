@@ -25,25 +25,11 @@ public class ItemUtils {
             return 0;
         }
 
-        //if(VersionUtils.isSupportedComponent()) {
         NbtCompound component = CustomDataUtil.get(stack, "itemalchemy");
 
         if (!component.contains("charge"))
             setCharge(stack, 0);
         return component.getInt("charge");
-        //}
-        /*
-        else {
-            NbtCompound nbt = stack.getOrCreateSubNbt("itemalchemy");
-
-            if (!nbt.contains("charge")) {
-                setCharge(stack, 0);
-            }
-
-            return nbt.getInt("charge");
-        }
-
-         */
     }
 
     public static void setCharge(ItemStack stack, int charge) {
@@ -54,18 +40,9 @@ public class ItemUtils {
             return;
 
 
-        //if(VersionUtils.isSupportedComponent()) {
         NbtCompound component = CustomDataUtil.get(stack, "itemalchemy");
 
         component.putInt("charge", charge);
         CustomDataUtil.set(stack, "itemalchemy", component);
-        //}
-        /*else {
-            NbtCompound nbt = stack.getOrCreateSubNbt("itemalchemy");
-
-            nbt.putInt("charge", charge);
-        }
-
-         */
     }
 }

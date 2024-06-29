@@ -105,7 +105,8 @@ public class AlchemicalRecipeManager {
             if (obj instanceof ItemConvertible)
                 ingredient = Ingredient.ofItems((ItemConvertible) obj);
 
-            list.add(ingredient);
+            if (ingredient != null)
+                list.add(ingredient);
         }
         return list;
     }

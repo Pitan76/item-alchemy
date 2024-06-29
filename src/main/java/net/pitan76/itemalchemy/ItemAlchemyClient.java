@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy;
 
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.item.ItemStack;
@@ -15,7 +14,7 @@ import net.pitan76.itemalchemy.client.screen.EMCCondenserScreen;
 import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.ScreenHandlers;
-import net.pitan76.mcpitanlib.api.client.registry.ArchRegistryClient;
+import net.pitan76.mcpitanlib.api.client.event.ItemTooltipRegistry;
 import net.pitan76.mcpitanlib.api.client.registry.CompatRegistryClient;
 import net.pitan76.mcpitanlib.api.client.registry.KeybindingRegistry;
 import net.pitan76.mcpitanlib.api.network.ClientNetworking;
@@ -33,7 +32,7 @@ public class ItemAlchemyClient {
 
     public static void init() {
         // Mixinを使った場合、関数が1.20から変更されているために使えないのでこちらで対処しておく
-        ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> lines.addAll(getEmcText(stack)));
+        ItemTooltipRegistry.registerItemTooltip((context) -> context.addTooltip(getEmcText(context.getStack())));
 
         CompatRegistryClient.registerScreen(ScreenHandlers.ALCHEMY_TABLE, AlchemyTableScreen::new);
         CompatRegistryClient.registerScreen(ScreenHandlers.EMC_COLLECTOR, EMCCollectorScreen::new);

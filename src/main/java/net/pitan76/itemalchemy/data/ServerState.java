@@ -3,7 +3,6 @@ package net.pitan76.itemalchemy.data;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.PersistentStateManager;
 import net.pitan76.mcpitanlib.api.entity.Player;
@@ -53,7 +52,7 @@ public class ServerState extends CompatiblePersistentState implements ModState {
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+    public NbtCompound writeNbtOverride(NbtCompound nbt) {
         NbtCompound modNBT = new NbtCompound();
         NbtList teamNBTList = new NbtList();
         NbtList playerNBTList = new NbtList();
