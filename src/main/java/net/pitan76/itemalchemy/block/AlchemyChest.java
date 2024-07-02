@@ -19,6 +19,7 @@ import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
 import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
+import net.pitan76.mcpitanlib.api.event.block.StateReplacedEvent;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
@@ -41,17 +42,20 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
     }
 
     @Override
-    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-        if (state.isOf(newState.getBlock())) {
+    public void onStateReplaced(StateReplacedEvent e) {
+        World world = e.world;
+        BlockPos pos = e.pos;
+
+        if (e.state.isOf(e.newState.getBlock()))
             return;
-        }
+
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof Inventory) {
             Inventory inventory = (Inventory) blockEntity;
             ItemScatterer.spawn(world, pos, inventory);
             world.updateComparators(pos, this);
         }
-        super.onStateReplaced(state, world, pos, newState, moved);
+        super.onStateReplaced(e);
     }
 
     @Override

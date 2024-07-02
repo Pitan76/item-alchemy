@@ -14,6 +14,7 @@ import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
+import net.pitan76.mcpitanlib.api.event.block.OutlineShapeEvent;
 
 public class AlchemyTable extends ExtendBlock {
     public AlchemyTable(AbstractBlock.Settings settings) {
@@ -38,7 +39,7 @@ public class AlchemyTable extends ExtendBlock {
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(OutlineShapeEvent e) {
         return VoxelShapes.cuboid(0, 0, 0, 1, 0.125, 1);
     }
 }
