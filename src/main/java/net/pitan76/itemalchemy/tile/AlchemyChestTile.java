@@ -16,6 +16,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.pitan76.itemalchemy.gui.screen.AlchemyChestScreenHandler;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
+import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
 import net.pitan76.mcpitanlib.api.util.InventoryUtil;
@@ -31,21 +33,13 @@ public class AlchemyChestTile extends ExtendBlockEntity implements SidedInventor
     }
 
     @Override
-    public void writeNbtOverride(NbtCompound nbt) {
-        super.writeNbtOverride(nbt);
-        if (getWorld() != null) {
-            InventoryUtil.writeNbt(getWorld(), nbt, inventory);
-        }
-        //Inventories.writeNbt(nbt, inventory);
+    public void writeNbt(WriteNbtArgs args) {
+        InventoryUtil.writeNbt(args, inventory);
     }
 
     @Override
-    public void readNbtOverride(NbtCompound nbt) {
-        super.readNbtOverride(nbt);
-        if (getWorld() != null) {
-            InventoryUtil.readNbt(getWorld(), nbt, inventory);
-        }
-        //Inventories.readNbt(nbt, inventory);
+    public void readNbt(ReadNbtArgs args) {
+        InventoryUtil.readNbt(args, inventory);
     }
 
     public AlchemyChestTile(BlockPos pos, BlockState state) {

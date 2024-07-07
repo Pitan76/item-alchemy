@@ -6,6 +6,8 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.PersistentStateManager;
 import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
+import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
 import net.pitan76.mcpitanlib.api.world.CompatiblePersistentState;
 import org.jetbrains.annotations.Nullable;
@@ -52,7 +54,9 @@ public class ServerState extends CompatiblePersistentState implements ModState {
     }
 
     @Override
-    public NbtCompound writeNbtOverride(NbtCompound nbt) {
+    public NbtCompound writeNbt(WriteNbtArgs args) {
+        NbtCompound nbt = args.getNbt();
+
         NbtCompound modNBT = new NbtCompound();
         NbtList teamNBTList = new NbtList();
         NbtList playerNBTList = new NbtList();
@@ -158,7 +162,7 @@ public class ServerState extends CompatiblePersistentState implements ModState {
     }
 
     @Override
-    public void readNbt(NbtCompound tag) {
+    public void readNbt(ReadNbtArgs args) {
 
     }
 }

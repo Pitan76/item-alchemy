@@ -27,6 +27,8 @@ import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.container.factory.DisplayNameArgs;
 import net.pitan76.mcpitanlib.api.event.container.factory.ExtraDataArgs;
+import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
+import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
@@ -70,21 +72,17 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
     }
 
     @Override
-    public void writeNbtOverride(NbtCompound nbt) {
-        super.writeNbtOverride(nbt);
-        //Inventories.writeNbt(nbt, inventory);
-        if (getWorld() != null)
-            InventoryUtil.writeNbt(getWorld(), nbt, inventory);
+    public void writeNbt(WriteNbtArgs args) {
+        NbtCompound nbt = args.getNbt();
+        InventoryUtil.writeNbt(args, inventory);
         nbt.putLong("stored_emc", storedEMC);
     }
 
     @Override
-    public void readNbtOverride(NbtCompound nbt) {
-        super.readNbtOverride(nbt);
+    public void readNbt(ReadNbtArgs args) {
+        NbtCompound nbt = args.getNbt();
         storedEMC = nbt.getLong("stored_emc");
-        //Inventories.readNbt(nbt, inventory);
-        if (getWorld() != null)
-            InventoryUtil.readNbt(getWorld(), nbt, inventory);
+        InventoryUtil.readNbt(args, inventory);
     }
 
     @Override
