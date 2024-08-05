@@ -12,6 +12,7 @@ This MOD adds philosopher's stone etc. which can be equivalently exchanged with 
 ## Contributor (Thanks!)
 - [Developer & Designer] OffsetMonkey538 Improved the textures, bug fix
 - [Developer] mymai1208 Implemented team function and charge function, bug fix
+- [Developer] anthonymendez TBD
 - [Designer] Murderman25 Provided the textures
 - [Translator] 54sda Translated to Chinese (zh_cn.json)
 
