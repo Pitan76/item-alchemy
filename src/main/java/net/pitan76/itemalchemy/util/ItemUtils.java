@@ -28,6 +28,12 @@ public class ItemUtils {
   // Maximum charge value allowed.
   public static final int MAX_CHARGE_VALUE = 4;
 
+  public static void handleItemChargeInventoryTick(ItemStack itemStack) {
+    int charge = getCharge(itemStack);
+    int damage = itemStack.getMaxDamage() - (charge * 4);
+    itemStack.setDamage(damage);
+  }
+
   /**
    * Handles {@link ItemMixin#inventoryTick(ItemStack, World, Entity, int, boolean, CallbackInfo)}
    * if the selected inventory item is of {@link ItemCharge}.
