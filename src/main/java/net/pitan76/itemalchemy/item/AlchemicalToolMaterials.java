@@ -5,8 +5,8 @@ import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
 
 public enum AlchemicalToolMaterials implements CompatibleToolMaterial {
 
-    DARK_MATTER(3, 0, 10.0F, 2.0F, 16, Ingredient.ofItems(Items.DARK_MATTER.getOrNull())),
-    RED_MATTER(3, 0, 15.0F, 4.0F, 20, Ingredient.ofItems(Items.RED_MATTER.getOrNull()));
+    DARK_MATTER(3, 16, 10.0F, 2.0F, 16, Ingredient.ofItems(Items.DARK_MATTER.getOrNull())),
+    RED_MATTER(3, 16, 15.0F, 4.0F, 20, Ingredient.ofItems(Items.RED_MATTER.getOrNull()));
 
     private final int miningLevel;
     private final int itemDurability;
