@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:coal"
+        },
+        {
+            "item": "minecraft:coal"
+        },
+        {
+            "item": "minecraft:coal"
+        },
+        {
+            "item": "minecraft:coal"
+        },
+        {
+            "item": "itemalchemy:philosopher_stone"
+        }
+    ],
+    "result": {
+        "item": "itemalchemy:alchemical_fuel",
+        "count": 1
+    }
+}

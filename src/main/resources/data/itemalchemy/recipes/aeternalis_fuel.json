@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "itemalchemy:mobius_fuel"
+        },
+        {
+            "item": "itemalchemy:mobius_fuel"
+        },
+        {
+            "item": "itemalchemy:mobius_fuel"
+        },
+        {
+            "item": "itemalchemy:mobius_fuel"
+        },
+        {
+            "item": "itemalchemy:philosopher_stone"
+        }
+    ],
+    "result": {
+        "item": "itemalchemy:aeternalis_fuel",
+        "count": 1
+    }
+}
