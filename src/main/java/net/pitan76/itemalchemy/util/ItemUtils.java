@@ -1,7 +1,5 @@
 package net.pitan76.itemalchemy.util;
 
-import static com.google.common.primitives.Ints.constrainToRange;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -10,9 +8,10 @@ import net.minecraft.world.World;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.mixins.ItemMixin;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
-import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static com.google.common.primitives.Ints.constrainToRange;
 
 /**
  * Provides utility functions relating to {@link ItemStack}s and their {@link ItemAlchemy} charge
