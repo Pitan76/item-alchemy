@@ -13,11 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Item.class)
 public class ItemMixin {
     @Inject(method = "inventoryTick", at = @At("TAIL"))
-    public void inventoryTick(
-            ItemStack stack, World world, Entity entity, int slot, boolean selected, CallbackInfo ci) {
-        if (world.isClient) {
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected, CallbackInfo ci) {
+        if (world.isClient)
             return;
-        }
 
         if (selected && ItemUtils.isItemChargeable(stack)) {
             ItemUtils.handleItemChargeInventoryTick(stack);
