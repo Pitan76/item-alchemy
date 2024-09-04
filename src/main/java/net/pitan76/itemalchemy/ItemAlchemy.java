@@ -34,6 +34,7 @@ public class ItemAlchemy extends CommonModInitializer {
 
     public void init() {
         INSTANCE = this;
+        registry = super.registry;
 
         RecipeManagerRegistry.register(AlchemicalRecipeManager::new);
 
