@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import static net.pitan76.itemalchemy.ItemAlchemy._id;
+
 // Referred to "TransmutationRecipeManager (RetroExchange)"
 // https://github.com/modmuss50/Retro-Exchange/blob/main/common/src/main/java/me/modmuss50/retroexchange/TransmutationRecipeManager.java (modmuss50)
 public class AlchemicalRecipeManager {
@@ -51,7 +53,7 @@ public class AlchemicalRecipeManager {
         try {
             resourceIds = ResourceUtil.findResources(event.getResourceManager(), "alchemical_craft", ".json");
         } catch (IOException e) {
-            ItemAlchemy.LOGGER.error("Failed to read alchemy.json", e);
+            ItemAlchemy.INSTANCE.error("Failed to read alchemy.json: " + e.getMessage());
             return;
         }
 
@@ -63,7 +65,7 @@ public class AlchemicalRecipeManager {
                 jsonArray.forEach((jsonElement) -> handle(jsonElement.getAsJsonObject()));
             } catch (Exception e) {
                 e.printStackTrace();
-                ItemAlchemy.LOGGER.error("Failed to read {}", resourceId.toString(), e);
+                ItemAlchemy.INSTANCE.error("Failed to read {}: " + resourceId.toString() + " " + e.getMessage());
             }
         });
     }
@@ -89,9 +91,9 @@ public class AlchemicalRecipeManager {
         }
         inputs[0] = Items.PHILOSOPHER_STONE.get();
 
-        Identifier id = ItemAlchemy.id("alchemical_craft/n" + count++);
+        CompatIdentifier id = _id("alchemical_craft/n" + count++);
 
-        CompatibleRecipeEntry recipe = CompatibleRecipeEntryUtil.createShapelessRecipe(id, "", RecipeUtil.CompatibilityCraftingRecipeCategory.MISC, new ItemStack(output), buildInput(inputs));
+        CompatibleRecipeEntry recipe = CompatibleRecipeEntryUtil.createShapelessRecipe(id.toMinecraft(), "", RecipeUtil.CompatibilityCraftingRecipeCategory.MISC, new ItemStack(output), buildInput(inputs));
         event.putCompatibleRecipeEntry(recipe);
     }
 

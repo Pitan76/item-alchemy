@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy;
 
-import net.minecraft.util.Identifier;
 import net.pitan76.itemalchemy.api.EMCUtil;
 import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.command.ItemAlchemyCommand;
@@ -15,34 +14,27 @@ import net.pitan76.itemalchemy.recipe.AlchemicalRecipeManager;
 import net.pitan76.itemalchemy.sound.Sounds;
 import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.itemalchemy.util.ItemCharge;
+import net.pitan76.mcpitanlib.api.CommonModInitializer;
 import net.pitan76.mcpitanlib.api.command.CommandRegistry;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.v0.EventRegistry;
 import net.pitan76.mcpitanlib.api.event.v0.event.ItemStackActionEvent;
 import net.pitan76.mcpitanlib.api.event.v1.RecipeManagerRegistry;
-import net.pitan76.mcpitanlib.api.registry.CompatRegistry;
-import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.pitan76.mcpitanlib.api.registry.v2.CompatRegistryV2;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 
-public class ItemAlchemy {
+public class ItemAlchemy extends CommonModInitializer {
 
     public static final String MOD_ID = "itemalchemy";
     public static final String MOD_NAME = "ItemAlchemy";
 
-    public static Logger LOGGER = LogManager.getLogger();
-    public static void log(Level level, String message){
-        LOGGER.log(level, "[" + MOD_NAME + "] " + message);
-    }
+    public static CompatRegistryV2 registry;
 
-    public static Identifier id(String id) {
-        return IdentifierUtil.id(MOD_ID, id);
-    }
+    public static ItemAlchemy INSTANCE;
 
-    public static CompatRegistry registry = CompatRegistry.createRegistry(MOD_ID);
+    public void init() {
+        INSTANCE = this;
 
-    public static void init() {
         RecipeManagerRegistry.register(AlchemicalRecipeManager::new);
 
         ItemGroups.init();
@@ -80,7 +72,19 @@ public class ItemAlchemy {
 
         // Registry commands
         CommandRegistry.register("itemalchemy", new ItemAlchemyCommand());
+    }
 
-        registry.allRegister();
+    @Override
+    public String getId() {
+        return MOD_ID;
+    }
+
+    @Override
+    public String getName() {
+        return MOD_NAME;
+    }
+
+    public static CompatIdentifier _id(String path) {
+        return INSTANCE.compatId(path);
     }
 }

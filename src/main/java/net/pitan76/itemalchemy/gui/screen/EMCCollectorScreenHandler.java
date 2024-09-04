@@ -2,7 +2,6 @@ package net.pitan76.itemalchemy.gui.screen;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -14,6 +13,9 @@ import net.pitan76.itemalchemy.tile.EMCCollectorTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
+import net.pitan76.mcpitanlib.api.util.InventoryUtil;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
+import net.pitan76.mcpitanlib.api.util.ScreenHandlerUtil;
 import net.pitan76.mcpitanlib.api.util.SlotUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +28,7 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
     public long maxEMC = 0;
 
     public EMCCollectorScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, null, new SimpleInventory(16 + 3));
+        this(syncId, playerInventory, null, InventoryUtil.createSimpleInventory(16 + 3));
         NbtCompound data = PacketByteUtil.readNbt(buf);
         if (data == null) return;
         int x, y, z;
@@ -62,20 +64,20 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
 
     @Override
     public ItemStack quickMoveOverride(Player player, int index) {
-        Slot slot = this.slots.get(index);
-        if (slot.hasStack()) {
+        Slot slot = ScreenHandlerUtil.getSlot(this, index);
+        if (SlotUtil.hasStack(slot)) {
             ItemStack originalStack = SlotUtil.getStack(slot);
             // TargetSlot
             if (index == 37) {
                 Slot targetSlot = this.slots.get(37);
-                SlotUtil.setStack(targetSlot, ItemStack.EMPTY);
-                return ItemStack.EMPTY;
+                SlotUtil.setStack(targetSlot, ItemStackUtil.empty());
+                return ItemStackUtil.empty();
             }
 
             if (index < 36) {
                 if (!this.callInsertItem(originalStack, 36 + 3, 36 + 16 + 3, false)) {
                     if (!this.callInsertItem(originalStack, 36, 36 + 3, false)) {
-                        return ItemStack.EMPTY;
+                        return ItemStackUtil.empty();
                     }
                 }
 
@@ -85,19 +87,19 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
                     ItemStack newTargetStack = originalStack.copy();
                     newTargetStack.setCount(37);
                     SlotUtil.setStack(targetSlot, newTargetStack);
-                    return ItemStack.EMPTY;
+                    return ItemStackUtil.empty();
                 }
             } else if (!this.callInsertItem(originalStack, 0, 36, false)) {
-                return ItemStack.EMPTY;
+                return ItemStackUtil.empty();
             }
 
             if (originalStack.isEmpty()) {
-                SlotUtil.setStack(slot, ItemStack.EMPTY);
+                SlotUtil.setStack(slot, ItemStackUtil.empty());
             } else {
-                slot.markDirty();
+                SlotUtil.markDirty(slot);
             }
         }
-        return ItemStack.EMPTY;
+        return ItemStackUtil.empty();
     }
 
     @Override

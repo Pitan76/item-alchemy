@@ -5,6 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +25,13 @@ public class EMCRepeater extends ExtendBlock {
         for (BlockPos pos : blockPoses) {
             if (emcRepeaterPosList.contains(pos)) continue;
 
-            if (world.getBlockState(pos).getBlock() instanceof EMCRepeater) {
+            if (WorldUtil.getBlockState(world, pos).getBlock() instanceof EMCRepeater) {
                 emcRepeaterPosList.add(pos);
                 BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
                 blockPosList.addAll(getNearPoses(world, nearPoses, emcRepeaterPosList));
             } else {
-                if (!blockPosList.contains(pos)) blockPosList.add(pos);
+                if (!blockPosList.contains(pos))
+                    blockPosList.add(pos);
             }
         }
 

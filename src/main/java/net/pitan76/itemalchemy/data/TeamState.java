@@ -4,6 +4,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import net.pitan76.mcpitanlib.api.util.NbtUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,12 @@ public class TeamState {
     public List<String> registeredItems = new ArrayList<>();
 
     public void readNbt(NbtCompound nbt) {
-        name = nbt.getString("name");
-        createdAt = nbt.getLong("created_at");
-        teamID = nbt.getUuid("id");
-        owner = nbt.getUuid("owner");
-        storedEMC = nbt.getLong("emc");
-        isDefault = nbt.getBoolean("is_default");
+        name = NbtUtil.get(nbt, "name", String.class);
+        createdAt = NbtUtil.get(nbt, "created_at", Long.class);
+        teamID = NbtUtil.get(nbt, "id", UUID.class);
+        owner = NbtUtil.get(nbt, "owner", UUID.class);
+        storedEMC = NbtUtil.get(nbt, "emc", Long.class);
+        isDefault = NbtUtil.get(nbt, "is_default", Boolean.class);
 
         List<String> registeredItems = ((NbtList)nbt.get("registered_items")).stream()
                 .filter(nbtElement -> nbtElement instanceof NbtString)
@@ -36,12 +37,12 @@ public class TeamState {
     }
 
     public void writeNbt(NbtCompound nbt) {
-        nbt.putString("name", name);
-        nbt.putLong("created_at", createdAt);
+        NbtUtil.set(nbt, "name", name);
+        NbtUtil.set(nbt, "created_at", createdAt);
         nbt.putUuid("id", teamID);
         nbt.putUuid("owner", owner);
-        nbt.putLong("emc", storedEMC);
-        nbt.putBoolean("is_default", isDefault);
+        NbtUtil.set(nbt, "emc", storedEMC);
+        NbtUtil.set(nbt, "is_default", isDefault);
 
         NbtList registeredItems = new NbtList();
 

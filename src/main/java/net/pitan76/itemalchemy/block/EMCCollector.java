@@ -4,11 +4,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
@@ -18,14 +15,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.tile.EMCCollectorTile;
+import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
-import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
-import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
-import net.pitan76.mcpitanlib.api.event.block.StateReplacedEvent;
-import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.event.block.*;
 import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,7 +34,7 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
 
     public EMCCollector(CompatibleBlockSettings settings, long maxEMC) {
         super(settings);
-        setDefaultState(BlockStateUtil.getDefaultState(this).with(FACING, Direction.NORTH));
+        setNewDefaultState(BlockStateUtil.getDefaultState(this).with(FACING, Direction.NORTH));
         this.maxEMC = maxEMC;
     }
 
@@ -58,7 +54,7 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof Inventory) {
             Inventory inventory = (Inventory) blockEntity;
-            inventory.setStack(1, ItemStack.EMPTY);
+            inventory.setStack(1, ItemStackUtil.empty());
             ItemScatterer.spawn(world, pos, inventory);
             world.updateComparators(pos, this);
         }
@@ -66,8 +62,8 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return getDefaultState().with(FACING, ctx.getPlayer().getHorizontalFacing().getOpposite());
+    public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
+        return args.withBlockState(FACING, args.getHorizontalPlayerFacing().getOpposite());
     }
 
     public EMCCollector() {
@@ -80,11 +76,11 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
 
     @Override
     public ActionResult onRightClick(BlockUseEvent e) {
-        if (e.world.isClient()) {
+        if (e.isClient()) {
             return ActionResult.SUCCESS;
         }
 
-        BlockEntity blockEntity = e.world.getBlockEntity(e.pos);
+        BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof EMCCollectorTile) {
             EMCCollectorTile tile = (EMCCollectorTile)blockEntity;
             e.player.openExtendedMenu(tile);
@@ -104,14 +100,13 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
         return new EMCCollectorTile(event);
     }
 
-    @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return ((world1, pos, state1, blockEntity) -> {
-            if (blockEntity instanceof EMCCollectorTile) {
-                EMCCollectorTile emcCollectorTile = (EMCCollectorTile) blockEntity;
-                emcCollectorTile.tick(world1, pos, state1, emcCollectorTile);
-            }
-        });
+    public @Nullable <T extends BlockEntity> BlockEntityType<T> getBlockEntityType() {
+        return (BlockEntityType<T>) Tiles.EMC_COLLECTOR.getOrNull();
+    }
+
+    @Override
+    public boolean isTick() {
+        return true;
     }
 }

@@ -3,19 +3,17 @@ package net.pitan76.itemalchemy.client.screen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
-import net.pitan76.mcpitanlib.api.client.SimpleHandledScreen;
+import net.pitan76.mcpitanlib.api.client.CompatInventoryScreen;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawBackgroundArgs;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawForegroundArgs;
-import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawMouseoverTooltipArgs;
-import net.pitan76.mcpitanlib.api.client.render.handledscreen.RenderArgs;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
-import net.pitan76.mcpitanlib.api.util.client.RenderUtil;
 import net.pitan76.mcpitanlib.api.util.client.ScreenUtil;
 
-public class EMCCollectorScreen extends SimpleHandledScreen {
+import static net.pitan76.itemalchemy.ItemAlchemy._id;
+
+public class EMCCollectorScreen extends CompatInventoryScreen {
     public PlayerInventory playerInventory;
 
     EMCCollectorScreenHandler screenHandler;
@@ -33,11 +31,11 @@ public class EMCCollectorScreen extends SimpleHandledScreen {
     @Override
     public void initOverride() {
         super.initOverride();
-
     }
 
-    public Identifier getTexture() {
-        return ItemAlchemy.id("textures/gui/emc_collector.png");
+    @Override
+    public CompatIdentifier getCompatTexture() {
+        return _id("textures/gui/emc_collector.png");
     }
 
     @Override
@@ -51,20 +49,12 @@ public class EMCCollectorScreen extends SimpleHandledScreen {
 
     @Override
     public void drawBackgroundOverride(DrawBackgroundArgs args) {
+        super.drawBackgroundOverride(args);
+        if (screenHandler == null) return;
+
         long emc = (screenHandler.storedEMC + screenHandler.tile.storedEMC);
         if (emc > screenHandler.maxEMC) emc = screenHandler.maxEMC;
 
-        RenderUtil.setShaderToPositionTexProgram();
-        RenderUtil.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        callDrawTexture(args.drawObjectDM, getTexture(), x, y, 0, 0, backgroundWidth, backgroundHeight);
-        if (screenHandler != null)
-            callDrawTexture(args.drawObjectDM, getTexture(), x + 93, y + 13, 0, 168, (int) Math.round((double) emc / screenHandler.maxEMC * 46), 14);
-    }
-
-    @Override
-    public void renderOverride(RenderArgs args) {
-        callRenderBackground(args);
-        super.renderOverride(args);
-        callDrawMouseoverTooltip(new DrawMouseoverTooltipArgs(args.drawObjectDM, args.mouseX, args.mouseY));
+        callDrawTexture(args.drawObjectDM, getTexture(), x + 93, y + 13, 0, 168, (int) Math.round((double) emc / screenHandler.maxEMC * 46), 14);
     }
 }

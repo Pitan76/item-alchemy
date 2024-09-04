@@ -10,7 +10,7 @@ public class FabricMain implements ModInitializer {
      */
     @Override
     public void onInitialize() {
-        ItemAlchemy.init();
+        new ItemAlchemy();
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             ItemAlchemyClient.init();
         }

@@ -17,7 +17,7 @@ public class PlayerRegisteredItemUtil {
     public static List<String> getItemsAsString(Player player) {
         Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
 
-        if(!teamState.isPresent()) {
+        if (!teamState.isPresent()) {
             return new ArrayList<>();
         }
 
@@ -50,7 +50,7 @@ public class PlayerRegisteredItemUtil {
 
         teamState.get().registeredItems = list;
 
-        if(!player.isClient()) {
+        if (!player.isClient()) {
             ServerState.getServerState(player.getWorld().getServer()).markDirty();
         }
     }

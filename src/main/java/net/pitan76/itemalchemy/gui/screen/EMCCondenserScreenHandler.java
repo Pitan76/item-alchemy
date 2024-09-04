@@ -2,7 +2,6 @@ package net.pitan76.itemalchemy.gui.screen;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -16,6 +15,7 @@ import net.pitan76.itemalchemy.tile.EMCCondenserTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
+import net.pitan76.mcpitanlib.api.util.InventoryUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.SlotUtil;
 import org.jetbrains.annotations.Nullable;
@@ -30,10 +30,10 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
 
     public long storedEMC = 0;
     public long maxEMC = 0;
-    public ItemStack targetStack = ItemStack.EMPTY;
+    public ItemStack targetStack = ItemStackUtil.empty();
 
     public EMCCondenserScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, null, new SimpleInventory(92), ItemStack.EMPTY);
+        this(syncId, playerInventory, null, InventoryUtil.createSimpleInventory(92), ItemStackUtil.empty());
         NbtCompound data = PacketByteUtil.readNbt(buf);
         if (data == null) return;
         int x, y, z;
@@ -102,7 +102,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
         Slot slot = callGetSlot(index);
         Slot targetSlot = callGetSlot(36);
 
-        if (slot.hasStack()) {
+        if (SlotUtil.hasStack(slot)) {
             ItemStack originalStack = SlotUtil.getStack(slot);
 
             // TargetSlot
@@ -110,7 +110,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
                 //増殖スロットが空だった場合
                 if(targetStack.isEmpty()) {
                     if (EMCManager.get(originalStack.getItem()) == 0) {
-                        SlotUtil.setStack(targetSlot, ItemStack.EMPTY);
+                        SlotUtil.setStack(targetSlot, ItemStackUtil.empty());
                         return originalStack;
                     }
 
@@ -120,13 +120,13 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
                     SlotUtil.setStack(targetSlot, newStack);
                     setTargetStack(newStack);
 
-                    return ItemStack.EMPTY;
+                    return ItemStackUtil.empty();
                 }
 
-                SlotUtil.setStack(targetSlot, ItemStack.EMPTY);
-                setTargetStack(ItemStack.EMPTY);
+                SlotUtil.setStack(targetSlot, ItemStackUtil.empty());
+                setTargetStack(ItemStackUtil.empty());
 
-                return ItemStack.EMPTY;
+                return ItemStackUtil.empty();
             }
 
             if (index < 36) {
@@ -140,23 +140,23 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
                         setTargetStack(newStack);
                     }
 
-                    return ItemStack.EMPTY;
+                    return ItemStackUtil.empty();
                 }
 
                 if (!this.callInsertItem(originalStack, 36 + 1, 36 + 92, false)) {
-                    return ItemStack.EMPTY;
+                    return ItemStackUtil.empty();
                 }
             } else if (!this.callInsertItem(originalStack, 0, 36, true)) {
-                return ItemStack.EMPTY;
+                return ItemStackUtil.empty();
             }
 
             if (originalStack.isEmpty()) {
-                SlotUtil.setStack(slot, ItemStack.EMPTY);
+                SlotUtil.setStack(slot, ItemStackUtil.empty());
             } else {
-                slot.markDirty();
+                SlotUtil.markDirty(slot);
             }
         }
-        return ItemStack.EMPTY;
+        return ItemStackUtil.empty();
     }
 
     @Override
@@ -166,8 +166,8 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
         if (slotIndex == 36) { // Target Slot
             // カーソルでアイテムを持ってない場合
             if (getCursorStack().isEmpty()) {
-                setTargetStack(ItemStack.EMPTY);
-                SlotUtil.setStack(targetSlot, ItemStack.EMPTY);
+                setTargetStack(ItemStackUtil.empty());
+                SlotUtil.setStack(targetSlot, ItemStackUtil.empty());
 
                 return;
             }

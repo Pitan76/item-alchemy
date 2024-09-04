@@ -3,17 +3,15 @@ package net.pitan76.itemalchemy.client.screen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.pitan76.itemalchemy.ItemAlchemy;
-import net.pitan76.mcpitanlib.api.client.SimpleHandledScreen;
+import net.pitan76.mcpitanlib.api.client.CompatInventoryScreen;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawBackgroundArgs;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawForegroundArgs;
-import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawMouseoverTooltipArgs;
-import net.pitan76.mcpitanlib.api.client.render.handledscreen.RenderArgs;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
-import net.pitan76.mcpitanlib.api.util.client.RenderUtil;
 
-public class AlchemyChestScreen extends SimpleHandledScreen {
+import static net.pitan76.itemalchemy.ItemAlchemy._id;
+
+public class AlchemyChestScreen extends CompatInventoryScreen {
     public PlayerInventory playerInventory;
 
     public AlchemyChestScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
@@ -27,28 +25,20 @@ public class AlchemyChestScreen extends SimpleHandledScreen {
     @Override
     public void initOverride() {
         super.initOverride();
-
     }
 
-    public Identifier getTexture() {
-        return ItemAlchemy.id("textures/gui/alchemy_chest.png");
+    @Override
+    public CompatIdentifier getCompatTexture() {
+        return _id("textures/gui/alchemy_chest.png");
     }
 
     @Override
     public void drawBackgroundOverride(DrawBackgroundArgs args) {
-        RenderUtil.setShaderToPositionTexProgram();
-        RenderUtil.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        callDrawTexture(args.drawObjectDM, getTexture(), x, y, 0, 0, backgroundWidth, backgroundHeight);
+        super.drawBackgroundOverride(args);
     }
 
     @Override
-    protected void drawForegroundOverride(DrawForegroundArgs args) {
-    }
+    public void drawForegroundOverride(DrawForegroundArgs args) {
 
-    @Override
-    public void renderOverride(RenderArgs args) {
-        callRenderBackground(args);
-        super.renderOverride(args);
-        callDrawMouseoverTooltip(new DrawMouseoverTooltipArgs(args.drawObjectDM, args.mouseX, args.mouseY));
     }
 }

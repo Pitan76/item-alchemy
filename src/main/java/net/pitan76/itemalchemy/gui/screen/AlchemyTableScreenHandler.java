@@ -2,7 +2,6 @@ package net.pitan76.itemalchemy.gui.screen;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandlerType;
@@ -20,10 +19,7 @@ import net.pitan76.itemalchemy.gui.slot.RegisterSlot;
 import net.pitan76.itemalchemy.gui.slot.RemoveSlot;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.SimpleScreenHandler;
-import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
-import net.pitan76.mcpitanlib.api.util.ItemUtil;
-import net.pitan76.mcpitanlib.api.util.SlotUtil;
-import net.pitan76.mcpitanlib.api.util.TextUtil;
+import net.pitan76.mcpitanlib.api.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +31,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
     public RegisterInventory registerInventory; // contains InputSlot(0)
     public ExtractInventory extractInventory;
-    public Inventory otherInventory = new SimpleInventory(52);
+    public Inventory otherInventory = InventoryUtil.createSimpleInventory(52);
 
     public AlchemyTableScreenHandler(int syncId, PlayerInventory playerInventory) {
         this(syncId, playerInventory, new RegisterInventory(64, new Player(playerInventory.player)));
@@ -138,113 +134,30 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
         return this.callAddSlot(slot);
     }
 
-    public static final int DEFAULT_SLOT_SIZE = 18;
-
-    /**
-     * Add player main inventory slots
-     * @param inventory target player inventory
-     * @param x start x
-     * @param y start y
-     */
-    protected List<Slot> addPlayerMainInventorySlots(PlayerInventory inventory, int x, int y) {
-        return this.addSlots(inventory, 9, x, y, DEFAULT_SLOT_SIZE, 9, 3);
-    }
-
-    /**
-     * Add player hotbar slots
-     * @param inventory target player inventory
-     * @param x start x
-     * @param y start y
-     */
-    protected List<Slot> addPlayerHotbarSlots(PlayerInventory inventory, int x, int y) {
-        return this.addSlotsX(inventory, 0, x, y, DEFAULT_SLOT_SIZE, 9);
-    }
-
-    /**
-     * 一括でスロットを設置する
-     * @param inventory target inventory
-     * @param firstIndex fisrt index
-     * @param firstX first x
-     * @param firstY first y
-     * @param size a slot size (if this is -1, set 18 to this)
-     * @param maxAmountX x line slot max amount
-     * @param maxAmountY y line slot max amount
-     * @return Slot list
-     */
-    protected List<Slot> addSlots(Inventory inventory, int firstIndex, int firstX, int firstY, int size, int maxAmountX, int maxAmountY) {
-        if (size < 0) size = DEFAULT_SLOT_SIZE;
-        List<Slot> slots = new ArrayList<>();
-        for (int y = 0; y < maxAmountY; ++y) {
-            List<Slot> xSlots = this.addSlotsX(inventory, firstIndex + (y * maxAmountX), firstX, firstY + (y * size), size, maxAmountX);
-            slots.addAll(xSlots);
-        }
-        return slots;
-    }
-
-    /**
-     * 一括で横にスロットを設置する
-     * @param inventory target inventory
-     * @param firstIndex first index
-     * @param firstX first x
-     * @param y y
-     * @param size a slot size (if this is -1, set 18 to this)
-     * @param amount slot amount
-     * @return Slot list
-     */
-    protected List<Slot> addSlotsX(Inventory inventory, int firstIndex, int firstX, int y, int size, int amount) {
-        if (size < 0) size = DEFAULT_SLOT_SIZE;
-        List<Slot> slots = new ArrayList<>();
-        for (int x = 0; x < amount; ++x) {
-            Slot slot = this.addNormalSlot(inventory, firstIndex + x, firstX + (x * size), y);
-            slots.add(slot);
-        }
-        return slots;
-    }
-
-    /**
-     * 一括で縦にスロットを設置する
-     * @param inventory target inventory
-     * @param firstIndex first index
-     * @param x x
-     * @param firstY first y
-     * @param size a slot size (if this is -1, set 18 to this)
-     * @param amount slot amount
-     * @return Slot list
-     */
-    protected List<Slot> addSlotsY(Inventory inventory, int firstIndex, int x, int firstY, int size, int amount) {
-        if (size < 0) size = DEFAULT_SLOT_SIZE;
-        List<Slot> slots = new ArrayList<>();
-        for (int y = 0; y < amount; ++y) {
-            Slot slot = this.addNormalSlot(inventory, firstIndex + x, x, firstY + (y * size));
-            slots.add(slot);
-        }
-        return slots;
-    }
-
     @Override
     public ItemStack quickMoveOverride(Player player, int index) {
         ItemStack newStack;
-        Slot slot = this.slots.get(index);
-        if (slot.hasStack()) {
+        Slot slot = ScreenHandlerUtil.getSlot(this, index);
+        if (SlotUtil.hasStack(slot)) {
             ItemStack originalStack = SlotUtil.getStack(slot);
             newStack = originalStack.copy();
 
             if (index < 36) { // indexがRegisterサイズより小さい
                 if (!this.callInsertItem(originalStack, 36, 37, true)) {
-                    return ItemStack.EMPTY;
+                    return ItemStackUtil.empty();
                 }
             } else if (!this.callInsertItem(originalStack, 0, 36, false)) {
-                return ItemStack.EMPTY;
+                return ItemStackUtil.empty();
             }
 
             if (originalStack.isEmpty()) {
-                SlotUtil.setStack(slot, ItemStack.EMPTY);
+                SlotUtil.setStack(slot, ItemStackUtil.empty());
             } else {
-                slot.markDirty();
+                SlotUtil.markDirty(slot);
             }
-            return ItemStack.EMPTY;
+            return ItemStackUtil.empty();
         }
-        return ItemStack.EMPTY;
+        return ItemStackUtil.empty();
     }
 
     public String searchText, searchNamespace = "";

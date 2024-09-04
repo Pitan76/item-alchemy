@@ -3,24 +3,21 @@ package net.pitan76.itemalchemy.block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 import net.pitan76.itemalchemy.tile.AlchemyChestTile;
+import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
 import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
+import net.pitan76.mcpitanlib.api.event.block.PlacementStateArgs;
 import net.pitan76.mcpitanlib.api.event.block.StateReplacedEvent;
-import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +29,7 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
 
     public AlchemyChest(CompatibleBlockSettings settings) {
         super(settings);
-        setDefaultState(BlockStateUtil.getDefaultState(this).with(FACING, Direction.NORTH));
+        setNewDefaultState(BlockStateUtil.getDefaultState(this).with(FACING, Direction.NORTH));
     }
 
     @Override
@@ -43,24 +40,15 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
 
     @Override
     public void onStateReplaced(StateReplacedEvent e) {
-        World world = e.world;
-        BlockPos pos = e.pos;
-
         if (e.state.isOf(e.newState.getBlock()))
             return;
 
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof Inventory) {
-            Inventory inventory = (Inventory) blockEntity;
-            ItemScatterer.spawn(world, pos, inventory);
-            world.updateComparators(pos, this);
-        }
-        super.onStateReplaced(e);
+        e.spawnDropsInContainer();
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return getDefaultState().with(FACING, ctx.getPlayer().getHorizontalFacing().getOpposite());
+    public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
+        return args.withBlockState(FACING, args.getHorizontalPlayerFacing().getOpposite());
     }
 
     public AlchemyChest() {
@@ -69,11 +57,10 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
 
     @Override
     public ActionResult onRightClick(BlockUseEvent e) {
-        if (e.world.isClient()) {
+        if (e.isClient())
             return ActionResult.SUCCESS;
-        }
 
-        BlockEntity blockEntity = e.world.getBlockEntity(e.pos);
+        BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof AlchemyChestTile) {
             AlchemyChestTile tile = (AlchemyChestTile)blockEntity;
             e.player.openGuiScreen(tile);
@@ -89,7 +76,12 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
     }
 
     @Override
-    public @Nullable BlockEntity createBlockEntity(TileCreateEvent event) {
-        return new AlchemyChestTile(event);
+    public @Nullable <T extends BlockEntity> BlockEntityType<T> getBlockEntityType() {
+        return (BlockEntityType<T>) Tiles.ALCHEMY_CHEST.getOrNull();
+    }
+
+    @Override
+    public boolean isTick() {
+        return true;
     }
 }

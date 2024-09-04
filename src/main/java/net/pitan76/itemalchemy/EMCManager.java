@@ -2,7 +2,6 @@ package net.pitan76.itemalchemy;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -27,10 +26,7 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tag.TagKey;
-import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
-import net.pitan76.mcpitanlib.api.util.ItemUtil;
-import net.pitan76.mcpitanlib.api.util.RecipeUtil;
-import net.pitan76.mcpitanlib.api.util.ResourceUtil;
+import net.pitan76.mcpitanlib.api.util.*;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -38,6 +34,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+
+import static net.pitan76.itemalchemy.ItemAlchemy._id;
 
 public class EMCManager {
 
@@ -107,8 +105,9 @@ public class EMCManager {
     }
 
     public static File getConfigFile() {
-        File dir = new File(FabricLoader.getInstance().getConfigDir().toFile(), ItemAlchemy.MOD_ID);
+        File dir = new File(PlatformUtil.getConfigFolder().toFile(), ItemAlchemy.MOD_ID);
         if (!dir.exists()) dir.mkdirs();
+
         return new File(dir, "emc_config.json");
     }
 
@@ -173,14 +172,14 @@ public class EMCManager {
 
         for (Recipe<?> recipe : recipes) {
             try {
-                ItemStack outStack = RecipeUtil.getOutput((Recipe<?>) recipe, world);
+                ItemStack outStack = RecipeUtil.getOutput(recipe, world);
                 addEmcFromRecipe(outStack, recipe, unsetRecipes, false);
             } catch (NoClassDefFoundError | Exception ignore) {}
         }
         List<Recipe<?>> dummy = new ArrayList<>();
         for (Recipe<?> recipe : unsetRecipes) {
             try {
-                ItemStack outStack = RecipeUtil.getOutput((Recipe<?>) recipe, world);;
+                ItemStack outStack = RecipeUtil.getOutput(recipe, world);
                 addEmcFromRecipe(outStack, recipe, dummy, true);
             } catch (NoClassDefFoundError | Exception ignore) {}
         }
@@ -223,11 +222,11 @@ public class EMCManager {
     public static void decrementEmc(Player player, long amount) {
         ServerState state = ServerState.getServerState(player.getWorld().getServer());
 
-        if(!state.getPlayer(player.getUUID()).isPresent()) {
-            return;
-        }
+        if (!state.getPlayer(player.getUUID()).isPresent()) return;
 
         PlayerState playerState = state.getPlayer(player.getUUID()).get();
+
+        if (!state.getTeam(playerState.teamID).isPresent()) return;
         TeamState teamState = state.getTeam(playerState.teamID).get();
 
         teamState.storedEMC -= amount;
@@ -238,11 +237,12 @@ public class EMCManager {
     public static void setEMCtoPlayer(Player player, long emc) {
         ServerState state = ServerState.getServerState(player.getWorld().getServer());
 
-        if(!state.getPlayer(player.getUUID()).isPresent()) {
-            return;
-        }
+        if (!state.getPlayer(player.getUUID()).isPresent()) return;
 
         PlayerState playerState = state.getPlayer(player.getUUID()).get();
+
+        if (!state.getTeam(playerState.teamID).isPresent()) return;
+
         TeamState teamState = state.getTeam(playerState.teamID).get();
 
         teamState.storedEMC = emc;
@@ -253,11 +253,11 @@ public class EMCManager {
     public static void incrementEmc(Player player, long amount) {
         ServerState state = ServerState.getServerState(player.getWorld().getServer());
 
-        if(!state.getPlayer(player.getUUID()).isPresent()) {
-            return;
-        }
+        if (!state.getPlayer(player.getUUID()).isPresent()) return;
 
         PlayerState playerState = state.getPlayer(player.getUUID()).get();
+
+        if (!state.getTeam(playerState.teamID).isPresent()) return;
         TeamState teamState = state.getTeam(playerState.teamID).get();
 
         teamState.storedEMC += amount;
@@ -272,15 +272,15 @@ public class EMCManager {
     }
 
     public static void syncS2C(ServerPlayerEntity serverPlayer) {
-        if (serverPlayer.networkHandler == null) {
+        if (serverPlayer.networkHandler == null)
             return;
-        }
 
         Player player = new Player(serverPlayer);
 
         ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
         PacketByteBuf buf = PacketByteUtil.create();
 
+        if (!serverState.getTeamByPlayer(player.getUUID()).isPresent()) return;
         TeamState teamState = serverState.getTeamByPlayer(player.getUUID()).get();
 
         NbtCompound nbt = new NbtCompound();
@@ -288,11 +288,11 @@ public class EMCManager {
 
         teamState.writeNbt(teamNBT);
 
-        nbt.put("team", teamNBT);
+        NbtUtil.put(nbt, "team", teamNBT);
 
         PacketByteUtil.writeNbt(buf, nbt);
 
-        ServerNetworking.send(serverPlayer, ItemAlchemy.id("sync_emc"), buf);
+        ServerNetworking.send(serverPlayer, _id("sync_emc").toMinecraft(), buf);
     }
 
     public static void syncS2C_emc_map(ServerPlayerEntity player) {
@@ -304,7 +304,7 @@ public class EMCManager {
 
         PacketByteUtil.writeMap(buf, map);
         //System.out.println("send emc map to " + player.getName().getString());
-        ServerNetworking.send(player, ItemAlchemy.id("sync_emc_map"), buf);
+        ServerNetworking.send(player, _id("sync_emc_map").toMinecraft(), buf);
     }
 
     public static Map<String, Long> defaultEMCMap = new LinkedHashMap<>();
@@ -314,7 +314,7 @@ public class EMCManager {
         try {
             resourceIds = ResourceUtil.findResources(resourceManager, "default_emcs", ".json");
         } catch (IOException e) {
-            ItemAlchemy.LOGGER.error("Failed to read default emc", e);
+            ItemAlchemy.INSTANCE.error("Failed to read default emc: " + e.getMessage());
             return;
         }
 
@@ -330,12 +330,10 @@ public class EMCManager {
                 if (resourceId.toString().endsWith("/tags.json")) {
                     HashMap<String, Long> tempMap = gson.fromJson(json, listType);
                     for (Map.Entry<String, Long> entry : map.entrySet()) {
-                        TagKey<Item> tagKey = (TagKey<Item>) TagKey.create(TagKey.Type.ITEM, IdentifierUtil.id(entry.getKey()));
-                        for (Item item : ItemUtil.getAllItems()) {
-                            if (ItemUtil.isIn(item, tagKey)) {
-                                if (tempMap.containsKey(ItemUtil.toID(item).toString())) continue;
-                                tempMap.put(ItemUtil.toID(item).toString(), entry.getValue());
-                            }
+                        Identifier tagId = IdentifierUtil.id(entry.getKey());
+                        for (Item item : ItemUtil.getItems(tagId)) {
+                            if (tempMap.containsKey(ItemUtil.toID(item).toString())) continue;
+                            tempMap.put(ItemUtil.toID(item).toString(), entry.getValue());
                         }
                     }
                     map = tempMap;
@@ -348,7 +346,7 @@ public class EMCManager {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                ItemAlchemy.LOGGER.error("Failed to read {}", resourceId.toString(), e);
+                ItemAlchemy.INSTANCE.error("Failed to read {}: " + resourceId.toString() + " " + e.getMessage());
             }
         });
     }

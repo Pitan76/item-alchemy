@@ -3,20 +3,18 @@ package net.pitan76.itemalchemy.block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.pitan76.itemalchemy.tile.AEGUTile;
 import net.pitan76.itemalchemy.tile.EMCCondenserTile;
+import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
 import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
-import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,7 +43,7 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
     }
 
     public static BlockState setConnected(BlockState state, boolean isConnected) {
-        return state.with(CONNECTED, isConnected);
+        return BlockStateUtil.with(state, CONNECTED, isConnected);
     }
 
     public static boolean isConnected(BlockState state) {
@@ -68,18 +66,12 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
     }
 
     @Override
-    public @Nullable BlockEntity createBlockEntity(TileCreateEvent event) {
-        return new AEGUTile(event);
+    public @Nullable <T extends BlockEntity> BlockEntityType<T> getBlockEntityType() {
+        return (BlockEntityType<T>) Tiles.AEGU.getOrNull();
     }
 
-    @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return ((world1, pos, state1, blockEntity) -> {
-            if (blockEntity instanceof AEGUTile) {
-                AEGUTile aeguTile = (AEGUTile) blockEntity;
-                aeguTile.tick(world1, pos, state1, aeguTile);
-            }
-        });
+    public boolean isTick() {
+        return true;
     }
 }

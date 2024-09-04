@@ -9,6 +9,7 @@ import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import net.pitan76.itemalchemy.item.ILearnableItem;
 import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class RegisterInventory extends SimpleInventory {
                 screenHandler.extractInventory.placeExtractSlots();
             }
 
-            if (consumedItem || !learning) stack = ItemStack.EMPTY;
+            if (consumedItem || !learning) stack = ItemStackUtil.empty();
         }
         super.setStack(slot, stack);
     }

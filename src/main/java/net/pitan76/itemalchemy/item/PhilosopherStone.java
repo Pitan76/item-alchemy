@@ -18,10 +18,7 @@ import net.pitan76.mcpitanlib.api.event.item.ItemUseOnBlockEvent;
 import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.ExtendItem;
 import net.pitan76.mcpitanlib.api.item.FixedRecipeRemainderItem;
-import net.pitan76.mcpitanlib.api.util.BlockUtil;
-import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
-import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.core.Dummy;
 import org.jetbrains.annotations.Nullable;
 
@@ -135,30 +132,30 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
     }
 
     @Override
-    public ActionResult onRightClickOnBlock(ItemUseOnBlockEvent event) {
-        World world = event.world;
-        if (!world.isClient()) {
-            BlockPos targetPos = event.hit.getBlockPos();
+    public ActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
+        World world = e.world;
+        if (!e.isClient()) {
+            BlockPos targetPos = e.getBlockPos();
             BlockState targetBlockState = world.getBlockState(targetPos);
-            Player player = event.player;
+            Player player = e.player;
 
             if (!isExchange(targetBlockState.getBlock()))
                 return ActionResult.SUCCESS;
 
-            List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, targetPos, ItemUtils.getCharge(event.stack), true, true);
+            List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, targetPos, ItemUtils.getCharge(e.stack), true, true);
 
             Block replaceBlock = getExchangeBlock(targetBlockState.getBlock(), player.getPlayerEntity().isSneaking());
 
             if (replaceBlock == null)
                 return ActionResult.SUCCESS;
 
-            blocks.forEach(pos -> exchangeBlock(world, pos, replaceBlock.getDefaultState(), world.getBlockState(pos)));
+            blocks.forEach(pos -> exchangeBlock(world, pos, BlockStateUtil.getDefaultState(replaceBlock), world.getBlockState(pos)));
 
             WorldUtil.playSound(world, null, targetPos, Sounds.EXCHANGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 1f);
             return ActionResult.SUCCESS;
         }
 
-        return super.onRightClickOnBlock(event);
+        return super.onRightClickOnBlock(e);
     }
 
     public void exchangeBlock(World world, BlockPos blockPos, BlockState newBlockState, BlockState blockState) {
@@ -169,7 +166,7 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
             newBlockState = newBlockState.with(Properties.HORIZONTAL_FACING, blockState.get(Properties.HORIZONTAL_FACING));
         }
         //world.playSound(null, blockPos, Sounds.EXCHANGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 1f);
-        world.setBlockState(blockPos, newBlockState);
+        WorldUtil.setBlockState(world, blockPos, newBlockState);
     }
 
     @Override
@@ -189,13 +186,13 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
 
     @Nullable
     public static Block getExchangeBlock(Block target, boolean isSneaking) {
-        if(isSneaking) {
-            if(shift_exchange_map.containsKey(target)) {
+        if (isSneaking) {
+            if (shift_exchange_map.containsKey(target)) {
                 return shift_exchange_map.get(target);
             }
         }
 
-        if(exchange_map.containsKey(target)) {
+        if (exchange_map.containsKey(target)) {
             return exchange_map.get(target);
         }
 

@@ -10,23 +10,26 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.pitan76.itemalchemy.EMCManager;
-import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.api.PlayerRegisteredItemUtil;
 import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
-import net.pitan76.mcpitanlib.api.client.SimpleHandledScreen;
-import net.pitan76.mcpitanlib.api.client.render.handledscreen.*;
+import net.pitan76.mcpitanlib.api.client.CompatInventoryScreen;
+import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawBackgroundArgs;
+import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawForegroundArgs;
+import net.pitan76.mcpitanlib.api.client.render.handledscreen.KeyEventArgs;
+import net.pitan76.mcpitanlib.api.client.render.handledscreen.RenderArgs;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.network.ClientNetworking;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
-import net.pitan76.mcpitanlib.api.util.client.RenderUtil;
 import net.pitan76.mcpitanlib.api.util.client.ScreenUtil;
 
 import java.util.List;
 
-public class AlchemyTableScreen extends SimpleHandledScreen {
+import static net.pitan76.itemalchemy.ItemAlchemy._id;
+
+public class AlchemyTableScreen extends CompatInventoryScreen {
     public PlayerInventory playerInventory;
     public TextFieldWidget searchBox;
     public AlchemyTableScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
@@ -68,7 +71,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
 
                 PacketByteUtil.writeString(buf, searchBox.getText());
                 PacketByteUtil.writeNbt(buf, translations);
-                ClientNetworking.send(ItemAlchemy.id("search"), buf);
+                ClientNetworking.send(_id("search").toMinecraft(), buf);
 
                 AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
 
@@ -111,7 +114,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
             NbtCompound nbt = new NbtCompound();
             nbt.putInt("control", 0);
             PacketByteUtil.writeNbt(buf, nbt);
-            ClientNetworking.send(ItemAlchemy.id("network"), buf);
+            ClientNetworking.send(_id("network").toMinecraft(), buf);
         }));
 
         addDrawableCTBW(ScreenUtil.createTexturedButtonWidget(x + 171, y + 110, 18, 18, 226, 0, 18, getTexture(), (buttonWidget) -> {
@@ -125,12 +128,13 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
             NbtCompound nbt = new NbtCompound();
             nbt.putInt("control", 1);
             PacketByteUtil.writeNbt(buf, nbt);
-            ClientNetworking.send(ItemAlchemy.id("network"), buf);
+            ClientNetworking.send(_id("network").toMinecraft(), buf);
         }));
     }
 
-    public Identifier getTexture() {
-        return ItemAlchemy.id("textures/gui/alchemy_table.png");
+    @Override
+    public CompatIdentifier getCompatTexture() {
+        return _id("textures/gui/alchemy_table.png");
     }
 
     @Override
@@ -142,18 +146,7 @@ public class AlchemyTableScreen extends SimpleHandledScreen {
 
     @Override
     public void drawBackgroundOverride(DrawBackgroundArgs args) {
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
-        RenderUtil.setShaderToPositionTexProgram();
-        RenderUtil.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        callDrawTexture(args.drawObjectDM, getTexture(), x, y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        super.drawBackgroundOverride(args);
         ScreenUtil.TextFieldUtil.render(searchBox, new RenderArgs(args.drawObjectDM, args.mouseX, args.mouseY, args.delta));
-    }
-
-    @Override
-    public void renderOverride(RenderArgs args) {
-        callRenderBackground(args);
-        super.renderOverride(args);
-        callDrawMouseoverTooltip(new DrawMouseoverTooltipArgs(args.drawObjectDM, args.mouseX, args.mouseY));
     }
 }

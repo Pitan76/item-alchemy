@@ -10,6 +10,7 @@ import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import net.pitan76.itemalchemy.item.ILearnableItem;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.slot.CompatibleSlot;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 
 import java.util.ArrayList;
@@ -28,9 +29,8 @@ public class RemoveSlot extends CompatibleSlot {
     public void callSetStack(ItemStack stack) {
         Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
 
-        if(!teamState.isPresent()) {
+        if (!teamState.isPresent())
             return;
-        }
 
         List<String> items = new ArrayList<>();
         if (stack.getItem() instanceof ILearnableItem) {
@@ -48,7 +48,7 @@ public class RemoveSlot extends CompatibleSlot {
             screenHandler.extractInventory.placeExtractSlots();
         }
 
-        if(!player.isClient()) {
+        if (!player.isClient()) {
             ServerState.getServerState(player.getWorld().getServer()).markDirty();
         }
 
@@ -57,6 +57,6 @@ public class RemoveSlot extends CompatibleSlot {
             AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
             screenHandler.extractInventory.placeExtractSlots();
         }
-        super.callSetStack(ItemStack.EMPTY);
+        super.callSetStack(ItemStackUtil.empty());
     }
 }

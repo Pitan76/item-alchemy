@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static net.pitan76.itemalchemy.ItemAlchemy._id;
+
 public class ItemAlchemyClient {
     public static NbtCompound itemAlchemyNbt;
 
@@ -34,25 +36,25 @@ public class ItemAlchemyClient {
         // Mixinを使った場合、関数が1.20から変更されているために使えないのでこちらで対処しておく
         ItemTooltipRegistry.registerItemTooltip((context) -> context.addTooltip(getEmcText(context.getStack())));
 
-        CompatRegistryClient.registerScreen(ScreenHandlers.ALCHEMY_TABLE, AlchemyTableScreen::new);
-        CompatRegistryClient.registerScreen(ScreenHandlers.EMC_COLLECTOR, EMCCollectorScreen::new);
-        CompatRegistryClient.registerScreen(ScreenHandlers.EMC_CONDENSER, EMCCondenserScreen::new);
-        CompatRegistryClient.registerScreen(ScreenHandlers.ALCHEMY_CHEST, AlchemyChestScreen::new);
+        CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.ALCHEMY_TABLE, AlchemyTableScreen::new);
+        CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.EMC_COLLECTOR, EMCCollectorScreen::new);
+        CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.EMC_CONDENSER, EMCCondenserScreen::new);
+        CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.ALCHEMY_CHEST, AlchemyChestScreen::new);
 
         WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(new BlockRenderer());
 
-        ClientNetworking.registerReceiver(ItemAlchemy.id("sync_emc"), (client, p, buf) -> {
+        ClientNetworking.registerReceiver(_id("sync_emc").toMinecraft(), (client, p, buf) -> {
             itemAlchemyNbt = PacketByteUtil.readNbt(buf);
         });
 
-        ClientNetworking.registerReceiver(ItemAlchemy.id("sync_emc_map"), (client, p, buf) -> {
+        ClientNetworking.registerReceiver(_id("sync_emc_map").toMinecraft(), (client, p, buf) -> {
             Map<String, Long> map = PacketByteUtil.readMap(buf, PacketByteUtil::readString, PacketByteBuf::readLong);
             if (map == null) return;
 
             EMCManager.setMap(map);
         });
 
-        ClientNetworking.registerReceiver(ItemAlchemy.id("itemalchemy_emc_collector"), (client, p, buf) -> {
+        ClientNetworking.registerReceiver(_id("itemalchemy_emc_collector").toMinecraft(), (client, p, buf) -> {
             long storedEMC = PacketByteUtil.readLong(buf);
             if (Objects.requireNonNull(p).currentScreenHandler instanceof EMCCollectorScreenHandler) {
                 EMCCollectorScreenHandler screenHandler = (EMCCollectorScreenHandler) p.currentScreenHandler;
@@ -60,7 +62,7 @@ public class ItemAlchemyClient {
             }
         });
 
-        ClientNetworking.registerReceiver(ItemAlchemy.id("itemalchemy_emc_condenser"), (client, p, buf) -> {
+        ClientNetworking.registerReceiver(_id("itemalchemy_emc_condenser").toMinecraft(), (client, p, buf) -> {
             long storedEMC = PacketByteUtil.readLong(buf);
             long maxEMC = PacketByteUtil.readLong(buf);
 
@@ -71,7 +73,7 @@ public class ItemAlchemyClient {
             }
         });
 
-        KeybindingRegistry.registerOnLevelWithNetwork(new KeyBinding("key.itemalchemy.charge", GLFW.GLFW_KEY_V, "category.itemalchemy.all"), ItemAlchemy.id("tool_charge"));
+        KeybindingRegistry.registerOnLevelWithNetwork(new KeyBinding("key.itemalchemy.charge", GLFW.GLFW_KEY_V, "category.itemalchemy.all"), _id("tool_charge").toMinecraft());
     }
 
     // display emc to the item's tooltip

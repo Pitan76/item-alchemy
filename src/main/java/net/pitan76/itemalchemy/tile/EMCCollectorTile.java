@@ -2,7 +2,6 @@ package net.pitan76.itemalchemy.tile;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -29,16 +28,20 @@ import net.pitan76.mcpitanlib.api.event.container.factory.DisplayNameArgs;
 import net.pitan76.mcpitanlib.api.event.container.factory.ExtraDataArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
+import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
+import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.InventoryUtil;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
+import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTicker<EMCCollectorTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
+public class EMCCollectorTile extends ExtendBlockEntity implements ExtendBlockEntityTicker<EMCCollectorTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
     private long oldStoredEMC = 0;
     public long storedEMC = 0;
     public int coolDown = 0; // tick
@@ -47,7 +50,7 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
         return 10 * 1; // tick
     }
 
-    public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(16 + 3, ItemStack.EMPTY);
+    public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(16 + 3, ItemStackUtil.empty());
 
     public EMCCollectorTile(BlockEntityType<?> type, TileCreateEvent event) {
         super(type, event);
@@ -57,13 +60,13 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
     public void writeNbt(WriteNbtArgs args) {
         NbtCompound nbt = args.getNbt();
         InventoryUtil.writeNbt(args, inventory);
-        nbt.putLong("stored_emc", storedEMC);
+        NbtUtil.set(nbt, "stored_emc", storedEMC);
     }
 
     @Override
     public void readNbt(ReadNbtArgs args) {
         NbtCompound nbt = args.getNbt();
-        storedEMC = nbt.getLong("stored_emc");
+        storedEMC = NbtUtil.get(nbt, "stored_emc", Long.class);
         InventoryUtil.readNbt(args, inventory);
     }
 
@@ -85,10 +88,12 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
     }
 
     @Override
-    public void tick(World mcWorld, BlockPos pos, BlockState state, EMCCollectorTile blockEntity) {
+    public void tick(TileTickEvent<EMCCollectorTile> e) {
+        World mcWorld = e.world;
+
         if (mcWorld.isClient()) return;
 
-        long maxEMC = ((EMCCollector) state.getBlock()).maxEMC;
+        long maxEMC = ((EMCCollector) e.state.getBlock()).maxEMC;
 
         if (coolDown == 0) {
             if (maxEMC <= storedEMC) return;
@@ -122,7 +127,7 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
                             nextIndex = 2;
                         }
                         if (nextIndex == 2) {
-                            if (convertStack(stack, true) == ItemStack.EMPTY) continue;
+                            if (convertStack(stack, true) == ItemStackUtil.empty()) continue;
                         }
 
                         if (inventory.get(nextIndex).isEmpty()) {
@@ -157,7 +162,7 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
                     ItemStack stack = convertStack(inventory.get(2).copy());
                     if (!stack.isEmpty()) {
                         inventory.set(0, stack);
-                        inventory.set(2, ItemStack.EMPTY);
+                        inventory.set(2, ItemStackUtil.empty());
                     }
                 }
             }
@@ -165,7 +170,7 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
                 for (int i = 0; i < 16; i++) {
                     if (inventory.get(3 + 15 - i).isEmpty()) {
                         inventory.set(3 + 15 - i, inventory.get(0).copy());
-                        inventory.set(0, ItemStack.EMPTY);
+                        inventory.set(0, ItemStackUtil.empty());
                         break;
                     }
                 }
@@ -177,7 +182,7 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
                     if (player.networkHandler != null && player.currentScreenHandler instanceof EMCCollectorScreenHandler && ((EMCCollectorScreenHandler) player.currentScreenHandler).tile == this) {
                         PacketByteBuf buf = PacketByteUtil.create();
                         PacketByteUtil.writeLong(buf, storedEMC);
-                        ServerNetworking.send(player, ItemAlchemy.id("itemalchemy_emc_collector"), buf);
+                        ServerNetworking.send(player, ItemAlchemy._id("itemalchemy_emc_collector").toMinecraft(), buf);
                     }
                 }
             }
@@ -189,7 +194,7 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
     }
 
     public ItemStack convertStack(ItemStack stack, boolean test) {
-        if (!inventory.get(1).isEmpty() && inventory.get(1).getItem() == stack.getItem()) return ItemStack.EMPTY;
+        if (!inventory.get(1).isEmpty() && inventory.get(1).getItem() == stack.getItem()) return ItemStackUtil.empty();
 
         if (net.minecraft.item.Items.COAL == stack.getItem()) {
             if (storedEMC >= 16 || test) {
@@ -221,7 +226,7 @@ public class EMCCollectorTile extends ExtendBlockEntity implements BlockEntityTi
                 return new ItemStack(Items.AETERNALIS_FUEL.getOrNull(), 1);
             }
         }
-        return ItemStack.EMPTY;
+        return ItemStackUtil.empty();
     }
 
 

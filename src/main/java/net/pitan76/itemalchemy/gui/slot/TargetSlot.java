@@ -6,6 +6,7 @@ import net.minecraft.screen.ScreenHandler;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.mcpitanlib.api.gui.slot.CompatibleSlot;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 
 public class TargetSlot extends CompatibleSlot {
 
@@ -30,7 +31,7 @@ public class TargetSlot extends CompatibleSlot {
     @Override
     public void callSetStack(ItemStack stack) {
         if(EMCManager.get(stack) == 0) {
-            super.callSetStack(ItemStack.EMPTY);
+            super.callSetStack(ItemStackUtil.empty());
 
             return;
         }
@@ -43,8 +44,8 @@ public class TargetSlot extends CompatibleSlot {
 
     @Override
     public ItemStack callTakeStack(int amount) {
-        callSetStack(ItemStack.EMPTY);
-        return ItemStack.EMPTY;
+        callSetStack(ItemStackUtil.empty());
+        return ItemStackUtil.empty();
     }
 
     public ScreenHandler getScreenHandler() {

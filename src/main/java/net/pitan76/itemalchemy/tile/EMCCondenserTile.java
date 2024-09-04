@@ -2,7 +2,6 @@ package net.pitan76.itemalchemy.tile;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -29,13 +28,16 @@ import net.pitan76.mcpitanlib.api.event.container.factory.DisplayNameArgs;
 import net.pitan76.mcpitanlib.api.event.container.factory.ExtraDataArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
+import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
+import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 import net.pitan76.mcpitanlib.api.util.InventoryUtil;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,14 +46,14 @@ import java.util.List;
 
 import static net.pitan76.mcpitanlib.api.util.InventoryUtil.canMergeItems;
 
-public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTicker<EMCCondenserTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
+public class EMCCondenserTile extends ExtendBlockEntity implements ExtendBlockEntityTicker<EMCCondenserTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
     public long storedEMC = 0;
     public long maxEMC = 0;
     public long oldStoredEMC = 0;
     public long oldMaxEMC = 0;
     public int coolDown = 0; // tick
 
-    public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1 + 91, ItemStack.EMPTY);
+    public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1 + 91, ItemStackUtil.empty());
 
     public EMCCondenserTile(BlockEntityType<?> type, TileCreateEvent event) {
         super(type, event);
@@ -86,7 +88,8 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
     }
 
     @Override
-    public void tick(World world, BlockPos pos, BlockState state, EMCCondenserTile blockEntity) {
+    public void tick(TileTickEvent<EMCCondenserTile> e) {
+        World world = e.world;
         if (world.isClient) return;
 
         if (!inventory.isEmpty()) {
@@ -172,7 +175,7 @@ public class EMCCondenserTile extends ExtendBlockEntity implements BlockEntityTi
                     //if (!getTargetStack().isEmpty())
                     //    PacketByteUtil.writeItemStack(buf, getTargetStack());
 
-                    ServerNetworking.send(player, ItemAlchemy.id("itemalchemy_emc_condenser"), buf);
+                    ServerNetworking.send(player, ItemAlchemy._id("itemalchemy_emc_condenser").toMinecraft(), buf);
                 }
             }
         }
