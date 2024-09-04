@@ -11,7 +11,7 @@ public class Sounds {
     public static final RegistryResult<SoundEvent> CHARGE_SOUND = register("charge");
     public static final RegistryResult<SoundEvent> UNCHARGE_SOUND = register("uncharge");
 
-    public static void init(){
+    public static void init() {
 
     }
     private static RegistryResult<SoundEvent> register(String id) {
