@@ -63,7 +63,7 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof AlchemyChestTile) {
             AlchemyChestTile tile = (AlchemyChestTile)blockEntity;
-            e.player.openExtendedMenu(tile);
+            e.player.openMenu(tile);
             return ActionResult.CONSUME;
         }
         return ActionResult.PASS;
