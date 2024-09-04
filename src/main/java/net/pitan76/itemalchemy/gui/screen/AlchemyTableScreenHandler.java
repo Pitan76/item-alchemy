@@ -150,7 +150,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
                 return ItemStackUtil.empty();
             }
 
-            if (originalStack.isEmpty()) {
+            if (ItemStackUtil.isEmpty(originalStack)) {
                 SlotUtil.setStack(slot, ItemStackUtil.empty());
             } else {
                 SlotUtil.markDirty(slot);
@@ -247,7 +247,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             }
 
 
-            if (definedStack != null && stack.isEmpty() && EMCManager.getEmcFromPlayer(player) >= EMCManager.get(definedStack) * receivable) {
+            if (definedStack != null && ItemStackUtil.isEmpty(stack) && EMCManager.getEmcFromPlayer(player) >= EMCManager.get(definedStack) * receivable) {
                 EMCManager.decrementEmc(player, EMCManager.get(definedStack) * receivable);
                 SlotUtil.setStack(extractSlot, definedStack.copy());
 

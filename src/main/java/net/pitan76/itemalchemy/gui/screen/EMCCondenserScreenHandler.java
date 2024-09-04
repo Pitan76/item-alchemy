@@ -108,7 +108,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
             // TargetSlot
             if(index == 36) {
                 //増殖スロットが空だった場合
-                if(targetStack.isEmpty()) {
+                if(ItemStackUtil.isEmpty(targetStack)) {
                     if (EMCManager.get(originalStack.getItem()) == 0) {
                         SlotUtil.setStack(targetSlot, ItemStackUtil.empty());
                         return originalStack;
@@ -131,7 +131,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
 
             if (index < 36) {
                 // TargetSlot
-                if(targetStack.isEmpty()) {
+                if(ItemStackUtil.isEmpty(targetStack)) {
                     if(EMCManager.get(originalStack.getItem()) != 0) {
                         ItemStack newStack = ItemStackUtil.create(originalStack.getItem());
                         newStack.setCount(1);
@@ -150,7 +150,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
                 return ItemStackUtil.empty();
             }
 
-            if (originalStack.isEmpty()) {
+            if (ItemStackUtil.isEmpty(originalStack)) {
                 SlotUtil.setStack(slot, ItemStackUtil.empty());
             } else {
                 SlotUtil.markDirty(slot);

@@ -24,7 +24,7 @@ public class RegisterInventory extends SimpleInventory {
 
     @Override
     public void setStack(int slot, ItemStack stack) {
-        if (!stack.isEmpty()) {
+        if (!ItemStackUtil.isEmpty(stack)) {
             boolean consumedItem = false,
                     learning = stack.getItem() instanceof ILearnableItem;
 

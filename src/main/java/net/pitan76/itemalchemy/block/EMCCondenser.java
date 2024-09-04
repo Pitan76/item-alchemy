@@ -26,6 +26,7 @@ import net.pitan76.mcpitanlib.api.event.block.StateReplacedEvent;
 import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvider {
@@ -54,7 +55,7 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
         if (e.state.isOf(e.newState.getBlock()))
             return;
 
-        BlockEntity blockEntity = world.getBlockEntity(pos);
+        BlockEntity blockEntity = WorldUtil.getBlockEntity(world, pos);
         if (blockEntity instanceof Inventory) {
             Inventory inventory = (Inventory) blockEntity;
             inventory.setStack(0, ItemStackUtil.empty());

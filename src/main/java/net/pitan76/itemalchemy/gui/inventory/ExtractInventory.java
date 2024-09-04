@@ -76,7 +76,7 @@ public class ExtractInventory extends SimpleInventory {
 
     @Override
     public void setStack(int slot, ItemStack stack) {
-        if (!stack.isEmpty() && !definedStacks.containsKey(slot)) {
+        if (!ItemStackUtil.isEmpty(stack) && !definedStacks.containsKey(slot)) {
             //definedStack = stack.copy();
             definedStacks.put(slot, stack.copy());
             super.setStack(slot, stack);

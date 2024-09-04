@@ -93,7 +93,7 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
                 return ItemStackUtil.empty();
             }
 
-            if (originalStack.isEmpty()) {
+            if (ItemStackUtil.isEmpty(originalStack)) {
                 SlotUtil.setStack(slot, ItemStackUtil.empty());
             } else {
                 SlotUtil.markDirty(slot);
@@ -107,7 +107,7 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
         if (slotIndex == 37) { // Target Slot
             ItemStack oldStack = getCursorStack().copy();
             super.overrideOnSlotClick(slotIndex, button, actionType, player);
-            if (!oldStack.isEmpty()) {
+            if (!ItemStackUtil.isEmpty(oldStack)) {
                 setCursorStack(oldStack);
             }
             return;

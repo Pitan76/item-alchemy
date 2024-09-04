@@ -19,20 +19,19 @@ public class TargetSlot extends CompatibleSlot {
 
     @Override
     public boolean canInsert(ItemStack stack) {
-        if(screenHandler instanceof EMCCondenserScreenHandler) {
+        if (screenHandler instanceof EMCCondenserScreenHandler) {
             EMCCondenserScreenHandler handler = (EMCCondenserScreenHandler) screenHandler;
 
-            return EMCManager.get(stack) != 0 && !stack.isEmpty() && handler.targetStack.isEmpty();
+            return EMCManager.get(stack) != 0 && !ItemStackUtil.isEmpty(stack) && ItemStackUtil.isEmpty(handler.targetStack);
         }
 
-        return EMCManager.get(stack) != 0 && !stack.isEmpty();
+        return EMCManager.get(stack) != 0 && !ItemStackUtil.isEmpty(stack);
     }
 
     @Override
     public void callSetStack(ItemStack stack) {
-        if(EMCManager.get(stack) == 0) {
+        if (EMCManager.get(stack) == 0) {
             super.callSetStack(ItemStackUtil.empty());
-
             return;
         }
 

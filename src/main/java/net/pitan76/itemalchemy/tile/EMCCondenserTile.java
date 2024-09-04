@@ -23,6 +23,7 @@ import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.block.EMCCollector;
 import net.pitan76.itemalchemy.block.EMCRepeater;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
+import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.container.factory.DisplayNameArgs;
 import net.pitan76.mcpitanlib.api.event.container.factory.ExtraDataArgs;
@@ -33,7 +34,7 @@ import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.ServerNetworking;
-import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
+import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +44,7 @@ import java.util.List;
 
 import static net.pitan76.mcpitanlib.api.util.InventoryUtil.canMergeItems;
 
-public class EMCCondenserTile extends ExtendBlockEntity implements ExtendBlockEntityTicker<EMCCondenserTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
+public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEntityTicker<EMCCondenserTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
     public long storedEMC = 0;
     public long maxEMC = 0;
     public long oldStoredEMC = 0;
@@ -91,7 +92,7 @@ public class EMCCondenserTile extends ExtendBlockEntity implements ExtendBlockEn
 
         if (!inventory.isEmpty()) {
             ItemStack targetStack = inventory.get(0);
-            if (!targetStack.isEmpty()) {
+            if (!ItemStackUtil.isEmpty(targetStack)) {
                 maxEMC = EMCManager.get(targetStack.getItem());
             } else {
                 maxEMC = 0;
@@ -103,7 +104,7 @@ public class EMCCondenserTile extends ExtendBlockEntity implements ExtendBlockEn
         for (BlockPos nearPos : EMCRepeater.getNearPoses(world, nearPoses)) {
             BlockState nearState = WorldUtil.getBlockState(world, nearPos);
             if (nearState.getBlock() instanceof EMCCollector) {
-                BlockEntity nearTile = world.getBlockEntity(nearPos);
+                BlockEntity nearTile = WorldUtil.getBlockEntity(world, nearPos);
                 if (nearTile instanceof EMCCollectorTile) {
                     EMCCollectorTile nearCollectorTile = ((EMCCollectorTile) nearTile);
                     if (nearCollectorTile.storedEMC > 0) {
@@ -117,13 +118,13 @@ public class EMCCondenserTile extends ExtendBlockEntity implements ExtendBlockEn
 
         if (!inventory.isEmpty()) {
             ItemStack targetStack = inventory.get(0);
-            if (!targetStack.isEmpty()) {
+            if (!ItemStackUtil.isEmpty(targetStack)) {
                 if (coolDown == 0) {
                     List<ItemStack> storageInventory = new ArrayList<>(inventory);
 
                     if (!storageInventory.isEmpty()) {
                         for (ItemStack stack : inventory) {
-                            if (stack.isEmpty()) continue;
+                            if (ItemStackUtil.isEmpty(stack)) continue;
                             if (stack.getItem() == targetStack.getItem()) continue;
 
                             long emc = EMCManager.get(stack.getItem());
@@ -164,15 +165,16 @@ public class EMCCondenserTile extends ExtendBlockEntity implements ExtendBlockEn
             oldStoredEMC = storedEMC;
             oldMaxEMC = maxEMC;
 
-            for (ServerPlayerEntity player : ((ServerWorld) world).getPlayers()) {
-                if (player.networkHandler != null && player.currentScreenHandler instanceof EMCCondenserScreenHandler && ((EMCCondenserScreenHandler) player.currentScreenHandler).tile == this ) {
+            for (ServerPlayerEntity serverPlayerEntity : ((ServerWorld) world).getPlayers()) {
+                Player player = new Player(serverPlayerEntity);
+                if (serverPlayerEntity.networkHandler != null && player.getCurrentScreenHandler() instanceof EMCCondenserScreenHandler && ((EMCCondenserScreenHandler) player.getCurrentScreenHandler()).tile == this ) {
                     PacketByteBuf buf = PacketByteUtil.create();
                     PacketByteUtil.writeLong(buf, storedEMC);
                     PacketByteUtil.writeLong(buf, maxEMC);
                     //if (!getTargetStack().isEmpty())
                     //    PacketByteUtil.writeItemStack(buf, getTargetStack());
 
-                    ServerNetworking.send(player, ItemAlchemy._id("itemalchemy_emc_condenser").toMinecraft(), buf);
+                    ServerNetworking.send(serverPlayerEntity, ItemAlchemy._id("itemalchemy_emc_condenser").toMinecraft(), buf);
                 }
             }
         }
@@ -189,13 +191,13 @@ public class EMCCondenserTile extends ExtendBlockEntity implements ExtendBlockEn
             if (i == 0) continue;
             //
             ItemStack stack = inventory.get(i);
-            if (stack.isEmpty()) {
+            if (ItemStackUtil.isEmpty(stack)) {
                 if (!test) inventory.set(i, insertStack);
                 isInserted = true;
                 break;
             } else if (canMergeItems(stack, insertStack)) {
                 int j = insertStack.getCount();
-                if (!test) stack.increment(j);
+                if (!test) ItemStackUtil.incrementCount(stack, j);
                 isInserted = j > 0;
                 break;
             }

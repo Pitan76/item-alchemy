@@ -16,6 +16,7 @@ import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
 import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider {
@@ -54,7 +55,7 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
     public ActionResult onRightClick(BlockUseEvent e) {
         BlockPos blockPos = AEGUTile.getNearEMCCondenserPos(e.world, e.pos);
         if (blockPos == null) return ActionResult.FAIL;
-        BlockEntity blockEntity = e.world.getBlockEntity(blockPos);
+        BlockEntity blockEntity = WorldUtil.getBlockEntity(e.world, blockPos);
 
         if (blockEntity instanceof EMCCondenserTile) {
             EMCCondenserTile tile = (EMCCondenserTile) blockEntity;

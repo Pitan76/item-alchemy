@@ -116,7 +116,7 @@ public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEn
                 // -1 < i < 16 0以上15以下
                 int index = 15 + 3 - i;
                 ItemStack stack = inventory.get(index).copy();
-                if (!stack.isEmpty()) {
+                if (!ItemStackUtil.isEmpty(stack)) {
                     if (index > 2) {
                         int nextIndex = index - 1;
 
@@ -157,7 +157,7 @@ public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEn
 
                 if (inventory.get(0).isEmpty()) {
                     ItemStack stack = convertStack(inventory.get(2).copy());
-                    if (!stack.isEmpty()) {
+                    if (!ItemStackUtil.isEmpty(stack)) {
                         inventory.set(0, stack);
                         inventory.set(2, ItemStackUtil.empty());
                     }
