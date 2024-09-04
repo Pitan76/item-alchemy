@@ -23,8 +23,8 @@ public class TeamState {
     public void readNbt(NbtCompound nbt) {
         name = NbtUtil.get(nbt, "name", String.class);
         createdAt = NbtUtil.get(nbt, "created_at", Long.class);
-        teamID = NbtUtil.get(nbt, "id", UUID.class);
-        owner = NbtUtil.get(nbt, "owner", UUID.class);
+        teamID = nbt.getUuid("id");
+        owner = nbt.getUuid("owner");
         storedEMC = NbtUtil.get(nbt, "emc", Long.class);
         isDefault = NbtUtil.get(nbt, "is_default", Boolean.class);
 

@@ -1,7 +1,6 @@
 package net.pitan76.itemalchemy.command;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.argument.ItemStackArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -23,6 +22,7 @@ import net.pitan76.mcpitanlib.api.command.argument.StringCommand;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.*;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
+import net.pitan76.mcpitanlib.api.util.PlatformUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 
@@ -51,7 +51,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                     System.out.println("reload emc manager");
                     if (!EMCManager.getMap().isEmpty()) EMCManager.setMap(new LinkedHashMap<>());
 
-                    File dir = new File(FabricLoader.getInstance().getConfigDir().toFile(), ItemAlchemy.MOD_ID);
+                    File dir = new File(PlatformUtil.getConfigFolder().toFile(), ItemAlchemy.MOD_ID);
                     if (!dir.exists()) dir.mkdirs();
                     File file = new File(dir, "emc_config.json");
 
@@ -113,8 +113,9 @@ public class ItemAlchemyCommand extends LiteralCommand {
             public void execute(ServerCommandEvent event) {
                 if (!event.getWorld().isClient()) {
 
-                    File dir = new File(FabricLoader.getInstance().getConfigDir().toFile(), ItemAlchemy.MOD_ID);
+                    File dir = new File(PlatformUtil.getConfigFolder().toFile(), ItemAlchemy.MOD_ID);
                     if (!dir.exists()) dir.mkdirs();
+                    
                     File file = new File(dir, "emc_config.json");
                     if (file.exists()) {
                         String fileName = "emc_config_backup_" + DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").format(LocalDateTime.now()) + ".json";

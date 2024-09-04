@@ -50,23 +50,23 @@ public class ItemAlchemy extends CommonModInitializer {
         EventRegistry.ServerLifecycle.serverStarted(EMCManager::init);
 
         EventRegistry.ServerConnection.join((p) -> {
-            if (p != null) {
-                Player player = new Player(p);
-                EMCManager.syncS2C_emc_map(p);
-                ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
+            if (p == null) return;
 
-                serverState.createPlayer(player);
+            Player player = new Player(p);
+            EMCManager.syncS2C_emc_map(p);
+            ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
 
-                EMCManager.syncS2C(p);
-            }
+            serverState.createPlayer(player);
+
+            EMCManager.syncS2C(p);
         });
 
         EventRegistry.ServerLifecycle.serverStopped(EMCManager::exit);
 
         ItemStackActionEvent.register((stack) -> {
-            if (stack.getItem() instanceof ItemCharge) {
-                ItemStackActionEvent.setReturnValue(false);
-            }
+            if (!(stack.getItem() instanceof ItemCharge)) return;
+
+            ItemStackActionEvent.setReturnValue(false);
         });
 
         ServerNetworks.init();
