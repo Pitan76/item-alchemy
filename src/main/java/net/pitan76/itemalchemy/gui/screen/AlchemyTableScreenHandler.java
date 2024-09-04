@@ -166,7 +166,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
         this.searchText = searchText;
     }
 
-    public NbtCompound translations = new NbtCompound();
+    public NbtCompound translations = NbtUtil.create();
     public void setTranslations(NbtCompound translations) {
         this.translations = translations;
     }

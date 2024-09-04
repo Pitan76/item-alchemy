@@ -1,6 +1,7 @@
 package net.pitan76.itemalchemy.data;
 
 import net.pitan76.itemalchemy.ItemAlchemyClient;
+import net.pitan76.mcpitanlib.api.util.NbtUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +13,7 @@ public class ClientState implements ModState {
     public Optional<TeamState> getTeamByPlayer(UUID playerUUID) {
         if (ItemAlchemyClient.itemAlchemyNbt != null) {
             TeamState team = new TeamState();
-            team.readNbt(ItemAlchemyClient.itemAlchemyNbt.getCompound("team"));
+            team.readNbt(NbtUtil.get(ItemAlchemyClient.itemAlchemyNbt, "team"));
 
             return Optional.of(team);
         }

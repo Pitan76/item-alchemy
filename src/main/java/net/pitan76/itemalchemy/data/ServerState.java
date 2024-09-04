@@ -8,6 +8,7 @@ import net.minecraft.world.PersistentStateManager;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
+import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
 import net.pitan76.mcpitanlib.api.world.CompatiblePersistentState;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +26,7 @@ public class ServerState extends CompatiblePersistentState implements ModState {
     public static ServerState create(NbtCompound nbt) {
         ServerState serverState = new ServerState();
 
-        NbtCompound modNBT = nbt.getCompound("itemalchemy");
+        NbtCompound modNBT = NbtUtil.get(nbt, "itemalchemy");
 
         for (NbtElement item : (NbtList)modNBT.get("teams")) {
             if(!(item instanceof NbtCompound)) {
@@ -57,12 +58,12 @@ public class ServerState extends CompatiblePersistentState implements ModState {
     public NbtCompound writeNbt(WriteNbtArgs args) {
         NbtCompound nbt = args.getNbt();
 
-        NbtCompound modNBT = new NbtCompound();
+        NbtCompound modNBT = NbtUtil.create();
         NbtList teamNBTList = new NbtList();
         NbtList playerNBTList = new NbtList();
 
         for (TeamState teamState : teams) {
-            NbtCompound teamNBT = new NbtCompound();
+            NbtCompound teamNBT = NbtUtil.create();
 
             teamState.writeNbt(teamNBT);
 
@@ -70,7 +71,7 @@ public class ServerState extends CompatiblePersistentState implements ModState {
         }
 
         for (PlayerState playerState : players) {
-            NbtCompound playerNBT = new NbtCompound();
+            NbtCompound playerNBT = NbtUtil.create();
 
             playerState.writeNBT(playerNBT);
 
@@ -79,7 +80,7 @@ public class ServerState extends CompatiblePersistentState implements ModState {
 
         modNBT.put("teams", teamNBTList);
         modNBT.put("players", playerNBTList);
-        nbt.put("itemalchemy", modNBT);
+        NbtUtil.put(nbt, "itemalchemy", modNBT);
 
         return nbt;
     }

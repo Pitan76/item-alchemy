@@ -7,6 +7,7 @@ import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
+import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,15 +23,10 @@ public class PlayerEntityMixin {
     public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
         Player player = new Player((PlayerEntity) (Object)this);
 
-        if(player.isClient()) {
-            return;
-        }
-
-        if(!nbt.contains("itemalchemy")) {
-            return;
-        }
-
-        NbtCompound modNBT = nbt.getCompound("itemalchemy");
+        if (player.isClient()) return;
+        if (!nbt.contains("itemalchemy")) return;
+        
+        NbtCompound modNBT = NbtUtil.get(nbt, "itemalchemy");
 
         ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
 
@@ -39,12 +35,11 @@ public class PlayerEntityMixin {
 
         TeamState teamState = serverState.getTeamByPlayer(player.getUUID()).get();
 
-        if(modNBT.contains("emc")) {
-            teamState.storedEMC = modNBT.getLong("emc");
-        }
+        if (NbtUtil.has(modNBT, "emc"))
+            teamState.storedEMC = NbtUtil.get(modNBT, "emc", Long.class);
 
-        if(modNBT.contains("registered_items")) {
-            NbtCompound registeredItems = modNBT.getCompound("registered_items");
+        if (NbtUtil.has(modNBT, "registered_items")) {
+            NbtCompound registeredItems = NbtUtil.get(modNBT, "registered_items");
 
             List<String> keys = registeredItems.getKeys().stream().filter(key -> ItemUtil.isExist(IdentifierUtil.id(key))).collect(Collectors.toList());
 

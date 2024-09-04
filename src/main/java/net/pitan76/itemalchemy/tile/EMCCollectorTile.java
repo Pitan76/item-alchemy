@@ -258,7 +258,7 @@ public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEn
 
     @Override
     public void writeExtraData(ExtraDataArgs args) {
-        NbtCompound data = new NbtCompound();
+        NbtCompound data = NbtUtil.create();
         data.putLong("x", pos.getX());
         data.putLong("y", pos.getY());
         data.putLong("z", pos.getZ());

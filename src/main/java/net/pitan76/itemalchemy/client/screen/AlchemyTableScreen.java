@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.client.screen;
 
-import io.netty.buffer.Unpooled;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerInventory;
@@ -23,6 +22,7 @@ import net.pitan76.mcpitanlib.api.network.ClientNetworking;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
+import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.client.ScreenUtil;
 
@@ -56,7 +56,7 @@ public class AlchemyTableScreen extends CompatInventoryScreen {
     public boolean keyReleased(KeyEventArgs args) {
         if (searchBox.isFocused()) {
             if (args.keyCode != 256) {
-                NbtCompound translations = new NbtCompound();
+                NbtCompound translations = NbtUtil.create();
 
                 List<Item> items = PlayerRegisteredItemUtil.getItems(new Player(playerInventory.player));
                 for (Item item : items) {
@@ -68,7 +68,7 @@ public class AlchemyTableScreen extends CompatInventoryScreen {
                 }
 
 
-                PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+                PacketByteBuf buf = PacketByteUtil.create();
 
                 PacketByteUtil.writeString(buf, searchBox.getText());
                 PacketByteUtil.writeNbt(buf, translations);
@@ -111,9 +111,9 @@ public class AlchemyTableScreen extends CompatInventoryScreen {
             }
 
             // サーバーに送信
-            PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-            NbtCompound nbt = new NbtCompound();
-            nbt.putInt("control", 0);
+            PacketByteBuf buf = PacketByteUtil.create();
+            NbtCompound nbt = NbtUtil.create();
+            NbtUtil.set(nbt, "control", 0);
             PacketByteUtil.writeNbt(buf, nbt);
             ClientNetworking.send(_id("network").toMinecraft(), buf);
         }));
@@ -125,9 +125,9 @@ public class AlchemyTableScreen extends CompatInventoryScreen {
                 screenHandler.nextExtractSlots();
             }
 
-            PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-            NbtCompound nbt = new NbtCompound();
-            nbt.putInt("control", 1);
+            PacketByteBuf buf = PacketByteUtil.create();
+            NbtCompound nbt = NbtUtil.create();
+            NbtUtil.set(nbt, "control", 1);
             PacketByteUtil.writeNbt(buf, nbt);
             ClientNetworking.send(_id("network").toMinecraft(), buf);
         }));

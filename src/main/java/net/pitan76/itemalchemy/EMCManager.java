@@ -283,8 +283,8 @@ public class EMCManager {
         if (!serverState.getTeamByPlayer(player.getUUID()).isPresent()) return;
         TeamState teamState = serverState.getTeamByPlayer(player.getUUID()).get();
 
-        NbtCompound nbt = new NbtCompound();
-        NbtCompound teamNBT = new NbtCompound();
+        NbtCompound nbt = NbtUtil.create();
+        NbtCompound teamNBT = NbtUtil.create();
 
         teamState.writeNbt(teamNBT);
 
