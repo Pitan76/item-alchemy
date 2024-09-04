@@ -66,7 +66,7 @@ public class ExtractInventory extends SimpleInventory {
                 notExists++;
                 continue;
             }
-            ItemStack itemStack = new ItemStack(ItemUtil.fromId(id), 1);
+            ItemStack itemStack = ItemStackUtil.create(ItemUtil.fromId(id), 1);
             setStack(i + 64, itemStack);
         }
         isSettingStack = false;

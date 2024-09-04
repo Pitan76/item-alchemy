@@ -33,15 +33,12 @@ import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.ServerNetworking;
-import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
+import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
-import net.pitan76.mcpitanlib.api.util.InventoryUtil;
-import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
-import net.pitan76.mcpitanlib.api.util.NbtUtil;
-import net.pitan76.mcpitanlib.api.util.TextUtil;
+import net.pitan76.mcpitanlib.api.util.*;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCCollectorTile extends ExtendBlockEntity implements ExtendBlockEntityTicker<EMCCollectorTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
+public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEntityTicker<EMCCollectorTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
     private long oldStoredEMC = 0;
     public long storedEMC = 0;
     public int coolDown = 0; // tick
@@ -89,19 +86,19 @@ public class EMCCollectorTile extends ExtendBlockEntity implements ExtendBlockEn
 
     @Override
     public void tick(TileTickEvent<EMCCollectorTile> e) {
-        World mcWorld = e.world;
+        World world = e.world;
 
-        if (mcWorld.isClient()) return;
+        if (world.isClient()) return;
 
         long maxEMC = ((EMCCollector) e.state.getBlock()).maxEMC;
 
         if (coolDown == 0) {
             if (maxEMC <= storedEMC) return;
-            float skyAngle = mcWorld.getSkyAngle(0);
-            if ((!this.world.isRaining() && !world.isThundering() && (world.hasSkyLight() && skyAngle <= 0.25 || skyAngle >= 0.75) && world.isSkyVisible(pos.up()))
-                    || mcWorld.getBlockState(pos.up()).getLuminance() > 10 || mcWorld.getBlockState(pos.down()).getLuminance() > 10
-                    || mcWorld.getBlockState(pos.north()).getLuminance() > 10 || mcWorld.getBlockState(pos.south()).getLuminance() > 10
-                    || mcWorld.getBlockState(pos.east()).getLuminance() > 10 || mcWorld.getBlockState(pos.west()).getLuminance() > 10) {
+            float skyAngle = world.getSkyAngle(0);
+            if ((!WorldUtil.isRaining(world) && !WorldUtil.isThundering(world) && (WorldUtil.hasSkyLight(world) && skyAngle <= 0.25 || skyAngle >= 0.75) && WorldUtil.isSkyVisible(world, pos.up()))
+                    || WorldUtil.getBlockState(world, pos.up()).getLuminance() > 10 || WorldUtil.getBlockState(world, pos.down()).getLuminance() > 10
+                    || WorldUtil.getBlockState(world, pos.north()).getLuminance() > 10 || WorldUtil.getBlockState(world, pos.south()).getLuminance() > 10
+                    || WorldUtil.getBlockState(world, pos.east()).getLuminance() > 10 || WorldUtil.getBlockState(world, pos.west()).getLuminance() > 10) {
                 storedEMC++;
                 if (maxEMC >= 100000) {
                     storedEMC += Math.round(maxEMC / 100000) + 2;
@@ -144,10 +141,10 @@ public class EMCCollectorTile extends ExtendBlockEntity implements ExtendBlockEn
 
             if (!inventory.get(2).isEmpty()) {
                 BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
-                for (BlockPos nearPos : EMCRepeater.getNearPoses(mcWorld, nearPoses)) {
-                    BlockState nearState = mcWorld.getBlockState(nearPos);
+                for (BlockPos nearPos : EMCRepeater.getNearPoses(world, nearPoses)) {
+                    BlockState nearState = WorldUtil.getBlockState(world, nearPos);
                     if (nearState.getBlock() instanceof EMCCollector) {
-                        BlockEntity nearTile = mcWorld.getBlockEntity(nearPos);
+                        BlockEntity nearTile = WorldUtil.getBlockEntity(world, nearPos);
                         if (nearTile instanceof EMCCollectorTile) {
                             EMCCollectorTile nearCollectorTile = ((EMCCollectorTile) nearTile);
                             if (maxEMC > storedEMC && nearCollectorTile.storedEMC > 0) {
@@ -178,7 +175,7 @@ public class EMCCollectorTile extends ExtendBlockEntity implements ExtendBlockEn
 
             if (oldStoredEMC != storedEMC) {
                 oldStoredEMC = storedEMC;
-                for (ServerPlayerEntity player : ((ServerWorld) mcWorld).getPlayers()) {
+                for (ServerPlayerEntity player : ((ServerWorld) world).getPlayers()) {
                     if (player.networkHandler != null && player.currentScreenHandler instanceof EMCCollectorScreenHandler && ((EMCCollectorScreenHandler) player.currentScreenHandler).tile == this) {
                         PacketByteBuf buf = PacketByteUtil.create();
                         PacketByteUtil.writeLong(buf, storedEMC);
@@ -199,31 +196,31 @@ public class EMCCollectorTile extends ExtendBlockEntity implements ExtendBlockEn
         if (net.minecraft.item.Items.COAL == stack.getItem()) {
             if (storedEMC >= 16 || test) {
                 if (!test) storedEMC -= 16;
-                return new ItemStack(net.minecraft.item.Items.REDSTONE, 1);
+                return ItemStackUtil.create(net.minecraft.item.Items.REDSTONE, 1);
             }
         }
         if (net.minecraft.item.Items.REDSTONE == stack.getItem()) {
             if (storedEMC >= 32 || test) {
                 if (!test) storedEMC -= 32;
-                return new ItemStack(net.minecraft.item.Items.GUNPOWDER, 1);
+                return ItemStackUtil.create(net.minecraft.item.Items.GUNPOWDER, 1);
             }
         }
         if (net.minecraft.item.Items.GUNPOWDER == stack.getItem()) {
             if (storedEMC >= 256 || test) {
                 if (!test) storedEMC -= 256;
-                return new ItemStack(Items.ALCHEMICAL_FUEL.getOrNull(), 1);
+                return ItemStackUtil.create(Items.ALCHEMICAL_FUEL.getOrNull(), 1);
             }
         }
         if (Items.ALCHEMICAL_FUEL.getOrNull() == stack.getItem()) {
             if (storedEMC >= 1024 || test) {
                 if (!test) storedEMC -= 1024;
-                return new ItemStack(Items.MOBIUS_FUEL.getOrNull(), 1);
+                return ItemStackUtil.create(Items.MOBIUS_FUEL.getOrNull(), 1);
             }
         }
         if (Items.MOBIUS_FUEL.getOrNull() == stack.getItem()) {
             if (storedEMC >= 4096 || test) {
                 if (!test) storedEMC -= 4096;
-                return new ItemStack(Items.AETERNALIS_FUEL.getOrNull(), 1);
+                return ItemStackUtil.create(Items.AETERNALIS_FUEL.getOrNull(), 1);
             }
         }
         return ItemStackUtil.empty();

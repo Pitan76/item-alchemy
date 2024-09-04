@@ -4,17 +4,17 @@ import com.google.common.collect.Lists;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WorldUtils {
     public static List<BlockPos> getTargetBlocks(World world, BlockPos pos, int range, boolean isHeightScan, boolean isSameBlock) {
-        BlockState baseBlock = world.getBlockState(pos);
+        BlockState baseBlock = WorldUtil.getBlockState(world, pos);
 
-        if(range <= 0) {
+        if (range <= 0)
             return Lists.newArrayList(pos);
-        }
 
         List<BlockPos> blocks = new ArrayList<>();
 
@@ -26,16 +26,10 @@ public class WorldUtils {
                     int offsetZ = range - z;
 
                     BlockPos targetPos = pos.add(offsetX, offsetY, offsetZ);
+                    BlockState block = WorldUtil.getBlockState(world, targetPos);
 
-                    BlockState block = world.getBlockState(targetPos);
-
-                    if(block.isAir()) {
-                        continue;
-                    }
-
-                    if(!block.isOf(baseBlock.getBlock()) && isSameBlock) {
-                        continue;
-                    }
+                    if (block.isAir()) continue;
+                    if (!block.isOf(baseBlock.getBlock()) && isSameBlock) continue;
 
                     blocks.add(targetPos);
                 }

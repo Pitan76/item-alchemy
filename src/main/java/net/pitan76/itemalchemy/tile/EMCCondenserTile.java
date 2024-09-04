@@ -35,10 +35,7 @@ import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
-import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
-import net.pitan76.mcpitanlib.api.util.InventoryUtil;
-import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
-import net.pitan76.mcpitanlib.api.util.TextUtil;
+import net.pitan76.mcpitanlib.api.util.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -55,8 +52,8 @@ public class EMCCondenserTile extends ExtendBlockEntity implements ExtendBlockEn
 
     public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1 + 91, ItemStackUtil.empty());
 
-    public EMCCondenserTile(BlockEntityType<?> type, TileCreateEvent event) {
-        super(type, event);
+    public EMCCondenserTile(BlockEntityType<?> type, TileCreateEvent e) {
+        super(type, e);
     }
 
     public EMCCondenserTile(BlockPos pos, BlockState state) {
@@ -65,8 +62,8 @@ public class EMCCondenserTile extends ExtendBlockEntity implements ExtendBlockEn
     public EMCCondenserTile(BlockView world) {
         this(new TileCreateEvent(world));
     }
-    public EMCCondenserTile(TileCreateEvent event) {
-        this(Tiles.EMC_CONDENSER.getOrNull(), event);
+    public EMCCondenserTile(TileCreateEvent e) {
+        this(Tiles.EMC_CONDENSER.getOrNull(), e);
     }
 
     public int getMaxCoolDown() {
@@ -77,13 +74,13 @@ public class EMCCondenserTile extends ExtendBlockEntity implements ExtendBlockEn
     public void writeNbt(WriteNbtArgs args) {
         NbtCompound nbt = args.getNbt();
         InventoryUtil.writeNbt(args, inventory);
-        nbt.putLong("stored_emc", storedEMC);
+        NbtUtil.set(nbt, "stored_emc", storedEMC);
     }
 
     @Override
     public void readNbt(ReadNbtArgs args) {
         NbtCompound nbt = args.getNbt();
-        storedEMC = nbt.getLong("stored_emc");
+        storedEMC = NbtUtil.get(nbt, "stored_emc", Long.class);
         InventoryUtil.readNbt(args, inventory);
     }
 
@@ -104,7 +101,7 @@ public class EMCCondenserTile extends ExtendBlockEntity implements ExtendBlockEn
         BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
 
         for (BlockPos nearPos : EMCRepeater.getNearPoses(world, nearPoses)) {
-            BlockState nearState = world.getBlockState(nearPos);
+            BlockState nearState = WorldUtil.getBlockState(world, nearPos);
             if (nearState.getBlock() instanceof EMCCollector) {
                 BlockEntity nearTile = world.getBlockEntity(nearPos);
                 if (nearTile instanceof EMCCollectorTile) {

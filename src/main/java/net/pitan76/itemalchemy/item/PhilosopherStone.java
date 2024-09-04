@@ -136,7 +136,7 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
         World world = e.world;
         if (!e.isClient()) {
             BlockPos targetPos = e.getBlockPos();
-            BlockState targetBlockState = world.getBlockState(targetPos);
+            BlockState targetBlockState = WorldUtil.getBlockState(world, targetPos);
             Player player = e.player;
 
             if (!isExchange(targetBlockState.getBlock()))
@@ -149,7 +149,7 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
             if (replaceBlock == null)
                 return ActionResult.SUCCESS;
 
-            blocks.forEach(pos -> exchangeBlock(world, pos, BlockStateUtil.getDefaultState(replaceBlock), world.getBlockState(pos)));
+            blocks.forEach(pos -> exchangeBlock(world, pos, BlockStateUtil.getDefaultState(replaceBlock), WorldUtil.getBlockState(world, pos)));
 
             WorldUtil.playSound(world, null, targetPos, Sounds.EXCHANGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 1f);
             return ActionResult.SUCCESS;

@@ -192,7 +192,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             String translatedName = "";
 
             Identifier itemIdentifier = IdentifierUtil.id(id);
-            ItemStack itemStack = new ItemStack(ItemUtil.fromId(itemIdentifier));
+            ItemStack itemStack = ItemStackUtil.create(ItemUtil.fromId(itemIdentifier));
             String itemTranslationKey = itemStack.getTranslationKey();
 
             // If the item has a translation, we should use that instead of the identifier.

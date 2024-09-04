@@ -114,7 +114,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
                         return originalStack;
                     }
 
-                    ItemStack newStack = new ItemStack(originalStack.getItem());
+                    ItemStack newStack = ItemStackUtil.create(originalStack.getItem());
                     newStack.setCount(1);
 
                     SlotUtil.setStack(targetSlot, newStack);
@@ -133,7 +133,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
                 // TargetSlot
                 if(targetStack.isEmpty()) {
                     if(EMCManager.get(originalStack.getItem()) != 0) {
-                        ItemStack newStack = new ItemStack(originalStack.getItem());
+                        ItemStack newStack = ItemStackUtil.create(originalStack.getItem());
                         newStack.setCount(1);
 
                         SlotUtil.setStack(targetSlot, newStack);
@@ -172,7 +172,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
                 return;
             }
 
-            ItemStack oldStack = new ItemStack(getCursorStack().getItem());
+            ItemStack oldStack = ItemStackUtil.create(getCursorStack().getItem());
 
             if(EMCManager.get(oldStack.getItem()) == 0) {
                 callSetCursorStack(getCursorStack());
