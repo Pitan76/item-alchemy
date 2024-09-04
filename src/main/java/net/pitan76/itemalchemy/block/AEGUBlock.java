@@ -59,7 +59,7 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
         if (blockEntity instanceof EMCCondenserTile) {
             EMCCondenserTile tile = (EMCCondenserTile) blockEntity;
             if (e.world.isClient) return ActionResult.SUCCESS;
-            e.player.openGuiScreen(tile);
+            e.player.openExtendedMenu(tile);
             return ActionResult.CONSUME;
         }
         return ActionResult.PASS;

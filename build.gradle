@@ -113,8 +113,9 @@ curseforge {
             addGameVersion '1.20.1'
             addGameVersion '1.20.3'
             addGameVersion '1.20.4'
-            addGameVersion '1.20.6'
             addGameVersion '1.21'
+            addGameVersion '1.21.1'
+
             addGameVersion "Fabric"
             relations {
                 requiredDependency 'fabric-api'
@@ -137,7 +138,7 @@ modrinth {
         projectId = 'cfQx2fbQ'
         versionNumber = project.mod_version
         uploadFile = remapJar
-        gameVersions = ['1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.20', '1.20.1', '1.20.3', '1.20.4', '1.20.6', '1.21']
+        gameVersions = ['1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.20', '1.20.1', '1.20.3', '1.20.4', '1.21', '1.21.1']
         versionType = 'release'
         loaders = ['fabric']
         changelog = "Fix bugs\nMCPitanLib version: " + mcpitanlib_version.split(":")[1]
