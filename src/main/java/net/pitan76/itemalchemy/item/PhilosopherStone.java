@@ -136,7 +136,7 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
         World world = e.world;
         if (!e.isClient()) {
             BlockPos targetPos = e.getBlockPos();
-            BlockState targetBlockState = WorldUtil.getBlockState(world, targetPos);
+            BlockState targetBlockState = e.getBlockState();
             Player player = e.player;
 
             if (!isExchange(targetBlockState.getBlock()))

@@ -150,9 +150,8 @@ public class ServerState extends CompatiblePersistentState implements ModState {
     public Optional<TeamState> getTeamByPlayer(UUID playerUUID) {
         Optional<PlayerState> playerState = getPlayer(playerUUID);
 
-        if(!playerState.isPresent()) {
+        if (!playerState.isPresent())
             return Optional.empty();
-        }
 
         return getTeam(playerState.get().teamID);
     }

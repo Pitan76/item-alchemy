@@ -24,7 +24,7 @@ import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.emcs.EMCDef;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
-import net.pitan76.mcpitanlib.api.network.ServerNetworking;
+import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tag.TagKey;
 import net.pitan76.mcpitanlib.api.util.*;
 import org.apache.commons.io.IOUtils;
@@ -292,7 +292,7 @@ public class EMCManager {
 
         PacketByteUtil.writeNbt(buf, nbt);
 
-        ServerNetworking.send(serverPlayer, _id("sync_emc").toMinecraft(), buf);
+        ServerNetworking.send(serverPlayer, _id("sync_emc"), buf);
     }
 
     public static void syncS2C_emc_map(ServerPlayerEntity player) {
@@ -304,7 +304,7 @@ public class EMCManager {
 
         PacketByteUtil.writeMap(buf, map);
         //System.out.println("send emc map to " + player.getName().getString());
-        ServerNetworking.send(player, _id("sync_emc_map").toMinecraft(), buf);
+        ServerNetworking.send(player, _id("sync_emc_map"), buf);
     }
 
     public static Map<String, Long> defaultEMCMap = new LinkedHashMap<>();

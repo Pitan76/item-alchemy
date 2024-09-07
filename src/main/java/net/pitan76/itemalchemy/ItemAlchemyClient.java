@@ -17,7 +17,7 @@ import net.pitan76.itemalchemy.gui.screen.ScreenHandlers;
 import net.pitan76.mcpitanlib.api.client.event.ItemTooltipRegistry;
 import net.pitan76.mcpitanlib.api.client.registry.CompatRegistryClient;
 import net.pitan76.mcpitanlib.api.client.registry.KeybindingRegistry;
-import net.pitan76.mcpitanlib.api.network.ClientNetworking;
+import net.pitan76.mcpitanlib.api.network.v2.ClientNetworking;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.lwjgl.glfw.GLFW;
@@ -25,7 +25,6 @@ import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static net.pitan76.itemalchemy.ItemAlchemy._id;
 
@@ -43,31 +42,31 @@ public class ItemAlchemyClient {
 
         WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(new BlockRenderer());
 
-        ClientNetworking.registerReceiver(_id("sync_emc").toMinecraft(), (client, p, buf) -> {
-            itemAlchemyNbt = PacketByteUtil.readNbt(buf);
+        ClientNetworking.registerReceiver(_id("sync_emc"), (e) -> {
+            itemAlchemyNbt = PacketByteUtil.readNbt(e.buf);
         });
 
-        ClientNetworking.registerReceiver(_id("sync_emc_map").toMinecraft(), (client, p, buf) -> {
-            Map<String, Long> map = PacketByteUtil.readMap(buf, PacketByteUtil::readString, PacketByteBuf::readLong);
+        ClientNetworking.registerReceiver(_id("sync_emc_map"), (e) -> {
+            Map<String, Long> map = PacketByteUtil.readMap(e.buf, PacketByteUtil::readString, PacketByteBuf::readLong);
             if (map == null) return;
 
             EMCManager.setMap(map);
         });
 
-        ClientNetworking.registerReceiver(_id("itemalchemy_emc_collector").toMinecraft(), (client, p, buf) -> {
-            long storedEMC = PacketByteUtil.readLong(buf);
-            if (Objects.requireNonNull(p).currentScreenHandler instanceof EMCCollectorScreenHandler) {
-                EMCCollectorScreenHandler screenHandler = (EMCCollectorScreenHandler) p.currentScreenHandler;
+        ClientNetworking.registerReceiver(_id("itemalchemy_emc_collector"), (e) -> {
+            long storedEMC = PacketByteUtil.readLong(e.buf);
+            if (e.player.getCurrentScreenHandler() instanceof EMCCollectorScreenHandler) {
+                EMCCollectorScreenHandler screenHandler = (EMCCollectorScreenHandler) e.player.getCurrentScreenHandler();
                 screenHandler.storedEMC = storedEMC;
             }
         });
 
-        ClientNetworking.registerReceiver(_id("itemalchemy_emc_condenser").toMinecraft(), (client, p, buf) -> {
-            long storedEMC = PacketByteUtil.readLong(buf);
-            long maxEMC = PacketByteUtil.readLong(buf);
+        ClientNetworking.registerReceiver(_id("itemalchemy_emc_condenser"), (e) -> {
+            long storedEMC = PacketByteUtil.readLong(e.buf);
+            long maxEMC = PacketByteUtil.readLong(e.buf);
 
-            if (Objects.requireNonNull(p).currentScreenHandler instanceof EMCCondenserScreenHandler) {
-                EMCCondenserScreenHandler screenHandler = (EMCCondenserScreenHandler) p.currentScreenHandler;
+            if (e.player.getCurrentScreenHandler() instanceof EMCCondenserScreenHandler) {
+                EMCCondenserScreenHandler screenHandler = (EMCCondenserScreenHandler) e.player.getCurrentScreenHandler();
                 screenHandler.storedEMC = storedEMC;
                 screenHandler.maxEMC = maxEMC;
             }
@@ -85,14 +84,14 @@ public class ItemAlchemyClient {
         } catch (Exception e) {
             emc = 0;
         }
-        if (emc == 0) {
-            return list;
-        }
+
+        if (emc == 0) return list;
+
         list.add(TextUtil.literal("§eEMC: §r" + String.format("%,d", emc)));
 
-        if (stack.getCount() > 1) {
+        if (stack.getCount() > 1)
             list.add(TextUtil.literal("§eStack EMC: §r" + String.format("%,d", emc * stack.getCount())));
-        }
+
         return list;
     }
 }

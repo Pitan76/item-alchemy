@@ -10,7 +10,6 @@ import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -19,10 +18,7 @@ import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
-import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
-import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
-import net.pitan76.mcpitanlib.api.event.block.PlacementStateArgs;
-import net.pitan76.mcpitanlib.api.event.block.StateReplacedEvent;
+import net.pitan76.mcpitanlib.api.event.block.*;
 import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
@@ -59,8 +55,8 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
         if (blockEntity instanceof Inventory) {
             Inventory inventory = (Inventory) blockEntity;
             inventory.setStack(0, ItemStackUtil.empty());
-            ItemScatterer.spawn(world, pos, inventory);
-            world.updateComparators(pos, this);
+            ItemScattererUtil.spawn(world, pos, inventory);
+            e.updateComparators();
         }
         super.onStateReplaced(e);
     }

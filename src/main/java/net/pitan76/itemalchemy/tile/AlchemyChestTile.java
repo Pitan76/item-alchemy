@@ -28,8 +28,8 @@ public class AlchemyChestTile extends ExtendBlockEntity implements SidedInventor
 
     public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(104, ItemStackUtil.empty());
 
-    public AlchemyChestTile(BlockEntityType<?> type, TileCreateEvent event) {
-        super(type, event);
+    public AlchemyChestTile(BlockEntityType<?> type, TileCreateEvent e) {
+        super(type, e);
     }
 
     @Override
@@ -50,8 +50,8 @@ public class AlchemyChestTile extends ExtendBlockEntity implements SidedInventor
         this(new TileCreateEvent(world));
     }
 
-    public AlchemyChestTile(TileCreateEvent event) {
-        this(Tiles.ALCHEMY_CHEST.getOrNull(), event);
+    public AlchemyChestTile(TileCreateEvent e) {
+        this(Tiles.ALCHEMY_CHEST.getOrNull(), e);
     }
 
     @Nullable

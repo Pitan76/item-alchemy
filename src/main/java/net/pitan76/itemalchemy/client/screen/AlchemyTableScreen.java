@@ -18,7 +18,7 @@ import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawForegroundArgs
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.KeyEventArgs;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.RenderArgs;
 import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.network.ClientNetworking;
+import net.pitan76.mcpitanlib.api.network.v2.ClientNetworking;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
@@ -72,7 +72,7 @@ public class AlchemyTableScreen extends CompatInventoryScreen {
 
                 PacketByteUtil.writeString(buf, searchBox.getText());
                 PacketByteUtil.writeNbt(buf, translations);
-                ClientNetworking.send(_id("search").toMinecraft(), buf);
+                ClientNetworking.send(_id("search"), buf);
 
                 AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
 
@@ -85,8 +85,8 @@ public class AlchemyTableScreen extends CompatInventoryScreen {
         return super.keyReleased(args);
     }
 
-    public void removed() {
-        super.removed();
+    public void removedOverride() {
+        super.removedOverride();
         if (searchBox.isFocused())
             ScreenUtil.setRepeatEvents(false);
     }
@@ -115,7 +115,7 @@ public class AlchemyTableScreen extends CompatInventoryScreen {
             NbtCompound nbt = NbtUtil.create();
             NbtUtil.set(nbt, "control", 0);
             PacketByteUtil.writeNbt(buf, nbt);
-            ClientNetworking.send(_id("network").toMinecraft(), buf);
+            ClientNetworking.send(_id("network"), buf);
         }));
 
         addDrawableCTBW(ScreenUtil.createTexturedButtonWidget(x + 171, y + 110, 18, 18, 226, 0, 18, getTexture(), (buttonWidget) -> {
@@ -129,7 +129,7 @@ public class AlchemyTableScreen extends CompatInventoryScreen {
             NbtCompound nbt = NbtUtil.create();
             NbtUtil.set(nbt, "control", 1);
             PacketByteUtil.writeNbt(buf, nbt);
-            ClientNetworking.send(_id("network").toMinecraft(), buf);
+            ClientNetworking.send(_id("network"), buf);
         }));
     }
 

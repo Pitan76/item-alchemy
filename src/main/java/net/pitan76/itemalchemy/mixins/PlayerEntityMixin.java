@@ -2,18 +2,21 @@ package net.pitan76.itemalchemy.mixins;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.MinecraftServer;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Deprecated
@@ -28,7 +31,10 @@ public class PlayerEntityMixin {
         
         NbtCompound modNBT = NbtUtil.get(nbt, "itemalchemy");
 
-        ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
+        Optional<MinecraftServer> serverOptional = WorldUtil.getServer(player.getWorld());
+        if (!serverOptional.isPresent()) return;
+
+        ServerState serverState = ServerState.getServerState(serverOptional.get());
 
         //ServerConnectionより早く呼ばれるのでModをアップデートしたユーザーはここでStateに記録
         serverState.createPlayer(player);

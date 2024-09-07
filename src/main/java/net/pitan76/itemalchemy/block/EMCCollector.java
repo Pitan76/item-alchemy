@@ -10,7 +10,6 @@ import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -56,8 +55,8 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
         if (blockEntity instanceof Inventory) {
             Inventory inventory = (Inventory) blockEntity;
             inventory.setStack(1, ItemStackUtil.empty());
-            ItemScatterer.spawn(world, pos, inventory);
-            world.updateComparators(pos, this);
+            ItemScattererUtil.spawn(world, pos, inventory);
+            e.updateComparators();
         }
         super.onStateReplaced(e);
     }
@@ -77,9 +76,7 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
 
     @Override
     public ActionResult onRightClick(BlockUseEvent e) {
-        if (e.isClient()) {
-            return ActionResult.SUCCESS;
-        }
+        if (e.isClient()) return ActionResult.SUCCESS;
 
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof EMCCollectorTile) {

@@ -9,17 +9,19 @@ import net.pitan76.itemalchemy.util.ItemCharge;
 import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
-import net.pitan76.mcpitanlib.api.network.ServerNetworking;
+import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+
+import java.util.Optional;
 
 import static net.pitan76.itemalchemy.ItemAlchemy._id;
 
 public class ServerNetworks {
     public static void init() {
-        ServerNetworking.registerReceiver(_id("network").toMinecraft(), (server, p, buf) -> {
-            NbtCompound nbt = PacketByteUtil.readNbt(buf);
+        ServerNetworking.registerReceiver(_id("network"), (e) -> {
+            NbtCompound nbt = PacketByteUtil.readNbt(e.buf);
             if (nbt.contains("control")) {
-                Player player = new Player(p);
+                Player player = e.player;
                 int ctrl = nbt.getInt("control");
                 if (ctrl == 0) {
                     if (!(player.getCurrentScreenHandler() instanceof AlchemyTableScreenHandler)) return;
@@ -34,10 +36,10 @@ public class ServerNetworks {
             }
         });
 
-        ServerNetworking.registerReceiver(_id("search").toMinecraft(), (server, p, buf) -> {
-            String text = PacketByteUtil.readString(buf);
-            NbtCompound translations = PacketByteUtil.readNbt(buf);
-            Player player = new Player(p);
+        ServerNetworking.registerReceiver(_id("search"), (e) -> {
+            String text = PacketByteUtil.readString(e.buf);
+            NbtCompound translations = PacketByteUtil.readNbt(e.buf);
+            Player player = e.player;
             AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
 
             // Sort
@@ -47,21 +49,20 @@ public class ServerNetworks {
             screenHandler.sortBySearch();
         });
 
-        ServerNetworking.registerReceiver(_id("tool_charge").toMinecraft(), (server, p, buf) -> {
-            Player player = new Player(p);
-            ItemStack itemStack = ItemUtils.getCurrentHandItem(p);
+        ServerNetworking.registerReceiver(_id("tool_charge"), (e) -> {
+            Player player = e.player;
+            Optional<ItemStack> stackOptional = ItemUtils.getCurrentHandItem(player);
 
-            if (itemStack == null) {
-                return;
-            }
+            if (!stackOptional.isPresent()) return;
 
-            if (itemStack.getItem() instanceof ItemCharge) {
-                int chargeLevel = ItemUtils.getCharge(itemStack);
+            ItemStack stack = stackOptional.get();
+            if (stack.getItem() instanceof ItemCharge) {
+                int chargeLevel = ItemUtils.getCharge(stack);
 
                 int afterChargeLevel = player.isSneaking() ? chargeLevel - 1 : chargeLevel + 1;
-                ItemUtils.setCharge(itemStack, afterChargeLevel);
+                ItemUtils.setCharge(stack, afterChargeLevel);
 
-                if (ItemUtils.getCharge(itemStack) == afterChargeLevel) {
+                if (ItemUtils.getCharge(stack) == afterChargeLevel) {
                     WorldUtil.playSound(player.getWorld(), null, player.getBlockPos(), player.isSneaking() ? Sounds.UNCHARGE_SOUND.getOrNull() : Sounds.CHARGE_SOUND.getOrNull(), SoundCategory.PLAYERS, 0.15f, 0.4f + afterChargeLevel / 5f);
                 }
             }

@@ -29,27 +29,14 @@ public class BlockRenderer implements WorldRenderEvents.BeforeBlockOutline{
     public boolean beforeBlockOutline(WorldRenderContext context, @Nullable HitResult hitResult) {
         PlayerEntity player = MinecraftClient.getInstance().player;
 
-        if(player == null) {
-            return true;
-        }
+        if (player == null) return true;
+        if (hitResult == null) return true;
+        if (hitResult.getType() != HitResult.Type.BLOCK) return true;
 
-        if(hitResult == null) {
-            return true;
-        }
+        ItemStack stack = ItemUtils.getCurrentHandItem(player);
 
-        if(hitResult.getType() != HitResult.Type.BLOCK) {
-            return true;
-        }
-
-        ItemStack itemStack = ItemUtils.getCurrentHandItem(player);
-
-        if(itemStack == null) {
-            return true;
-        }
-
-        if(!(itemStack.getItem() instanceof PhilosopherStone)) {
-            return true;
-        }
+        if (stack == null) return true;
+        if (!(stack.getItem() instanceof PhilosopherStone)) return true;
 
         MatrixStack matrixStack = context.matrixStack();
         Camera camera = context.camera();
@@ -58,18 +45,13 @@ public class BlockRenderer implements WorldRenderEvents.BeforeBlockOutline{
         BlockPos blockPos = ((BlockHitResult)hitResult).getBlockPos();
         BlockState blockState = context.world().getBlockState(blockPos);
 
-        if(blockState.isAir()) {
-            return true;
-        }
-
-        if(!PhilosopherStone.isExchange(blockState.getBlock())) {
-            return true;
-        }
+        if (blockState.isAir()) return true;
+        if (!PhilosopherStone.isExchange(blockState.getBlock())) return true;
 
         VoxelShape sharp = blockState.getOutlineShape(world, blockPos);
         VertexConsumer consumer = context.consumers().getBuffer(RenderLayer.getLines());
 
-        List<BlockPos> blocks = WorldUtils.getTargetBlocks(context.world(), blockPos, ItemUtils.getCharge(itemStack), true, true);
+        List<BlockPos> blocks = WorldUtils.getTargetBlocks(context.world(), blockPos, ItemUtils.getCharge(stack), true, true);
 
         for (BlockPos block : blocks) {
             double x = block.getX() - camera.getPos().x;
