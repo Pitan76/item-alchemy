@@ -1,5 +1,6 @@
 package net.pitan76.itemalchemy.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntity;
@@ -17,6 +18,7 @@ import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import org.jetbrains.annotations.Nullable;
 
 public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider {
@@ -29,18 +31,22 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
         this.emc = emc;
     }
 
+    public AEGUBlock(CompatibleBlockSettings settings) {
+        this(settings, 10000);
+    }
+
     public AEGUBlock() {
         this(10000);
+    }
+
+    public AEGUBlock(long emc) {
+        this(CompatibleBlockSettings.copy(net.minecraft.block.Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f), emc);
     }
 
     @Override
     public void appendProperties(AppendPropertiesArgs args) {
         args.addProperty(CONNECTED);
         super.appendProperties(args);
-    }
-
-    public AEGUBlock(long emc) {
-        this(CompatibleBlockSettings.copy(net.minecraft.block.Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f), emc);
     }
 
     public static BlockState setConnected(BlockState state, boolean isConnected) {
@@ -59,7 +65,7 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
 
         if (blockEntity instanceof EMCCondenserTile) {
             EMCCondenserTile tile = (EMCCondenserTile) blockEntity;
-            if (e.world.isClient) return ActionResult.SUCCESS;
+            if (e.isClient()) return ActionResult.SUCCESS;
             e.player.openExtendedMenu(tile);
             return ActionResult.CONSUME;
         }
@@ -74,5 +80,10 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
     @Override
     public boolean isTick() {
         return true;
+    }
+
+    @Override
+    public CompatMapCodec<? extends Block> getCompatCodec() {
+        return CompatMapCodec.createCodecOfExtendBlock(AEGUBlock::new);
     }
 }

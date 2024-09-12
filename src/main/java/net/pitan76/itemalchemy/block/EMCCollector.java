@@ -1,5 +1,6 @@
 package net.pitan76.itemalchemy.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
@@ -23,6 +24,7 @@ import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvider {
@@ -36,6 +38,18 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
         super(settings);
         setNewDefaultState(BlockStateUtil.getDefaultState(this).with(FACING, Direction.NORTH));
         this.maxEMC = maxEMC;
+    }
+
+    public EMCCollector(CompatibleBlockSettings settings) {
+        this(settings, 10000);
+    }
+
+    public EMCCollector() {
+        this(10000);
+    }
+
+    public EMCCollector(long maxEMC) {
+        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f), maxEMC);
     }
 
     @Override
@@ -64,14 +78,6 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
     @Override
     public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
         return args.withBlockState(FACING, args.getHorizontalPlayerFacing().getOpposite());
-    }
-
-    public EMCCollector() {
-        this(10000);
-    }
-
-    public EMCCollector(long maxEMC) {
-        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f), maxEMC);
     }
 
     @Override
@@ -106,5 +112,10 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
     @Override
     public boolean isTick() {
         return true;
+    }
+
+    @Override
+    public CompatMapCodec<? extends Block> getCompatCodec() {
+        return CompatMapCodec.createCodecOfExtendBlock(EMCCollector::new);
     }
 }

@@ -36,12 +36,12 @@ public class ItemUtils {
    * Handles {@link ItemMixin#inventoryTick(ItemStack, World, Entity, int, boolean, CallbackInfo)}
    * if the selected inventory item is of {@link ItemCharge}.
    *
-   * @param itemStack that is selected and of {@link ItemCharge}.
+   * @param stack that is selected and of {@link ItemCharge}.
    */
-  public static void handleItemChargeInventoryTick(ItemStack itemStack) {
-    int charge = getCharge(itemStack);
-    int damage = ItemStackUtil.getMaxDamage(itemStack) - (charge * 4);
-    itemStack.setDamage(damage);
+  public static void handleItemChargeInventoryTick(ItemStack stack) {
+    int charge = getCharge(stack);
+    int damage = ItemStackUtil.getMaxDamage(stack) - (charge * 4);
+    ItemStackUtil.setDamage(stack, damage);
   }
 
   /**
@@ -112,12 +112,12 @@ public class ItemUtils {
 
     NbtCompound nbt = CustomDataUtil.get(stack, ItemAlchemy.MOD_ID);
 
-    if (!nbt.contains(CHARGE_COMPONENT_KEY)) {
+    if (!NbtUtil.has(nbt, CHARGE_COMPONENT_KEY)) {
       setCharge(stack, MIN_CHARGE_VALUE);
       return MIN_CHARGE_VALUE;
     }
 
-    return nbt.getInt(CHARGE_COMPONENT_KEY);
+    return NbtUtil.getInt(nbt, CHARGE_COMPONENT_KEY);
   }
 
   /**

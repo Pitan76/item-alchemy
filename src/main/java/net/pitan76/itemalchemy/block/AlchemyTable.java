@@ -1,6 +1,6 @@
 package net.pitan76.itemalchemy.block;
 
-import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -14,14 +14,15 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.api.event.block.OutlineShapeEvent;
 import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
+import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 
 public class AlchemyTable extends ExtendBlock {
-    public AlchemyTable(AbstractBlock.Settings settings) {
+    public AlchemyTable(CompatibleBlockSettings settings) {
         super(settings);
     }
 
     public AlchemyTable() {
-        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.BLACK).strength(1.5f, 7.0f).build());
+        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.BLACK).strength(1.5f, 7.0f));
     }
 
     @Override
@@ -40,5 +41,10 @@ public class AlchemyTable extends ExtendBlock {
     @Override
     public VoxelShape getOutlineShape(OutlineShapeEvent e) {
         return VoxelShapeUtil.cuboid(0, 0, 0, 1, 0.125, 1);
+    }
+
+    @Override
+    public CompatMapCodec<? extends Block> getCompatCodec() {
+        return CompatMapCodec.createCodecOfExtendBlock(AlchemyTable::new);
     }
 }

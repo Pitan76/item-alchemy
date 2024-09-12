@@ -48,7 +48,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
             @Override
             public void execute(ServerCommandEvent event) {
                 if (!event.getWorld().isClient()) {
-                    System.out.println("reload emc manager");
+                    ItemAlchemy.INSTANCE.info("reload emc manager");
                     if (!EMCManager.getMap().isEmpty()) EMCManager.setMap(new LinkedHashMap<>());
 
                     File dir = new File(PlatformUtil.getConfigFolder().toFile(), ItemAlchemy.MOD_ID);

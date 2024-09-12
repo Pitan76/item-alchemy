@@ -143,7 +143,7 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
                         ItemStack newStack = targetStack.copy();
                         newStack.setCount(1);
                         // Remove NBT
-                        CustomDataUtil.setNbt(newStack, new NbtCompound());
+                        CustomDataUtil.setNbt(newStack, NbtUtil.create());
                         //newStack.setNbt(new NbtCompound());
                         if (insertItem(newStack, inventory, true)) {
                             insertItem(newStack, inventory);

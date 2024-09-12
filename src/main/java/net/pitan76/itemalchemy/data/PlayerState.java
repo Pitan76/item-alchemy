@@ -1,6 +1,7 @@
 package net.pitan76.itemalchemy.data;
 
 import net.minecraft.nbt.NbtCompound;
+import net.pitan76.mcpitanlib.api.util.NbtUtil;
 
 import java.util.UUID;
 
@@ -9,12 +10,12 @@ public class PlayerState {
     public UUID teamID;
 
     public void readNbt(NbtCompound nbt) {
-        playerUUID = nbt.getUuid("uuid");
-        teamID = nbt.getUuid("team");
+        playerUUID = NbtUtil.getUuid(nbt, "uuid");
+        teamID = NbtUtil.getUuid(nbt, "team");
     }
 
     public void writeNBT(NbtCompound nbt) {
-        nbt.putUuid("uuid", playerUUID);
-        nbt.putUuid("team", teamID);
+        NbtUtil.putUuid(nbt, "uuid", playerUUID);
+        NbtUtil.putUuid(nbt, "team", teamID);
     }
 }

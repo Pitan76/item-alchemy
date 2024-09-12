@@ -1,11 +1,13 @@
 package net.pitan76.itemalchemy.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,5 +42,10 @@ public class EMCRepeater extends ExtendBlock {
 
     public static List<BlockPos> getNearPoses(World world, BlockPos[] blockPoses) {
         return getNearPoses(world, blockPoses, new ArrayList<>());
+    }
+
+    @Override
+    public CompatMapCodec<? extends Block> getCompatCodec() {
+        return CompatMapCodec.createCodecOfExtendBlock(EMCRepeater::new);
     }
 }

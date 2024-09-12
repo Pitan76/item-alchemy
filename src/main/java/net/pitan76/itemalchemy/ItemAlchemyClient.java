@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy;
 
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -15,6 +14,7 @@ import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.ScreenHandlers;
 import net.pitan76.mcpitanlib.api.client.event.ItemTooltipRegistry;
+import net.pitan76.mcpitanlib.api.client.event.WorldRenderRegistry;
 import net.pitan76.mcpitanlib.api.client.registry.CompatRegistryClient;
 import net.pitan76.mcpitanlib.api.client.registry.KeybindingRegistry;
 import net.pitan76.mcpitanlib.api.network.v2.ClientNetworking;
@@ -40,7 +40,7 @@ public class ItemAlchemyClient {
         CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.EMC_CONDENSER, EMCCondenserScreen::new);
         CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.ALCHEMY_CHEST, AlchemyChestScreen::new);
 
-        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(new BlockRenderer());
+        WorldRenderRegistry.registerWorldRenderBeforeBlockOutline(new BlockRenderer());
 
         ClientNetworking.registerReceiver(_id("sync_emc"), (e) -> {
             itemAlchemyNbt = PacketByteUtil.readNbt(e.buf);

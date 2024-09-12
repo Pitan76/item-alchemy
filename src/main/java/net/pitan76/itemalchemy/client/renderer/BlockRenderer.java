@@ -1,33 +1,31 @@
 package net.pitan76.itemalchemy.client.renderer;
 
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.item.PhilosopherStone;
 import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.itemalchemy.util.WorldUtils;
-import org.jetbrains.annotations.Nullable;
+import net.pitan76.mcpitanlib.api.client.event.listener.BeforeBlockOutlineEvent;
+import net.pitan76.mcpitanlib.api.client.event.listener.BeforeBlockOutlineListener;
+import net.pitan76.mcpitanlib.api.client.event.listener.WorldRenderContext;
+import net.pitan76.mcpitanlib.api.util.client.ClientUtil;
 
 import java.util.List;
+import java.util.Optional;
 
-public class BlockRenderer implements WorldRenderEvents.BeforeBlockOutline{
+public class BlockRenderer implements BeforeBlockOutlineListener {
 
     @Override
-    public boolean beforeBlockOutline(WorldRenderContext context, @Nullable HitResult hitResult) {
-        PlayerEntity player = MinecraftClient.getInstance().player;
+    public boolean beforeBlockOutline(BeforeBlockOutlineEvent e) {
+        PlayerEntity player = ClientUtil.getClientPlayer();
+
+        HitResult hitResult = e.getHitResult();
 
         if (player == null) return true;
         if (hitResult == null) return true;
@@ -38,33 +36,32 @@ public class BlockRenderer implements WorldRenderEvents.BeforeBlockOutline{
         if (stack == null) return true;
         if (!(stack.getItem() instanceof PhilosopherStone)) return true;
 
-        MatrixStack matrixStack = context.matrixStack();
+        WorldRenderContext context = e.getContext();
+
         Camera camera = context.camera();
-        World world = context.world();
+        World world = e.getWorld();
 
         BlockPos blockPos = ((BlockHitResult)hitResult).getBlockPos();
-        BlockState blockState = context.world().getBlockState(blockPos);
+
+        Optional<BlockState> optionalBlockState = e.getBlockState();
+        if (!optionalBlockState.isPresent()) return true;
+
+        BlockState blockState = optionalBlockState.get();
 
         if (blockState.isAir()) return true;
         if (!PhilosopherStone.isExchange(blockState.getBlock())) return true;
 
-        VoxelShape sharp = blockState.getOutlineShape(world, blockPos);
-        VertexConsumer consumer = context.consumers().getBuffer(RenderLayer.getLines());
-
-        List<BlockPos> blocks = WorldUtils.getTargetBlocks(context.world(), blockPos, ItemUtils.getCharge(stack), true, true);
+        List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, blockPos, ItemUtils.getCharge(stack), true, true);
 
         for (BlockPos block : blocks) {
             double x = block.getX() - camera.getPos().x;
             double y = block.getY() - camera.getPos().y;
             double z = block.getZ() - camera.getPos().z;
 
-            matrixStack.push();
-
-            matrixStack.translate(x, y, z);
-
-            WorldRenderer.drawBox(matrixStack, consumer, sharp.getBoundingBox(), 1f, 0.6f, 1f, 1f);
-
-            matrixStack.pop();
+            e.push();
+            e.translate(x, y, z);
+            e.drawBox(1f, 0.6f, 1f, 1f);
+            e.pop();
         }
 
         return false;

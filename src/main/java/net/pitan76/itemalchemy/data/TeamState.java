@@ -21,14 +21,14 @@ public class TeamState {
     public List<String> registeredItems = new ArrayList<>();
 
     public void readNbt(NbtCompound nbt) {
-        name = NbtUtil.get(nbt, "name", String.class);
-        createdAt = NbtUtil.get(nbt, "created_at", Long.class);
-        teamID = nbt.getUuid("id");
-        owner = nbt.getUuid("owner");
-        storedEMC = NbtUtil.get(nbt, "emc", Long.class);
-        isDefault = NbtUtil.get(nbt, "is_default", Boolean.class);
+        name = NbtUtil.getString(nbt, "name");
+        createdAt = NbtUtil.getLong(nbt, "created_at");
+        teamID = NbtUtil.getUuid(nbt, "id");
+        owner = NbtUtil.getUuid(nbt, "owner");
+        storedEMC = NbtUtil.getLong(nbt, "emc");
+        isDefault = NbtUtil.getBoolean(nbt, "is_default");
 
-        List<String> registeredItems = ((NbtList)nbt.get("registered_items")).stream()
+        List<String> registeredItems = (NbtUtil.getList(nbt, "registered_items")).stream()
                 .filter(nbtElement -> nbtElement instanceof NbtString)
                 .map(NbtElement::asString)
                 .collect(Collectors.toList());
@@ -37,19 +37,19 @@ public class TeamState {
     }
 
     public void writeNbt(NbtCompound nbt) {
-        NbtUtil.set(nbt, "name", name);
-        NbtUtil.set(nbt, "created_at", createdAt);
-        nbt.putUuid("id", teamID);
-        nbt.putUuid("owner", owner);
-        NbtUtil.set(nbt, "emc", storedEMC);
-        NbtUtil.set(nbt, "is_default", isDefault);
+        NbtUtil.putString(nbt, "name", name);
+        NbtUtil.putLong(nbt, "created_at", createdAt);
+        NbtUtil.putUuid(nbt, "id", teamID);
+        NbtUtil.putUuid(nbt, "owner", owner);
+        NbtUtil.putLong(nbt, "emc", storedEMC);
+        NbtUtil.putBoolean(nbt, "is_default", isDefault);
 
-        NbtList registeredItems = new NbtList();
+        NbtList registeredItems = NbtUtil.createNbtList();
 
         for (String registeredItem : this.registeredItems) {
             registeredItems.add(NbtString.of(registeredItem));
         }
 
-        nbt.put("registered_items", registeredItems);
+        NbtUtil.put(nbt, "registered_items", registeredItems);
     }
 }

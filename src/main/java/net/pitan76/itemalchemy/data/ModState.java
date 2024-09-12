@@ -17,9 +17,8 @@ public interface ModState {
     List<TeamState> getTeamsByOwner(UUID playerUUID);
 
     static ModState getModState(@Nullable MinecraftServer server) {
-        if(server != null) {
+        if (server != null)
             return ServerState.getServerState(server);
-        }
 
         return new ClientState();
     }

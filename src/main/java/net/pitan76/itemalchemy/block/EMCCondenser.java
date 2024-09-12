@@ -1,5 +1,6 @@
 package net.pitan76.itemalchemy.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
@@ -23,6 +24,7 @@ import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvider {
@@ -35,6 +37,10 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
     public EMCCondenser(CompatibleBlockSettings settings) {
         super(settings);
         BlockStateUtil.getDefaultState(this).with(FACING, Direction.NORTH);
+    }
+
+    public EMCCondenser() {
+        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.BLACK).strength(2f, 7.0f));
     }
 
     @Override
@@ -66,10 +72,6 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
         return args.withBlockState(FACING, args.getHorizontalPlayerFacing().getOpposite());
     }
 
-    public EMCCondenser() {
-        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.BLACK).strength(2f, 7.0f));
-    }
-
     @Override
     public ActionResult onRightClick(BlockUseEvent e) {
         if (e.isClient())
@@ -98,5 +100,10 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
     @Override
     public boolean isTick() {
         return true;
+    }
+
+    @Override
+    public CompatMapCodec<? extends Block> getCompatCodec() {
+        return CompatMapCodec.createCodecOfExtendBlock(EMCCondenser::new);
     }
 }

@@ -28,10 +28,9 @@ public class ServerState extends CompatiblePersistentState implements ModState {
 
         NbtCompound modNBT = NbtUtil.get(nbt, "itemalchemy");
 
-        for (NbtElement item : (NbtList)modNBT.get("teams")) {
-            if(!(item instanceof NbtCompound)) {
+        for (NbtElement item : NbtUtil.getList(modNBT, "teams")) {
+            if (!(item instanceof NbtCompound))
                 continue;
-            }
 
             TeamState teamState = new TeamState();
             teamState.readNbt((NbtCompound)item);
@@ -39,13 +38,11 @@ public class ServerState extends CompatiblePersistentState implements ModState {
             serverState.teams.add(teamState);
         }
 
-        for (NbtElement item : (NbtList)modNBT.get("players")) {
-            if(!(item instanceof NbtCompound)) {
+        for (NbtElement item : NbtUtil.getList(modNBT, "players")) {
+            if (!(item instanceof NbtCompound))
                 continue;
-            }
 
             PlayerState playerState = new PlayerState();
-
             playerState.readNbt((NbtCompound)item);
 
             serverState.players.add(playerState);
@@ -59,8 +56,8 @@ public class ServerState extends CompatiblePersistentState implements ModState {
         NbtCompound nbt = args.getNbt();
 
         NbtCompound modNBT = NbtUtil.create();
-        NbtList teamNBTList = new NbtList();
-        NbtList playerNBTList = new NbtList();
+        NbtList teamNBTList = NbtUtil.createNbtList();
+        NbtList playerNBTList = NbtUtil.createNbtList();
 
         for (TeamState teamState : teams) {
             NbtCompound teamNBT = NbtUtil.create();
@@ -78,8 +75,8 @@ public class ServerState extends CompatiblePersistentState implements ModState {
             playerNBTList.add(playerNBT);
         }
 
-        modNBT.put("teams", teamNBTList);
-        modNBT.put("players", playerNBTList);
+        NbtUtil.put(modNBT, "teams", teamNBTList);
+        NbtUtil.put(modNBT, "players", playerNBTList);
         NbtUtil.put(nbt, "itemalchemy", modNBT);
 
         return nbt;
@@ -113,9 +110,8 @@ public class ServerState extends CompatiblePersistentState implements ModState {
     }
 
     public PlayerState createPlayer(Player player) {
-        if(getPlayer(player.getUUID()).isPresent()) {
+        if (getPlayer(player.getUUID()).isPresent())
             return getPlayer(player.getUUID()).get();
-        }
 
         PlayerState state = new PlayerState();
 

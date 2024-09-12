@@ -10,6 +10,7 @@ import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
+import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 
 import java.util.Optional;
@@ -20,9 +21,9 @@ public class ServerNetworks {
     public static void init() {
         ServerNetworking.registerReceiver(_id("network"), (e) -> {
             NbtCompound nbt = PacketByteUtil.readNbt(e.buf);
-            if (nbt.contains("control")) {
+            if (NbtUtil.has(nbt, "control")) {
                 Player player = e.player;
-                int ctrl = nbt.getInt("control");
+                int ctrl = NbtUtil.getInt(nbt, "control");
                 if (ctrl == 0) {
                     if (!(player.getCurrentScreenHandler() instanceof AlchemyTableScreenHandler)) return;
                     AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();

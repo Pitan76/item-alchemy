@@ -27,7 +27,7 @@ public class PlayerEntityMixin {
         Player player = new Player((PlayerEntity) (Object)this);
 
         if (player.isClient()) return;
-        if (!nbt.contains("itemalchemy")) return;
+        if (!NbtUtil.has(nbt, "itemalchemy")) return;
         
         NbtCompound modNBT = NbtUtil.get(nbt, "itemalchemy");
 
