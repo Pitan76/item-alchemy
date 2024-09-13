@@ -2,7 +2,6 @@ package net.pitan76.itemalchemy.client.renderer;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.Camera;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -14,6 +13,7 @@ import net.pitan76.itemalchemy.util.WorldUtils;
 import net.pitan76.mcpitanlib.api.client.event.listener.BeforeBlockOutlineEvent;
 import net.pitan76.mcpitanlib.api.client.event.listener.BeforeBlockOutlineListener;
 import net.pitan76.mcpitanlib.api.client.event.listener.WorldRenderContext;
+import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.client.ClientUtil;
 
 import java.util.List;
@@ -23,22 +23,23 @@ public class BlockRenderer implements BeforeBlockOutlineListener {
 
     @Override
     public boolean beforeBlockOutline(BeforeBlockOutlineEvent e) {
-        PlayerEntity player = ClientUtil.getClientPlayer();
+        if (ClientUtil.getClientPlayer() == null) return true;
+        Player player = ClientUtil.getPlayer();
 
         HitResult hitResult = e.getHitResult();
 
-        if (player == null) return true;
         if (hitResult == null) return true;
         if (hitResult.getType() != HitResult.Type.BLOCK) return true;
 
-        ItemStack stack = ItemUtils.getCurrentHandItem(player);
+        Optional<ItemStack> optionalStack = player.getCurrentHandItem();
+        if (!optionalStack.isPresent()) return true;
+        ItemStack stack = optionalStack.get();
 
-        if (stack == null) return true;
         if (!(stack.getItem() instanceof PhilosopherStone)) return true;
 
         WorldRenderContext context = e.getContext();
 
-        Camera camera = context.camera();
+        Camera camera = context.getCamera();
         World world = e.getWorld();
 
         BlockPos blockPos = ((BlockHitResult)hitResult).getBlockPos();

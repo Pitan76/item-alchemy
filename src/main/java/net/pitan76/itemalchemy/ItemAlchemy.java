@@ -53,12 +53,13 @@ public class ItemAlchemy extends CommonModInitializer {
             if (p == null) return;
 
             Player player = new Player(p);
-            EMCManager.syncS2C_emc_map(p);
+
+            EMCManager.syncS2C_emc_map(player);
             ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
 
             serverState.createPlayer(player);
 
-            EMCManager.syncS2C(p);
+            EMCManager.syncS2C(player);
         });
 
         EventRegistry.ServerLifecycle.serverStopped(EMCManager::exit);

@@ -23,6 +23,7 @@ import net.pitan76.itemalchemy.block.EMCCollector;
 import net.pitan76.itemalchemy.block.EMCRepeater;
 import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import net.pitan76.itemalchemy.item.Items;
+import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.container.factory.DisplayNameArgs;
 import net.pitan76.mcpitanlib.api.event.container.factory.ExtraDataArgs;
@@ -175,8 +176,9 @@ public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEn
 
             if (oldStoredEMC != storedEMC) {
                 oldStoredEMC = storedEMC;
-                for (ServerPlayerEntity player : ((ServerWorld) world).getPlayers()) {
-                    if (player.networkHandler != null && player.currentScreenHandler instanceof EMCCollectorScreenHandler && ((EMCCollectorScreenHandler) player.currentScreenHandler).tile == this) {
+                for (ServerPlayerEntity p : ((ServerWorld) world).getPlayers()) {
+                    Player player = new Player(p);
+                    if (player.hasNetworkHandler() && player.getCurrentScreenHandler() instanceof EMCCollectorScreenHandler && ((EMCCollectorScreenHandler) player.getCurrentScreenHandler()).tile == this) {
                         PacketByteBuf buf = PacketByteUtil.create();
                         PacketByteUtil.writeLong(buf, storedEMC);
                         ServerNetworking.send(player, ItemAlchemy._id("itemalchemy_emc_collector"), buf);

@@ -148,7 +148,7 @@ public class EMCManager {
 
         if (!world.isClient()) {
             for (ServerPlayerEntity player : world.getPlayers()) {
-                syncS2C_emc_map(player);
+                syncS2C_emc_map(new Player(player));
             }
         }
     }
@@ -271,11 +271,9 @@ public class EMCManager {
         return teamState.map(state -> state.storedEMC).orElse(0L);
     }
 
-    public static void syncS2C(ServerPlayerEntity serverPlayer) {
-        if (serverPlayer.networkHandler == null)
-            return;
-
-        Player player = new Player(serverPlayer);
+    public static void syncS2C(Player player) {
+        if (!player.hasNetworkHandler()) return;
+        if (!player.isServerPlayerEntity()) return;
 
         ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
         PacketByteBuf buf = PacketByteUtil.create();
@@ -292,16 +290,14 @@ public class EMCManager {
 
         PacketByteUtil.writeNbt(buf, nbt);
 
-        ServerNetworking.send(serverPlayer, _id("sync_emc"), buf);
+        ServerNetworking.send(player.getServerPlayer().get(), _id("sync_emc"), buf);
     }
 
-    public static void syncS2C_emc_map(ServerPlayerEntity player) {
-        if (player.networkHandler == null) {
-            return;
-        }
+    public static void syncS2C_emc_map(Player player) {
+        if (!player.hasNetworkHandler()) return;
         if (map.isEmpty()) return;
-        PacketByteBuf buf = PacketByteUtil.create();
 
+        PacketByteBuf buf = PacketByteUtil.create();
         PacketByteUtil.writeMap(buf, map);
         //System.out.println("send emc map to " + player.getName().getString());
         ServerNetworking.send(player, _id("sync_emc_map"), buf);

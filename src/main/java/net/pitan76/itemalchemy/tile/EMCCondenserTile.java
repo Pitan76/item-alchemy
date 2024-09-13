@@ -167,7 +167,7 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
 
             for (ServerPlayerEntity serverPlayerEntity : ((ServerWorld) world).getPlayers()) {
                 Player player = new Player(serverPlayerEntity);
-                if (serverPlayerEntity.networkHandler != null && player.getCurrentScreenHandler() instanceof EMCCondenserScreenHandler && ((EMCCondenserScreenHandler) player.getCurrentScreenHandler()).tile == this ) {
+                if (player.hasNetworkHandler() && player.getCurrentScreenHandler() instanceof EMCCondenserScreenHandler && ((EMCCondenserScreenHandler) player.getCurrentScreenHandler()).tile == this ) {
                     PacketByteBuf buf = PacketByteUtil.create();
                     PacketByteUtil.writeLong(buf, storedEMC);
                     PacketByteUtil.writeLong(buf, maxEMC);

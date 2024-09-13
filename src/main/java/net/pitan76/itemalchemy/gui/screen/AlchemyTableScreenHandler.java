@@ -7,7 +7,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.api.PlayerRegisteredItemUtil;
@@ -258,11 +257,8 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
                 }
 
                 // sync emc
-                if (player.getEntity() instanceof ServerPlayerEntity) {
-                    ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player.getEntity();
-                    EMCManager.syncS2C(serverPlayer);
-                }
-
+                if (player.isServerPlayerEntity())
+                    EMCManager.syncS2C(player);
             }
         }
     }

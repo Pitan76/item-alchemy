@@ -3,7 +3,6 @@ package net.pitan76.itemalchemy.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.shape.VoxelShape;
 import net.pitan76.itemalchemy.EMCManager;
@@ -27,11 +26,10 @@ public class AlchemyTable extends ExtendBlock {
 
     @Override
     public ActionResult onRightClick(BlockUseEvent e) {
-        if (e.isClient())
-            return ActionResult.SUCCESS;
+        if (e.isClient()) return ActionResult.SUCCESS;
 
-        if (e.player.getPlayerEntity() instanceof ServerPlayerEntity)
-            EMCManager.syncS2C((ServerPlayerEntity) e.player.getPlayerEntity());
+        if (e.player.isServerPlayerEntity())
+            EMCManager.syncS2C(e.player);
 
         Player player = e.player;
         player.openGuiScreen(new AlchemyTableScreenHandlerFactory());

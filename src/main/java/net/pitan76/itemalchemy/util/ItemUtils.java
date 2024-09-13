@@ -1,20 +1,16 @@
 package net.pitan76.itemalchemy.util;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.mixins.ItemMixin;
-import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Optional;
 
 import static com.google.common.primitives.Ints.constrainToRange;
 
@@ -42,47 +38,6 @@ public class ItemUtils {
     int charge = getCharge(stack);
     int damage = ItemStackUtil.getMaxDamage(stack) - (charge * 4);
     ItemStackUtil.setDamage(stack, damage);
-  }
-
-  /**
-   * Returns the current {@link ItemStack} in the {@link PlayerEntity}'s hand, or offhand if the
-   * main hand is empty.
-   *
-   * @param player to check current hand item.
-   * @return {@code ItemStack} that the {@link PlayerEntity} is holding. Can be {@link null}.
-   */
-  @Nullable
-  public static ItemStack getCurrentHandItem(PlayerEntity player) {
-    boolean playerIsHoldingInMainHand = !player.getMainHandStack().isEmpty();
-    if (playerIsHoldingInMainHand)
-      return player.getMainHandStack();
-
-    boolean playerIsHoldingInOffHand = !player.getOffHandStack().isEmpty();
-
-    if (playerIsHoldingInOffHand)
-      return player.getOffHandStack();
-
-    return null;
-  }
-
-  /**
-   * Returns the current {@link ItemStack} in the {@link Player}'s hand, or offhand if the
-   * main hand is empty.
-   *
-   * @param player to check current hand item.
-   * @return {@code ItemStack} that the {@link Player} is holding. Can be {@link null}.
-   */
-  public static Optional<ItemStack> getCurrentHandItem(Player player) {
-    boolean playerIsHoldingInMainHand = !player.getMainHandStack().isEmpty();
-    if (playerIsHoldingInMainHand)
-      return Optional.ofNullable(player.getMainHandStack());
-
-    boolean playerIsHoldingInOffHand = !player.getOffHandStack().isEmpty();
-
-    if (playerIsHoldingInOffHand)
-      return Optional.ofNullable(player.getOffHandStack());
-
-    return Optional.empty();
   }
 
   /**

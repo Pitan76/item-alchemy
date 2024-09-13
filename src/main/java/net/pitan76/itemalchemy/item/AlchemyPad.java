@@ -1,7 +1,6 @@
 package net.pitan76.itemalchemy.item;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.TypedActionResult;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
@@ -18,14 +17,13 @@ public class AlchemyPad extends ExtendItem {
 
     @Override
     public TypedActionResult<ItemStack> onRightClick(ItemUseEvent e) {
-        if (e.world.isClient()) {
-            return TypedActionResult.consume(e.user.getPlayerEntity().getStackInHand(e.hand));
-        }
-        if (e.user.getPlayerEntity() instanceof ServerPlayerEntity) {
-            EMCManager.syncS2C((ServerPlayerEntity) e.user.getPlayerEntity());
-        }
+        if (e.isClient()) return TypedActionResult.consume(e.getStack());
+
+        if (e.user.isServerPlayerEntity())
+            EMCManager.syncS2C(e.user);
+
         Player player = e.user;
         player.openGuiScreen(new AlchemyTableScreenHandlerFactory());
-        return TypedActionResult.consume(e.user.getPlayerEntity().getStackInHand(e.hand));
+        return TypedActionResult.consume(e.getStack());
     }
 }

@@ -52,7 +52,7 @@ public class ServerNetworks {
 
         ServerNetworking.registerReceiver(_id("tool_charge"), (e) -> {
             Player player = e.player;
-            Optional<ItemStack> stackOptional = ItemUtils.getCurrentHandItem(player);
+            Optional<ItemStack> stackOptional = player.getCurrentHandItem();
 
             if (!stackOptional.isPresent()) return;
 

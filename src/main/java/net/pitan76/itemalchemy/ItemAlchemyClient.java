@@ -17,8 +17,9 @@ import net.pitan76.mcpitanlib.api.client.event.ItemTooltipRegistry;
 import net.pitan76.mcpitanlib.api.client.event.WorldRenderRegistry;
 import net.pitan76.mcpitanlib.api.client.registry.CompatRegistryClient;
 import net.pitan76.mcpitanlib.api.client.registry.KeybindingRegistry;
-import net.pitan76.mcpitanlib.api.network.v2.ClientNetworking;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
+import net.pitan76.mcpitanlib.api.network.v2.ClientNetworking;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import org.lwjgl.glfw.GLFW;
 
@@ -89,7 +90,7 @@ public class ItemAlchemyClient {
 
         list.add(TextUtil.literal("§eEMC: §r" + String.format("%,d", emc)));
 
-        if (stack.getCount() > 1)
+        if (ItemStackUtil.getCount(stack) > 1)
             list.add(TextUtil.literal("§eStack EMC: §r" + String.format("%,d", emc * stack.getCount())));
 
         return list;
