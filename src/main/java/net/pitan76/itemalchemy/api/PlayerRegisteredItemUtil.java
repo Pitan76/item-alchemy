@@ -1,6 +1,7 @@
 package net.pitan76.itemalchemy.api;
 
 import net.minecraft.item.Item;
+import net.minecraft.server.MinecraftServer;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.data.ModState;
 import net.pitan76.itemalchemy.data.ServerState;
@@ -8,6 +9,8 @@ import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
+import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,16 +45,16 @@ public class PlayerRegisteredItemUtil {
     }
 
     public static void setItemsForString(Player player, List<String> list) {
-        Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
+        Optional<MinecraftServer> server = WorldUtil.getServer(player.getWorld());
+        if (!server.isPresent()) return;
 
-        if(!teamState.isPresent()) {
-            return;
-        }
+        Optional<TeamState> teamState = ModState.getModState(server.get()).getTeamByPlayer(player.getUUID());
+        if (!teamState.isPresent()) return;
 
         teamState.get().registeredItems = list;
 
         if (!player.isClient()) {
-            ServerState.getServerState(player.getWorld().getServer()).markDirty();
+            PersistentStateUtil.markDirty(ServerState.getServerState(server.get()));
         }
     }
 

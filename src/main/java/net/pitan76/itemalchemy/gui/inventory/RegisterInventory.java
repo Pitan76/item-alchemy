@@ -2,6 +2,7 @@ package net.pitan76.itemalchemy.gui.inventory;
 
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.data.PlayerState;
 import net.pitan76.itemalchemy.data.ServerState;
@@ -11,9 +12,12 @@ import net.pitan76.itemalchemy.item.ILearnableItem;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
+import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class RegisterInventory extends SimpleInventory {
     public Player player;
@@ -28,8 +32,11 @@ public class RegisterInventory extends SimpleInventory {
             boolean consumedItem = false,
                     learning = stack.getItem() instanceof ILearnableItem;
 
-            if(!player.getWorld().isClient) {
-                ServerState state = ServerState.getServerState(player.getWorld().getServer());
+            if(!player.isClient()) {
+                Optional<MinecraftServer> server = WorldUtil.getServer(player.getWorld());
+                if (!server.isPresent()) return;
+
+                ServerState state = ServerState.getServerState(server.get());
                 PlayerState playerState = state.getPlayer(player.getUUID()).get();
 
                 TeamState teamState = state.getTeam(playerState.teamID).get();
@@ -47,11 +54,11 @@ public class RegisterInventory extends SimpleInventory {
                     teamState.registeredItems.add(itemId);
                 }
 
-                state.markDirty();
+                PersistentStateUtil.markDirty(state);
             }
 
             if (slot == 50) {
-                if (!player.getWorld().isClient && EMCManager.get(stack) != 0) {
+                if (!player.isClient() && EMCManager.get(stack) != 0) {
                     EMCManager.writeEmcToPlayer(player, stack);
                 }
             } else {

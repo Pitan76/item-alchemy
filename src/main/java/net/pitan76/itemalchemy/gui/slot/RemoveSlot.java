@@ -2,6 +2,7 @@ package net.pitan76.itemalchemy.gui.slot;
 
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.data.ModState;
 import net.pitan76.itemalchemy.data.ServerState;
@@ -12,6 +13,8 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.slot.CompatibleSlot;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
+import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +30,12 @@ public class RemoveSlot extends CompatibleSlot {
 
     @Override
     public void callSetStack(ItemStack stack) {
-        Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
-
-        if (!teamState.isPresent())
-            return;
+        Optional<MinecraftServer> serverOptional = WorldUtil.getServer(player.getWorld());
+        if (!serverOptional.isPresent()) return;
+        MinecraftServer server = serverOptional.get();
+        
+        Optional<TeamState> teamState = ModState.getModState(server).getTeamByPlayer(player.getUUID());
+        if (!teamState.isPresent()) return;
 
         List<String> items = new ArrayList<>();
         if (stack.getItem() instanceof ILearnableItem) {
@@ -49,10 +54,10 @@ public class RemoveSlot extends CompatibleSlot {
         }
 
         if (!player.isClient()) {
-            ServerState.getServerState(player.getWorld().getServer()).markDirty();
+            PersistentStateUtil.markDirty(ServerState.getServerState(server));
         }
 
-        player.offerOrDrop(stack.copy());
+        player.offerOrDrop(ItemStackUtil.copy(stack));
         if (player.getCurrentScreenHandler() instanceof AlchemyTableScreenHandler) {
             AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
             screenHandler.extractInventory.placeExtractSlots();

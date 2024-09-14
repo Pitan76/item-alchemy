@@ -139,7 +139,7 @@ public class EMCManager {
             defaultMap();
         }
 
-        ServerWorld world = (ServerWorld) WorldUtil.getOverworld(server);
+        ServerWorld world = WorldUtil.getOverworld(server);
         setEmcFromRecipes(world);
         for (Map.Entry<String, Long> entry : getMap().entrySet()) {
             config.set(entry.getKey(), entry.getValue());
@@ -147,13 +147,17 @@ public class EMCManager {
         config.save(file);
 
         if (!world.isClient()) {
-            for (ServerPlayerEntity player : world.getPlayers()) {
-                syncS2C_emc_map(new Player(player));
+            for (Player player : WorldUtil.getPlayers(world)) {
+                syncS2C_emc_map(player);
             }
         }
     }
 
     public static void exit(MinecraftServer server) {
+        exit();
+    }
+
+    public static void exit() {
         playerCache = new HashMap<>();
     }
 

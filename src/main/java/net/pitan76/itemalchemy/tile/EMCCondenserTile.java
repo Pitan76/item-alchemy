@@ -149,7 +149,7 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
                             insertItem(newStack, inventory);
                             storedEMC -= useEMC;
 
-                            markDirty();
+                            BlockEntityUtil.markDirty(this);
                         }
 
                     }

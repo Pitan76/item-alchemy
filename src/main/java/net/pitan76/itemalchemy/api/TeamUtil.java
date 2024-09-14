@@ -5,6 +5,7 @@ import net.pitan76.itemalchemy.data.PlayerState;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -63,7 +64,7 @@ public class TeamUtil {
 
         playerState.get().teamID = teamState.get().teamID;
 
-        serverState.markDirty();
+        PersistentStateUtil.markDirty(serverState);
 
         return true;
     }
@@ -83,7 +84,7 @@ public class TeamUtil {
         }
 
         serverState.teams.remove(teamState.get());
-        serverState.markDirty();
+        PersistentStateUtil.markDirty(serverState);
 
         return true;
     }
@@ -110,7 +111,7 @@ public class TeamUtil {
             removeTeam(server, currentTeamState.teamID);
         }
 
-        serverState.markDirty();
+        PersistentStateUtil.markDirty(serverState);
 
         return true;
     }

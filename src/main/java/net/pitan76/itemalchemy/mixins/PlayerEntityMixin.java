@@ -6,10 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
-import net.pitan76.mcpitanlib.api.util.ItemUtil;
-import net.pitan76.mcpitanlib.api.util.NbtUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -53,6 +50,6 @@ public class PlayerEntityMixin {
             teamState.registeredItems.addAll(keys);
         }
 
-        serverState.markDirty();
+        PersistentStateUtil.markDirty(serverState);
     }
 }

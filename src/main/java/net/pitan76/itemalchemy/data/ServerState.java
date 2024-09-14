@@ -104,7 +104,7 @@ public class ServerState extends CompatiblePersistentState implements ModState {
 
         teams.add(team);
 
-        markDirty();
+        PersistentStateUtil.markDirty(this);
 
         return team;
     }
@@ -122,7 +122,7 @@ public class ServerState extends CompatiblePersistentState implements ModState {
 
         players.add(state);
 
-        markDirty();
+        PersistentStateUtil.markDirty(this);
 
         return state;
     }
