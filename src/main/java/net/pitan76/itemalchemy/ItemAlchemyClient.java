@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy;
 
-import net.minecraft.client.option.KeyBinding;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -15,13 +14,13 @@ import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.ScreenHandlers;
 import net.pitan76.mcpitanlib.api.client.event.ItemTooltipRegistry;
 import net.pitan76.mcpitanlib.api.client.event.WorldRenderRegistry;
+import net.pitan76.mcpitanlib.api.client.option.KeyCodes;
 import net.pitan76.mcpitanlib.api.client.registry.CompatRegistryClient;
-import net.pitan76.mcpitanlib.api.client.registry.KeybindingRegistry;
+import net.pitan76.mcpitanlib.api.client.registry.v2.KeybindingRegistry;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ClientNetworking;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +72,7 @@ public class ItemAlchemyClient {
             }
         });
 
-        KeybindingRegistry.registerOnLevelWithNetwork(new KeyBinding("key.itemalchemy.charge", GLFW.GLFW_KEY_V, "category.itemalchemy.all"), _id("tool_charge").toMinecraft());
+        KeybindingRegistry.registerOnLevelWithNetwork("key.itemalchemy.charge", KeyCodes.KEY_V, "category.itemalchemy.all", _id("tool_charge"));
     }
 
     // display emc to the item's tooltip

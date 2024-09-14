@@ -139,7 +139,7 @@ public class EMCManager {
             defaultMap();
         }
 
-        ServerWorld world = server.getOverworld();
+        ServerWorld world = (ServerWorld) WorldUtil.getOverworld(server);
         setEmcFromRecipes(world);
         for (Map.Entry<String, Long> entry : getMap().entrySet()) {
             config.set(entry.getKey(), entry.getValue());
@@ -190,8 +190,8 @@ public class EMCManager {
         if (!contains(outStack.getItem())) {
             long totalEmc = 0;
             for (Ingredient ingredient : recipe.getIngredients()) {
-                if (ingredient.getMatchingStacks().length > 0) {
-                    ItemStack stack = ingredient.getMatchingStacks()[0];
+                if (IngredientUtil.getMatchingStacks(ingredient).length > 0) {
+                    ItemStack stack = IngredientUtil.getMatchingStacks(ingredient)[0];
                     if (contains(stack.getItem())) {
                         if (ItemStackUtil.getCount(outStack) == 0) {
                             totalEmc += get(stack.getItem());
@@ -220,10 +220,9 @@ public class EMCManager {
     public static Map<String, NbtCompound> playerCache = new HashMap<>();
 
     public static void decrementEmc(Player player, long amount) {
-        ServerState state = ServerState.getServerState(player.getWorld().getServer());
+        ServerState state = ServerState.getServerState(ServerUtil.getServer(player.getWorld()));
 
         if (!state.getPlayer(player.getUUID()).isPresent()) return;
-
         PlayerState playerState = state.getPlayer(player.getUUID()).get();
 
         if (!state.getTeam(playerState.teamID).isPresent()) return;
@@ -231,14 +230,13 @@ public class EMCManager {
 
         teamState.storedEMC -= amount;
 
-        state.markDirty();
+        PersistentStateUtil.markDirty(state);
     }
 
     public static void setEMCtoPlayer(Player player, long emc) {
-        ServerState state = ServerState.getServerState(player.getWorld().getServer());
+        ServerState state = ServerState.getServerState(ServerUtil.getServer(player.getWorld()));
 
         if (!state.getPlayer(player.getUUID()).isPresent()) return;
-
         PlayerState playerState = state.getPlayer(player.getUUID()).get();
 
         if (!state.getTeam(playerState.teamID).isPresent()) return;
@@ -247,14 +245,13 @@ public class EMCManager {
 
         teamState.storedEMC = emc;
 
-        state.markDirty();
+        PersistentStateUtil.markDirty(state);
     }
 
     public static void incrementEmc(Player player, long amount) {
-        ServerState state = ServerState.getServerState(player.getWorld().getServer());
+        ServerState state = ServerState.getServerState(ServerUtil.getServer(player.getWorld()));
 
         if (!state.getPlayer(player.getUUID()).isPresent()) return;
-
         PlayerState playerState = state.getPlayer(player.getUUID()).get();
 
         if (!state.getTeam(playerState.teamID).isPresent()) return;
@@ -262,11 +259,11 @@ public class EMCManager {
 
         teamState.storedEMC += amount;
 
-        state.markDirty();
+        PersistentStateUtil.markDirty(state);
     }
 
     public static long getEmcFromPlayer(Player player) {
-        Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
+        Optional<TeamState> teamState = ModState.getModState(ServerUtil.getServer(player.getWorld())).getTeamByPlayer(player.getUUID());
 
         return teamState.map(state -> state.storedEMC).orElse(0L);
     }
@@ -275,7 +272,7 @@ public class EMCManager {
         if (!player.hasNetworkHandler()) return;
         if (!player.isServerPlayerEntity()) return;
 
-        ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
+        ServerState serverState = ServerState.getServerState(ServerUtil.getServer(player.getWorld()));
         PacketByteBuf buf = PacketByteUtil.create();
 
         if (!serverState.getTeamByPlayer(player.getUUID()).isPresent()) return;

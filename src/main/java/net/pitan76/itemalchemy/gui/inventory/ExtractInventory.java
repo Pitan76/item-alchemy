@@ -45,8 +45,9 @@ public class ExtractInventory extends SimpleInventory {
     }
 
     public void placeExtractSlots(List<String> keys) {
-        if (player.getPlayerEntity() instanceof ServerPlayerEntity)
+        if (player.isServerPlayerEntity())
             EMCManager.syncS2C(player);
+
         isSettingStack = true;
 
         definedStacks.clear();

@@ -53,6 +53,6 @@ public class EMCCondenserScreen extends CompatInventoryScreen {
         long emc = (screenHandler.storedEMC + screenHandler.tile.storedEMC);
         if (emc > screenHandler.maxEMC) emc = screenHandler.maxEMC;
 
-        callDrawTexture(args.drawObjectDM, getCompatTexture().toMinecraft(), x + 31, y + 7, 0, 240, (int) Math.round((double) emc / screenHandler.maxEMC * 106), 14);
+        callDrawTexture(args.drawObjectDM, getCompatTexture(), x + 31, y + 7, 0, 240, (int) Math.round((double) emc / screenHandler.maxEMC * 106), 14);
     }
 }

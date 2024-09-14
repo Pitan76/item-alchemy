@@ -92,7 +92,7 @@ public class AlchemicalRecipeManager {
 
         CompatIdentifier id = _id("alchemical_craft/n" + count++);
 
-        CompatibleRecipeEntry recipe = CompatibleRecipeEntryUtil.createShapelessRecipe(id.toMinecraft(), "", RecipeUtil.CompatibilityCraftingRecipeCategory.MISC, ItemStackUtil.create(output), buildInput(inputs));
+        CompatibleRecipeEntry recipe = CompatibleRecipeEntryUtil.createShapelessRecipe(id, "", RecipeUtil.CompatibilityCraftingRecipeCategory.MISC, ItemStackUtil.create(output), buildInput(inputs));
         event.putCompatibleRecipeEntry(recipe);
     }
 
