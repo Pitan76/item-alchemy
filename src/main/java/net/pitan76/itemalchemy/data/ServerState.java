@@ -25,28 +25,7 @@ public class ServerState extends CompatiblePersistentState implements ModState {
 
     public static ServerState create(NbtCompound nbt) {
         ServerState serverState = new ServerState();
-
-        NbtCompound modNBT = NbtUtil.get(nbt, "itemalchemy");
-
-        for (NbtElement item : NbtUtil.getList(modNBT, "teams")) {
-            if (!(item instanceof NbtCompound))
-                continue;
-
-            TeamState teamState = new TeamState();
-            teamState.readNbt((NbtCompound)item);
-
-            serverState.teams.add(teamState);
-        }
-
-        for (NbtElement item : NbtUtil.getList(modNBT, "players")) {
-            if (!(item instanceof NbtCompound))
-                continue;
-
-            PlayerState playerState = new PlayerState();
-            playerState.readNbt((NbtCompound)item);
-
-            serverState.players.add(playerState);
-        }
+        serverState.readNbt(new ReadNbtArgs(nbt));
 
         return serverState;
     }
@@ -80,6 +59,31 @@ public class ServerState extends CompatiblePersistentState implements ModState {
         NbtUtil.put(nbt, "itemalchemy", modNBT);
 
         return nbt;
+    }
+
+    @Override
+    public void readNbt(ReadNbtArgs args) {
+        NbtCompound nbt = args.getNbt();
+        NbtCompound modNBT = NbtUtil.get(nbt, "itemalchemy");
+
+        for (NbtElement teamNbt : NbtUtil.getList(modNBT, "teams")) {
+            if (!(teamNbt instanceof NbtCompound)) continue;
+
+            TeamState teamState = new TeamState();
+            teamState.readNbt((NbtCompound) teamNbt);
+
+            teams.add(teamState);
+        }
+
+        for (NbtElement item : NbtUtil.getList(modNBT, "players")) {
+            if (!(item instanceof NbtCompound))
+                continue;
+
+            PlayerState playerState = new PlayerState();
+            playerState.readNbt((NbtCompound)item);
+
+            players.add(playerState);
+        }
     }
 
     public static ServerState getServerState(MinecraftServer server) {
@@ -155,10 +159,5 @@ public class ServerState extends CompatiblePersistentState implements ModState {
     @Override
     public Optional<PlayerState> getPlayer(UUID uuid) {
         return players.stream().filter(playerState -> playerState.playerUUID.equals(uuid)).findFirst();
-    }
-
-    @Override
-    public void readNbt(ReadNbtArgs args) {
-
     }
 }

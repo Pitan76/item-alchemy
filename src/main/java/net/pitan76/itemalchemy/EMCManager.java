@@ -78,7 +78,7 @@ public class EMCManager {
 
     public static long get(ItemStack stack) {
         if (!contains(stack.getItem())) return 0;
-        return get(stack.getItem()) * stack.getCount();
+        return get(stack.getItem()) * ItemStackUtil.getCount(stack);
     }
 
     public static Map<String, Long> getMap() {
@@ -291,7 +291,7 @@ public class EMCManager {
 
         PacketByteUtil.writeNbt(buf, nbt);
 
-        ServerNetworking.send(player.getServerPlayer().get(), _id("sync_emc"), buf);
+        ServerNetworking.send(player, _id("sync_emc"), buf);
     }
 
     public static void syncS2C_emc_map(Player player) {

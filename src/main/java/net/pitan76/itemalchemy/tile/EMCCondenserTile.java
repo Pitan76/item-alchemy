@@ -131,7 +131,7 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
                             if (emc == 0) continue;
                             //if (emc + storedEMC <= maxEMC) {
                             storedEMC += emc;
-                            stack.decrement(1);
+                            ItemStackUtil.decrementCount(stack, 1);
                             break;
                             //}
                         }
@@ -246,9 +246,9 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
     @Override
     public void writeExtraData(ExtraDataArgs args) {
         NbtCompound data = NbtUtil.create();
-        NbtUtil.putLong(data, "x", pos.getX());
-        NbtUtil.putLong(data, "y", pos.getY());
-        NbtUtil.putLong(data, "z", pos.getZ());
+        NbtUtil.putInt(data, "x", pos.getX());
+        NbtUtil.putInt(data, "y", pos.getY());
+        NbtUtil.putInt(data, "z", pos.getZ());
         NbtUtil.putLong(data, "stored_emc", storedEMC);
         NbtUtil.putLong(data, "max_emc", maxEMC);
         args.writeVar(data);

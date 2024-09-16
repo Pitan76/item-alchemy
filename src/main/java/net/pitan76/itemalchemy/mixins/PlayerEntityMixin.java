@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin {
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
-    public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
+    private void itemalchemy$readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
         Player player = new Player((PlayerEntity) (Object)this);
 
         if (player.isClient()) return;
@@ -28,10 +28,10 @@ public class PlayerEntityMixin {
         
         NbtCompound modNBT = NbtUtil.get(nbt, "itemalchemy");
 
-        Optional<MinecraftServer> serverOptional = WorldUtil.getServer(player.getWorld());
-        if (!serverOptional.isPresent()) return;
+        Optional<MinecraftServer> optionalServer = WorldUtil.getServer(player.getWorld());
+        if (!optionalServer.isPresent()) return;
 
-        ServerState serverState = ServerState.getServerState(serverOptional.get());
+        ServerState serverState = ServerState.getServerState(optionalServer.get());
 
         //ServerConnectionより早く呼ばれるのでModをアップデートしたユーザーはここでStateに記録
         serverState.createPlayer(player);
@@ -44,7 +44,7 @@ public class PlayerEntityMixin {
         if (NbtUtil.has(modNBT, "registered_items")) {
             NbtCompound registeredItems = NbtUtil.get(modNBT, "registered_items");
 
-            List<String> keys = registeredItems.getKeys().stream().filter(key -> ItemUtil.isExist(IdentifierUtil.id(key))).collect(Collectors.toList());
+            List<String> keys = NbtUtil.getKeys(registeredItems).stream().filter(key -> ItemUtil.isExist(IdentifierUtil.id(key))).collect(Collectors.toList());
 
             teamState.registeredItems.clear();
             teamState.registeredItems.addAll(keys);

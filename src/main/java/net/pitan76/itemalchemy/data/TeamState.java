@@ -12,9 +12,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class TeamState {
-    public UUID teamID;
     public String name;
     public long createdAt;
+    public UUID teamID;
     public UUID owner;
     public long storedEMC = 0;
     public boolean isDefault = true;

@@ -15,9 +15,8 @@ import net.pitan76.itemalchemy.tile.EMCCondenserTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
-import net.pitan76.mcpitanlib.api.util.InventoryUtil;
-import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
-import net.pitan76.mcpitanlib.api.util.SlotUtil;
+import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -37,16 +36,18 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
         NbtCompound data = PacketByteUtil.readNbt(buf);
         if (data == null) return;
         int x, y, z;
-        if (data.contains("x") && data.contains("y") && data.contains("z")) {
-            x = data.getInt("x");
-            y = data.getInt("y");
-            z = data.getInt("z");
+        if (NbtUtil.has(data, "x") && NbtUtil.has(data, "y") && NbtUtil.has(data, "z")) {
+            x = NbtUtil.getInt(data, "x");
+            y = NbtUtil.getInt(data, "y");
+            z = NbtUtil.getInt(data, "z");
 
-            tile = (EMCCondenserTile) new Player(playerInventory.player).getWorld().getBlockEntity(new BlockPos(x, y, z));
-            storedEMC = data.getInt("stored_emc") - tile.storedEMC;
-            maxEMC = data.getInt("max_emc");
+            Player player = new Player(playerInventory.player);
 
-            targetStack = ItemStackUtil.fromNbt(playerInventory.player.getWorld(), data.getCompound("target_item"));
+            tile = (EMCCondenserTile) WorldUtil.getBlockEntity(player.getWorld(), PosUtil.flooredBlockPos(x, y, z));
+            storedEMC = NbtUtil.getLong(data, "stored_emc") - tile.storedEMC;
+            maxEMC = NbtUtil.getLong(data, "max_emc");
+
+            targetStack = ItemStackUtil.fromNbt(player.getWorld(), NbtUtil.get(data, "target_item"));
         }
     }
 
@@ -131,8 +132,8 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
 
             if (index < 36) {
                 // TargetSlot
-                if(ItemStackUtil.isEmpty(targetStack)) {
-                    if(EMCManager.get(originalStack.getItem()) != 0) {
+                if (ItemStackUtil.isEmpty(targetStack)) {
+                    if (EMCManager.get(originalStack.getItem()) != 0) {
                         ItemStack newStack = ItemStackUtil.create(originalStack.getItem());
                         newStack.setCount(1);
 

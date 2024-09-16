@@ -6,6 +6,7 @@ import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -128,9 +129,11 @@ public class TeamUtil {
     }
 
     public static boolean leaveTeam(Player player) {
-        if (player.isClient())
-            return false;
+        if (player.isClient()) return false;
+        Optional<MinecraftServer> optionalServer = WorldUtil.getServer(player.getWorld());
 
-        return leaveTeam(player.getWorld().getServer(), player.getUUID());
+        return optionalServer.filter(server ->
+                leaveTeam(server, player.getUUID())).isPresent();
+
     }
 }

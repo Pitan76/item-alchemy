@@ -129,12 +129,12 @@ public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEn
                         }
 
                         if (inventory.get(nextIndex).isEmpty()) {
-                            inventory.get(index).decrement(1);
-                            stack.setCount(1);
+                            ItemStackUtil.decrementCount(inventory.get(index), 1);
+                            ItemStackUtil.setCount(stack, 1);
                             inventory.set(nextIndex, stack);
                         } else if (inventory.get(nextIndex).getItem() == stack.getItem()) {
-                            inventory.get(index).decrement(1);
-                            inventory.get(nextIndex).increment(1);
+                            ItemStackUtil.decrementCount(inventory.get(index), 1);
+                            ItemStackUtil.incrementCount(inventory.get(nextIndex), 1);
                         }
                     }
                 }
@@ -261,11 +261,11 @@ public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEn
     @Override
     public void writeExtraData(ExtraDataArgs args) {
         NbtCompound data = NbtUtil.create();
-        data.putLong("x", pos.getX());
-        data.putLong("y", pos.getY());
-        data.putLong("z", pos.getZ());
-        data.putLong("stored_emc", storedEMC);
-        data.putLong("max_emc", ((EMCCollector) getCachedState().getBlock()).maxEMC);
+        NbtUtil.putInt(data, "x", pos.getX());
+        NbtUtil.putInt(data, "y", pos.getY());
+        NbtUtil.putInt(data, "z", pos.getZ());
+        NbtUtil.putLong(data, "stored_emc", storedEMC);
+        NbtUtil.putLong(data, "max_emc", ((EMCCollector) getCachedState().getBlock()).maxEMC);
         args.writeVar(data);
     }
 }

@@ -90,7 +90,7 @@ public class ItemAlchemyClient {
         list.add(TextUtil.literal("§eEMC: §r" + String.format("%,d", emc)));
 
         if (ItemStackUtil.getCount(stack) > 1)
-            list.add(TextUtil.literal("§eStack EMC: §r" + String.format("%,d", emc * stack.getCount())));
+            list.add(TextUtil.literal("§eStack EMC: §r" + String.format("%,d", emc * ItemStackUtil.getCount(stack))));
 
         return list;
     }
