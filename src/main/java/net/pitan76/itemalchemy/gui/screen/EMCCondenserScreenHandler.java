@@ -7,7 +7,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.util.math.BlockPos;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.gui.slot.CondenserStorageSlot;
 import net.pitan76.itemalchemy.gui.slot.TargetSlot;

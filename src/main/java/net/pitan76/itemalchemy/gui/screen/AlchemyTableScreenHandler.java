@@ -7,7 +7,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.util.Identifier;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.api.PlayerRegisteredItemUtil;
 import net.pitan76.itemalchemy.data.ModState;
@@ -190,7 +189,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
         for (String id : ids) {
             String translatedName = "";
 
-            Identifier itemIdentifier = IdentifierUtil.id(id);
+            CompatIdentifier itemIdentifier = CompatIdentifier.of(id);
             ItemStack itemStack = ItemStackUtil.create(ItemUtil.fromId(itemIdentifier));
             String itemTranslationKey = itemStack.getTranslationKey();
 
@@ -232,7 +231,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
         //System.out.println("index: " + slotIndex + ", action: " + actionType.name());
 
-        if (slotIndex >= 50 && !player.getWorld().isClient && (actionType == SlotActionType.SWAP || actionType == SlotActionType.PICKUP || actionType == SlotActionType.QUICK_MOVE || actionType == SlotActionType.THROW)) {
+        if (slotIndex >= 50 && !player.isClient() && (actionType == SlotActionType.SWAP || actionType == SlotActionType.PICKUP || actionType == SlotActionType.QUICK_MOVE || actionType == SlotActionType.THROW)) {
 
             Slot slot = callGetSlot(slotIndex);
             if (!(slot instanceof ExtractSlot)) return;
@@ -252,7 +251,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
                 if (receivable > 1) {
                     ItemStack addedStack = definedStack.copy();
-                    addedStack.setCount(receivable - 1);
+                    ItemStackUtil.setCount(addedStack, receivable - 1);
                     player.offerOrDrop(addedStack);
                 }
 

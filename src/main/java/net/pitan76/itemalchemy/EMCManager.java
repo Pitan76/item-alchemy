@@ -11,7 +11,6 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -337,7 +336,7 @@ public class EMCManager {
                 }
 
                 for (Map.Entry<String, Long> entry : map.entrySet()) {
-                    if (ItemUtil.isExist(IdentifierUtil.id(entry.getKey()))) {
+                    if (ItemUtil.isExist(CompatIdentifier.of(entry.getKey()))) {
                         defaultEMCMap.put(entry.getKey(), entry.getValue());
                     }
                 }

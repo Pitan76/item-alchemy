@@ -2,14 +2,12 @@ package net.pitan76.itemalchemy.gui.inventory;
 
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.data.ModState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 import org.jetbrains.annotations.Nullable;
@@ -60,7 +58,7 @@ public class ExtractInventory extends SimpleInventory {
                 setStack(i + 64, ItemStackUtil.empty());
                 continue;
             }
-            Identifier id = IdentifierUtil.id(keys.get(id_index));
+            CompatIdentifier id = CompatIdentifier.of(keys.get(id_index));
             //System.out.println(id);
             if (!ItemUtil.isExist(id)) {
                 i--;
