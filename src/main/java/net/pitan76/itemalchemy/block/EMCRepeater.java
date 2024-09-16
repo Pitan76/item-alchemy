@@ -14,6 +14,13 @@ import java.util.List;
 
 public class EMCRepeater extends ExtendBlock {
 
+    protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(EMCRepeater::new);
+
+    @Override
+    public CompatMapCodec<? extends Block> getCompatCodec() {
+        return CODEC;
+    }
+
     public EMCRepeater(CompatibleBlockSettings settings) {
         super(settings);
     }
@@ -42,10 +49,5 @@ public class EMCRepeater extends ExtendBlock {
 
     public static List<BlockPos> getNearPoses(World world, BlockPos[] blockPoses) {
         return getNearPoses(world, blockPoses, new ArrayList<>());
-    }
-
-    @Override
-    public CompatMapCodec<? extends Block> getCompatCodec() {
-        return CompatMapCodec.createCodecOfExtendBlock(EMCRepeater::new);
     }
 }

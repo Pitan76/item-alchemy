@@ -88,7 +88,7 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
     @Override
     public void tick(TileTickEvent<EMCCondenserTile> e) {
         World world = e.world;
-        if (world.isClient) return;
+        if (WorldUtil.isClient(world)) return;
 
         if (!inventory.isEmpty()) {
             ItemStack targetStack = inventory.get(0);

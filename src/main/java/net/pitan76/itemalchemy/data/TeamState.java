@@ -6,7 +6,6 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
-import net.pitan76.mcpitanlib.api.util.PlatformUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +29,7 @@ public class TeamState {
         storedEMC = NbtUtil.getLong(nbt, "emc");
         isDefault = NbtUtil.getBoolean(nbt, "is_default");
 
-        if (PlatformUtil.isDevelopmentEnvironment())
-            ItemAlchemy.logger.info("TeamState.readNbt(): nbt: " + nbt);
+        ItemAlchemy.logger.infoIfDev("TeamState.readNbt(): nbt: " + nbt);
 
         List<String> registeredItems = (NbtUtil.getList(nbt, "registered_items")).stream()
                 .filter(nbtElement -> nbtElement instanceof NbtString)
@@ -49,8 +47,7 @@ public class TeamState {
         NbtUtil.putLong(nbt, "emc", storedEMC);
         NbtUtil.putBoolean(nbt, "is_default", isDefault);
 
-        if (PlatformUtil.isDevelopmentEnvironment())
-            ItemAlchemy.logger.info("TeamState.writeNbt(): nbt: " + nbt);
+        ItemAlchemy.logger.infoIfDev("TeamState.writeNbt(): nbt: " + nbt);
 
         NbtList registeredItems = NbtUtil.createNbtList();
 

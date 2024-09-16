@@ -10,6 +10,13 @@ import org.jetbrains.annotations.Nullable;
 
 public class EMCCondenserMK2 extends EMCCondenser {
 
+    protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(EMCCondenserMK2::new);
+
+    @Override
+    public CompatMapCodec<? extends Block> getCompatCodec() {
+        return CODEC;
+    }
+
     public EMCCondenserMK2() {
         super();
     }
@@ -21,10 +28,5 @@ public class EMCCondenserMK2 extends EMCCondenser {
     @Override
     public @Nullable BlockEntity createBlockEntity(TileCreateEvent event) {
         return new EMCCondenserMK2Tile(event);
-    }
-
-    @Override
-    public CompatMapCodec<? extends Block> getCompatCodec() {
-        return CompatMapCodec.createCodecOfExtendBlock(EMCCondenserMK2::new);
     }
 }

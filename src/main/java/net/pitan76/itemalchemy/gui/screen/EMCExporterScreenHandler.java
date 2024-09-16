@@ -8,7 +8,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.pitan76.itemalchemy.gui.slot.TargetSlot;
-import net.pitan76.itemalchemy.tile.EMCCollectorTile;
+import net.pitan76.itemalchemy.tile.EMCExporterTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
@@ -16,15 +16,12 @@ import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
+public class EMCExporterScreenHandler extends ExtendedScreenHandler {
     public Inventory inventory;
     public PlayerInventory playerInventory;
-    public EMCCollectorTile tile = null;
+    public EMCExporterTile tile = null;
 
-    public long storedEMC = 0;
-    public long maxEMC = 0;
-
-    public EMCCollectorScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
+    public EMCExporterScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
         this(syncId, playerInventory, null, InventoryUtil.createSimpleInventory(16 + 3));
         NbtCompound data = PacketByteUtil.readNbt(buf);
         if (data == null) return;
@@ -35,14 +32,15 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
             z = NbtUtil.getInt(data, "z");
 
             Player player = new Player(playerInventory.player);
+            tile = (EMCExporterTile) WorldUtil.getBlockEntity(player.getWorld(), PosUtil.flooredBlockPos(x, y, z));
 
-            tile = (EMCCollectorTile) WorldUtil.getBlockEntity(player.getWorld(), PosUtil.flooredBlockPos(x, y, z));
-            storedEMC = NbtUtil.getLong(data, "stored_emc") - tile.storedEMC;
-            maxEMC = NbtUtil.getLong(data, "max_emc");
+            if (NbtUtil.has(data, "team"))
+                tile.teamUUID = NbtUtil.getUuid(data, "team");
+
         }
     }
 
-    public EMCCollectorScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCCollectorTile tile, Inventory inventory) {
+    public EMCExporterScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCExporterTile tile, Inventory inventory) {
         super(ScreenHandlers.EMC_COLLECTOR, syncId);
 
         this.inventory = inventory;

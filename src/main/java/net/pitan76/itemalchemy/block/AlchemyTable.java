@@ -16,6 +16,14 @@ import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 
 public class AlchemyTable extends ExtendBlock {
+
+    protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(AlchemyTable::new);
+
+    @Override
+    public CompatMapCodec<? extends Block> getCompatCodec() {
+        return CODEC;
+    }
+
     public AlchemyTable(CompatibleBlockSettings settings) {
         super(settings);
     }
@@ -39,10 +47,5 @@ public class AlchemyTable extends ExtendBlock {
     @Override
     public VoxelShape getOutlineShape(OutlineShapeEvent e) {
         return VoxelShapeUtil.cuboid(0, 0, 0, 1, 0.125, 1);
-    }
-
-    @Override
-    public CompatMapCodec<? extends Block> getCompatCodec() {
-        return CompatMapCodec.createCodecOfExtendBlock(AlchemyTable::new);
     }
 }

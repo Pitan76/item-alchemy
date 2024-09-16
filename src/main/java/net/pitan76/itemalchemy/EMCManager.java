@@ -104,7 +104,7 @@ public class EMCManager {
     }
 
     public static File getConfigFile() {
-        File dir = new File(PlatformUtil.getConfigFolder().toFile(), ItemAlchemy.MOD_ID);
+        File dir = new File(PlatformUtil.getConfigFolderAsFile(), ItemAlchemy.MOD_ID);
         if (!dir.exists()) dir.mkdirs();
 
         return new File(dir, "emc_config.json");
@@ -145,7 +145,7 @@ public class EMCManager {
         }
         config.save(file);
 
-        if (!world.isClient()) {
+        if (!WorldUtil.isClient(world)) {
             for (Player player : WorldUtil.getPlayers(world)) {
                 syncS2C_emc_map(player);
             }
@@ -316,7 +316,7 @@ public class EMCManager {
                 if (resourceId.toString().endsWith("/tags.json")) {
                     HashMap<String, Long> tempMap = gson.fromJson(json, listType);
                     for (Map.Entry<String, Long> entry : map.entrySet()) {
-                        Identifier tagId = IdentifierUtil.id(entry.getKey());
+                        CompatIdentifier tagId = CompatIdentifier.of(entry.getKey());
                         for (Item item : ItemUtil.getItems(tagId)) {
                             if (tempMap.containsKey(ItemUtil.toID(item).toString())) continue;
                             tempMap.put(ItemUtil.toID(item).toString(), entry.getValue());

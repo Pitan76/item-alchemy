@@ -5,7 +5,7 @@ import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.emcs.EMCDef;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.tag.TagKey;
-import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 
 public class EMCUtil {
@@ -23,13 +23,12 @@ public class EMCUtil {
             EMCManager.add2(tagKey, amount);
         }
 
-
         public static long getEMC(Item item) {
             return EMCManager.get(item);
         }
 
         public static long getEMC(String id) {
-            return EMCManager.get(ItemUtil.fromId(IdentifierUtil.id(id)));
+            return EMCManager.get(ItemUtil.fromId(CompatIdentifier.of(id)));
         }
     }
 

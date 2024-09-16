@@ -25,6 +25,13 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
     public static BooleanProperty CONNECTED = BooleanProperty.of("connected");
     public long emc;
 
+    protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(AEGUBlock::new);
+
+    @Override
+    public CompatMapCodec<? extends Block> getCompatCodec() {
+        return CODEC;
+    }
+
     public AEGUBlock(CompatibleBlockSettings settings, long emc) {
         super(settings);
         setNewDefaultState(BlockStateUtil.getDefaultState(this).with(CONNECTED, false));
@@ -80,10 +87,5 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider 
     @Override
     public boolean isTick() {
         return true;
-    }
-
-    @Override
-    public CompatMapCodec<? extends Block> getCompatCodec() {
-        return CompatMapCodec.createCodecOfExtendBlock(AEGUBlock::new);
     }
 }

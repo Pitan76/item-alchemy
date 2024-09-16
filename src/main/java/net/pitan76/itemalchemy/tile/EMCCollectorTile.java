@@ -89,7 +89,7 @@ public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEn
     public void tick(TileTickEvent<EMCCollectorTile> e) {
         World world = e.world;
 
-        if (world.isClient()) return;
+        if (WorldUtil.isClient(world)) return;
 
         long maxEMC = ((EMCCollector) e.state.getBlock()).maxEMC;
 

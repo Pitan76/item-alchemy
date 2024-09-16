@@ -7,7 +7,7 @@ import net.pitan76.itemalchemy.data.ModState;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
@@ -20,9 +20,8 @@ public class PlayerRegisteredItemUtil {
     public static List<String> getItemsAsString(Player player) {
         Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
 
-        if (!teamState.isPresent()) {
+        if (!teamState.isPresent())
             return new ArrayList<>();
-        }
 
         return new ArrayList<>(teamState.get().registeredItems);
     }
@@ -30,7 +29,7 @@ public class PlayerRegisteredItemUtil {
     public static List<Item> getItems(Player player) {
         List<Item> items = new ArrayList<>();
         for (String id : getItemsAsString(player)) {
-            items.add(ItemUtil.fromId(IdentifierUtil.id(id)));
+            items.add(ItemUtil.fromId(CompatIdentifier.of(id)));
         }
 
         return items;

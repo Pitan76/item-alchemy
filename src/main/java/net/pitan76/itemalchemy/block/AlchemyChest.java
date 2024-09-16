@@ -29,6 +29,13 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
 
     private static final Text TITLE = TextUtil.translatable("block.itemalchemy.alchemy_chest");
 
+    protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(AlchemyChest::new);
+
+    @Override
+    public CompatMapCodec<? extends Block> getCompatCodec() {
+        return CODEC;
+    }
+
     public AlchemyChest(CompatibleBlockSettings settings) {
         super(settings);
         setNewDefaultState(BlockStateUtil.getDefaultState(this).with(FACING, Direction.NORTH));
@@ -42,8 +49,7 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
 
     @Override
     public void onStateReplaced(StateReplacedEvent e) {
-        if (e.state.isOf(e.newState.getBlock()))
-            return;
+        if (e.isSameState()) return;
 
         e.spawnDropsInContainer();
     }
@@ -85,10 +91,5 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
     @Override
     public boolean isTick() {
         return true;
-    }
-
-    @Override
-    public CompatMapCodec<? extends Block> getCompatCodec() {
-        return CompatMapCodec.createCodecOfExtendBlock(AlchemyChest::new);
     }
 }

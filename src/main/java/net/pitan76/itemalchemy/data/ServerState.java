@@ -11,7 +11,6 @@ import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
-import net.pitan76.mcpitanlib.api.util.PlatformUtil;
 import net.pitan76.mcpitanlib.api.world.CompatiblePersistentState;
 import org.jetbrains.annotations.Nullable;
 
@@ -83,35 +82,28 @@ public class ServerState extends CompatiblePersistentState implements ModState {
         NbtUtil.put(modNBT, "players", playerNBTList);
         NbtUtil.put(nbt, "itemalchemy", modNBT);
 
-        if (PlatformUtil.isDevelopmentEnvironment())
-            ItemAlchemy.logger.info("ServerState.writeNbt: " + args.getNbt().toString());
+        ItemAlchemy.logger.infoIfDev("ServerState.writeNbt: " + args.getNbt().toString());
 
         return nbt;
     }
 
     @Override
     public void readNbt(ReadNbtArgs args) {
-        if (PlatformUtil.isDevelopmentEnvironment())
-            ItemAlchemy.logger.info("ServerState.readNbt: " + args.getNbt().toString());
+        ItemAlchemy.logger.infoIfDev("ServerState.readNbt: " + args.getNbt().toString());
 
         NbtCompound nbt = args.getNbt();
         NbtCompound modNBT = NbtUtil.get(nbt, "itemalchemy");
 
-        for (NbtElement teamNbt : NbtUtil.getList(modNBT, "teams")) {
-            if (!(teamNbt instanceof NbtCompound)) continue;
-
+        for (NbtElement teamNbt : NbtUtil.getNbtCompoundList(modNBT, "teams")) {
             TeamState teamState = new TeamState();
             teamState.readNbt((NbtCompound) teamNbt);
 
             teams.add(teamState);
         }
 
-        for (NbtElement playerNbt : NbtUtil.getList(modNBT, "players")) {
-            if (!(playerNbt instanceof NbtCompound))
-                continue;
-
+        for (NbtElement playerNbt : NbtUtil.getNbtCompoundList(modNBT, "players")) {
             PlayerState playerState = new PlayerState();
-            playerState.readNbt((NbtCompound)playerNbt);
+            playerState.readNbt((NbtCompound) playerNbt);
 
             players.add(playerState);
         }
@@ -126,7 +118,7 @@ public class ServerState extends CompatiblePersistentState implements ModState {
     public TeamState createTeam(Player owner, @Nullable String name) {
         TeamState team = new TeamState();
 
-        if(name == null) {
+        if (name == null) {
             team.name = owner.getName();
         } else {
             team.name = name;

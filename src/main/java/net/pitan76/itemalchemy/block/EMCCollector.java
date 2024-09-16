@@ -34,6 +34,13 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
 
     public long maxEMC;
 
+    protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(EMCCollector::new);
+
+    @Override
+    public CompatMapCodec<? extends Block> getCompatCodec() {
+        return CODEC;
+    }
+
     public EMCCollector(CompatibleBlockSettings settings, long maxEMC) {
         super(settings);
         setNewDefaultState(BlockStateUtil.getDefaultState(this).with(FACING, Direction.NORTH));
@@ -62,8 +69,7 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
     public void onStateReplaced(StateReplacedEvent e) {
         World world = e.world;
         BlockPos pos = e.pos;
-        if (e.state.isOf(e.newState.getBlock()))
-            return;
+        if (e.isSameState()) return;
 
         BlockEntity blockEntity = WorldUtil.getBlockEntity(world, pos);
         if (blockEntity instanceof Inventory) {
@@ -112,10 +118,5 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
     @Override
     public boolean isTick() {
         return true;
-    }
-
-    @Override
-    public CompatMapCodec<? extends Block> getCompatCodec() {
-        return CompatMapCodec.createCodecOfExtendBlock(EMCCollector::new);
     }
 }

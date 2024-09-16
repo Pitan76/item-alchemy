@@ -1,5 +1,6 @@
 {
   "itemGroup.itemalchemy.item_alchemy": "Item Alchemy",
+
   "item.itemalchemy.tome_of_knowledge": "Tome of Knowledge",
   "item.itemalchemy.philosopher_stone": "Philosopher's Stone",
   "item.itemalchemy.alchemy_pad": "Alchemy Pad",
@@ -21,6 +22,7 @@
   "item.itemalchemy.red_matter_pickaxe": "Red Matter Pickaxe",
   "item.itemalchemy.red_matter_shovel": "Red Matter Shovel",
   "item.itemalchemy.red_matter_hoe": "Red Matter Hoe",
+
   "block.itemalchemy.alchemy_table": "Alchemy Table",
   "block.itemalchemy.emc_collector_mk1": "EMC Collector MK-1",
   "block.itemalchemy.emc_collector_mk2": "EMC Collector MK-2",
@@ -36,9 +38,15 @@
   "block.itemalchemy.ultimate_aegu": "Ultimate AEGU",
   "block.itemalchemy.dark_matter_block": "Dark Matter Block",
   "block.itemalchemy.red_matter_block": "Red Matter Block",
+  "block.itemalchemy.emc_importer": "EMC Importer",
+  "block.itemalchemy.emc_exporter": "EMC Exporter",
+
   "container.itemalchemy.alchemy_table": "Alchemy Table",
   "container.itemalchemy.emc_condenser": "EMC Condenser",
   "container.itemalchemy.emc_collector": "EMC Collector",
+  "container.itemalchemy.emc_importer": "EMC Importer",
+  "container.itemalchemy.emc_exporter": "EMC Exporter",
+
   "category.itemalchemy.all": "Item Alchemy",
   "key.itemalchemy.charge": "Charge"
 }

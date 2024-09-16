@@ -36,8 +36,7 @@ public class TeamUtil {
     }
 
     public static boolean joinTeam(Player player, String teamName) {
-        if (player.isClient())
-            return false;
+        if (player.isClient()) return false;
 
         ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
 
@@ -48,8 +47,7 @@ public class TeamUtil {
     }
 
     public static boolean joinTeam(Player player, UUID teamUUID) {
-        if (player.isClient())
-            return false;
+        if (player.isClient()) return false;
 
         ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
 
@@ -79,8 +77,7 @@ public class TeamUtil {
         List<PlayerState> playerStates = serverState.players.stream().filter(playerState -> playerState.teamID == teamUUID).collect(Collectors.toList());
 
         for (PlayerState playerState : playerStates) {
-            if (!leaveTeam(server, playerState.playerUUID))
-                return false;
+            if (!leaveTeam(server, playerState.playerUUID)) return false;
 
         }
 
@@ -108,7 +105,7 @@ public class TeamUtil {
 
         playerState.get().teamID = defaultTeamState.get().teamID;
 
-        if(currentTeamState.owner == playerUUID) {
+        if (currentTeamState.owner == playerUUID) {
             removeTeam(server, currentTeamState.teamID);
         }
 

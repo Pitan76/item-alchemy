@@ -72,8 +72,8 @@ public class AlchemicalRecipeManager {
     private void handle(JsonObject jsonObject) {
         JsonArray itemsArray = jsonObject.get("items").getAsJsonArray();
 
-        Identifier inputId = IdentifierUtil.id(itemsArray.get(0).getAsString());
-        Identifier outputId = IdentifierUtil.id(itemsArray.get(1).getAsString());
+        CompatIdentifier inputId = CompatIdentifier.of(itemsArray.get(0).getAsString());
+        CompatIdentifier outputId = CompatIdentifier.of(itemsArray.get(1).getAsString());
 
         Item input = ItemUtil.fromId(inputId);
         Item output = ItemUtil.fromId(outputId);

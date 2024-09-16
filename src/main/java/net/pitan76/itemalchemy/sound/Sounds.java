@@ -1,20 +1,20 @@
 package net.pitan76.itemalchemy.sound;
 
-import net.minecraft.sound.SoundEvent;
-import net.pitan76.mcpitanlib.api.registry.result.RegistryResult;
+import net.pitan76.mcpitanlib.api.sound.CompatSoundEvent;
 
 import static net.pitan76.itemalchemy.ItemAlchemy._id;
 import static net.pitan76.itemalchemy.ItemAlchemy.registry;
 
 public class Sounds {
-    public static final RegistryResult<SoundEvent> EXCHANGE_SOUND = register("exchange");
-    public static final RegistryResult<SoundEvent> CHARGE_SOUND = register("charge");
-    public static final RegistryResult<SoundEvent> UNCHARGE_SOUND = register("uncharge");
+    public static final CompatSoundEvent EXCHANGE_SOUND = register("exchange");
+    public static final CompatSoundEvent CHARGE_SOUND = register("charge");
+    public static final CompatSoundEvent UNCHARGE_SOUND = register("uncharge");
 
     public static void init() {
 
     }
-    private static RegistryResult<SoundEvent> register(String id) {
-        return registry.registerSoundEvent(_id(id));
+
+    private static CompatSoundEvent register(String id) {
+        return registry.registerCompatSoundEvent(_id(id));
     }
 }
