@@ -22,6 +22,7 @@ import net.pitan76.mcpitanlib.api.event.v0.event.ItemStackActionEvent;
 import net.pitan76.mcpitanlib.api.event.v1.RecipeManagerRegistry;
 import net.pitan76.mcpitanlib.api.registry.v2.CompatRegistryV2;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
+import net.pitan76.mcpitanlib.api.util.Logger;
 
 public class ItemAlchemy extends CommonModInitializer {
 
@@ -32,9 +33,12 @@ public class ItemAlchemy extends CommonModInitializer {
 
     public static ItemAlchemy INSTANCE;
 
+    public static Logger logger;
+
     public void init() {
         INSTANCE = this;
         registry = super.registry;
+        logger = super.logger;
 
         RecipeManagerRegistry.register(AlchemicalRecipeManager::new);
 
@@ -62,7 +66,7 @@ public class ItemAlchemy extends CommonModInitializer {
             EMCManager.syncS2C(player);
         });
 
-        EventRegistry.ServerLifecycle.serverStopped(EMCManager::exit);
+        //EventRegistry.ServerLifecycle.serverStopped(EMCManager::exit);
 
         ItemStackActionEvent.register((stack) -> {
             if (!(stack.getItem() instanceof ItemCharge)) return;

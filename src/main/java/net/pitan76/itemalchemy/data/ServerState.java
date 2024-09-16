@@ -30,6 +30,25 @@ public class ServerState extends CompatiblePersistentState implements ModState {
         return serverState;
     }
 
+    /*
+    itemalchemy (NbtCompound: modNBT):
+      teams (NbtList: teamNBTList):
+        (NbtCompound: teamNBT)
+        - name: "(Player Name)"
+          created_at: (Created At)
+          id: (Team UUID)
+          owner: (Owner UUID)
+          emc: (Stored EMC)
+          is_default: (isDefault)
+          registered_items: (NbtList: registeredItems)
+
+      players (NbtList: playerNBTList):
+        (NbtCompound: playerNBT)
+        - uuid: (Player UUID)
+          team: (Team UUID)
+
+     */
+
     @Override
     public NbtCompound writeNbt(WriteNbtArgs args) {
         NbtCompound nbt = args.getNbt();
@@ -75,12 +94,12 @@ public class ServerState extends CompatiblePersistentState implements ModState {
             teams.add(teamState);
         }
 
-        for (NbtElement item : NbtUtil.getList(modNBT, "players")) {
-            if (!(item instanceof NbtCompound))
+        for (NbtElement playerNbt : NbtUtil.getList(modNBT, "players")) {
+            if (!(playerNbt instanceof NbtCompound))
                 continue;
 
             PlayerState playerState = new PlayerState();
-            playerState.readNbt((NbtCompound)item);
+            playerState.readNbt((NbtCompound)playerNbt);
 
             players.add(playerState);
         }

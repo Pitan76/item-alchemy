@@ -152,14 +152,6 @@ public class EMCManager {
         }
     }
 
-    public static void exit(MinecraftServer server) {
-        exit();
-    }
-
-    public static void exit() {
-        playerCache = new HashMap<>();
-    }
-
     public static void defaultMap() {
         if (!defaultEMCMap.isEmpty()) {
             map.putAll(defaultEMCMap);
@@ -219,8 +211,6 @@ public class EMCManager {
     public static void writeEmcToPlayer(Player player, ItemStack stack) {
         incrementEmc(player, EMCManager.get(stack));
     }
-
-    public static Map<String, NbtCompound> playerCache = new HashMap<>();
 
     public static void decrementEmc(Player player, long amount) {
         ServerState state = ServerState.getServerState(ServerUtil.getServer(player.getWorld()));
