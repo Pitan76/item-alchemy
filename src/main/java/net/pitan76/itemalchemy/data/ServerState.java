@@ -5,11 +5,13 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.PersistentStateManager;
+import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
+import net.pitan76.mcpitanlib.api.util.PlatformUtil;
 import net.pitan76.mcpitanlib.api.world.CompatiblePersistentState;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +24,10 @@ import java.util.stream.Collectors;
 public class ServerState extends CompatiblePersistentState implements ModState {
     public List<TeamState> teams = new ArrayList<>();
     public List<PlayerState> players = new ArrayList<>();
+
+    public ServerState() {
+        super("itemalchemy");
+    }
 
     public static ServerState create(NbtCompound nbt) {
         ServerState serverState = new ServerState();
@@ -77,11 +83,17 @@ public class ServerState extends CompatiblePersistentState implements ModState {
         NbtUtil.put(modNBT, "players", playerNBTList);
         NbtUtil.put(nbt, "itemalchemy", modNBT);
 
+        if (PlatformUtil.isDevelopmentEnvironment())
+            ItemAlchemy.logger.info("ServerState.writeNbt: " + args.getNbt().toString());
+
         return nbt;
     }
 
     @Override
     public void readNbt(ReadNbtArgs args) {
+        if (PlatformUtil.isDevelopmentEnvironment())
+            ItemAlchemy.logger.info("ServerState.readNbt: " + args.getNbt().toString());
+
         NbtCompound nbt = args.getNbt();
         NbtCompound modNBT = NbtUtil.get(nbt, "itemalchemy");
 
