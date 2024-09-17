@@ -5,12 +5,14 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.PersistentStateManager;
+import net.minecraft.world.World;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
+import net.pitan76.mcpitanlib.api.util.ServerUtil;
 import net.pitan76.mcpitanlib.api.world.CompatiblePersistentState;
 import org.jetbrains.annotations.Nullable;
 
@@ -113,6 +115,18 @@ public class ServerState extends CompatiblePersistentState implements ModState {
         PersistentStateManager manager = PersistentStateUtil.getManagerFromServer(server);
 
         return PersistentStateUtil.getOrCreate(manager, "itemalchemy", ServerState::new, ServerState::create);
+    }
+
+    public static ServerState of(MinecraftServer server) {
+        return getServerState(server);
+    }
+
+    public static ServerState of(World world) {
+        return of(ServerUtil.getServer(world));
+    }
+
+    public static ServerState of(Player player) {
+        return of(player.getWorld());
     }
 
     public TeamState createTeam(Player owner, @Nullable String name) {

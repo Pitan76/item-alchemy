@@ -5,6 +5,7 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.pitan76.itemalchemy.ItemAlchemy;
+import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
 
 import java.util.ArrayList;
@@ -56,5 +57,17 @@ public class TeamState {
         }
 
         NbtUtil.put(nbt, "registered_items", registeredItems);
+    }
+
+    public boolean isOwner(UUID player) {
+        return owner.equals(player);
+    }
+
+    public boolean isOwner(Player player) {
+        return isOwner(player.getUUID());
+    }
+
+    public boolean isMember(Player player) {
+        return ServerState.of(player).getTeamByPlayer(player.getUUID()).isPresent();
     }
 }

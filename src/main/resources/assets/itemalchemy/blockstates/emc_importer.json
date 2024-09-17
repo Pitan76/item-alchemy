@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "itemalchemy:block/emc_importer" }
+  }
+}

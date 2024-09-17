@@ -42,11 +42,6 @@ public class EMCExporter extends ExtendBlock implements ExtendBlockEntityProvide
     }
 
     @Override
-    public BlockState getPlacementState(PlacementStateArgs args) {
-        return super.getPlacementState(args);
-    }
-
-    @Override
     public void onStateReplaced(StateReplacedEvent e) {
         World world = e.world;
         BlockPos pos = e.pos;
@@ -64,15 +59,24 @@ public class EMCExporter extends ExtendBlock implements ExtendBlockEntityProvide
 
     @Override
     public ActionResult onRightClick(BlockUseEvent e) {
-        if (e.isClient())
-            return ActionResult.SUCCESS;
+        if (e.isClient()) return ActionResult.SUCCESS;
 
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof EMCExporterTile) {
             EMCExporterTile tile = (EMCExporterTile)blockEntity;
+
+            if (!tile.hasTeam()) {
+                boolean isSuccess = tile.setTeam(e.player);
+                if (!isSuccess) {
+                    e.player.sendMessage(TextUtil.translatable("message.itemalchemy.failed_to_set_team"));
+                    return ActionResult.FAIL;
+                }
+            }
+
             e.player.openExtendedMenu(tile);
             return ActionResult.CONSUME;
         }
+
         return ActionResult.PASS;
     }
 

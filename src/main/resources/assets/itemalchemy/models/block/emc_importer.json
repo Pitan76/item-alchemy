@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:block/cube",
+	"textures": {
+		"particle": "itemalchemy:block/emc_link/importer",
+		"north": "itemalchemy:block/emc_link/importer",
+		"south": "itemalchemy:block/emc_link/importer",
+		"east": "itemalchemy:block/emc_link/importer",
+		"west": "itemalchemy:block/emc_link/importer",
+		"up": "itemalchemy:block/emc_link/importer",
+		"down": "itemalchemy:block/emc_link/importer"
+	}
+}

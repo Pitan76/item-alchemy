@@ -1,0 +1,76 @@
+package net.pitan76.itemalchemy.tile.base;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.util.math.BlockPos;
+import net.pitan76.itemalchemy.data.PlayerState;
+import net.pitan76.itemalchemy.data.ServerState;
+import net.pitan76.itemalchemy.data.TeamState;
+import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public class OwnedBlockEntity extends CompatBlockEntity {
+
+    public UUID teamUUID = null;
+
+    public OwnedBlockEntity(BlockEntityType<?> type, TileCreateEvent event) {
+        super(type, event);
+    }
+
+    public OwnedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+    }
+
+    public Optional<TeamState> getTeamState() {
+        ServerState serverState = ServerState.of(getWorld());
+        if (serverState == null)
+            return Optional.empty();
+
+        return serverState.getTeam(teamUUID);
+    }
+
+    public boolean isTeamOwner(Player player) {
+        return getTeamState().map(state -> state.isOwner(player)).orElse(false);
+    }
+
+    public boolean isTeamMember(Player player) {
+        return getTeamState().map(state -> state.isMember(player)).orElse(false);
+    }
+
+    public boolean hasTeam() {
+        return teamUUID != null;
+    }
+
+    public UUID getTeam() {
+        return teamUUID;
+    }
+
+    public void setTeam(UUID teamUUID) {
+        this.teamUUID = teamUUID;
+        markDirty();
+    }
+
+    /**
+     * Set team by player
+     * @param player Player
+     * @return boolean success or fail
+     */
+    public boolean setTeam(Player player) {
+        ServerState serverState = ServerState.of(getWorld());
+        if (serverState == null) return false;
+
+        Optional<PlayerState> optionalPlayerState = serverState.getPlayer(player.getUUID());
+        if (!optionalPlayerState.isPresent()) return false;
+
+        PlayerState playerState = optionalPlayerState.get();
+
+        if (playerState.teamID == null) return false;
+        setTeam(playerState.teamID);
+
+        return true;
+    }
+}

@@ -48,5 +48,7 @@
   "container.itemalchemy.emc_exporter": "EMC搬出器",
 
   "category.itemalchemy.all": "Item Alchemy",
-  "key.itemalchemy.charge": "チャージ"
+  "key.itemalchemy.charge": "チャージ",
+
+  "message.itemalchemy.failed_to_set_team": "[Item Alchemy] チームを設定できませんでした"
 }

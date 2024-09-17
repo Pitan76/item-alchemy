@@ -213,7 +213,7 @@ public class EMCManager {
     }
 
     public static void decrementEmc(Player player, long amount) {
-        ServerState state = ServerState.getServerState(ServerUtil.getServer(player.getWorld()));
+        ServerState state = ServerState.of(player);
 
         if (!state.getPlayer(player.getUUID()).isPresent()) return;
         PlayerState playerState = state.getPlayer(player.getUUID()).get();
@@ -227,7 +227,7 @@ public class EMCManager {
     }
 
     public static void setEMCtoPlayer(Player player, long emc) {
-        ServerState state = ServerState.getServerState(ServerUtil.getServer(player.getWorld()));
+        ServerState state = ServerState.of(player);
 
         if (!state.getPlayer(player.getUUID()).isPresent()) return;
         PlayerState playerState = state.getPlayer(player.getUUID()).get();
@@ -242,7 +242,7 @@ public class EMCManager {
     }
 
     public static void incrementEmc(Player player, long amount) {
-        ServerState state = ServerState.getServerState(ServerUtil.getServer(player.getWorld()));
+        ServerState state = ServerState.of(player);
 
         if (!state.getPlayer(player.getUUID()).isPresent()) return;
         PlayerState playerState = state.getPlayer(player.getUUID()).get();
@@ -265,7 +265,7 @@ public class EMCManager {
         if (!player.hasNetworkHandler()) return;
         if (!player.isServerPlayerEntity()) return;
 
-        ServerState serverState = ServerState.getServerState(ServerUtil.getServer(player.getWorld()));
+        ServerState serverState = ServerState.of(player);
         PacketByteBuf buf = PacketByteUtil.create();
 
         if (!serverState.getTeamByPlayer(player.getUUID()).isPresent()) return;
