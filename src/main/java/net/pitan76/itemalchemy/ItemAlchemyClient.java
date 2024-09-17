@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
+import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.client.renderer.BlockRenderer;
 import net.pitan76.itemalchemy.client.screen.*;
 import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
@@ -38,6 +39,8 @@ public class ItemAlchemyClient {
         CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.ALCHEMY_CHEST, AlchemyChestScreen::new);
         CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.EMC_IMPORTER, EMCImporterScreen::new);
         CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.EMC_EXPORTER, EMCExporterScreen::new);
+
+        CompatRegistryClient.registerCutoutBlock(Blocks.EMC_CABLE.getOrNull());
 
         WorldRenderRegistry.registerWorldRenderBeforeBlockOutline(new BlockRenderer());
 
