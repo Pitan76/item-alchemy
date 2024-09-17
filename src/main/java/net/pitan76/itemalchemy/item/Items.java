@@ -32,10 +32,10 @@ public class Items {
     public static RegistryResult<Item> AEGU;
     public static RegistryResult<Item> ADVANCED_AEGU;
     public static RegistryResult<Item> ULTIMATE_AEGU;
-    //public static RegistryResult<Item> EMC_IMPORTER;
-    //public static RegistryResult<Item> EMC_EXPORTER;
-    //public static RegistryResult<Item> EMC_CABLE;
-    //public static RegistryResult<Item> EMC_RELAY;
+    public static RegistryResult<Item> EMC_IMPORTER;
+    public static RegistryResult<Item> EMC_EXPORTER;
+    public static RegistryResult<Item> EMC_CABLE;
+    public static RegistryResult<Item> EMC_BATTERY;
 
     // Material
     public static RegistryResult<Item> ALCHEMICAL_FUEL;
@@ -77,10 +77,10 @@ public class Items {
         AEGU = registry.registerItem(_id("aegu"), () -> ItemUtil.ofBlock(Blocks.AEGU.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
         ADVANCED_AEGU = registry.registerItem(_id("advanced_aegu"), () -> ItemUtil.ofBlock(Blocks.ADVANCED_AEGU.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
         ULTIMATE_AEGU = registry.registerItem(_id("ultimate_aegu"), () -> ItemUtil.ofBlock(Blocks.ULTIMATE_AEGU.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
-        //EMC_IMPORTER = registry.registerItem(_id("emc_importer"), () -> ItemUtil.ofBlock(Blocks.EMC_IMPORTER.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
-        //EMC_EXPORTER = registry.registerItem(_id("emc_exporter"), () -> ItemUtil.ofBlock(Blocks.EMC_EXPORTER.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
-        //EMC_CABLE = registry.registerItem(_id("emc_cable"), () -> ItemUtil.ofBlock(Blocks.EMC_CABLE.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
-        //EMC_RELAY = registry.registerItem(_id("emc_relay"), () -> ItemUtil.ofBlock(Blocks.EMC_RELAY.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
+        EMC_IMPORTER = registry.registerItem(_id("emc_importer"), () -> ItemUtil.ofBlock(Blocks.EMC_IMPORTER.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
+        EMC_EXPORTER = registry.registerItem(_id("emc_exporter"), () -> ItemUtil.ofBlock(Blocks.EMC_EXPORTER.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
+        EMC_CABLE = registry.registerItem(_id("emc_cable"), () -> ItemUtil.ofBlock(Blocks.EMC_CABLE.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
+        EMC_BATTERY = registry.registerItem(_id("emc_battery"), () -> ItemUtil.ofBlock(Blocks.EMC_BATTERY.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
 
         ALCHEMY_PAD = registry.registerItem(_id("alchemy_pad"), () -> new AlchemyPad(CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
 

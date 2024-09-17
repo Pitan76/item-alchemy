@@ -18,7 +18,7 @@ public class Tiles {
     public static RegistryResult<BlockEntityType<?>> ALCHEMY_CHEST;
     public static RegistryResult<BlockEntityType<?>> EMC_IMPORTER;
     public static RegistryResult<BlockEntityType<?>> EMC_EXPORTER;
-    //public static RegistryResult<BlockEntityType<?>> EMC_RELAY;
+    public static RegistryResult<BlockEntityType<?>> EMC_BATTERY;
 
     public static void init() {
         EMC_COLLECTOR = registry.registerBlockEntityType(_id("emc_collector"), () -> create(EMCCollectorTile::new, Blocks.EMC_COLLECTOR_MK1.getOrNull(), Blocks.EMC_COLLECTOR_MK2.getOrNull(), Blocks.EMC_COLLECTOR_MK3.getOrNull(), Blocks.EMC_COLLECTOR_MK4.getOrNull(), Blocks.EMC_COLLECTOR_MK5.getOrNull()));

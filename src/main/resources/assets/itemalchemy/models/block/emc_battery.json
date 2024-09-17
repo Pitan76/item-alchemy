@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:block/cube",
+	"textures": {
+		"particle": "itemalchemy:block/emc_battery/side",
+		"north": "itemalchemy:block/emc_battery/front",
+		"south": "itemalchemy:block/emc_battery/side",
+		"east": "itemalchemy:block/emc_battery/side",
+		"west": "itemalchemy:block/emc_battery/side",
+		"up": "itemalchemy:block/emc_battery/top_mk1",
+		"down": "itemalchemy:block/emc_battery/bottom"
+	}
+}

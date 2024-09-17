@@ -33,7 +33,7 @@ public class Blocks {
 
     public static RegistryResult<Block> EMC_CABLE;
 
-    public static RegistryResult<Block> EMC_RELAY;
+    public static RegistryResult<Block> EMC_BATTERY;
 
     public static void init() {
         ALCHEMY_TABLE = registry.registerBlock(_id("alchemy_table"), AlchemyTable::new);
@@ -57,6 +57,6 @@ public class Blocks {
         EMC_EXPORTER = registry.registerBlock(_id("emc_exporter"), () -> new EMCExporter(CompatibleBlockSettings.of(CompatibleMaterial.STONE).strength(2.0f, 5.0f)));
 
         EMC_CABLE = registry.registerBlock(_id("emc_cable"), () -> new EMCCable(CompatibleBlockSettings.of(CompatibleMaterial.STONE).strength(2.0f, 5.0f)));
-        EMC_RELAY = registry.registerBlock(_id("emc_relay"), () -> new EMCRelay(CompatibleBlockSettings.of(CompatibleMaterial.STONE).strength(2.0f, 5.0f)));
+        EMC_BATTERY = registry.registerBlock(_id("emc_battery"), () -> new EMCRelay(CompatibleBlockSettings.of(CompatibleMaterial.STONE).strength(2.0f, 5.0f)));
     }
 }
