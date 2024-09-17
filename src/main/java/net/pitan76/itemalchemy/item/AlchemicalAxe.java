@@ -10,9 +10,10 @@ import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 
 public class AlchemicalAxe extends CompatibleAxeItem implements ExtendItemProvider, ItemCharge {
     public AlchemicalAxe(CompatibleToolMaterial toolMaterial, float attackDamage, float attackSpeed, CompatibleItemSettings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings);;
+        super(toolMaterial, attackDamage, attackSpeed, settings);
     }
 
+    @Override
     public boolean isDamageableOnDefault() {
         return false;
     }

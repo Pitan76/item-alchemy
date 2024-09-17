@@ -29,7 +29,7 @@ public class ItemUtils {
   public static final int MAX_CHARGE_VALUE = 4;
 
   /**
-   * Handles {@link ItemMixin#inventoryTick(ItemStack, World, Entity, int, boolean, CallbackInfo)}
+   * Handles {@link ItemMixin#itemalchemy$inventoryTick(ItemStack, World, Entity, int, boolean, CallbackInfo)}
    * if the selected inventory item is of {@link ItemCharge}.
    *
    * @param stack that is selected and of {@link ItemCharge}.
