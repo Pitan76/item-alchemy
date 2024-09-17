@@ -29,8 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvider {
     public static DirectionProperty FACING = Properties.HORIZONTAL_FACING;
-
-    private static final Text TITLE = TextUtil.translatable("container.itemalchemy.emc_condenser");
+    public static final Text TITLE = TextUtil.translatable("container.itemalchemy.emc_condenser");
 
     public long maxEMC = 100000;
 
@@ -48,6 +47,10 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
 
     public EMCCondenser() {
         this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.BLACK).strength(2f, 7.0f));
+    }
+
+    public long getMaxEMC() {
+        return maxEMC;
     }
 
     @Override

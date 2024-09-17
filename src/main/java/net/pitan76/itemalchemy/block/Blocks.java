@@ -57,6 +57,6 @@ public class Blocks {
         EMC_EXPORTER = registry.registerBlock(_id("emc_exporter"), () -> new EMCExporter(CompatibleBlockSettings.of(CompatibleMaterial.STONE).strength(2.0f, 5.0f)));
 
         EMC_CABLE = registry.registerBlock(_id("emc_cable"), () -> new EMCCable(CompatibleBlockSettings.of(CompatibleMaterial.STONE).strength(2.0f, 5.0f)));
-        EMC_BATTERY = registry.registerBlock(_id("emc_battery"), () -> new EMCRelay(CompatibleBlockSettings.of(CompatibleMaterial.STONE).strength(2.0f, 5.0f)));
+        EMC_BATTERY = registry.registerBlock(_id("emc_battery"), () -> new EMCBattery(100_000));
     }
 }

@@ -42,6 +42,10 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         super(type, e);
     }
 
+    public EMCImporterTile(TileCreateEvent e) {
+        this(Tiles.EMC_IMPORTER.getOrNull(), e);
+    }
+
     @Override
     public void writeNbt(WriteNbtArgs args) {
         InventoryUtil.writeNbt(args, inventory);
@@ -52,18 +56,6 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     public void readNbt(ReadNbtArgs args) {
         InventoryUtil.readNbt(args, inventory);
         teamUUID = NbtUtil.getUuid(args.nbt, "team");
-    }
-
-    public EMCImporterTile(BlockPos pos, BlockState state) {
-        this(new TileCreateEvent(pos, state));
-    }
-
-    public EMCImporterTile(BlockView world) {
-        this(new TileCreateEvent(world));
-    }
-
-    public EMCImporterTile(TileCreateEvent e) {
-        this(Tiles.EMC_IMPORTER.getOrNull(), e);
     }
 
     @Nullable

@@ -28,6 +28,7 @@ public class Tiles {
         ALCHEMY_CHEST = registry.registerBlockEntityType(_id("alchemy_chest"), () -> create(AlchemyChestTile::new, Blocks.ALCHEMY_CHEST.getOrNull()));
         EMC_IMPORTER = registry.registerBlockEntityType(_id("emc_importer"), () -> create(EMCImporterTile::new, Blocks.EMC_IMPORTER.getOrNull()));
         EMC_EXPORTER = registry.registerBlockEntityType(_id("emc_exporter"), () -> create(EMCExporterTile::new, Blocks.EMC_EXPORTER.getOrNull()));
+        EMC_BATTERY = registry.registerBlockEntityType(_id("emc_battery"), () -> create(EMCBatteryTile::new, Blocks.EMC_BATTERY.getOrNull()));
     }
 
     public static <T extends BlockEntity> BlockEntityType<T> create(BlockEntityTypeBuilder.Factory<T> supplier, Block... blocks) {
