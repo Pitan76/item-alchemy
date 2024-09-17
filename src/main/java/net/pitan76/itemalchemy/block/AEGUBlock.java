@@ -21,7 +21,7 @@ import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import org.jetbrains.annotations.Nullable;
 
-public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider {
+public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider, IUseableWrench {
     public static BooleanProperty CONNECTED = BooleanProperty.of("connected");
     public long emc;
 

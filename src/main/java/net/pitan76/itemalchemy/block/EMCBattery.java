@@ -18,7 +18,7 @@ import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCBattery extends EMCRepeater implements ExtendBlockEntityProvider {
+public class EMCBattery extends EMCRepeater implements ExtendBlockEntityProvider, IUseableWrench {
     public static DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final Text TITLE = TextUtil.translatable("container.itemalchemy.emc_battery");
 

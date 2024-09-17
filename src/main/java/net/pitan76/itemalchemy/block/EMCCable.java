@@ -12,7 +12,7 @@ import net.pitan76.mcpitanlib.api.util.PropertyUtil;
 import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 
-public class EMCCable extends EMCRepeater {
+public class EMCCable extends EMCRepeater implements IUseableWrench {
 
     protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(EMCCable::new);
 

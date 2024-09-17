@@ -8,7 +8,7 @@ import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCCondenserMK2 extends EMCCondenser {
+public class EMCCondenserMK2 extends EMCCondenser implements IUseableWrench {
 
     protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(EMCCondenserMK2::new);
 

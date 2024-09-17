@@ -49,6 +49,8 @@ public class Items {
     public static RegistryResult<Item> DARK_MATTER_BLOCK;
     public static RegistryResult<Item> RED_MATTER_BLOCK;
 
+    public static RegistryResult<Item> IA_WRENCH;
+
     public static RegistryResult<Item> DARK_MATTER_SWORD;
     public static RegistryResult<Item> DARK_MATTER_PICKAXE;
     public static RegistryResult<Item> DARK_MATTER_AXE;
@@ -94,6 +96,8 @@ public class Items {
         RED_MATTER = registry.registerItem(_id("red_matter"), () -> new ExtendItem(CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
         DARK_MATTER_BLOCK = registry.registerItem(_id("dark_matter_block"), () -> ItemUtil.ofBlock(Blocks.DARK_MATTER_BLOCK.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
         RED_MATTER_BLOCK = registry.registerItem(_id("red_matter_block"), () -> ItemUtil.ofBlock(Blocks.RED_MATTER_BLOCK.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
+
+        IA_WRENCH = registry.registerItem(_id("wrench"), () -> new Wrench(CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
 
         DARK_MATTER_SWORD = registry.registerItem(_id("dark_matter_sword"), () -> new AlchemicalSword(AlchemicalToolMaterials.DARK_MATTER, 3, -2.4f, ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
         DARK_MATTER_PICKAXE = registry.registerItem(_id("dark_matter_pickaxe"), () -> new AlchemicalPickaxe(AlchemicalToolMaterials.DARK_MATTER, 1, -2.8f, ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));

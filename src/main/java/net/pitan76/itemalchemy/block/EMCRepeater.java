@@ -12,7 +12,7 @@ import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EMCRepeater extends ExtendBlock {
+public class EMCRepeater extends ExtendBlock implements IUseableWrench {
 
     protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(EMCRepeater::new);
 

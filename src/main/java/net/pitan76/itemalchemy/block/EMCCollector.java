@@ -27,7 +27,7 @@ import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvider {
+public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvider, IUseableWrench {
     public static DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
     private static final Text TITLE = TextUtil.translatable("container.itemalchemy.emc_collector");

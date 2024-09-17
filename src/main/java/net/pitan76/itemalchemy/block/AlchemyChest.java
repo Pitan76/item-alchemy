@@ -24,7 +24,7 @@ import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import org.jetbrains.annotations.Nullable;
 
-public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvider {
+public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvider, IUseableWrench {
     public static DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
     private static final Text TITLE = TextUtil.translatable("block.itemalchemy.alchemy_chest");

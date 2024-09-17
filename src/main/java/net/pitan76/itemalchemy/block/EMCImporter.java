@@ -26,7 +26,7 @@ import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCImporter extends ExtendBlock implements ExtendBlockEntityProvider {
+public class EMCImporter extends ExtendBlock implements ExtendBlockEntityProvider, IUseableWrench {
     private static final Text TITLE = TextUtil.translatable("container.itemalchemy.emc_importer");
 
     protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(EMCImporter::new);

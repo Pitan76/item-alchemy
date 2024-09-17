@@ -15,7 +15,7 @@ import net.pitan76.mcpitanlib.api.event.block.OutlineShapeEvent;
 import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 
-public class AlchemyTable extends ExtendBlock {
+public class AlchemyTable extends ExtendBlock implements IUseableWrench {
 
     protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(AlchemyTable::new);
 
