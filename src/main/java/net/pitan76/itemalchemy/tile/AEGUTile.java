@@ -3,7 +3,6 @@ package net.pitan76.itemalchemy.tile;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.block.AEGUBlock;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
@@ -21,14 +20,6 @@ public class AEGUTile extends CompatBlockEntity implements ExtendBlockEntityTick
 
     public AEGUTile(BlockEntityType<?> type, TileCreateEvent e) {
         super(type, e);
-    }
-
-    public AEGUTile(BlockPos pos, BlockState state) {
-        this(new TileCreateEvent(pos, state));
-    }
-
-    public AEGUTile(BlockView world) {
-        this(new TileCreateEvent(world));
     }
 
     public AEGUTile(TileCreateEvent e) {

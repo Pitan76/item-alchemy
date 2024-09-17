@@ -16,7 +16,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.ItemAlchemy;
@@ -57,12 +56,6 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
         super(type, e);
     }
 
-    public EMCCondenserTile(BlockPos pos, BlockState state) {
-        this(new TileCreateEvent(pos, state));
-    }
-    public EMCCondenserTile(BlockView world) {
-        this(new TileCreateEvent(world));
-    }
     public EMCCondenserTile(TileCreateEvent e) {
         this(Tiles.EMC_CONDENSER.getOrNull(), e);
     }

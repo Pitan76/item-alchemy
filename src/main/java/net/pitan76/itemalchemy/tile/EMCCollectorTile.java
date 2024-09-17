@@ -16,7 +16,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.block.EMCCollector;
@@ -50,8 +49,12 @@ public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEn
 
     public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(16 + 3, ItemStackUtil.empty());
 
-    public EMCCollectorTile(BlockEntityType<?> type, TileCreateEvent event) {
-        super(type, event);
+    public EMCCollectorTile(BlockEntityType<?> type, TileCreateEvent e) {
+        super(type, e);
+    }
+
+    public EMCCollectorTile(TileCreateEvent e) {
+        this(Tiles.EMC_COLLECTOR.getOrNull(), e);
     }
 
     @Override
@@ -66,18 +69,6 @@ public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEn
         NbtCompound nbt = args.getNbt();
         storedEMC = NbtUtil.get(nbt, "stored_emc", Long.class);
         InventoryUtil.readNbt(args, inventory);
-    }
-
-    public EMCCollectorTile(BlockPos pos, BlockState state) {
-        this(new TileCreateEvent(pos, state));
-    }
-
-    public EMCCollectorTile(BlockView world) {
-        this(new TileCreateEvent(world));
-    }
-
-    public EMCCollectorTile(TileCreateEvent event) {
-        this(Tiles.EMC_COLLECTOR.getOrNull(), event);
     }
 
     @Nullable

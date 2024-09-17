@@ -31,7 +31,7 @@ import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCBatteryTile extends CompatBlockEntity implements ExtendBlockEntityTicker<EMCCollectorTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
+public class EMCBatteryTile extends CompatBlockEntity implements ExtendBlockEntityTicker<EMCBatteryTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
     public long storedEMC = 0;
     public int coolDown = 0; // tick
 
@@ -69,7 +69,7 @@ public class EMCBatteryTile extends CompatBlockEntity implements ExtendBlockEnti
     }
 
     @Override
-    public void tick(TileTickEvent<EMCCollectorTile> e) {
+    public void tick(TileTickEvent<EMCBatteryTile> e) {
         World world = e.world;
 
         if (WorldUtil.isClient(world)) return;

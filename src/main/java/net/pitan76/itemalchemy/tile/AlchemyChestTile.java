@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -10,9 +9,7 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockView;
 import net.pitan76.itemalchemy.gui.screen.AlchemyChestScreenHandler;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
@@ -32,6 +29,10 @@ public class AlchemyChestTile extends ExtendBlockEntity implements SidedInventor
         super(type, e);
     }
 
+    public AlchemyChestTile(TileCreateEvent e) {
+        this(Tiles.ALCHEMY_CHEST.getOrNull(), e);
+    }
+
     @Override
     public void writeNbt(WriteNbtArgs args) {
         InventoryUtil.writeNbt(args, inventory);
@@ -40,18 +41,6 @@ public class AlchemyChestTile extends ExtendBlockEntity implements SidedInventor
     @Override
     public void readNbt(ReadNbtArgs args) {
         InventoryUtil.readNbt(args, inventory);
-    }
-
-    public AlchemyChestTile(BlockPos pos, BlockState state) {
-        this(new TileCreateEvent(pos, state));
-    }
-
-    public AlchemyChestTile(BlockView world) {
-        this(new TileCreateEvent(world));
-    }
-
-    public AlchemyChestTile(TileCreateEvent e) {
-        this(Tiles.ALCHEMY_CHEST.getOrNull(), e);
     }
 
     @Nullable

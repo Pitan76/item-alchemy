@@ -41,7 +41,7 @@ public class EMCExporterScreenHandler extends ExtendedScreenHandler {
     }
 
     public EMCExporterScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCExporterTile tile, Inventory inventory) {
-        super(ScreenHandlers.EMC_COLLECTOR, syncId);
+        super(ScreenHandlers.EMC_EXPORTER, syncId);
 
         this.inventory = inventory;
         this.playerInventory = playerInventory;
