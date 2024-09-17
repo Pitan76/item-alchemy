@@ -55,6 +55,6 @@ public class EMCCollectorScreen extends CompatInventoryScreen {
         long emc = (screenHandler.storedEMC + screenHandler.tile.storedEMC);
         if (emc > screenHandler.maxEMC) emc = screenHandler.maxEMC;
 
-        callDrawTexture(args.drawObjectDM, getTexture(), x + 93, y + 13, 0, 168, (int) Math.round((double) emc / screenHandler.maxEMC * 46), 14);
+        callDrawTexture(args.drawObjectDM, getCompatTexture(), x + 93, y + 13, 0, 168, (int) Math.round((double) emc / screenHandler.maxEMC * 46), 14);
     }
 }
