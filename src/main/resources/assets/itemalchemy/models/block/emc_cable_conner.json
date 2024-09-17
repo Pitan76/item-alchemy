@@ -6,8 +6,8 @@
 		"1": "itemalchemy:block/emc_cable/left",
 		"2": "itemalchemy:block/emc_cable/right",
 		"4": "itemalchemy:block/emc_cable/bottom",
-		"5": "itemalchemy:block/emc_cable/bottom_coner",
-		"6": "itemalchemy:block/emc_cable/top_coner",
+		"5": "itemalchemy:block/emc_cable/bottom_conner",
+		"6": "itemalchemy:block/emc_cable/top_conner",
 		"particle": "itemalchemy:block/emc_cable/top"
 	},
 	"elements": [
