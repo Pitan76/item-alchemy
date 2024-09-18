@@ -40,6 +40,7 @@ public class ItemAlchemyClient {
         CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.ALCHEMY_CHEST, AlchemyChestScreen::new);
         CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.EMC_IMPORTER, EMCImporterScreen::new);
         CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.EMC_EXPORTER, EMCExporterScreen::new);
+        CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.EMC_BATTERY, EMCBatteryScreen::new);
 
         CompatRegistryClient.registerCutoutBlock(Blocks.EMC_CABLE.getOrNull());
 

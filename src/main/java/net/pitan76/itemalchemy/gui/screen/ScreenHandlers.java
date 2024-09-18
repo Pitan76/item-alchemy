@@ -18,6 +18,8 @@ public class ScreenHandlers {
     public static ScreenHandlerType<EMCImporterScreenHandler> EMC_IMPORTER = new ExtendedScreenHandlerTypeBuilder<>(EMCImporterScreenHandler::new).build();
     public static ScreenHandlerType<EMCExporterScreenHandler> EMC_EXPORTER = new ExtendedScreenHandlerTypeBuilder<>(EMCExporterScreenHandler::new).build();
 
+    public static ScreenHandlerType<EMCBatteryScreenHandler> EMC_BATTERY = new ExtendedScreenHandlerTypeBuilder<>(EMCBatteryScreenHandler::new).build();
+
     public static void init() {
         registry.registerScreenHandlerType(_id("alchemy_table"), () -> ALCHEMY_TABLE);
         registry.registerScreenHandlerType(_id("emc_collector"), () -> EMC_COLLECTOR);
@@ -26,5 +28,6 @@ public class ScreenHandlers {
         registry.registerScreenHandlerType(_id("alchemy_chest"), () -> ALCHEMY_CHEST);
         registry.registerScreenHandlerType(_id("emc_importer"), () -> EMC_IMPORTER);
         registry.registerScreenHandlerType(_id("emc_exporter"), () -> EMC_EXPORTER);
+        registry.registerScreenHandlerType(_id("emc_battery"), () -> EMC_BATTERY);
     }
 }

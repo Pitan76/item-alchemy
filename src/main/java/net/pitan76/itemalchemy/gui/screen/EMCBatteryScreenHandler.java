@@ -42,7 +42,7 @@ public class EMCBatteryScreenHandler extends ExtendedScreenHandler {
     }
 
     public EMCBatteryScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCBatteryTile tile, Inventory inventory) {
-        super(ScreenHandlers.EMC_COLLECTOR, syncId);
+        super(ScreenHandlers.EMC_BATTERY, syncId);
 
         this.inventory = inventory;
         this.playerInventory = playerInventory;
