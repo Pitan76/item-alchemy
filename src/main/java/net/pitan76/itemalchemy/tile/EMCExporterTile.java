@@ -88,7 +88,8 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
         long aveEMC = emc / filterCount;
 
-        for (ItemStack filterStack : filter) {
+        for (int i = 0; i < filter.size(); i++) {
+            ItemStack filterStack = filter.get(i);
             if (filterStack.isEmpty()) continue;
 
             long neededEMC = EMCManager.get(filterStack);
@@ -99,7 +100,7 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
             ItemStack stack = filterStack.copy();
             stack.setCount((int) Math.floorDiv(aveEMC, neededEMC));
-            result.add(stack);
+            result.set(i, stack);
         }
 
         return result;
