@@ -5,22 +5,16 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.pitan76.itemalchemy.tile.EMCImporterTile;
 import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
-import net.pitan76.mcpitanlib.api.event.block.ItemScattererUtil;
 import net.pitan76.mcpitanlib.api.event.block.StateReplacedEvent;
-import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,17 +38,6 @@ public class EMCImporter extends ExtendBlock implements ExtendBlockEntityProvide
 
     @Override
     public void onStateReplaced(StateReplacedEvent e) {
-        World world = e.world;
-        BlockPos pos = e.pos;
-        if (e.isSameState()) return;
-
-        BlockEntity blockEntity = WorldUtil.getBlockEntity(world, pos);
-        if (blockEntity instanceof Inventory) {
-            Inventory inventory = (Inventory) blockEntity;
-            inventory.setStack(1, ItemStackUtil.empty());
-            ItemScattererUtil.spawn(world, pos, inventory);
-            e.updateComparators();
-        }
         super.onStateReplaced(e);
     }
 
