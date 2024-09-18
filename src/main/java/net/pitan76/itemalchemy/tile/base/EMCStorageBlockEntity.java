@@ -71,4 +71,8 @@ public abstract class EMCStorageBlockEntity extends CompatBlockEntity {
     public boolean isEmpty() {
         return storedEMC <= 0;
     }
+
+    public boolean canExtract() {
+        return storedEMC > 0;
+    }
 }

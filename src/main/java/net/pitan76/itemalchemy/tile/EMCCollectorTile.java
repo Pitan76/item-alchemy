@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.ItemAlchemy;
+import net.pitan76.itemalchemy.api.EMCStorageUtil;
 import net.pitan76.itemalchemy.block.EMCCollector;
 import net.pitan76.itemalchemy.block.EMCRepeater;
 import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
@@ -142,22 +143,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
             if (!inventory.get(2).isEmpty()) {
                 setActive(true);
 
-                if (canInsert()) {
-                    BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
-                    for (BlockPos nearPos : EMCRepeater.getNearPoses(world, nearPoses)) {
-                        BlockState nearState = WorldUtil.getBlockState(world, nearPos);
-                        if (nearState.getBlock() instanceof EMCCollector) {
-                            BlockEntity nearTile = WorldUtil.getBlockEntity(world, nearPos);
-                            if (nearTile instanceof EMCCollectorTile) {
-                                EMCCollectorTile nearCollectorTile = ((EMCCollectorTile) nearTile);
-                                if (nearCollectorTile.storedEMC > 0) {
-                                    nearCollectorTile.storedEMC--;
-                                    storedEMC++;
-                                }
-                            }
-                        }
-                    }
-                }
+                EMCStorageUtil.transferAllEMC(this);
 
                 if (inventory.get(0).isEmpty()) {
                     ItemStack stack = convertStack(inventory.get(2).copy());
