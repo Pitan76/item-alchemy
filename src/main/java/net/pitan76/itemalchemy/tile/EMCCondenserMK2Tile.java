@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.ItemAlchemy;
+import net.pitan76.itemalchemy.api.EMCStorageUtil;
 import net.pitan76.itemalchemy.block.EMCCollector;
 import net.pitan76.itemalchemy.block.EMCRepeater;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserMK2ScreenHandler;
@@ -73,22 +74,7 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
             }
         }
 
-        BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
-
-        for (BlockPos nearPos : EMCRepeater.getNearPoses(world, nearPoses)) {
-            BlockState nearState = WorldUtil.getBlockState(world, nearPos);
-            if (!(nearState.getBlock() instanceof EMCCollector)) continue;
-
-            BlockEntity nearTile = WorldUtil.getBlockEntity(world, nearPos);
-            if (!(nearTile instanceof EMCCollectorTile)) continue;
-
-            EMCCollectorTile nearCollectorTile = ((EMCCollectorTile) nearTile);
-            if (nearCollectorTile.storedEMC > 0) {
-                long receiveEMC = nearCollectorTile.storedEMC;
-                nearCollectorTile.storedEMC -= receiveEMC;
-                storedEMC += receiveEMC;
-            }
-        }
+        EMCStorageUtil.transferAllEMC(this);
 
         if (!getItems().isEmpty()) {
             ItemStack targetStack = getItems().get(0);
