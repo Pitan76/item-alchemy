@@ -33,7 +33,8 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         return 10 * 1; // tick
     }
 
-    public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(16 + 3, ItemStackUtil.empty());
+    public DefaultedList<ItemStack> filter = DefaultedList.ofSize(9, ItemStackUtil.empty());
+    public DefaultedList<ItemStack> inv = DefaultedList.ofSize(1, ItemStackUtil.empty());
 
     public EMCImporterTile(BlockEntityType<?> type, TileCreateEvent e) {
         super(type, e);
@@ -45,14 +46,33 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     @Override
     public void writeNbt(WriteNbtArgs args) {
-        InventoryUtil.writeNbt(args, inventory);
-        NbtUtil.putUuid(args.nbt, "team", teamUUID);
+        NbtCompound filterNbt = NbtUtil.create();
+        InventoryUtil.writeNbt(args.registryLookup, filterNbt, filter);
+
+        NbtCompound invNbt = NbtUtil.create();
+        InventoryUtil.writeNbt(args.registryLookup, invNbt, inv);
+
+        NbtUtil.put(args.nbt, "filter", filterNbt);
+        NbtUtil.put(args.nbt, "inv", invNbt);
+
+        if (teamUUID != null)
+            NbtUtil.putUuid(args.nbt, "team", teamUUID);
     }
 
     @Override
     public void readNbt(ReadNbtArgs args) {
-        InventoryUtil.readNbt(args, inventory);
-        teamUUID = NbtUtil.getUuid(args.nbt, "team");
+        if (NbtUtil.has(args.nbt, "filter")) {
+            NbtCompound filterNbt = NbtUtil.get(args.nbt, "filter");
+            InventoryUtil.readNbt(args.registryLookup, filterNbt, filter);
+        }
+
+        if (NbtUtil.has(args.nbt, "inv")) {
+            NbtCompound invNbt = NbtUtil.get(args.nbt, "inv");
+            InventoryUtil.readNbt(args.registryLookup, invNbt, inv);
+        }
+
+        if (NbtUtil.has(args.nbt, "team"))
+            teamUUID = NbtUtil.getUuid(args.nbt, "team");
     }
 
     @Nullable
@@ -70,7 +90,7 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     @Override
     public DefaultedList<ItemStack> getItems() {
-        return inventory;
+        return inv;
     }
 
     @Override

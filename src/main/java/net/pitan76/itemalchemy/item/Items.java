@@ -27,7 +27,7 @@ public class Items {
     public static RegistryResult<Item> EMC_COLLECTOR_MK5;
     public static RegistryResult<Item> ALCHEMY_CHEST;
     public static RegistryResult<Item> EMC_CONDENSER;
-    //public static RegistryResult<Item> EMC_CONDENSER_MK2;
+    public static RegistryResult<Item> EMC_CONDENSER_MK2;
     public static RegistryResult<Item> EMC_REPEATER;
     public static RegistryResult<Item> AEGU;
     public static RegistryResult<Item> ADVANCED_AEGU;
@@ -74,7 +74,7 @@ public class Items {
         EMC_COLLECTOR_MK5 = registry.registerItem(_id("emc_collector_mk5"), () -> ItemUtil.ofBlock(Blocks.EMC_COLLECTOR_MK5.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
         ALCHEMY_CHEST = registry.registerItem(_id("alchemy_chest"), () -> ItemUtil.ofBlock(Blocks.ALCHEMY_CHEST.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
         EMC_CONDENSER = registry.registerItem(_id("emc_condenser"), () -> ItemUtil.ofBlock(Blocks.EMC_CONDENSER.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
-        //EMC_CONDENSER_MK2 = registry.registerItem(_id("emc_condenser_mk2"), () -> ItemUtil.ofBlock(Blocks.EMC_CONDENSER_MK2.getOrNull(), CompatibleItemSettings.of()));//.addGroup(ItemGroups.ITEM_ALCHEMY)));
+        EMC_CONDENSER_MK2 = registry.registerItem(_id("emc_condenser_mk2"), () -> ItemUtil.ofBlock(Blocks.EMC_CONDENSER_MK2.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
         EMC_REPEATER = registry.registerItem(_id("emc_repeater"), () -> ItemUtil.ofBlock(Blocks.EMC_REPEATER.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
         AEGU = registry.registerItem(_id("aegu"), () -> ItemUtil.ofBlock(Blocks.AEGU.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
         ADVANCED_AEGU = registry.registerItem(_id("advanced_aegu"), () -> ItemUtil.ofBlock(Blocks.ADVANCED_AEGU.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));

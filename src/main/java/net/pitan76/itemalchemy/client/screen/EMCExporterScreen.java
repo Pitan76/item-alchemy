@@ -8,6 +8,7 @@ import net.pitan76.mcpitanlib.api.client.CompatInventoryScreen;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawBackgroundArgs;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawForegroundArgs;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
+import net.pitan76.mcpitanlib.api.util.client.ClientUtil;
 
 import static net.pitan76.itemalchemy.ItemAlchemy._id;
 
@@ -19,8 +20,8 @@ public class EMCExporterScreen extends CompatInventoryScreen {
     public EMCExporterScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         this.playerInventory = inventory;
-        setBackgroundWidth(256);
-        setBackgroundHeight(234);
+        setBackgroundWidth(176);
+        setBackgroundHeight(184);
         if (handler instanceof EMCExporterScreenHandler)
             screenHandler = (EMCExporterScreenHandler) handler;
 
@@ -28,11 +29,15 @@ public class EMCExporterScreen extends CompatInventoryScreen {
 
     @Override
     public void initOverride() {
-        super.initOverride();
+        if (this.textRenderer == null)
+            this.textRenderer = ClientUtil.getTextRenderer();
+
+        setTitleX(backgroundWidth / 2 - textRenderer.getWidth(title) / 2);
     }
 
+    @Override
     public CompatIdentifier getCompatTexture() {
-        return _id("textures/gui/emc_exporter.png");
+        return _id("textures/gui/3x3.png");
     }
 
     @Override

@@ -84,7 +84,7 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
                 Slot targetSlot = this.slots.get(37);
                 if (SlotUtil.getStack(targetSlot).isEmpty()) {
                     ItemStack newTargetStack = originalStack.copy();
-                    newTargetStack.setCount(37);
+                    newTargetStack.setCount(1);
                     SlotUtil.setStack(targetSlot, newTargetStack);
                     return ItemStackUtil.empty();
                 }

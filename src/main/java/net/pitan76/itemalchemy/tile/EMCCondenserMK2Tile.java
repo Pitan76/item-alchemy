@@ -9,6 +9,6 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
     }
 
     public EMCCondenserMK2Tile(TileCreateEvent e) {
-        this(Tiles.EMC_CONDENSER.getOrNull(), e);//EMC_CONDENSER_MK2.getOrNull(), e);
+        this(Tiles.EMC_CONDENSER_MK2.getOrNull(), e);//EMC_CONDENSER_MK2.getOrNull(), e);
     }
 }

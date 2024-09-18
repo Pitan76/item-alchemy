@@ -7,7 +7,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
-import net.pitan76.itemalchemy.gui.slot.TargetSlot;
+import net.pitan76.itemalchemy.gui.slot.FilterSlot;
 import net.pitan76.itemalchemy.tile.EMCExporterTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
@@ -48,14 +48,16 @@ public class EMCExporterScreenHandler extends ExtendedScreenHandler {
         this.tile = tile;
         addPlayerMainInventorySlots(playerInventory, 24, 84);
         addPlayerHotbarSlots(playerInventory, 24, 142);
-        addNormalSlot(inventory, 0, 149, 12);
-        addTargetSlot(inventory, 1, 177, 35);
-        addNormalSlot(inventory, 2, 149, 58);
-        addSlots(inventory, 3, 14, 8, -1, 4, 4);
+        
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                addFilterSlot(inventory, j + i * 3, 62 + j * 18, 22 + i * 18);
+            }
+        }
     }
 
-    protected Slot addTargetSlot(Inventory inventory, int index, int x, int y) {
-        Slot slot = new TargetSlot(inventory, index, x, y, this);
+    protected Slot addFilterSlot(Inventory inventory, int index, int x, int y) {
+        Slot slot = new FilterSlot(inventory, index, x, y, this);
         return this.callAddSlot(slot);
     }
 
@@ -64,28 +66,25 @@ public class EMCExporterScreenHandler extends ExtendedScreenHandler {
         Slot slot = ScreenHandlerUtil.getSlot(this, index);
         if (SlotUtil.hasStack(slot)) {
             ItemStack originalStack = SlotUtil.getStack(slot);
-            // TargetSlot
-            if (index == 37) {
-                Slot targetSlot = this.slots.get(37);
+            // Filter Slot
+            if (index >= 37 && index <= 46) {
+                Slot targetSlot = this.slots.get(index);
                 SlotUtil.setStack(targetSlot, ItemStackUtil.empty());
                 return ItemStackUtil.empty();
             }
 
+            // Inventory
             if (index < 36) {
-                if (!this.callInsertItem(originalStack, 36 + 3, 36 + 16 + 3, false)) {
-                    if (!this.callInsertItem(originalStack, 36, 36 + 3, false)) {
+                for (int i = 37; i <= 46; i++) {
+                    Slot targetSlot = this.slots.get(i);
+                    if (SlotUtil.getStack(targetSlot).isEmpty()) {
+                        ItemStack newTargetStack = originalStack.copy();
+                        newTargetStack.setCount(1);
+                        SlotUtil.setStack(targetSlot, newTargetStack);
                         return ItemStackUtil.empty();
                     }
                 }
 
-                // TargetSlot
-                Slot targetSlot = this.slots.get(37);
-                if (SlotUtil.getStack(targetSlot).isEmpty()) {
-                    ItemStack newTargetStack = originalStack.copy();
-                    newTargetStack.setCount(37);
-                    SlotUtil.setStack(targetSlot, newTargetStack);
-                    return ItemStackUtil.empty();
-                }
             } else if (!this.callInsertItem(originalStack, 0, 36, false)) {
                 return ItemStackUtil.empty();
             }
@@ -100,15 +99,15 @@ public class EMCExporterScreenHandler extends ExtendedScreenHandler {
     }
 
     @Override
-    public void overrideOnSlotClick(int slotIndex, int button, SlotActionType actionType, Player player) {
-        if (slotIndex == 37) { // Target Slot
+    public void overrideOnSlotClick(int index, int button, SlotActionType actionType, Player player) {
+        if (index >= 37 && index <= 46) { // Target Slot
             ItemStack oldStack = getCursorStack().copy();
-            super.overrideOnSlotClick(slotIndex, button, actionType, player);
-            if (!ItemStackUtil.isEmpty(oldStack)) {
+            super.overrideOnSlotClick(index, button, actionType, player);
+            if (!ItemStackUtil.isEmpty(oldStack))
                 callSetCursorStack(oldStack);
-            }
+
             return;
         }
-        super.overrideOnSlotClick(slotIndex, button, actionType, player);
+        super.overrideOnSlotClick(index, button, actionType, player);
     }
 }
