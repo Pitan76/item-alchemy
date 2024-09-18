@@ -7,6 +7,7 @@ import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.client.renderer.BlockRenderer;
 import net.pitan76.itemalchemy.client.screen.*;
+import net.pitan76.itemalchemy.gui.screen.EMCBatteryScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.ScreenHandlers;
@@ -61,6 +62,14 @@ public class ItemAlchemyClient {
             long storedEMC = PacketByteUtil.readLong(e.buf);
             if (e.player.getCurrentScreenHandler() instanceof EMCCollectorScreenHandler) {
                 EMCCollectorScreenHandler screenHandler = (EMCCollectorScreenHandler) e.player.getCurrentScreenHandler();
+                screenHandler.storedEMC = storedEMC;
+            }
+        });
+
+        ClientNetworking.registerReceiver(_id("itemalchemy_emc_battery"), (e) -> {
+            long storedEMC = PacketByteUtil.readLong(e.buf);
+            if (e.player.getCurrentScreenHandler() instanceof EMCBatteryScreenHandler) {
+                EMCBatteryScreenHandler screenHandler = (EMCBatteryScreenHandler) e.player.getCurrentScreenHandler();
                 screenHandler.storedEMC = storedEMC;
             }
         });

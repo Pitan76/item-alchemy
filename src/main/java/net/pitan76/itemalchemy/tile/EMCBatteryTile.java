@@ -107,7 +107,7 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
                 if (player.hasNetworkHandler() && player.getCurrentScreenHandler() instanceof EMCBatteryScreenHandler && ((EMCBatteryScreenHandler) player.getCurrentScreenHandler()).tile == this) {
                     PacketByteBuf buf = PacketByteUtil.create();
                     PacketByteUtil.writeLong(buf, storedEMC);
-                    ServerNetworking.send(player, ItemAlchemy._id("itemalchemy_emc_collector"), buf);
+                    ServerNetworking.send(player, ItemAlchemy._id("itemalchemy_emc_battery"), buf);
                 }
             }
         }
