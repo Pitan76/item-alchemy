@@ -1,10 +1,15 @@
 package net.pitan76.itemalchemy.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.WorldAccess;
+import net.pitan76.itemalchemy.tile.base.EMCStorageBlockEntity;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.OutlineShapeEvent;
@@ -45,6 +50,54 @@ public class EMCCable extends EMCRepeater implements IUseableWrench {
     public void appendProperties(AppendPropertiesArgs args) {
         super.appendProperties(args);
         args.addProperty(SIDE1, SIDE2, CONNER, FACING);
+    }
+
+    @Override
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        // Cableを繋げる処理、同じ方向にCableがある場合はCONNERをfalseとして繋げる
+        // SIDE1とSIDE2は片方、両方の場合はSIDE1、SIDE2をtrueにする
+        //BlockEntity blockEntity = world.getBlockEntity(neighborPos);
+
+        BlockState north = world.getBlockState(pos.north());
+        BlockState south = world.getBlockState(pos.south());
+        BlockState east = world.getBlockState(pos.east());
+        BlockState west = world.getBlockState(pos.west());
+        BlockState up = world.getBlockState(pos.up());
+        BlockState down = world.getBlockState(pos.down());
+
+        if (neighborState.getBlock() == this || world.getBlockEntity(neighborPos) instanceof EMCStorageBlockEntity) {
+            boolean north_only = north.getBlock() == this || world.getBlockEntity(pos.north()) instanceof EMCStorageBlockEntity;
+            boolean south_only = south.getBlock() == this || world.getBlockEntity(pos.south()) instanceof EMCStorageBlockEntity;
+            boolean east_only = east.getBlock() == this || world.getBlockEntity(pos.east()) instanceof EMCStorageBlockEntity;
+            boolean west_only = west.getBlock() == this || world.getBlockEntity(pos.west()) instanceof EMCStorageBlockEntity;
+            boolean up_only = up.getBlock() == this || world.getBlockEntity(pos.up()) instanceof EMCStorageBlockEntity;
+            boolean down_only = down.getBlock() == this || world.getBlockEntity(pos.down()) instanceof EMCStorageBlockEntity;
+
+            boolean both_ns = (north_only && south_only);
+            boolean both_ew = (east_only && west_only);
+            boolean both_ud = (up_only && down_only);
+
+            if (east_only || west_only) {
+                state = state.with(FACING, Direction.NORTH);
+            } else if (north_only || south_only) {
+                state = state.with(FACING, Direction.EAST);
+            } else if (up_only || down_only) {
+                state = state.with(FACING, Direction.UP);
+            }
+
+            if (both_ns || both_ew || both_ud) {
+                return state.with(CONNER, false).with(SIDE1, true).with(SIDE2, true);
+            } else if (north_only && east_only || north_only && west_only || south_only && east_only || south_only && west_only) {
+                return state.with(CONNER, true).with(SIDE1, false).with(SIDE2, false);
+            } else if (north_only || west_only) {
+                return state.with(CONNER, false).with(SIDE1, true).with(SIDE2, false);
+            } else if (south_only || east_only) {
+                return state.with(CONNER, false).with(SIDE1, false).with(SIDE2, true);
+            }
+        }
+
+        return state.with(CONNER, false).with(SIDE1, false).with(SIDE2, false);
+
     }
 
     @Override
