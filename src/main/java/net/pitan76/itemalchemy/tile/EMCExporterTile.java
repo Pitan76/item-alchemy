@@ -38,6 +38,8 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         this(Tiles.EMC_EXPORTER.getOrNull(), e);
     }
 
+    public static int maxStackCount = 4096;
+
     @Override
     public void writeNbt(WriteNbtArgs args) {
         NbtCompound filterNbt = NbtUtil.create();
@@ -71,12 +73,23 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     }
 
     @Override
+    public void setStack(int slot, ItemStack stack) {
+        System.out.println("setStack: " + slot + ", " + stack);
+        IInventory.super.setStack(slot, stack);
+    }
+
+    @Override
+    public ItemStack getStack(int slot) {
+        System.out.println("getStack: " + slot);
+        return IInventory.super.getStack(slot);
+    }
+
+    @Override
     public DefaultedList<ItemStack> getItems() {
         DefaultedList<ItemStack> result = DefaultedList.ofSize(filter.size(), ItemStackUtil.empty());
 
         if (!hasTeam()) return result;
         if (filter.get(0).isEmpty()) return result;
-
 
         @SuppressWarnings("OptionalGetWithoutIsPresent")
         TeamState teamState = getTeamState().get();
@@ -99,7 +112,8 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
             if (!teamState.registeredItems.contains(ItemUtil.toCompatID(filterStack.getItem()).toString())) continue;
 
             ItemStack stack = filterStack.copy();
-            stack.setCount((int) Math.floorDiv(aveEMC, neededEMC));
+            stack.setCount(Math.min((int) Math.floorDiv(aveEMC, neededEMC), maxStackCount));
+
             result.set(i, stack);
         }
 

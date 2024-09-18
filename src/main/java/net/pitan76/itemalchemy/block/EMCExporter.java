@@ -44,17 +44,6 @@ public class EMCExporter extends ExtendBlock implements ExtendBlockEntityProvide
 
     @Override
     public void onStateReplaced(StateReplacedEvent e) {
-        World world = e.world;
-        BlockPos pos = e.pos;
-        if (e.isSameState()) return;
-
-        BlockEntity blockEntity = WorldUtil.getBlockEntity(world, pos);
-        if (blockEntity instanceof Inventory) {
-            Inventory inventory = (Inventory) blockEntity;
-            inventory.setStack(1, ItemStackUtil.empty());
-            ItemScattererUtil.spawn(world, pos, inventory);
-            e.updateComparators();
-        }
         super.onStateReplaced(e);
     }
 
