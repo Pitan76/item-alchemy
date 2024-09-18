@@ -51,7 +51,7 @@ public class EMCStorageUtil {
 
         BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
         for (BlockPos nearPos : getNearPoses(world, nearPoses)) {
-            if (WorldUtil.hasBlockEntity(world, nearPos)) continue;
+            if (!WorldUtil.hasBlockEntity(world, nearPos)) continue;
 
             BlockEntity nearTile = WorldUtil.getBlockEntity(world, nearPos);
             if (nearTile instanceof EMCStorageBlockEntity) {
