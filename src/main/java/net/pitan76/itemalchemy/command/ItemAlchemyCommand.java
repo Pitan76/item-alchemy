@@ -15,10 +15,7 @@ import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.command.CommandSettings;
 import net.pitan76.mcpitanlib.api.command.LiteralCommand;
-import net.pitan76.mcpitanlib.api.command.argument.IntegerCommand;
-import net.pitan76.mcpitanlib.api.command.argument.ItemCommand;
-import net.pitan76.mcpitanlib.api.command.argument.PlayerCommand;
-import net.pitan76.mcpitanlib.api.command.argument.StringCommand;
+import net.pitan76.mcpitanlib.api.command.argument.*;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.*;
 import net.pitan76.mcpitanlib.api.util.*;
@@ -425,6 +422,70 @@ public class ItemAlchemyCommand extends LiteralCommand {
                 event.sendSuccess("/itemalchemy team members [Team Name]");
             }
         });
+
+        addArgumentCommand("ranking", new LiteralCommand() {
+
+            @Override
+            public void init(CommandSettings settings) {
+                super.init(settings);
+                settings.permissionLevel(2);
+
+                addArgumentCommand("broadcast", new LiteralCommand() {
+                    @Override
+                    public void execute(ServerCommandEvent e) {
+                        if (e.isClient()) return;
+                        World world = e.getWorld();
+                        ServerState serverState = ServerState.getServerState(world.getServer());
+                        List<PlayerState> playerStates = serverState.players.stream().sorted((o1, o2) -> Long.compare(o2.getTeamState(world).get().storedEMC, o1.getTeamState(world).get().storedEMC)).collect(Collectors.toList());
+
+                        e.sendSuccess("[ItemAlchemy] EMC Ranking");
+                        for (int i = 0; i < 10; i++) {
+                            if (playerStates.size() <= i) break;
+                            Player player = PlayerManagerUtil.getPlayerByUUID(world, playerStates.get(i).playerUUID);
+                            if (player.getEntity() == null) continue;
+
+                            boolean isOwner = playerStates.get(i).playerUUID == serverState.getTeamByPlayer(player.getUUID()).get().owner;
+
+                            List<Player> players = PlayerManagerUtil.getPlayers(world);
+                            if (isOwner) {
+                                for (Player p : players) {
+                                    p.sendMessage(TextUtil.literal((i + 1) + ". §a" + player.getName() + " §c(Owner) §r: §a" + playerStates.get(i).getTeamState(world).get().storedEMC + "EMC"));
+                                }
+                            } else {
+                                for (Player p : players) {
+                                    p.sendMessage(TextUtil.literal((i + 1) + ". §a" + player.getName() + " §c(Member) §r: §a" + playerStates.get(i).getTeamState(world).get().storedEMC + "EMC"));
+                                }
+                            }
+
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void execute(ServerCommandEvent e) {
+                if (e.isClient()) return;
+                World world = e.getWorld();
+                ServerState serverState = ServerState.getServerState(world.getServer());
+                List<PlayerState> playerStates = serverState.players.stream().sorted((o1, o2) -> Long.compare(o2.getTeamState(world).get().storedEMC, o1.getTeamState(world).get().storedEMC)).collect(Collectors.toList());
+
+                e.sendSuccess("[ItemAlchemy] EMC Ranking");
+                for (int i = 0; i < 10; i++) {
+                    if (playerStates.size() <= i) break;
+                    Player player = PlayerManagerUtil.getPlayerByUUID(world, playerStates.get(i).playerUUID);
+                    if (player.getEntity() == null) continue;
+
+                    boolean isOwner = playerStates.get(i).playerUUID == serverState.getTeamByPlayer(player.getUUID()).get().owner;
+
+                    if (isOwner) {
+                        e.sendSuccess((i + 1) + ". §a" + player.getName() + " §c(Owner) §r: §a" + playerStates.get(i).getTeamState(world).get().storedEMC + "EMC");
+                    } else {
+                        e.sendSuccess((i + 1) + ". §a" + player.getName() + " §c(Member) §r: §a" + playerStates.get(i).getTeamState(world).get().storedEMC + "EMC");
+                    }
+                }
+
+            }
+        });
     }
 
     @Override
@@ -435,6 +496,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                 + "\n- /itemalchemy resetemc...Set all emc to default emc"
                 + "\n- /itemalchemy setemc [Item] [EMC]...Set emc of the item"
                 + "\n- /itemalchemy team [create | join | kick | leave | list | members] ([Team Name/Player Name])"
+                + "\n- /itemalchemy ranking...Show EMC ranking"
         );
     }
 }
