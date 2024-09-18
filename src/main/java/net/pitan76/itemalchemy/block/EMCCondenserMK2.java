@@ -11,7 +11,9 @@ import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCCondenserMK2 extends EMCCondenser implements IUseableWrench {
+public class EMCCondenserMK2 extends EMCCondenser {
+
+    public long maxEMC = 300000;
 
     protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(EMCCondenserMK2::new);
 
@@ -26,6 +28,11 @@ public class EMCCondenserMK2 extends EMCCondenser implements IUseableWrench {
 
     public EMCCondenserMK2(CompatibleBlockSettings settings) {
         super(settings);
+    }
+
+    @Override
+    public long getMaxEMC() {
+        return maxEMC;
     }
 
     @Override

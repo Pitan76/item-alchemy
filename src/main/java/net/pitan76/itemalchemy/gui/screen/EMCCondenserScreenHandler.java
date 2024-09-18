@@ -31,7 +31,11 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     public ItemStack targetStack = ItemStackUtil.empty();
 
     public EMCCondenserScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, null, InventoryUtil.createSimpleInventory(92), ItemStackUtil.empty());
+        this(syncId, playerInventory, InventoryUtil.createSimpleInventory(92), buf);
+    }
+
+    public EMCCondenserScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PacketByteBuf buf) {
+        this(syncId, playerInventory, null, inventory, ItemStackUtil.empty());
         NbtCompound data = PacketByteUtil.readNbt(buf);
         if (data == null) return;
         int x, y, z;
@@ -57,6 +61,11 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
         this.playerInventory = playerInventory;
         this.tile = tile;
         this.targetStack = targetStack;
+
+        initSlots();
+    }
+
+    public void initSlots() {
         addPlayerMainInventorySlots(playerInventory, 48, 154);
         addPlayerHotbarSlots(playerInventory, 48, 212);
         addTargetSlot(inventory, 0, 12, 6);

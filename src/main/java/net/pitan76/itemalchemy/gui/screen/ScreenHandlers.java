@@ -11,6 +11,7 @@ public class ScreenHandlers {
     public static ScreenHandlerType<AlchemyTableScreenHandler> ALCHEMY_TABLE = new SimpleScreenHandlerTypeBuilder<>(AlchemyTableScreenHandler::new).build();
     public static ScreenHandlerType<EMCCollectorScreenHandler> EMC_COLLECTOR = new ExtendedScreenHandlerTypeBuilder<>(EMCCollectorScreenHandler::new).build();
     public static ScreenHandlerType<EMCCondenserScreenHandler> EMC_CONDENSER = new ExtendedScreenHandlerTypeBuilder<>(EMCCondenserScreenHandler::new).build();
+    public static ScreenHandlerType<EMCCondenserMK2ScreenHandler> EMC_CONDENSER_MK2 = new ExtendedScreenHandlerTypeBuilder<>(EMCCondenserMK2ScreenHandler::new).build();
 
     public static ScreenHandlerType<AlchemyChestScreenHandler> ALCHEMY_CHEST = new SimpleScreenHandlerTypeBuilder<>(AlchemyChestScreenHandler::new).build();
 
@@ -21,6 +22,7 @@ public class ScreenHandlers {
         registry.registerScreenHandlerType(_id("alchemy_table"), () -> ALCHEMY_TABLE);
         registry.registerScreenHandlerType(_id("emc_collector"), () -> EMC_COLLECTOR);
         registry.registerScreenHandlerType(_id("emc_condenser"), () -> EMC_CONDENSER);
+        registry.registerScreenHandlerType(_id("emc_condenser_mk2"), () -> EMC_CONDENSER_MK2);
         registry.registerScreenHandlerType(_id("alchemy_chest"), () -> ALCHEMY_CHEST);
         registry.registerScreenHandlerType(_id("emc_importer"), () -> EMC_IMPORTER);
         registry.registerScreenHandlerType(_id("emc_exporter"), () -> EMC_EXPORTER);

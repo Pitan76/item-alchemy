@@ -61,13 +61,13 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
     }
 
     public int getMaxCoolDown() {
-        return 2; // tick
+        return 3; // tick
     }
 
     @Override
     public void writeNbt(WriteNbtArgs args) {
         NbtCompound nbt = args.getNbt();
-        InventoryUtil.writeNbt(args, inventory);
+        InventoryUtil.writeNbt(args, getItems());
         NbtUtil.set(nbt, "stored_emc", storedEMC);
     }
 
@@ -75,7 +75,7 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
     public void readNbt(ReadNbtArgs args) {
         NbtCompound nbt = args.getNbt();
         storedEMC = NbtUtil.getLong(nbt, "stored_emc");
-        InventoryUtil.readNbt(args, inventory);
+        InventoryUtil.readNbt(args, getItems());
     }
 
     @Override
@@ -83,8 +83,8 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
         World world = e.world;
         if (WorldUtil.isClient(world)) return;
 
-        if (!inventory.isEmpty()) {
-            ItemStack targetStack = inventory.get(0);
+        if (!getItems().isEmpty()) {
+            ItemStack targetStack = getItems().get(0);
             if (!ItemStackUtil.isEmpty(targetStack)) {
                 maxEMC = EMCManager.get(targetStack.getItem());
             } else {
@@ -109,14 +109,14 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
             }
         }
 
-        if (!inventory.isEmpty()) {
-            ItemStack targetStack = inventory.get(0);
+        if (!getItems().isEmpty()) {
+            ItemStack targetStack = getItems().get(0);
             if (!ItemStackUtil.isEmpty(targetStack)) {
                 if (coolDown == 0) {
-                    List<ItemStack> storageInventory = new ArrayList<>(inventory);
+                    List<ItemStack> storageInventory = new ArrayList<>(getItems());
 
                     if (!storageInventory.isEmpty()) {
-                        for (ItemStack stack : inventory) {
+                        for (ItemStack stack : getItems()) {
                             if (ItemStackUtil.isEmpty(stack)) continue;
                             if (stack.getItem() == targetStack.getItem()) continue;
 
@@ -138,8 +138,8 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
                         // Remove NBT
                         CustomDataUtil.setNbt(newStack, NbtUtil.create());
                         //newStack.setNbt(new NbtCompound());
-                        if (insertItem(newStack, inventory, true)) {
-                            insertItem(newStack, inventory);
+                        if (insertItem(newStack, getItems(), true)) {
+                            insertItem(newStack, getItems());
                             storedEMC -= useEMC;
 
                             BlockEntityUtil.markDirty(this);
@@ -199,7 +199,7 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
     }
 
     public ItemStack getTargetStack() {
-        return inventory.get(0);
+        return getItems().get(0);
     }
 
     @Override
@@ -226,6 +226,7 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
         return dir == Direction.DOWN;
     }
 
+    @Override
     @Nullable
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
         return new EMCCondenserScreenHandler(syncId, inv, this, this, getTargetStack());
@@ -248,7 +249,7 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
     }
 
     public void setTargetStack(ItemStack stack) {
-        inventory.set(0, stack);
+        getItems().set(0, stack);
         BlockEntityUtil.markDirty(this);
     }
 }
