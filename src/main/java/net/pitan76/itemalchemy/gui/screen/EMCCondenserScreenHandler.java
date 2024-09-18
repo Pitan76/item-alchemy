@@ -202,7 +202,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
         super.overrideOnSlotClick(slotIndex, button, actionType, player);
     }
 
-    private void setTargetStack(ItemStack stack) {
+    protected void setTargetStack(ItemStack stack) {
         targetStack = stack;
         tile.setTargetStack(stack);
     }

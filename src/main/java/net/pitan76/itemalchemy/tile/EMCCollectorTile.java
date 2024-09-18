@@ -22,6 +22,7 @@ import net.pitan76.itemalchemy.block.EMCCollector;
 import net.pitan76.itemalchemy.block.EMCRepeater;
 import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import net.pitan76.itemalchemy.item.Items;
+import net.pitan76.itemalchemy.tile.base.EMCStorageBlockEntity;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.container.factory.DisplayNameArgs;
@@ -33,14 +34,13 @@ import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
-import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEntityTicker<EMCCollectorTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
+public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlockEntityTicker<EMCCollectorTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
     private long oldStoredEMC = 0;
-    public long storedEMC = 0;
+    public long maxEMC = -1;
     public int coolDown = 0; // tick
 
     public int getMaxCoolDown() {
@@ -58,16 +58,22 @@ public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEn
     }
 
     @Override
+    public long getMaxEMC() {
+        if (maxEMC == -1)
+            return ((EMCCollector) getCachedState().getBlock()).maxEMC;
+
+        return maxEMC;
+    }
+
+    @Override
     public void writeNbt(WriteNbtArgs args) {
-        NbtCompound nbt = args.getNbt();
+        super.writeNbt(args);
         InventoryUtil.writeNbt(args, inventory);
-        NbtUtil.set(nbt, "stored_emc", storedEMC);
     }
 
     @Override
     public void readNbt(ReadNbtArgs args) {
-        NbtCompound nbt = args.getNbt();
-        storedEMC = NbtUtil.get(nbt, "stored_emc", Long.class);
+        super.readNbt(args);
         InventoryUtil.readNbt(args, inventory);
     }
 
@@ -79,13 +85,13 @@ public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEn
     @Override
     public void tick(TileTickEvent<EMCCollectorTile> e) {
         World world = e.world;
-
         if (WorldUtil.isClient(world)) return;
 
-        long maxEMC = ((EMCCollector) e.state.getBlock()).maxEMC;
+        if (maxEMC == -1)
+            maxEMC = ((EMCCollector) e.state.getBlock()).maxEMC;
 
         if (coolDown == 0) {
-            if (maxEMC <= storedEMC) return;
+            if (isFull()) return;
             float skyAngle = world.getSkyAngle(0);
             if ((!WorldUtil.isRaining(world) && !WorldUtil.isThundering(world) && (WorldUtil.hasSkyLight(world) && skyAngle <= 0.25 || skyAngle >= 0.75) && WorldUtil.isSkyVisible(world, pos.up()))
                     || WorldUtil.getBlockState(world, pos.up()).getLuminance() > 10 || WorldUtil.getBlockState(world, pos.down()).getLuminance() > 10
@@ -104,6 +110,8 @@ public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEn
 
         if (!inventory.isEmpty()) {
             // 0, 1, 2は右スロット 2はinput 0はoutput
+
+            // アイテムの移動
             for (int i = 0; i < inventory.size() - 3; i++) {
                 // -1 < i < 16 0以上15以下
                 int index = 15 + 3 - i;
@@ -132,16 +140,20 @@ public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEn
             }
 
             if (!inventory.get(2).isEmpty()) {
-                BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
-                for (BlockPos nearPos : EMCRepeater.getNearPoses(world, nearPoses)) {
-                    BlockState nearState = WorldUtil.getBlockState(world, nearPos);
-                    if (nearState.getBlock() instanceof EMCCollector) {
-                        BlockEntity nearTile = WorldUtil.getBlockEntity(world, nearPos);
-                        if (nearTile instanceof EMCCollectorTile) {
-                            EMCCollectorTile nearCollectorTile = ((EMCCollectorTile) nearTile);
-                            if (maxEMC > storedEMC && nearCollectorTile.storedEMC > 0) {
-                                nearCollectorTile.storedEMC--;
-                                storedEMC++;
+                setActive(true);
+
+                if (canInsert()) {
+                    BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
+                    for (BlockPos nearPos : EMCRepeater.getNearPoses(world, nearPoses)) {
+                        BlockState nearState = WorldUtil.getBlockState(world, nearPos);
+                        if (nearState.getBlock() instanceof EMCCollector) {
+                            BlockEntity nearTile = WorldUtil.getBlockEntity(world, nearPos);
+                            if (nearTile instanceof EMCCollectorTile) {
+                                EMCCollectorTile nearCollectorTile = ((EMCCollectorTile) nearTile);
+                                if (nearCollectorTile.storedEMC > 0) {
+                                    nearCollectorTile.storedEMC--;
+                                    storedEMC++;
+                                }
                             }
                         }
                     }
@@ -176,6 +188,8 @@ public class EMCCollectorTile extends CompatBlockEntity implements ExtendBlockEn
                     }
                 }
             }
+        } else {
+            setActive(false);
         }
     }
 

@@ -22,6 +22,7 @@ import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.block.EMCCollector;
 import net.pitan76.itemalchemy.block.EMCRepeater;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
+import net.pitan76.itemalchemy.tile.base.EMCStorageBlockEntity;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.container.factory.DisplayNameArgs;
@@ -33,7 +34,6 @@ import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
-import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import org.jetbrains.annotations.Nullable;
@@ -43,8 +43,7 @@ import java.util.List;
 
 import static net.pitan76.mcpitanlib.api.util.InventoryUtil.canMergeItems;
 
-public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEntityTicker<EMCCondenserTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
-    public long storedEMC = 0;
+public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlockEntityTicker<EMCCondenserTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
     public long maxEMC = 0;
     public long oldStoredEMC = 0;
     public long oldMaxEMC = 0;
@@ -65,16 +64,19 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
     }
 
     @Override
+    public long getMaxEMC() {
+        return maxEMC;
+    }
+
+    @Override
     public void writeNbt(WriteNbtArgs args) {
-        NbtCompound nbt = args.getNbt();
+        super.writeNbt(args);
         InventoryUtil.writeNbt(args, getItems());
-        NbtUtil.set(nbt, "stored_emc", storedEMC);
     }
 
     @Override
     public void readNbt(ReadNbtArgs args) {
-        NbtCompound nbt = args.getNbt();
-        storedEMC = NbtUtil.getLong(nbt, "stored_emc");
+        super.readNbt(args);
         InventoryUtil.readNbt(args, getItems());
     }
 
@@ -110,6 +112,8 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
         }
 
         if (!getItems().isEmpty()) {
+            setActive(true);
+
             ItemStack targetStack = getItems().get(0);
             if (!ItemStackUtil.isEmpty(targetStack)) {
                 if (coolDown == 0) {
@@ -152,6 +156,8 @@ public class EMCCondenserTile extends CompatBlockEntity implements ExtendBlockEn
                     coolDown = 0;
                 }
             }
+        } else {
+            setActive(false);
         }
 
         if (oldStoredEMC != storedEMC || oldMaxEMC != maxEMC) {
