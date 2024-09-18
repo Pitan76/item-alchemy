@@ -12,6 +12,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.EMCManager;
+import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.screen.EMCImporterScreenHandler;
 import net.pitan76.itemalchemy.tile.base.OwnedBlockEntity;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
@@ -72,7 +73,8 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     @Nullable
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-        return new EMCImporterScreenHandler(syncId, inv, this, this);
+        IInventory filterInventory = () -> this.filter;
+        return new EMCImporterScreenHandler(syncId, inv, this, this, filterInventory);
     }
 
     @Override
@@ -95,11 +97,14 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
                     break;
                 }
             }
-            if (!isFiltered)
-                return;
+            if (!isFiltered) return;
         }
 
-        getTeamState().get().storedEMC += emc;
+        @SuppressWarnings("OptionalGetWithoutIsPresent")
+        TeamState teamState = getTeamState().get();
+        if (!teamState.registeredItems.contains(ItemUtil.toCompatID(stack.getItem()).toString())) return;
+
+        teamState.storedEMC += emc;
         inv.set(0, ItemStackUtil.empty());
     }
 
@@ -139,9 +144,12 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
                     break;
                 }
             }
-            if (!isFiltered)
-                return false;
+            if (!isFiltered) return false;
         }
+
+        @SuppressWarnings("OptionalGetWithoutIsPresent")
+        TeamState teamState = getTeamState().get();
+        if (!teamState.registeredItems.contains(ItemUtil.toCompatID(stack.getItem()).toString())) return false;
 
         return dir != Direction.DOWN;
     }

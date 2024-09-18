@@ -17,12 +17,12 @@ import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCExporterScreenHandler extends ExtendedScreenHandler {
-    public Inventory inventory;
+    public Inventory filter;
     public PlayerInventory playerInventory;
     public EMCExporterTile tile = null;
 
     public EMCExporterScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, null, InventoryUtil.createSimpleInventory(16 + 3));
+        this(syncId, playerInventory, null, InventoryUtil.createSimpleInventory(9));
         NbtCompound data = PacketByteUtil.readNbt(buf);
         if (data == null) return;
         int x, y, z;
@@ -40,18 +40,18 @@ public class EMCExporterScreenHandler extends ExtendedScreenHandler {
         }
     }
 
-    public EMCExporterScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCExporterTile tile, Inventory inventory) {
+    public EMCExporterScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCExporterTile tile, Inventory filter) {
         super(ScreenHandlers.EMC_EXPORTER, syncId);
 
-        this.inventory = inventory;
+        this.filter = filter;
         this.playerInventory = playerInventory;
         this.tile = tile;
-        addPlayerMainInventorySlots(playerInventory, 24, 84);
-        addPlayerHotbarSlots(playerInventory, 24, 142);
+        addPlayerMainInventorySlots(playerInventory, 8, 102);
+        addPlayerHotbarSlots(playerInventory, 8, 160);
         
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                addFilterSlot(inventory, j + i * 3, 62 + j * 18, 22 + i * 18);
+                addFilterSlot(filter, j + i * 3, 62 + j * 18, 22 + i * 18);
             }
         }
     }

@@ -11,6 +11,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.pitan76.itemalchemy.EMCManager;
+import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.screen.EMCExporterScreenHandler;
 import net.pitan76.itemalchemy.tile.base.OwnedBlockEntity;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
@@ -60,7 +61,8 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     @Nullable
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-        return new EMCExporterScreenHandler(syncId, inv, this, this);
+        IInventory filterInventory = () -> this.filter;
+        return new EMCExporterScreenHandler(syncId, inv, this, filterInventory);
     }
 
     @Override
@@ -75,7 +77,11 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         if (!hasTeam()) return result;
         if (filter.get(0).isEmpty()) return result;
 
-        long emc = getTeamState().get().storedEMC;
+
+        @SuppressWarnings("OptionalGetWithoutIsPresent")
+        TeamState teamState = getTeamState().get();
+
+        long emc = teamState.storedEMC;
         if (emc <= 0) return result;
 
         int filterCount = getFilterCount();
@@ -86,9 +92,10 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
             if (filterStack.isEmpty()) continue;
 
             long neededEMC = EMCManager.get(filterStack);
-            if (neededEMC <= 0) continue;
 
+            if (neededEMC <= 0) continue;
             if (aveEMC < neededEMC) continue;
+            if (!teamState.registeredItems.contains(ItemUtil.toCompatID(filterStack.getItem()).toString())) continue;
 
             ItemStack stack = filterStack.copy();
             stack.setCount((int) Math.floorDiv(aveEMC, neededEMC));
