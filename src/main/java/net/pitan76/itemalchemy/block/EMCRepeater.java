@@ -35,6 +35,9 @@ public class EMCRepeater extends ExtendBlock implements IUseableWrench {
             if (emcRepeaterPosList.contains(pos)) continue;
 
             if (WorldUtil.getBlockState(world, pos).getBlock() instanceof EMCRepeater) {
+                if (WorldUtil.getBlockState(world, pos).getBlock() instanceof EMCBattery && !blockPosList.contains(pos))
+                    blockPosList.add(pos);
+
                 emcRepeaterPosList.add(pos);
                 BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
                 blockPosList.addAll(getNearPoses(world, nearPoses, emcRepeaterPosList));
