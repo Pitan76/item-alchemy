@@ -6,15 +6,20 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.api.EMCStorageUtil;
 import net.pitan76.itemalchemy.block.EMCBattery;
 import net.pitan76.itemalchemy.gui.screen.EMCBatteryScreenHandler;
 import net.pitan76.itemalchemy.tile.base.EMCStorageBlockEntity;
+import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.container.factory.DisplayNameArgs;
 import net.pitan76.mcpitanlib.api.event.container.factory.ExtraDataArgs;
@@ -23,6 +28,8 @@ import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
+import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
+import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import org.jetbrains.annotations.Nullable;
@@ -30,6 +37,8 @@ import org.jetbrains.annotations.Nullable;
 public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlockEntityTicker<EMCBatteryTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
     public long maxEMC = -1;
     public int coolDown = 0; // tick
+
+    private long oldStoredEMC = 0;
 
     public int getMaxCoolDown() {
         return 10;
@@ -90,6 +99,18 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
         //if (!inventory.get(2).isEmpty()) {
 
         EMCStorageUtil.transferAllEMC(this, true);
+
+        if (oldStoredEMC != storedEMC) {
+            oldStoredEMC = storedEMC;
+            for (ServerPlayerEntity p : ((ServerWorld) world).getPlayers()) {
+                Player player = new Player(p);
+                if (player.hasNetworkHandler() && player.getCurrentScreenHandler() instanceof EMCBatteryScreenHandler && ((EMCBatteryScreenHandler) player.getCurrentScreenHandler()).tile == this) {
+                    PacketByteBuf buf = PacketByteUtil.create();
+                    PacketByteUtil.writeLong(buf, storedEMC);
+                    ServerNetworking.send(player, ItemAlchemy._id("itemalchemy_emc_collector"), buf);
+                }
+            }
+        }
 
     }
 

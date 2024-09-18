@@ -32,7 +32,7 @@ public class RegisterInventory extends SimpleInventory {
             boolean consumedItem = false,
                     learning = stack.getItem() instanceof ILearnableItem;
 
-            if(!player.isClient()) {
+            if (!player.isClient()) {
                 Optional<MinecraftServer> server = WorldUtil.getServer(player.getWorld());
                 if (!server.isPresent()) return;
 

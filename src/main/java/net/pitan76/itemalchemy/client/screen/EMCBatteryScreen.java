@@ -8,6 +8,7 @@ import net.pitan76.mcpitanlib.api.client.CompatInventoryScreen;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawBackgroundArgs;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawForegroundArgs;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
+import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.client.ClientUtil;
 import net.pitan76.mcpitanlib.api.util.client.ScreenUtil;
 
@@ -43,11 +44,17 @@ public class EMCBatteryScreen extends CompatInventoryScreen {
 
     @Override
     public void drawForegroundOverride(DrawForegroundArgs args) {
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, getTitle(), this.titleX, 10, 4210752);
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, playerInventoryTitle, playerInventoryTitleX, 90, 4210752);
+        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, getTitle(), this.titleX, 6, 4210752);
+        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, playerInventoryTitle, playerInventoryTitleX + 16, 73, 4210752);
 
-        //super.drawForegroundOverride(args);
-        //ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, TextUtil.literal(String.format("%,d", emc)), 140, 10, 4210752);
+        Text storedEmcText = TextUtil.literal(String.format("%,d", screenHandler.storedEMC));
+        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, storedEmcText, 103 - ScreenUtil.getWidth(storedEmcText) / 2, 50, 4210752);
+
+        Text inputChargeItemEmcText = TextUtil.literal("0");
+        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, inputChargeItemEmcText, 16, 66, 4210752);
+
+        Text outputChargeItemEmcText = TextUtil.literal("0");
+        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, outputChargeItemEmcText, 161, 66, 4210752);
     }
 
     @Override
@@ -55,7 +62,13 @@ public class EMCBatteryScreen extends CompatInventoryScreen {
         super.drawBackgroundOverride(args);
         if (screenHandler == null) return;
 
+        long emc = (screenHandler.storedEMC);
+        if (emc > screenHandler.maxEMC) emc = screenHandler.maxEMC;
 
-        //callDrawTexture(args.drawObjectDM, getCompatTexture(), x + 31, y + 7, 0, 240, (int) Math.round((double) emc / screenHandler.maxEMC * 106), 14);
+        callDrawTexture(args.drawObjectDM, getCompatTexture(), x + 51, y + 35, 0, 168, (int) Math.round((double) emc / screenHandler.maxEMC * 106), 14);
+
+        //callDrawTexture(args.drawObjectDM, getCompatTexture(), x + 15, y + 51, 0, 182, (int) Math.round(0.5 * 35), 14);
+        //callDrawTexture(args.drawObjectDM, getCompatTexture(), x + 159, y + 51, 0, 182, (int) Math.round(0.5 * 35), 14);
+
     }
 }

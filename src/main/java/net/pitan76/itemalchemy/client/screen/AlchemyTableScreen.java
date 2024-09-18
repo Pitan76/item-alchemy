@@ -67,7 +67,6 @@ public class AlchemyTableScreen extends CompatInventoryScreen {
                     }
                 }
 
-
                 PacketByteBuf buf = PacketByteUtil.create();
 
                 PacketByteUtil.writeString(buf, searchBox.getText());

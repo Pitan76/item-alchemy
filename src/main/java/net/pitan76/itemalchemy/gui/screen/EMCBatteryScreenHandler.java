@@ -59,9 +59,9 @@ public class EMCBatteryScreenHandler extends ExtendedScreenHandler {
     public void initSlots() {
         addPlayerMainInventorySlots(playerInventory, 24, 84);
         addPlayerHotbarSlots(playerInventory, 24, 142);
-        addNormalSlot(inventory, 0, 149, 12);
-        addNormalSlot(inventory, 2, 149, 58);
-        addSlots(inventory, 3, 14, 8, -1, 4, 4);
+        addNormalSlot(inventory, 0, 24, 33);
+        addNormalSlot(inventory, 1, 168, 33);
+        //addSlots(inventory, 3, 14, 8, -1, 4, 4);
     }
 
     @Override
