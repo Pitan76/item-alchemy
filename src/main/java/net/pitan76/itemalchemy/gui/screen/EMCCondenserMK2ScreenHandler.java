@@ -4,6 +4,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.gui.slot.CondenserMK2InputSlot;
@@ -16,15 +17,15 @@ import org.jetbrains.annotations.Nullable;
 public class EMCCondenserMK2ScreenHandler extends EMCCondenserScreenHandler {
 
     public EMCCondenserMK2ScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        super(syncId, playerInventory, InventoryUtil.createSimpleInventory(85), buf);
+        this(ScreenHandlers.EMC_CONDENSER_MK2, syncId, playerInventory, InventoryUtil.createSimpleInventory(85), buf);
     }
 
-    public EMCCondenserMK2ScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PacketByteBuf buf) {
-        super(syncId, playerInventory, inventory, buf);
+    public EMCCondenserMK2ScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, Inventory inventory, PacketByteBuf buf) {
+        super(type, syncId, playerInventory, inventory, buf);
     }
 
     public EMCCondenserMK2ScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCCondenserTile tile, Inventory inventory, ItemStack targetStack) {
-        super(syncId, playerInventory, tile, inventory, targetStack);
+        super(ScreenHandlers.EMC_CONDENSER_MK2, syncId, playerInventory, tile, inventory, targetStack);
     }
 
     @Override

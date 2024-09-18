@@ -5,6 +5,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.pitan76.itemalchemy.EMCManager;
@@ -31,10 +32,10 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     public ItemStack targetStack = ItemStackUtil.empty();
 
     public EMCCondenserScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, InventoryUtil.createSimpleInventory(92), buf);
+        this(ScreenHandlers.EMC_CONDENSER, syncId, playerInventory, InventoryUtil.createSimpleInventory(92), buf);
     }
 
-    public EMCCondenserScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PacketByteBuf buf) {
+    public EMCCondenserScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, Inventory inventory, PacketByteBuf buf) {
         this(syncId, playerInventory, null, inventory, ItemStackUtil.empty());
         NbtCompound data = PacketByteUtil.readNbt(buf);
         if (data == null) return;
@@ -55,7 +56,11 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     }
 
     public EMCCondenserScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCCondenserTile tile, Inventory inventory, ItemStack targetStack) {
-        super(ScreenHandlers.EMC_CONDENSER, syncId);
+        this(ScreenHandlers.EMC_CONDENSER, syncId, playerInventory, tile, inventory, targetStack);
+    }
+
+    public EMCCondenserScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, @Nullable EMCCondenserTile tile, Inventory inventory, ItemStack targetStack) {
+        super(type, syncId);
 
         this.inventory = inventory;
         this.playerInventory = playerInventory;
