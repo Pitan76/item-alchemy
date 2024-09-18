@@ -21,8 +21,8 @@ public class EMCBatteryScreen extends CompatInventoryScreen {
     public EMCBatteryScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         this.playerInventory = inventory;
-        setBackgroundWidth(176);
-        setBackgroundHeight(184);
+        setBackgroundWidth(208);
+        setBackgroundHeight(166);
         if (handler instanceof EMCBatteryScreenHandler)
             screenHandler = (EMCBatteryScreenHandler) handler;
 
@@ -38,7 +38,7 @@ public class EMCBatteryScreen extends CompatInventoryScreen {
 
     @Override
     public CompatIdentifier getCompatTexture() {
-        return _id("textures/gui/3x3.png");
+        return _id("textures/gui/emc_battery.png");
     }
 
     @Override

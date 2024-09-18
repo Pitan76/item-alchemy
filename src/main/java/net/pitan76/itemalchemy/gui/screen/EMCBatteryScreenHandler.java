@@ -5,6 +5,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.pitan76.itemalchemy.tile.EMCBatteryTile;
@@ -24,7 +25,7 @@ public class EMCBatteryScreenHandler extends ExtendedScreenHandler {
     public long maxEMC = 0;
 
     public EMCBatteryScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, null, InventoryUtil.createSimpleInventory(16 + 3));
+        this(syncId, playerInventory, null, InventoryUtil.createSimpleInventory(2));
         NbtCompound data = PacketByteUtil.readNbt(buf);
         if (data == null) return;
         int x, y, z;
@@ -42,11 +43,20 @@ public class EMCBatteryScreenHandler extends ExtendedScreenHandler {
     }
 
     public EMCBatteryScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCBatteryTile tile, Inventory inventory) {
-        super(ScreenHandlers.EMC_BATTERY, syncId);
+        this(ScreenHandlers.EMC_BATTERY, syncId, playerInventory, tile, inventory);
+    }
+
+    public EMCBatteryScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, @Nullable EMCBatteryTile tile, Inventory inventory) {
+        super(type, syncId);
 
         this.inventory = inventory;
         this.playerInventory = playerInventory;
         this.tile = tile;
+
+        initSlots();
+    }
+
+    public void initSlots() {
         addPlayerMainInventorySlots(playerInventory, 24, 84);
         addPlayerHotbarSlots(playerInventory, 24, 142);
         addNormalSlot(inventory, 0, 149, 12);
