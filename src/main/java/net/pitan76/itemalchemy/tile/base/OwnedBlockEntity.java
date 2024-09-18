@@ -27,7 +27,7 @@ public class OwnedBlockEntity extends CompatBlockEntity {
 
     public Optional<TeamState> getTeamState() {
         ServerState serverState = ServerState.of(getWorld());
-        if (serverState == null)
+        if (serverState == null || teamUUID == null)
             return Optional.empty();
 
         return serverState.getTeam(teamUUID);
@@ -42,7 +42,8 @@ public class OwnedBlockEntity extends CompatBlockEntity {
     }
 
     public boolean hasTeam() {
-        return teamUUID != null;
+        if (teamUUID == null) return false;
+        return getTeamState().isPresent();
     }
 
     public UUID getTeam() {

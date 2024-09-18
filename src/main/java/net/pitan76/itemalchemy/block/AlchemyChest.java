@@ -52,6 +52,7 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
         if (e.isSameState()) return;
 
         e.spawnDropsInContainer();
+        super.onStateReplaced(e);
     }
 
     @Override

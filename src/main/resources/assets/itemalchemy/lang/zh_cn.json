@@ -51,6 +51,8 @@
   "container.itemalchemy.emc_exporter": "EMC输出器",
   "container.itemalchemy.emc_battery": "EMC电池",
 
+  "text.itemalchemy.owner": "所有者: %s",
+
   "category.itemalchemy.all": "Item Alchemy",
   "key.itemalchemy.charge": "充电",
 

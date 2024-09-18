@@ -51,6 +51,8 @@
   "container.itemalchemy.emc_exporter": "EMC搬出器",
   "container.itemalchemy.emc_battery": "EMCバッテリー",
 
+  "text.itemalchemy.owner": "所有者: %s",
+
   "category.itemalchemy.all": "Item Alchemy",
   "key.itemalchemy.charge": "チャージ",
 

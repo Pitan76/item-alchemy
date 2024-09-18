@@ -14,6 +14,7 @@ import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.screen.EMCExporterScreenHandler;
 import net.pitan76.itemalchemy.tile.base.OwnedBlockEntity;
+import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.container.factory.DisplayNameArgs;
 import net.pitan76.mcpitanlib.api.event.container.factory.ExtraDataArgs;
@@ -29,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEntityTicker<EMCExporterTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
 
     public DefaultedList<ItemStack> filter = DefaultedList.ofSize(9, ItemStackUtil.empty());
+    public String ownerName = "";
 
     public EMCExporterTile(BlockEntityType<?> type, TileCreateEvent e) {
         super(type, e);
@@ -48,6 +50,9 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
         if (teamUUID != null)
             NbtUtil.putUuid(args.nbt, "team", teamUUID);
+
+        if (ownerName != null && !ownerName.isEmpty())
+            NbtUtil.putString(args.nbt, "ownerName", ownerName);
     }
 
     @Override
@@ -59,6 +64,9 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
         if (NbtUtil.has(args.nbt, "team"))
             teamUUID = NbtUtil.getUuid(args.nbt, "team");
+
+        if (NbtUtil.has(args.nbt, "ownerName"))
+            ownerName = NbtUtil.getString(args.nbt, "ownerName");
     }
 
     @Nullable
@@ -73,23 +81,25 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
-        System.out.println("setStack: " + slot + ", " + stack);
-        IInventory.super.setStack(slot, stack);
+    public ItemStack removeStack(int slot, int count) {
+        long consumeEmc = EMCManager.get(CACHE.get(slot).getItem()) * count;
+
+        getTeamState().ifPresent(teamState -> {
+            if (teamState.storedEMC < consumeEmc) return;
+            teamState.storedEMC -= consumeEmc;
+        });
+
+        return IInventory.super.removeStack(slot, count);
     }
 
-    @Override
-    public ItemStack getStack(int slot) {
-        System.out.println("getStack: " + slot);
-        return IInventory.super.getStack(slot);
-    }
+    public DefaultedList<ItemStack> CACHE = DefaultedList.ofSize(9, ItemStackUtil.empty());
 
     @Override
     public DefaultedList<ItemStack> getItems() {
         DefaultedList<ItemStack> result = DefaultedList.ofSize(filter.size(), ItemStackUtil.empty());
 
         if (!hasTeam()) return result;
-        if (filter.get(0).isEmpty()) return result;
+        if (getFilterCount() <= 0) return result;
 
         @SuppressWarnings("OptionalGetWithoutIsPresent")
         TeamState teamState = getTeamState().get();
@@ -117,6 +127,7 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
             result.set(i, stack);
         }
 
+        CACHE = result;
         return result;
     }
 
@@ -159,8 +170,22 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         NbtUtil.putInt(data, "x", pos.getX());
         NbtUtil.putInt(data, "y", pos.getY());
         NbtUtil.putInt(data, "z", pos.getZ());
-        if (teamUUID != null)
+        if (teamUUID != null) {
             NbtUtil.putUuid(data, "team", teamUUID);
+
+            getTeamState().ifPresent(teamState -> {
+
+                if (ownerName == null || ownerName.isEmpty()) {
+                    if (getWorld() == null) return;
+
+                    Player player = PlayerManagerUtil.getPlayerByUUID(getWorld(), teamState.owner);
+                    if (player.getEntity() == null) return;
+
+                    ownerName = player.getName();
+                }
+                NbtUtil.putString(data, "ownerName", ownerName);
+            });
+        }
 
         args.writeVar(data);
     }

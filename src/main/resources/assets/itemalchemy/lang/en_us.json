@@ -51,6 +51,8 @@
   "container.itemalchemy.emc_exporter": "EMC Exporter",
   "container.itemalchemy.emc_battery": "EMC Battery",
 
+  "text.itemalchemy.owner": "Owner: %s",
+
   "category.itemalchemy.all": "Item Alchemy",
   "key.itemalchemy.charge": "Charge",
 

@@ -21,6 +21,7 @@ public class EMCImporterScreenHandler extends ExtendedScreenHandler {
     public Inventory filter;
     public PlayerInventory playerInventory;
     public EMCImporterTile tile = null;
+    public String ownerName = "";
 
     public EMCImporterScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
         this(syncId, playerInventory, null, InventoryUtil.createSimpleInventory(1), InventoryUtil.createSimpleInventory(9));
@@ -37,6 +38,9 @@ public class EMCImporterScreenHandler extends ExtendedScreenHandler {
 
             if (NbtUtil.has(data, "team"))
                 tile.teamUUID = NbtUtil.getUuid(data, "team");
+
+            if (NbtUtil.has(data, "ownerName"))
+                ownerName = NbtUtil.getString(data, "ownerName");
 
         }
     }

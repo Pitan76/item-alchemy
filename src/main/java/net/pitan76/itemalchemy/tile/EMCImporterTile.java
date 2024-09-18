@@ -15,6 +15,7 @@ import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.screen.EMCImporterScreenHandler;
 import net.pitan76.itemalchemy.tile.base.OwnedBlockEntity;
+import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.container.factory.DisplayNameArgs;
 import net.pitan76.mcpitanlib.api.event.container.factory.ExtraDataArgs;
@@ -31,6 +32,7 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     public DefaultedList<ItemStack> filter = DefaultedList.ofSize(9, ItemStackUtil.empty());
     public DefaultedList<ItemStack> inv = DefaultedList.ofSize(1, ItemStackUtil.empty());
+    public String ownerName = "";
 
     public EMCImporterTile(BlockEntityType<?> type, TileCreateEvent e) {
         super(type, e);
@@ -53,6 +55,9 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
         if (teamUUID != null)
             NbtUtil.putUuid(args.nbt, "team", teamUUID);
+
+        if (ownerName != null && !ownerName.isEmpty())
+            NbtUtil.putString(args.nbt, "ownerName", ownerName);
     }
 
     @Override
@@ -69,6 +74,9 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
         if (NbtUtil.has(args.nbt, "team"))
             teamUUID = NbtUtil.getUuid(args.nbt, "team");
+
+        if (NbtUtil.has(args.nbt, "ownerName"))
+            ownerName = NbtUtil.getString(args.nbt, "ownerName");
     }
 
     @Nullable
@@ -89,7 +97,7 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         long emc = EMCManager.get(stack);
         if (emc <= 0) return;
 
-        if (!filter.isEmpty()) {
+        if (getFilterCount() > 0) {
             boolean isFiltered = false;
             for (ItemStack filterStack : filter) {
                 if (ItemUtil.isEqual(stack.getItem(), filterStack.getItem())) {
@@ -133,10 +141,10 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        if (!EMCManager.contains(stack.getItem()))
-            return false;
+        if (!hasTeam()) return false;
+        if (!EMCManager.contains(stack.getItem())) return false;
 
-        if (!filter.isEmpty()) {
+        if (getFilterCount() > 0) {
             boolean isFiltered = false;
             for (ItemStack filterStack : filter) {
                 if (ItemUtil.isEqual(stack.getItem(), filterStack.getItem())) {
@@ -170,8 +178,22 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         NbtUtil.putInt(data, "x", pos.getX());
         NbtUtil.putInt(data, "y", pos.getY());
         NbtUtil.putInt(data, "z", pos.getZ());
-        if (teamUUID != null)
+        if (teamUUID != null) {
             NbtUtil.putUuid(data, "team", teamUUID);
+
+            getTeamState().ifPresent(teamState -> {
+
+                if (ownerName == null || ownerName.isEmpty()) {
+                    if (getWorld() == null) return;
+
+                    Player player = PlayerManagerUtil.getPlayerByUUID(getWorld(), teamState.owner);
+                    if (player.getEntity() == null) return;
+
+                    ownerName = player.getName();
+                }
+                NbtUtil.putString(data, "ownerName", ownerName);
+            });
+        }
 
         args.writeVar(data);
     }

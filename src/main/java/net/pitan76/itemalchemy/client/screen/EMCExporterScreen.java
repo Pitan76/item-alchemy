@@ -8,7 +8,9 @@ import net.pitan76.mcpitanlib.api.client.CompatInventoryScreen;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawBackgroundArgs;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawForegroundArgs;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
+import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.client.ClientUtil;
+import net.pitan76.mcpitanlib.api.util.client.ScreenUtil;
 
 import static net.pitan76.itemalchemy.ItemAlchemy._id;
 
@@ -42,6 +44,13 @@ public class EMCExporterScreen extends CompatInventoryScreen {
 
     @Override
     public void drawForegroundOverride(DrawForegroundArgs args) {
+        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, getTitle(), this.titleX, 10, 4210752);
+        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, playerInventoryTitle, playerInventoryTitleX, 90, 4210752);
+
+        if (screenHandler.ownerName != null && !screenHandler.ownerName.isEmpty()) {
+            Text owner = TextUtil.translatable("text.itemalchemy.owner", screenHandler.ownerName);
+            ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, owner, backgroundWidth - 10 - ScreenUtil.getWidth(owner), 90, 4210752);
+        }
         //ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, TextUtil.literal(String.format("%,d", emc)), 140, 10, 4210752);
     }
 
