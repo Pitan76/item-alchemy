@@ -1,7 +1,7 @@
-package net.pitan76.itemalchemy.emcs.vanilla;
+package net.pitan76.itemalchemy.emc.vanilla;
 
 import net.minecraft.item.Items;
-import net.pitan76.itemalchemy.emcs.EMCDef;
+import net.pitan76.itemalchemy.emc.EMCDef;
 import net.pitan76.mcpitanlib.api.item.CompatItems;
 import net.pitan76.mcpitanlib.api.util.ItemUtil;
 

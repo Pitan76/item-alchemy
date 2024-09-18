@@ -1,4 +1,4 @@
-package net.pitan76.itemalchemy.emcs;
+package net.pitan76.itemalchemy.emc;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;

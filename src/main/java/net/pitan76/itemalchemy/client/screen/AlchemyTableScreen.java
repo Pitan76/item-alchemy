@@ -44,43 +44,42 @@ public class AlchemyTableScreen extends CompatInventoryScreen {
 
     @Override
     public boolean keyPressed(KeyEventArgs args) {
-        if (searchBox.isFocused()) {
-            if (args.keyCode != 256) {
-                return searchBox.keyPressed(args.keyCode, args.scanCode, args.modifiers);
-            }
-        }
-        return super.keyPressed(args);
+        if (!searchBox.isFocused() || args.keyCode == 256)
+            return super.keyPressed(args);
+
+        return searchBox.keyPressed(args.keyCode, args.scanCode, args.modifiers);
+
     }
 
     @Override
     public boolean keyReleased(KeyEventArgs args) {
-        if (searchBox.isFocused()) {
-            if (args.keyCode != 256) {
-                NbtCompound translations = NbtUtil.create();
+        if (!searchBox.isFocused() || args.keyCode == 256)
+            return super.keyReleased(args);
 
-                List<Item> items = PlayerRegisteredItemUtil.getItems(new Player(playerInventory.player));
-                for (Item item : items) {
-                    ItemStack stack = ItemStackUtil.create(item);
-                    String itemTranslationKey = stack.getTranslationKey();
-                    if (I18n.hasTranslation(itemTranslationKey)) {
-                        translations.putString(itemTranslationKey, I18n.translate(itemTranslationKey));
-                    }
-                }
+        NbtCompound translations = NbtUtil.create();
 
-                PacketByteBuf buf = PacketByteUtil.create();
-
-                PacketByteUtil.writeString(buf, searchBox.getText());
-                PacketByteUtil.writeNbt(buf, translations);
-                ClientNetworking.send(_id("search"), buf);
-
-                AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
-
-                screenHandler.setSearchText(searchBox.getText());
-                screenHandler.setTranslations(translations);
-                screenHandler.index = 0;
-                screenHandler.sortBySearch();
+        List<Item> items = PlayerRegisteredItemUtil.getItems(new Player(playerInventory.player));
+        for (Item item : items) {
+            ItemStack stack = ItemStackUtil.create(item);
+            String itemTranslationKey = stack.getTranslationKey();
+            if (I18n.hasTranslation(itemTranslationKey)) {
+                translations.putString(itemTranslationKey, I18n.translate(itemTranslationKey));
             }
         }
+
+        PacketByteBuf buf = PacketByteUtil.create();
+
+        PacketByteUtil.writeString(buf, searchBox.getText());
+        PacketByteUtil.writeNbt(buf, translations);
+        ClientNetworking.send(_id("search"), buf);
+
+        AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
+
+        screenHandler.setSearchText(searchBox.getText());
+        screenHandler.setTranslations(translations);
+        screenHandler.index = 0;
+        screenHandler.sortBySearch();
+
         return super.keyReleased(args);
     }
 

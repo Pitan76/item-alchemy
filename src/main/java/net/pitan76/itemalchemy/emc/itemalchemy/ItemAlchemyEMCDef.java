@@ -1,6 +1,6 @@
-package net.pitan76.itemalchemy.emcs.itemalchemy;
+package net.pitan76.itemalchemy.emc.itemalchemy;
 
-import net.pitan76.itemalchemy.emcs.EMCDef;
+import net.pitan76.itemalchemy.emc.EMCDef;
 import net.pitan76.itemalchemy.item.Items;
 
 public class ItemAlchemyEMCDef extends EMCDef {
