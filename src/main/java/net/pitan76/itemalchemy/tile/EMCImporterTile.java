@@ -11,6 +11,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.gui.screen.EMCImporterScreenHandler;
 import net.pitan76.itemalchemy.tile.base.OwnedBlockEntity;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
@@ -26,12 +27,6 @@ import net.pitan76.mcpitanlib.api.util.*;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEntityTicker<EMCImporterTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
-
-    public int coolDown = 0; // tick
-
-    public int getMaxCoolDown() {
-        return 10 * 1; // tick
-    }
 
     public DefaultedList<ItemStack> filter = DefaultedList.ofSize(9, ItemStackUtil.empty());
     public DefaultedList<ItemStack> inv = DefaultedList.ofSize(1, ItemStackUtil.empty());
@@ -83,14 +78,43 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     @Override
     public void tick(TileTickEvent<EMCImporterTile> e) {
         World world = e.world;
-
         if (WorldUtil.isClient(world)) return;
 
+        if (!hasTeam()) return;
+        if (inv.get(0).isEmpty()) return;
+
+        ItemStack stack = inv.get(0);
+        long emc = EMCManager.get(stack);
+        if (emc <= 0) return;
+
+        if (!filter.isEmpty()) {
+            boolean isFiltered = false;
+            for (ItemStack filterStack : filter) {
+                if (ItemUtil.isEqual(stack.getItem(), filterStack.getItem())) {
+                    isFiltered = true;
+                    break;
+                }
+            }
+            if (!isFiltered)
+                return;
+        }
+
+        getTeamState().get().storedEMC += emc;
+        inv.set(0, ItemStackUtil.empty());
     }
 
     @Override
     public DefaultedList<ItemStack> getItems() {
         return inv;
+    }
+
+    public int getFilterCount() {
+        int count = 0;
+        for (int i = filter.size() - 1; i >= 0; i--) {
+            if (!filter.get(i).isEmpty())
+                count++;
+        }
+        return count;
     }
 
     @Override
@@ -104,6 +128,21 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+        if (!EMCManager.contains(stack.getItem()))
+            return false;
+
+        if (!filter.isEmpty()) {
+            boolean isFiltered = false;
+            for (ItemStack filterStack : filter) {
+                if (ItemUtil.isEqual(stack.getItem(), filterStack.getItem())) {
+                    isFiltered = true;
+                    break;
+                }
+            }
+            if (!isFiltered)
+                return false;
+        }
+
         return dir != Direction.DOWN;
     }
 

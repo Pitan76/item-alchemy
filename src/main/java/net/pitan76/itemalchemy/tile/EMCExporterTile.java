@@ -10,7 +10,7 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.gui.screen.EMCExporterScreenHandler;
 import net.pitan76.itemalchemy.tile.base.OwnedBlockEntity;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
@@ -27,14 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEntityTicker<EMCExporterTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
 
-    public int coolDown = 0; // tick
-
-    public int getMaxCoolDown() {
-        return 10 * 1; // tick
-    }
-
     public DefaultedList<ItemStack> filter = DefaultedList.ofSize(9, ItemStackUtil.empty());
-    public DefaultedList<ItemStack> inv = DefaultedList.ofSize(1, ItemStackUtil.empty());
 
     public EMCExporterTile(BlockEntityType<?> type, TileCreateEvent e) {
         super(type, e);
@@ -48,12 +41,7 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     public void writeNbt(WriteNbtArgs args) {
         NbtCompound filterNbt = NbtUtil.create();
         InventoryUtil.writeNbt(args.registryLookup, filterNbt, filter);
-
-        NbtCompound invNbt = NbtUtil.create();
-        InventoryUtil.writeNbt(args.registryLookup, invNbt, inv);
-
         NbtUtil.put(args.nbt, "filter", filterNbt);
-        NbtUtil.put(args.nbt, "inv", invNbt);
 
         if (teamUUID != null)
             NbtUtil.putUuid(args.nbt, "team", teamUUID);
@@ -64,11 +52,6 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         if (NbtUtil.has(args.nbt, "filter")) {
             NbtCompound filterNbt = NbtUtil.get(args.nbt, "filter");
             InventoryUtil.readNbt(args.registryLookup, filterNbt, filter);
-        }
-
-        if (NbtUtil.has(args.nbt, "inv")) {
-            NbtCompound invNbt = NbtUtil.get(args.nbt, "inv");
-            InventoryUtil.readNbt(args.registryLookup, invNbt, inv);
         }
 
         if (NbtUtil.has(args.nbt, "team"))
@@ -82,15 +65,46 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     @Override
     public void tick(TileTickEvent<EMCExporterTile> e) {
-        World world = e.world;
-
-        if (WorldUtil.isClient(world)) return;
 
     }
 
     @Override
     public DefaultedList<ItemStack> getItems() {
-        return inv;
+        DefaultedList<ItemStack> result = DefaultedList.ofSize(filter.size(), ItemStackUtil.empty());
+
+        if (!hasTeam()) return result;
+        if (filter.get(0).isEmpty()) return result;
+
+        long emc = getTeamState().get().storedEMC;
+        if (emc <= 0) return result;
+
+        int filterCount = getFilterCount();
+
+        long aveEMC = emc / filterCount;
+
+        for (ItemStack filterStack : filter) {
+            if (filterStack.isEmpty()) continue;
+
+            long neededEMC = EMCManager.get(filterStack);
+            if (neededEMC <= 0) continue;
+
+            if (aveEMC < neededEMC) continue;
+
+            ItemStack stack = filterStack.copy();
+            stack.setCount((int) Math.floorDiv(aveEMC, neededEMC));
+            result.add(stack);
+        }
+
+        return result;
+    }
+
+    public int getFilterCount() {
+        int count = 0;
+        for (int i = filter.size() - 1; i >= 0; i--) {
+            if (!filter.get(i).isEmpty())
+                count++;
+        }
+        return count;
     }
 
     @Override
