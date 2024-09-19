@@ -50,6 +50,12 @@ public class Items {
     public static RegistryResult<Item> RED_MATTER_BLOCK;
 
     public static RegistryResult<Item> IA_WRENCH;
+    public static RegistryResult<Item> DIVINING_ROD_LV1;
+    public static RegistryResult<Item> DIVINING_ROD_LV2;
+    public static RegistryResult<Item> DIVINING_ROD_LV3;
+
+    public static RegistryResult<Item> RING;
+    public static RegistryResult<Item> PICKUP_RING;
 
     public static RegistryResult<Item> DARK_MATTER_SWORD;
     public static RegistryResult<Item> DARK_MATTER_PICKAXE;
@@ -98,6 +104,12 @@ public class Items {
         RED_MATTER_BLOCK = registry.registerItem(_id("red_matter_block"), () -> ItemUtil.ofBlock(Blocks.RED_MATTER_BLOCK.getOrNull(), CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
 
         IA_WRENCH = registry.registerItem(_id("wrench"), () -> new Wrench(CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
+        DIVINING_ROD_LV1 = registry.registerItem(_id("divining_rod_lv1"), () -> new DiviningRod(1, CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
+        DIVINING_ROD_LV2 = registry.registerItem(_id("divining_rod_lv2"), () -> new DiviningRod(2, CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
+        DIVINING_ROD_LV3 = registry.registerItem(_id("divining_rod_lv3"), () -> new DiviningRod(3, CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
+
+        RING = registry.registerItem(_id("ring"), () -> new Ring(CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
+        PICKUP_RING = registry.registerItem(_id("pickup_ring"), () -> new PickupRing(CompatibleItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
 
         DARK_MATTER_SWORD = registry.registerItem(_id("dark_matter_sword"), () -> new AlchemicalSword(AlchemicalToolMaterials.DARK_MATTER, 3, -2.4f, ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
         DARK_MATTER_PICKAXE = registry.registerItem(_id("dark_matter_pickaxe"), () -> new AlchemicalPickaxe(AlchemicalToolMaterials.DARK_MATTER, 1, -2.8f, ChargeItemSettings.of().addGroup(ItemGroups.ITEM_ALCHEMY)));
