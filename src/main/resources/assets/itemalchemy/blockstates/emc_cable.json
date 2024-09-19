@@ -1,6 +1,6 @@
 {
   "variants": {
-    "side1=false,side2=false,conner=false,facing=north": {
+    "side1=false,side2=false,conner=false": {
       "model": "itemalchemy:block/emc_cable"
     },
     "side1=true,side2=false,conner=false,facing=north": {
@@ -11,9 +11,6 @@
     },
     "side1=true,side2=true,conner=false,facing=north": {
       "model": "itemalchemy:block/emc_cable_both"
-    },
-    "side1=false,side2=false,conner=true,facing=north": {
-      "model": "itemalchemy:block/emc_cable_conner"
     },
     "side1=true,side2=false,conner=false,facing=east": {
       "model": "itemalchemy:block/emc_cable_left",
@@ -27,9 +24,20 @@
       "model": "itemalchemy:block/emc_cable_both",
       "y": 90
     },
+    "side1=false,side2=false,conner=true,facing=north": {
+      "model": "itemalchemy:block/emc_cable_conner"
+    },
     "side1=false,side2=false,conner=true,facing=east": {
       "model": "itemalchemy:block/emc_cable_conner",
       "y": 90
+    },
+    "side1=false,side2=false,conner=true,facing=south": {
+      "model": "itemalchemy:block/emc_cable_conner",
+      "y": 180
+    },
+    "side1=false,side2=false,conner=true,facing=west": {
+      "model": "itemalchemy:block/emc_cable_conner",
+      "y": 270
     }
   }
 }
