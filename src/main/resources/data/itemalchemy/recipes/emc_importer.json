@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S#S",
+    "SBS",
+    "SAS"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:hopper"
+    },
+    "A": {
+      "item": "itemalchemy:alchemy_table"
+    },
+    "B": {
+      "item": "itemalchemy:emc_cable"
+    },
+    "S": {
+      "item": "minecraft:stone"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:emc_importer",
+    "count": 1
+  }
+}

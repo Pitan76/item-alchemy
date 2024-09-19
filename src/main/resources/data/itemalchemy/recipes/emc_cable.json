@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "itemalchemy:emc_repeater"
+    }
+  ],
+  "result": {
+    "item": "itemalchemy:emc_cable",
+    "count": 4
+  }
+}

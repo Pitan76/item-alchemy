@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#B#",
+    "#A#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:obsidian"
+    },
+    "A": {
+      "item": "itemalchemy:dark_matter_block"
+    },
+    "B": {
+      "item": "minecraft:glass"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:emc_battery",
+    "count": 1
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "@@@",
+    "#O#",
+    "@@@"
+  ],
+  "key": {
+    "#": {
+      "item": "itemalchemy:dark_matter"
+    },
+    "O": {
+      "item": "itemalchemy:ring"
+    },
+    "@": {
+      "item": "minecraft:string"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:pickup_ring",
+    "count": 1
+  }
+}

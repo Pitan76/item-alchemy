@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "BAB",
+    " C "
+  ],
+  "key": {
+    "A": {
+      "item": "itemalchemy:emc_condenser"
+    },
+    "B": {
+      "item": "itemalchemy:dark_matter"
+    },
+    "C": {
+      "item": "itemalchemy:red_matter"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:emc_condenser_mk2",
+    "count": 1
+  }
+}
