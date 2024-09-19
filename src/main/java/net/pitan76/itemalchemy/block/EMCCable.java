@@ -93,6 +93,17 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
     @Override
     public void onPlaced(BlockPlacedEvent e) {
         super.onPlaced(e);
+
+        BlockState north = WorldUtil.getBlockState(e.world, e.pos.north());
+        BlockState south = WorldUtil.getBlockState(e.world, e.pos.south());
+        BlockState east = WorldUtil.getBlockState(e.world, e.pos.east());
+        BlockState west = WorldUtil.getBlockState(e.world, e.pos.west());
+        BlockState up = WorldUtil.getBlockState(e.world, e.pos.up());
+        BlockState down = WorldUtil.getBlockState(e.world, e.pos.down());
+
+        if (north.getBlock() == this || south.getBlock() == this || east.getBlock() == this || west.getBlock() == this || up.getBlock() == this || down.getBlock() == this)
+            return;
+
         WorldUtil.setBlockState(e.world, e.pos ,getStateForNeighborUpdate(new StateForNeighborUpdateArgs(e.state, null, null, e.world, e.pos, null)));
     }
 
@@ -144,14 +155,26 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
                 state = state.with(FACING, Direction.UP);
             }
 
+            // 交差
             if (both_ns && both_ew || both_ns && both_ud || both_ew && both_ud) {
-                return state.with(CROSS, true);
+                return state.with(CROSS, true).with(T_CHAR, false).with(CONNER, false);
             } else {
                 state = state.with(CROSS, false);
             }
 
-            if (both_ns && east_only || both_ns && west_only || both_ew && north_only || both_ew && south_only || both_ud && east_only || both_ud && west_only) {
-                return state.with(T_CHAR, true);
+            // T字
+            if (both_ns && east_only) {
+                return state.with(T_CHAR, true).with(CROSS, false)
+                        .with(CONNER, false).with(FACING, Direction.SOUTH);
+            } else if (both_ns && west_only) {
+                return state.with(T_CHAR, true).with(CROSS, false)
+                        .with(CONNER, false).with(FACING, Direction.NORTH);
+            } else if (both_ew && north_only) {
+                return state.with(T_CHAR, true).with(CROSS, false)
+                        .with(CONNER, false).with(FACING, Direction.EAST);
+            } else if (both_ew && south_only) {
+                return state.with(T_CHAR, true).with(CROSS, false)
+                        .with(CONNER, false).with(FACING, Direction.WEST);
             } else {
                 state = state.with(T_CHAR, false);
             }
