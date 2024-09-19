@@ -109,6 +109,19 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
 
     @Override
     public ActionResult onRightClick(BlockUseEvent e) {
+
+        if (PlatformUtil.isDevelopmentEnvironment()) {
+            if (e.isClient()) return ActionResult.SUCCESS;
+            if (e.isSneaking()) return ActionResult.SUCCESS;
+
+            e.player.sendMessage(TextUtil.literal("facing: " + e.state.get(FACING).toString() +
+                    " side1: " + e.state.get(SIDE1).toString() +
+                    " side2: " + e.state.get(SIDE2).toString() +
+                    " conner: " + e.state.get(CONNER).toString() +
+                    " tchar: " + e.state.get(T_CHAR).toString() +
+                    " cross: " + e.state.get(CROSS).toString()));
+
+        }
         return super.onRightClick(e);
     }
 
@@ -143,6 +156,8 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
 
         if (north_only || south_only || east_only || west_only || up_only || down_only) {
 
+            state = state.with(SIDE1, false).with(SIDE2, false).with(CONNER, false).with(T_CHAR, false).with(CROSS, false);
+
             boolean both_ns = (north_only && south_only);
             boolean both_ew = (east_only && west_only);
             boolean both_ud = (up_only && down_only);
@@ -157,26 +172,18 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
 
             // 交差
             if (both_ns && both_ew || both_ns && both_ud || both_ew && both_ud) {
-                return state.with(CROSS, true).with(T_CHAR, false).with(CONNER, false);
-            } else {
-                state = state.with(CROSS, false);
+                return state.with(CROSS, true);
             }
 
             // T字
             if (both_ns && east_only) {
-                return state.with(T_CHAR, true).with(CROSS, false)
-                        .with(CONNER, false).with(FACING, Direction.SOUTH);
+                return state.with(T_CHAR, true).with(FACING, Direction.SOUTH);
             } else if (both_ns && west_only) {
-                return state.with(T_CHAR, true).with(CROSS, false)
-                        .with(CONNER, false).with(FACING, Direction.NORTH);
+                return state.with(T_CHAR, true).with(FACING, Direction.NORTH);
             } else if (both_ew && north_only) {
-                return state.with(T_CHAR, true).with(CROSS, false)
-                        .with(CONNER, false).with(FACING, Direction.EAST);
+                return state.with(T_CHAR, true).with(FACING, Direction.EAST);
             } else if (both_ew && south_only) {
-                return state.with(T_CHAR, true).with(CROSS, false)
-                        .with(CONNER, false).with(FACING, Direction.WEST);
-            } else {
-                state = state.with(T_CHAR, false);
+                return state.with(T_CHAR, true).with(FACING, Direction.WEST);
             }
 
             if (both_ns || both_ew || both_ud) {
@@ -185,26 +192,26 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
 
             if (north_only && east_only || north_only && west_only || south_only && east_only || south_only && west_only) {
                 if (north_only && west_only ) {
-                    return state.with(CONNER, true).with(SIDE1, false).with(SIDE2, false).with(FACING, Direction.NORTH);
+                    return state.with(CONNER, true).with(FACING, Direction.NORTH);
                 }
 
                 if (north_only && east_only) {
-                    return state.with(CONNER, true).with(SIDE1, false).with(SIDE2, false).with(FACING, Direction.EAST);
+                    return state.with(CONNER, true).with(FACING, Direction.EAST);
                 }
 
                 if (south_only && west_only) {
-                    return state.with(CONNER, true).with(SIDE1, false).with(SIDE2, false).with(FACING, Direction.WEST);
+                    return state.with(CONNER, true).with(FACING, Direction.WEST);
                 }
 
                 if (south_only && east_only) {
-                    return state.with(CONNER, true).with(SIDE1, false).with(SIDE2, false).with(FACING, Direction.SOUTH);
+                    return state.with(CONNER, true).with(FACING, Direction.SOUTH);
                 }
 
 
             } else if (north_only || west_only) {
-                return state.with(CONNER, false).with(SIDE1, true).with(SIDE2, false);
+                return state.with(SIDE1, true);
             } else if (south_only || east_only) {
-                return state.with(CONNER, false).with(SIDE1, false).with(SIDE2, true);
+                return state.with(SIDE2, true);
             }
         }
 
