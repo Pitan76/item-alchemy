@@ -23,6 +23,12 @@
   "item.itemalchemy.red_matter_shovel": "红物质铲",
   "item.itemalchemy.red_matter_hoe": "红物质锄头",
   "item.itemalchemy.wrench": "IA扳手",
+  "item.itemalchemy.ring": "戒指",
+  "item.itemalchemy.pickup_ring": "拾取戒指",
+  "item.itemalchemy.void_ring": "虚空戒指",
+  "item.itemalchemy.divining_rod_lv1": "探测杖 (Lv1)",
+  "item.itemalchemy.divining_rod_lv2": "探测杖 (Lv2)",
+  "item.itemalchemy.divining_rod_lv3": "探测杖 (Lv3)",
 
   "block.itemalchemy.alchemy_table": "转换桌",
   "block.itemalchemy.emc_collector_mk1": "EMC收集器 MK-1",
