@@ -25,6 +25,9 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
     public static final BooleanProperty SIDE1 = PropertyUtil.createBooleanProperty("side1");
     public static final BooleanProperty SIDE2 = PropertyUtil.createBooleanProperty("side2");
     public static final BooleanProperty CONNER = PropertyUtil.createBooleanProperty("conner");
+    public static final BooleanProperty T_CHAR = PropertyUtil.createBooleanProperty("tchar");
+    public static final BooleanProperty CROSS = PropertyUtil.createBooleanProperty("cross");
+
     public static final DirectionProperty FACING = PropertyUtil.createDirectionProperty("facing");
 
     public static final VoxelShape NONE = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D);
@@ -49,18 +52,22 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
 
     public EMCCable(CompatibleBlockSettings settings) {
         super(settings);
-        setNewDefaultState(getNewDefaultState().with(SIDE1, false).with(SIDE2, false).with(CONNER, false).with(FACING, Direction.NORTH).with(WATERLOGGED, false));
+        setNewDefaultState(getNewDefaultState().with(SIDE1, false).with(SIDE2, false).with(CONNER, false)
+                .with(T_CHAR, false).with(CROSS, false)
+                .with(FACING, Direction.NORTH).with(WATERLOGGED, false));
     }
 
     public EMCCable() {
         super();
-        setNewDefaultState(getNewDefaultState().with(SIDE1, false).with(SIDE2, false).with(CONNER, false).with(FACING, Direction.NORTH).with(WATERLOGGED, false));
+        setNewDefaultState(getNewDefaultState().with(SIDE1, false).with(SIDE2, false).with(CONNER, false)
+                .with(T_CHAR, false).with(CROSS, false)
+                .with(FACING, Direction.NORTH).with(WATERLOGGED, false));
     }
 
     @Override
     public void appendProperties(AppendPropertiesArgs args) {
         super.appendProperties(args);
-        args.addProperty(SIDE1, SIDE2, CONNER, FACING, WATERLOGGED);
+        args.addProperty(SIDE1, SIDE2, CONNER, T_CHAR, CROSS, FACING, WATERLOGGED);
     }
 
     @Override
@@ -101,6 +108,8 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
 
     @Override
     public BlockState getStateForNeighborUpdate(StateForNeighborUpdateArgs args) {
+        args.state = super.getStateForNeighborUpdate(args);
+
         BlockState state = args.getState();
         BlockPos pos = args.getPos();
 
@@ -135,16 +144,32 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
                 state = state.with(FACING, Direction.UP);
             }
 
+            if (both_ns && both_ew || both_ns && both_ud || both_ew && both_ud) {
+                return state.with(CROSS, true);
+            }
+
+            if (both_ns && east_only || both_ns && west_only || both_ew && north_only || both_ew && south_only || both_ud && east_only || both_ud && west_only) {
+                return state.with(T_CHAR, true);
+            }
+
             if (both_ns || both_ew || both_ud) {
                 return state.with(CONNER, false).with(SIDE1, true).with(SIDE2, true);
-            } else if (north_only && east_only || north_only && west_only || south_only && east_only || south_only && west_only) {
+            }
+
+            if (north_only && east_only || north_only && west_only || south_only && east_only || south_only && west_only) {
                 if (north_only && west_only ) {
                     return state.with(CONNER, true).with(SIDE1, false).with(SIDE2, false).with(FACING, Direction.NORTH);
-                } else if (north_only && east_only) {
+                }
+
+                if (north_only && east_only) {
                     return state.with(CONNER, true).with(SIDE1, false).with(SIDE2, false).with(FACING, Direction.EAST);
-                } else if (south_only && west_only) {
+                }
+
+                if (south_only && west_only) {
                     return state.with(CONNER, true).with(SIDE1, false).with(SIDE2, false).with(FACING, Direction.WEST);
-                } else if (south_only && east_only) {
+                }
+
+                if (south_only && east_only) {
                     return state.with(CONNER, true).with(SIDE1, false).with(SIDE2, false).with(FACING, Direction.SOUTH);
                 }
 
@@ -156,7 +181,7 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
             }
         }
 
-        return state.with(CONNER, false).with(SIDE1, false).with(SIDE2, false).with(FACING, Direction.NORTH);
+        return state.with(CONNER, false).with(SIDE1, false).with(SIDE2, false).with(T_CHAR, false).with(CROSS, false).with(FACING, Direction.NORTH);
 
     }
 

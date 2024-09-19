@@ -38,6 +38,36 @@
     "side1=false,side2=false,conner=true,facing=west": {
       "model": "itemalchemy:block/emc_cable_conner",
       "y": 270
+    },
+    "cross=true,facing=north": {
+      "model": "itemalchemy:block/emc_cable_cross"
+    },
+    "cross=true,facing=east": {
+      "model": "itemalchemy:block/emc_cable_cross",
+      "y": 90
+    },
+    "cross=true,facing=south": {
+      "model": "itemalchemy:block/emc_cable_cross",
+      "y": 180
+    },
+    "cross=true,facing=west": {
+      "model": "itemalchemy:block/emc_cable_cross",
+      "y": 270
+    },
+    "tchar=true,facing=north": {
+      "model": "itemalchemy:block/emc_cable_tchar"
+    },
+    "tchar=true,facing=east": {
+      "model": "itemalchemy:block/emc_cable_tchar",
+      "y": 90
+    },
+    "tchar=true,facing=south": {
+      "model": "itemalchemy:block/emc_cable_tchar",
+      "y": 180
+    },
+    "tchar=true,facing=west": {
+      "model": "itemalchemy:block/emc_cable_tchar",
+      "y": 270
     }
   }
 }
