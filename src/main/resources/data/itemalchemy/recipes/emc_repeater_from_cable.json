@@ -15,7 +15,7 @@
     }
   ],
   "result": {
-    "item": "itemalchemy:repeater",
+    "item": "itemalchemy:emc_repeater",
     "count": 1
   }
 }
