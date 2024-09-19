@@ -146,10 +146,14 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
 
             if (both_ns && both_ew || both_ns && both_ud || both_ew && both_ud) {
                 return state.with(CROSS, true);
+            } else {
+                state = state.with(CROSS, false);
             }
 
             if (both_ns && east_only || both_ns && west_only || both_ew && north_only || both_ew && south_only || both_ud && east_only || both_ud && west_only) {
                 return state.with(T_CHAR, true);
+            } else {
+                state = state.with(T_CHAR, false);
             }
 
             if (both_ns || both_ew || both_ud) {
@@ -217,6 +221,18 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
             } else if (direction == Direction.WEST) {
                 return WEST_CONNER_CONNECT;
             }
+        } else if (e.getState().get(T_CHAR)) {
+            if (direction == Direction.NORTH) {
+                return NORTH_CONNER_CONNECT;
+            } else if (direction == Direction.SOUTH) {
+                return SOUTH_CONNER_CONNECT;
+            } else if (direction == Direction.EAST) {
+                return EAST_CONNER_CONNECT;
+            } else if (direction == Direction.WEST) {
+                return WEST_CONNER_CONNECT;
+            }
+        } else if (e.getState().get(CROSS)) {
+            return VoxelShapeUtil.union(NS_BOTH_CONNECT, EW_BOTH_CONNECT);
         }
         return NONE;
     }
