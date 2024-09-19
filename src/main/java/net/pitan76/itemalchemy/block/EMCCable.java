@@ -6,6 +6,7 @@ import net.minecraft.block.Waterloggable;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -75,6 +76,27 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
     @Override
     public FluidState getFluidState(FluidStateArgs args) {
         return PropertyUtil.get(args.state, WATERLOGGED) ? FluidUtil.getStillWater() : super.getFluidState(args);
+    }
+
+    @Override
+    public void onStateReplaced(StateReplacedEvent e) {
+        super.onStateReplaced(e);
+    }
+
+    @Override
+    public void onPlaced(BlockPlacedEvent e) {
+        super.onPlaced(e);
+        WorldUtil.setBlockState(e.world, e.pos ,getStateForNeighborUpdate(new StateForNeighborUpdateArgs(e.state, null, null, e.world, e.pos, null)));
+    }
+
+    @Override
+    public ActionResult onRightClick(BlockUseEvent e) {
+        return super.onRightClick(e);
+    }
+
+    @Override
+    public void neighborUpdate(NeighborUpdateEvent e) {
+        super.neighborUpdate(e);
     }
 
     @Override
