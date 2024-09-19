@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "itemalchemy:emc_emc_cable"
+      "item": "itemalchemy:emc_cable"
     },
     {
-      "item": "itemalchemy:emc_emc_cable"
+      "item": "itemalchemy:emc_cable"
     },
     {
-      "item": "itemalchemy:emc_emc_cable"
+      "item": "itemalchemy:emc_cable"
     },
     {
-      "item": "itemalchemy:emc_emc_cable"
+      "item": "itemalchemy:emc_cable"
     }
   ],
   "result": {
