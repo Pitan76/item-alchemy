@@ -16,8 +16,10 @@ public class ItemAlchemyConfig {
     public static void init() {
         removeDataFromCopyStack = config.getBooleanOrCreate("remove_data_from_copy_stack", true);
 
-        if (!file.exists() || !file.isFile())
-            save();
+        if (!file.exists() || !file.isFile()) {
+            if (file.mkdirs())
+                save();
+        }
     }
 
     public static boolean isRemoveDataFromCopyStack() {
