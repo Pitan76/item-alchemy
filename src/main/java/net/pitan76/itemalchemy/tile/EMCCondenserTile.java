@@ -1,7 +1,5 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -14,14 +12,11 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.api.EMCStorageUtil;
-import net.pitan76.itemalchemy.block.EMCCollector;
-import net.pitan76.itemalchemy.block.EMCRepeater;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.itemalchemy.tile.base.EMCStorageBlockEntity;
 import net.pitan76.mcpitanlib.api.entity.Player;

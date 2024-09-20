@@ -11,7 +11,9 @@ import net.pitan76.itemalchemy.gui.slot.CondenserMK2InputSlot;
 import net.pitan76.itemalchemy.gui.slot.CondenserMK2OutputSlot;
 import net.pitan76.itemalchemy.tile.EMCCondenserTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.InventoryUtil;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
+import net.pitan76.mcpitanlib.api.util.SlotUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCCondenserMK2ScreenHandler extends EMCCondenserScreenHandler {

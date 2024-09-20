@@ -20,7 +20,6 @@ import net.pitan76.mcpitanlib.api.event.block.PlacementStateArgs;
 import net.pitan76.mcpitanlib.api.util.PropertyUtil;
 import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
-import org.jetbrains.annotations.Nullable;
 
 public class AlchemyTable extends ExtendBlock implements IUseableWrench {
 
