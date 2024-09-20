@@ -21,17 +21,17 @@ repositories {
 }
 
 dependencies {
-    // To change the versions see the gradle.properties file"
     implementation "com.google.guava:guava:${project.guava_version}"
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation "net.pitan76:mcpitanlib-fabric${rootProject.mcpitanlib_version}"
     include "net.pitan76:mcpitanlib_checker-fabric:${rootProject.mcpitanlib_checker_version}"
+
+    modImplementation "me.shedaniel:RoughlyEnoughItems-fabric:${rootProject.rei_version}"
 }
 
 processResources {
