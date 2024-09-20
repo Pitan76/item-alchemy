@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.api.EMCStorageUtil;
+import net.pitan76.itemalchemy.config.ItemAlchemyConfig;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.itemalchemy.tile.base.EMCStorageBlockEntity;
 import net.pitan76.mcpitanlib.api.entity.Player;
@@ -118,11 +119,16 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
                     long useEMC = EMCManager.get(targetStack.getItem());
                     if (useEMC == 0) useEMC = 1;
                     if (storedEMC >= useEMC) {
-                        ItemStack newStack = targetStack.copy();
+                        ItemStack newStack;
+                        if (ItemAlchemyConfig.isRemoveDataFromCopyStack()) {
+                            // Remove Data
+                            newStack = new ItemStack(targetStack.getItem());
+                        } else {
+                            newStack = targetStack.copy();
+                        }
+
                         newStack.setCount(1);
-                        // Remove NBT
-                        CustomDataUtil.setNbt(newStack, NbtUtil.create());
-                        //newStack.setNbt(new NbtCompound());
+
                         if (insertItem(newStack, getItems(), true)) {
                             insertItem(newStack, getItems());
                             storedEMC -= useEMC;
