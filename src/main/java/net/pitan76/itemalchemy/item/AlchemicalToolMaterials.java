@@ -25,7 +25,19 @@ public enum AlchemicalToolMaterials implements CompatibleToolMaterial {
     }
 
     AlchemicalToolMaterials(int miningLevel, int itemDurability, float miningSpeed, float attackDamage, int enchantability) {
-        this(miningLevel, itemDurability, miningSpeed, attackDamage, enchantability, null);
+        this(miningLevel, itemDurability, miningSpeed, attackDamage, enchantability, empty());
+    }
+
+    public static Ingredient empty() {
+        try {
+            return Ingredient.empty();
+        } catch (NoSuchMethodError e) {
+            try {
+                return Ingredient.EMPTY;
+            } catch (NoSuchFieldError e2) {
+                return Ingredient.ofItems();
+            }
+        }
     }
 
     public int getCompatDurability() {
