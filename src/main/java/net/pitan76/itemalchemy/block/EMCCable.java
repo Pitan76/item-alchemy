@@ -94,14 +94,12 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
     public void onPlaced(BlockPlacedEvent e) {
         super.onPlaced(e);
 
-        BlockState north = WorldUtil.getBlockState(e.world, e.pos.north());
-        BlockState south = WorldUtil.getBlockState(e.world, e.pos.south());
-        BlockState east = WorldUtil.getBlockState(e.world, e.pos.east());
-        BlockState west = WorldUtil.getBlockState(e.world, e.pos.west());
-        BlockState up = WorldUtil.getBlockState(e.world, e.pos.up());
-        BlockState down = WorldUtil.getBlockState(e.world, e.pos.down());
-
-        if (north.getBlock() == this || south.getBlock() == this || east.getBlock() == this || west.getBlock() == this || up.getBlock() == this || down.getBlock() == this)
+        if (WorldUtil.getBlockState(e.world, e.pos.north()).getBlock() == this ||
+                WorldUtil.getBlockState(e.world, e.pos.south()).getBlock() == this ||
+                WorldUtil.getBlockState(e.world, e.pos.east()).getBlock() == this ||
+                WorldUtil.getBlockState(e.world, e.pos.west()).getBlock() == this ||
+                WorldUtil.getBlockState(e.world, e.pos.up()).getBlock() == this ||
+                WorldUtil.getBlockState(e.world, e.pos.down()).getBlock() == this)
             return;
 
         WorldUtil.setBlockState(e.world, e.pos ,getStateForNeighborUpdate(new StateForNeighborUpdateArgs(e.state, null, null, e.world, e.pos, null)));
@@ -147,12 +145,12 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
         BlockState up = args.getBlockState(pos.up());
         BlockState down = args.getBlockState(pos.down());
 
-        boolean north_only = north.getBlock() == this || args.getBlockEntity(pos.north()) instanceof EMCStorageBlockEntity;
-        boolean south_only = south.getBlock() == this || args.getBlockEntity(pos.south()) instanceof EMCStorageBlockEntity;
-        boolean east_only = east.getBlock() == this || args.getBlockEntity(pos.east()) instanceof EMCStorageBlockEntity;
-        boolean west_only = west.getBlock() == this || args.getBlockEntity(pos.west()) instanceof EMCStorageBlockEntity;
-        boolean up_only = up.getBlock() == this || args.getBlockEntity(pos.up()) instanceof EMCStorageBlockEntity;
-        boolean down_only = down.getBlock() == this || args.getBlockEntity(pos.down()) instanceof EMCStorageBlockEntity;
+        boolean north_only = north.getBlock() == this || args.getBlockEntity(pos.north()) instanceof EMCStorageBlockEntity || north.getBlock() instanceof EMCRepeater;
+        boolean south_only = south.getBlock() == this || args.getBlockEntity(pos.south()) instanceof EMCStorageBlockEntity || south.getBlock() instanceof EMCRepeater;
+        boolean east_only = east.getBlock() == this || args.getBlockEntity(pos.east()) instanceof EMCStorageBlockEntity || east.getBlock() instanceof EMCRepeater;
+        boolean west_only = west.getBlock() == this || args.getBlockEntity(pos.west()) instanceof EMCStorageBlockEntity || west.getBlock() instanceof EMCRepeater;
+        boolean up_only = up.getBlock() == this || args.getBlockEntity(pos.up()) instanceof EMCStorageBlockEntity || up.getBlock() instanceof EMCRepeater;
+        boolean down_only = down.getBlock() == this || args.getBlockEntity(pos.down()) instanceof EMCStorageBlockEntity || down.getBlock() instanceof EMCRepeater;
 
         if (north_only || south_only || east_only || west_only || up_only || down_only) {
 
