@@ -9,11 +9,13 @@ import net.pitan76.easyapi.FileControl;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.api.TeamUtil;
+import net.pitan76.itemalchemy.config.ItemAlchemyConfig;
 import net.pitan76.itemalchemy.data.PlayerState;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.command.CommandSettings;
+import net.pitan76.mcpitanlib.api.command.ConfigCommand;
 import net.pitan76.mcpitanlib.api.command.LiteralCommand;
 import net.pitan76.mcpitanlib.api.command.argument.IntegerCommand;
 import net.pitan76.mcpitanlib.api.command.argument.ItemCommand;
@@ -489,6 +491,8 @@ public class ItemAlchemyCommand extends LiteralCommand {
 
             }
         });
+
+        addArgumentCommand("config", new ConfigCommand(ItemAlchemyConfig.getConfig(), ItemAlchemyConfig.getFile(), "[Item Alchemy]", ItemAlchemyConfig::reset));
     }
 
     @Override
@@ -500,6 +504,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
                 + "\n- /itemalchemy setemc [Item] [EMC]...Set emc of the item"
                 + "\n- /itemalchemy team [create | join | kick | leave | list | members] ([Team Name/Player Name])"
                 + "\n- /itemalchemy ranking...Show EMC ranking"
+                + "\n- /itemalchemy config [set | get | reset | list] ([key])...Config command"
         );
     }
 }
