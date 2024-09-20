@@ -1,5 +1,34 @@
 {
   "variants": {
-    "": { "model": "itemalchemy:block/alchemy_table" }
+    "facing=down": {
+      "model": "itemalchemy:block/alchemy_table",
+      "x": 0,
+      "y": 0
+    },
+    "facing=up": {
+      "model": "itemalchemy:block/alchemy_table",
+      "x": 180,
+      "y": 0
+    },
+    "facing=south": {
+      "model": "itemalchemy:block/alchemy_table",
+      "x": 90,
+      "y": 0
+    },
+    "facing=west": {
+      "model": "itemalchemy:block/alchemy_table",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "itemalchemy:block/alchemy_table",
+      "x": 90,
+      "y": 180
+    },
+    "facing=east": {
+      "model": "itemalchemy:block/alchemy_table",
+      "x": 90,
+      "y": 270
+    }
   }
 }
