@@ -3,6 +3,7 @@ package net.pitan76.itemalchemy;
 import net.pitan76.itemalchemy.api.EMCUtil;
 import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.command.ItemAlchemyCommand;
+import net.pitan76.itemalchemy.config.ItemAlchemyConfig;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.emc.itemalchemy.ItemAlchemyEMCDef;
 import net.pitan76.itemalchemy.emc.vanilla.VanillaEMCDef;
@@ -39,6 +40,8 @@ public class ItemAlchemy extends CommonModInitializer {
         INSTANCE = this;
         registry = super.registry;
         logger = super.logger;
+
+        ItemAlchemyConfig.init();
 
         RecipeManagerRegistry.register(AlchemicalRecipeManager::new);
 
