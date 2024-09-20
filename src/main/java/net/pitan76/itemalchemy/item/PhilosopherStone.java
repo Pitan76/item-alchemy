@@ -13,6 +13,7 @@ import net.pitan76.itemalchemy.util.ItemCharge;
 import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.itemalchemy.util.WorldUtils;
 import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.event.item.EnchantableArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseOnBlockEvent;
 import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
@@ -207,5 +208,10 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
     @Override
     public boolean isItemBarVisible(ItemBarVisibleArgs args) {
         return CustomDataUtil.contains(args.getStack(), "itemalchemy");
+    }
+
+    @Override
+    public boolean isEnchantable(EnchantableArgs args) {
+        return false;
     }
 }
