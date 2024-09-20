@@ -33,6 +33,8 @@ public class AEGUTile extends CompatBlockEntity implements ExtendBlockEntityTick
         this(Tiles.AEGU.getOrNull(), e);
     }
 
+    // TODO: Cache Target Condenser Tile
+
     @Override
     public void tick(TileTickEvent<AEGUTile> e) {
         World world = e.world;
