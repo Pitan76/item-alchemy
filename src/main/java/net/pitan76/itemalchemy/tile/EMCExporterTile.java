@@ -29,8 +29,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEntityTicker<EMCExporterTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
 
+    public static int MAX_STACK_COUNT = 4096;
+
     public DefaultedList<ItemStack> filter = DefaultedList.ofSize(9, ItemStackUtil.empty());
     public String ownerName = "";
+
+    public long oldStoredEMC = -1;
 
     public EMCExporterTile(BlockEntityType<?> type, TileCreateEvent e) {
         super(type, e);
@@ -40,10 +44,10 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         this(Tiles.EMC_EXPORTER.getOrNull(), e);
     }
 
-    public static int maxStackCount = 4096;
-
     @Override
     public void writeNbt(WriteNbtArgs args) {
+        super.writeNbt(args);
+
         NbtCompound filterNbt = NbtUtil.create();
         InventoryUtil.writeNbt(args.registryLookup, filterNbt, filter);
         NbtUtil.put(args.nbt, "filter", filterNbt);
@@ -57,6 +61,8 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     @Override
     public void readNbt(ReadNbtArgs args) {
+        super.readNbt(args);
+
         if (NbtUtil.has(args.nbt, "filter")) {
             NbtCompound filterNbt = NbtUtil.get(args.nbt, "filter");
             InventoryUtil.readNbt(args.registryLookup, filterNbt, filter);
@@ -77,7 +83,17 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     @Override
     public void tick(TileTickEvent<EMCExporterTile> e) {
+        if (oldStoredEMC != -1 && oldStoredEMC == storedEMC) return;
+        if (!hasTeam()) return;
 
+        @SuppressWarnings("OptionalGetWithoutIsPresent")
+        TeamState teamState = getTeamState().get();
+        if (oldStoredEMC != -1)
+            teamState.storedEMC -= oldStoredEMC - storedEMC;
+
+        storedEMC = Math.min(teamState.storedEMC, getMaxEMC());
+        oldStoredEMC = storedEMC;
+        markDirty();
     }
 
     @Override
@@ -122,7 +138,7 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
             if (!teamState.registeredItems.contains(ItemUtil.toCompatID(filterStack.getItem()).toString())) continue;
 
             ItemStack stack = filterStack.copy();
-            stack.setCount(Math.min((int) Math.floorDiv(aveEMC, neededEMC), maxStackCount));
+            stack.setCount(Math.min((int) Math.floorDiv(aveEMC, neededEMC), MAX_STACK_COUNT));
 
             result.set(i, stack);
         }
@@ -188,5 +204,20 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         }
 
         args.writeVar(data);
+    }
+
+    @Override
+    public long getMaxEMC() {
+        return 500_000;
+    }
+
+    @Override
+    public boolean canExtract() {
+        return true;
+    }
+
+    @Override
+    public boolean canInsert() {
+        return false;
     }
 }

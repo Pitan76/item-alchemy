@@ -12,6 +12,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.EMCManager;
+import net.pitan76.itemalchemy.api.EMCStorageUtil;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.screen.EMCImporterScreenHandler;
 import net.pitan76.itemalchemy.tile.base.OwnedBlockEntity;
@@ -44,6 +45,8 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     @Override
     public void writeNbt(WriteNbtArgs args) {
+        super.writeNbt(args);
+
         NbtCompound filterNbt = NbtUtil.create();
         InventoryUtil.writeNbt(args.registryLookup, filterNbt, filter);
 
@@ -62,6 +65,8 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     @Override
     public void readNbt(ReadNbtArgs args) {
+        super.readNbt(args);
+
         if (NbtUtil.has(args.nbt, "filter")) {
             NbtCompound filterNbt = NbtUtil.get(args.nbt, "filter");
             InventoryUtil.readNbt(args.registryLookup, filterNbt, filter);
@@ -89,8 +94,18 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     public void tick(TileTickEvent<EMCImporterTile> e) {
         World world = e.world;
         if (WorldUtil.isClient(world)) return;
-
         if (!hasTeam()) return;
+
+        EMCStorageUtil.transferAllEMC(this);
+        if (storedEMC > 0) {
+            @SuppressWarnings("OptionalGetWithoutIsPresent")
+            TeamState teamState = getTeamState().get();
+
+            teamState.storedEMC += storedEMC;
+            storedEMC = 0;
+            markDirty();
+        }
+
         if (inv.get(0).isEmpty()) return;
 
         ItemStack stack = inv.get(0);
@@ -196,5 +211,20 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         }
 
         args.writeVar(data);
+    }
+
+    @Override
+    public long getMaxEMC() {
+        return 30_000;
+    }
+
+    @Override
+    public boolean canExtract() {
+        return false;
+    }
+
+    @Override
+    public boolean canInsert() {
+        return true;
     }
 }

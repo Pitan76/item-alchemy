@@ -8,12 +8,11 @@ import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
-import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 
 import java.util.Optional;
 import java.util.UUID;
 
-public class OwnedBlockEntity extends CompatBlockEntity {
+public abstract class OwnedBlockEntity extends EMCStorageBlockEntity {
 
     public UUID teamUUID = null;
 
@@ -26,6 +25,8 @@ public class OwnedBlockEntity extends CompatBlockEntity {
     }
 
     public Optional<TeamState> getTeamState() {
+        if (getWorld() == null) return Optional.empty();
+
         ServerState serverState = ServerState.of(getWorld());
         if (serverState == null || teamUUID == null)
             return Optional.empty();

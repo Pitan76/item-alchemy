@@ -118,6 +118,8 @@ public class ServerState extends CompatiblePersistentState implements ModState {
     }
 
     public static ServerState of(MinecraftServer server) {
+        if (server == null) return null;
+
         return getServerState(server);
     }
 
