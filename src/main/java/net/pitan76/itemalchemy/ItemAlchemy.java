@@ -24,6 +24,7 @@ import net.pitan76.mcpitanlib.api.event.v1.RecipeManagerRegistry;
 import net.pitan76.mcpitanlib.api.registry.v2.CompatRegistryV2;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.Logger;
+import net.pitan76.mcpitanlib.core.registry.FuelRegistry;
 
 public class ItemAlchemy extends CommonModInitializer {
 
@@ -81,6 +82,8 @@ public class ItemAlchemy extends CommonModInitializer {
 
         // Registry commands
         CommandRegistry.register("itemalchemy", new ItemAlchemyCommand());
+
+        //FuelRegistry.register(Items.ALCHEMICAL_FUEL, 200);
     }
 
     @Override

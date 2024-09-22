@@ -31,7 +31,7 @@ dependencies {
     modImplementation "net.pitan76:mcpitanlib-fabric${rootProject.mcpitanlib_version}"
     include "net.pitan76:mcpitanlib_checker-fabric:${rootProject.mcpitanlib_checker_version}"
 
-    modImplementation "me.shedaniel:RoughlyEnoughItems-fabric:${rootProject.rei_version}"
+    modLocalRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${rootProject.rei_version}"
 }
 
 processResources {
