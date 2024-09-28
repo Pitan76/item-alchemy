@@ -50,14 +50,8 @@ tasks.withType(JavaCompile).configureEach {
     // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
     // If Javadoc is generated, this must be specified in that task too.
     it.options.encoding = "UTF-8"
-    it.options.release = targetJavaVersion
+    it.options.release.set(targetJavaVersion)
 
-    options.release = 8
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = "UTF-8"
-    options.release = 8
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
@@ -83,8 +77,23 @@ jar {
 // configure the maven publication
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        create("mavenJava", MavenPublication) {
+            artifactId = project.archives_base_name
             from components.java
+
+            pom.withXml {
+                def pomNode = asNode()
+                pomNode.dependencies.'*'.findAll {
+                    def groupId = it.groupId.text()
+                    def artifactId = it.artifactId.text()
+
+                    (groupId == 'net.pitan76' && artifactId.startsWith('mcpitanlib-')) ||
+                            (groupId == 'net.fabricmc.fabric-api')
+                }.each() {
+                    it.parent().remove(it)
+                    print("Removed dependency: ${it.groupId.text()}:${it.artifactId.text()}\n")
+                }
+            }
         }
     }
 
