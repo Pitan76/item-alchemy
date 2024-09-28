@@ -72,15 +72,14 @@ public class EMCExporterScreenHandler extends ExtendedScreenHandler {
             ItemStack originalStack = SlotUtil.getStack(slot);
             // Filter Slot
             if (index >= 37 && index <= 46) {
-                Slot targetSlot = this.slots.get(index);
-                SlotUtil.setStack(targetSlot, ItemStackUtil.empty());
+                SlotUtil.setStack(slot, ItemStackUtil.empty());
                 return ItemStackUtil.empty();
             }
 
             // Inventory
             if (index < 36) {
                 for (int i = 37; i <= 46; i++) {
-                    Slot targetSlot = this.slots.get(i);
+                    Slot targetSlot = ScreenHandlerUtil.getSlot(this, i);
                     if (SlotUtil.getStack(targetSlot).isEmpty()) {
                         ItemStack newTargetStack = originalStack.copy();
                         newTargetStack.setCount(1);

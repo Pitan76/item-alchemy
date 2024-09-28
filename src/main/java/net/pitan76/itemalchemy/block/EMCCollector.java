@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
@@ -34,10 +33,10 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
 
     public long maxEMC;
 
-    protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(EMCCollector::new);
+    protected CompatMapCodec<? extends EMCCollector> CODEC = CompatMapCodec.createCodecOfExtendBlock(EMCCollector::new);
 
     @Override
-    public CompatMapCodec<? extends Block> getCompatCodec() {
+    public CompatMapCodec<? extends EMCCollector> getCompatCodec() {
         return CODEC;
     }
 
