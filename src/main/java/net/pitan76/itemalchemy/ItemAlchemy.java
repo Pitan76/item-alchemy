@@ -83,7 +83,9 @@ public class ItemAlchemy extends CommonModInitializer {
         // Registry commands
         CommandRegistry.register("itemalchemy", new ItemAlchemyCommand());
 
-        //FuelRegistry.register(Items.ALCHEMICAL_FUEL, 200);
+        registry.registerFuel(() -> Items.ALCHEMICAL_FUEL.getOrNull(), 200 * 16);
+        registry.registerFuel(() -> Items.MOBIUS_FUEL.getOrNull(), 200 * 64);
+        registry.registerFuel(() -> Items.AETERNALIS_FUEL.getOrNull(), 200 * 128);
     }
 
     @Override
