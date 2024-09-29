@@ -3,22 +3,23 @@ package net.pitan76.itemalchemy.tile;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.block.AEGUBlock;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.CompatSidedInventory;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.AvailableSlotsArgs;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.CanExtractArgs;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.CanInsertArgs;
 import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class AEGUTile extends CompatBlockEntity implements ExtendBlockEntityTicker<AEGUTile>, SidedInventory {
+public class AEGUTile extends CompatBlockEntity implements ExtendBlockEntityTicker<AEGUTile>, CompatSidedInventory {
     public int coolDown = 0; // tick
 
     public int getMaxCoolDown() {
@@ -97,19 +98,19 @@ public class AEGUTile extends CompatBlockEntity implements ExtendBlockEntityTick
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
-        return getNearEMCCondenser().map(tile -> tile.getAvailableSlots(side)).orElse(new int[0]);
+    public int[] getAvailableSlots(AvailableSlotsArgs args) {
+        return getNearEMCCondenser().map(tile -> tile.getAvailableSlots(args)).orElse(new int[0]);
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        return getNearEMCCondenser().map(tile -> tile.canInsert(slot, stack, dir)).orElse(false);
+    public boolean canInsert(CanInsertArgs args) {
+        return getNearEMCCondenser().map(tile -> tile.canInsert(args)).orElse(false);
 
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        return getNearEMCCondenser().map(tile -> tile.canExtract(slot, stack, dir)).orElse(false);
+    public boolean canExtract(CanExtractArgs args) {
+        return getNearEMCCondenser().map(tile -> tile.canExtract(args)).orElse(false);
     }
 
     @Override

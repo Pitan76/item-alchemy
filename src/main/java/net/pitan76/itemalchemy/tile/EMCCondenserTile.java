@@ -1,9 +1,6 @@
 package net.pitan76.itemalchemy.tile;
 
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -11,8 +8,6 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.ItemAlchemy;
@@ -27,12 +22,16 @@ import net.pitan76.mcpitanlib.api.event.container.factory.ExtraDataArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
-import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandlerFactory;
+import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
+import net.pitan76.mcpitanlib.api.gui.v2.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.VanillaStyleSidedInventory;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.AvailableSlotsArgs;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -40,13 +39,13 @@ import java.util.List;
 
 import static net.pitan76.mcpitanlib.api.util.InventoryUtil.canMergeItems;
 
-public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlockEntityTicker<EMCCondenserTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
+public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlockEntityTicker<EMCCondenserTile>, VanillaStyleSidedInventory, IInventory, ExtendedScreenHandlerFactory {
     public long maxEMC = 0;
     public long oldStoredEMC = 0;
     public long oldMaxEMC = 0;
     public int coolDown = 0; // tick
 
-    public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1 + 91, ItemStackUtil.empty());
+    public ItemStackList inventory = ItemStackList.ofSize(1 + 91, ItemStackUtil.empty());
 
     public EMCCondenserTile(BlockEntityType<?> type, TileCreateEvent e) {
         super(type, e);
@@ -166,11 +165,11 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
         }
     }
 
-    public static boolean insertItem(ItemStack insertStack, DefaultedList<ItemStack> inventory) {
+    public static boolean insertItem(ItemStack insertStack, ItemStackList inventory) {
         return insertItem(insertStack, inventory, false);
     }
 
-    public static boolean insertItem(ItemStack insertStack, DefaultedList<ItemStack> inventory, boolean test) {
+    public static boolean insertItem(ItemStack insertStack, ItemStackList inventory, boolean test) {
         boolean isInserted = false;
         for (int i = 0; i < inventory.size(); i++) {
             // EMC Condenser Target slot
@@ -196,12 +195,12 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
     }
 
     @Override
-    public DefaultedList<ItemStack> getItems() {
+    public ItemStackList getItems() {
         return inventory;
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getAvailableSlots(AvailableSlotsArgs args) {
         int[] result = new int[getItems().size() - 1];
         for (int i = 0; i < result.length; i++) {
             result[i] = i + 1;
@@ -210,19 +209,9 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        return dir != Direction.DOWN;
-    }
-
-    @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        return dir == Direction.DOWN;
-    }
-
-    @Override
     @Nullable
-    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-        return new EMCCondenserScreenHandler(syncId, inv, this, this, getTargetStack());
+    public ScreenHandler createMenu(CreateMenuEvent e) {
+        return new EMCCondenserScreenHandler(e.syncId, e.playerInventory, this, this, getTargetStack());
     }
 
     @Override

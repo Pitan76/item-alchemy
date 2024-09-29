@@ -3,12 +3,10 @@ package net.pitan76.itemalchemy.tile;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.EMCManager;
@@ -23,16 +21,22 @@ import net.pitan76.mcpitanlib.api.event.container.factory.ExtraDataArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
-import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandlerFactory;
+import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.VanillaStyleSidedInventory;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.AvailableSlotsArgs;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.CanExtractArgs;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.CanInsertArgs;
+import net.pitan76.mcpitanlib.api.gui.v2.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEntityTicker<EMCImporterTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
+public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEntityTicker<EMCImporterTile>, VanillaStyleSidedInventory, IInventory, ExtendedScreenHandlerFactory {
 
-    public DefaultedList<ItemStack> filter = DefaultedList.ofSize(9, ItemStackUtil.empty());
-    public DefaultedList<ItemStack> inv = DefaultedList.ofSize(1, ItemStackUtil.empty());
+    public ItemStackList filter = ItemStackList.ofSize(9, ItemStackUtil.empty());
+    public ItemStackList inv = ItemStackList.ofSize(1, ItemStackUtil.empty());
     public String ownerName = "";
 
     public EMCImporterTile(BlockEntityType<?> type, TileCreateEvent e) {
@@ -85,9 +89,9 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     }
 
     @Nullable
-    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
+    public ScreenHandler createMenu(CreateMenuEvent e) {
         IInventory filterInventory = () -> this.filter;
-        return new EMCImporterScreenHandler(syncId, inv, this, this, filterInventory);
+        return new EMCImporterScreenHandler(e.syncId, e.playerInventory, this, this, filterInventory);
     }
 
     @Override
@@ -132,7 +136,7 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     }
 
     @Override
-    public DefaultedList<ItemStack> getItems() {
+    public ItemStackList getItems() {
         return inv;
     }
 
@@ -146,7 +150,7 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getAvailableSlots(AvailableSlotsArgs args) {
         int[] result = new int[getItems().size()];
         for (int i = 0; i < result.length; i++) {
             result[i] = i;
@@ -155,7 +159,11 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canInsert(CanInsertArgs args) {
+        if (args.dir == Direction.DOWN) return false;
+
+        ItemStack stack = args.stack;
+
         if (!hasTeam()) return false;
         if (!EMCManager.contains(stack.getItem())) return false;
 
@@ -172,14 +180,8 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
         @SuppressWarnings("OptionalGetWithoutIsPresent")
         TeamState teamState = getTeamState().get();
-        if (!teamState.registeredItems.contains(ItemUtil.toCompatID(stack.getItem()).toString())) return false;
 
-        return dir != Direction.DOWN;
-    }
-
-    @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        return dir == Direction.DOWN;
+        return teamState.registeredItems.contains(ItemUtil.toCompatID(stack.getItem()).toString());
     }
 
     @Override

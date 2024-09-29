@@ -8,7 +8,6 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.ItemAlchemy;
@@ -20,6 +19,7 @@ import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import static net.pitan76.mcpitanlib.api.util.InventoryUtil.canMergeItems;
 
 public class EMCCondenserMK2Tile extends EMCCondenserTile {
 
-    public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1 + 84, ItemStackUtil.empty());
+    public ItemStackList inventory = ItemStackList.ofSize(1 + 84, ItemStackUtil.empty());
 
     public EMCCondenserMK2Tile(BlockEntityType<?> type, TileCreateEvent e) {
         super(type, e);
@@ -45,7 +45,7 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
     }
 
     @Override
-    public DefaultedList<ItemStack> getItems() {
+    public ItemStackList getItems() {
         return inventory;
     }
 
@@ -137,11 +137,11 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
         }
     }
 
-    public static boolean insertItem(ItemStack insertStack, DefaultedList<ItemStack> inventory) {
+    public static boolean insertItem(ItemStack insertStack, ItemStackList inventory) {
         return insertItem(insertStack, inventory, false);
     }
 
-    public static boolean insertItem(ItemStack insertStack, DefaultedList<ItemStack> inventory, boolean test) {
+    public static boolean insertItem(ItemStack insertStack, ItemStackList inventory, boolean test) {
         boolean isInserted = false;
         for (int i = 43; i < inventory.size(); i++) {
             ItemStack stack = inventory.get(i);

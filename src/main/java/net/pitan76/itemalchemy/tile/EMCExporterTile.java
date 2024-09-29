@@ -1,15 +1,10 @@
 package net.pitan76.itemalchemy.tile;
 
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.Direction;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.screen.EMCExporterScreenHandler;
@@ -21,17 +16,21 @@ import net.pitan76.mcpitanlib.api.event.container.factory.ExtraDataArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
-import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandlerFactory;
+import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
+import net.pitan76.mcpitanlib.api.gui.v2.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.VanillaStyleSidedInventory;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.AvailableSlotsArgs;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEntityTicker<EMCExporterTile>, SidedInventory, IInventory, ExtendedScreenHandlerFactory {
+public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEntityTicker<EMCExporterTile>, VanillaStyleSidedInventory, IInventory, ExtendedScreenHandlerFactory {
 
     public static int MAX_STACK_COUNT = 4096;
 
-    public DefaultedList<ItemStack> filter = DefaultedList.ofSize(9, ItemStackUtil.empty());
+    public ItemStackList filter = ItemStackList.ofSize(9, ItemStackUtil.empty());
     public String ownerName = "";
 
     public long oldStoredEMC = -1;
@@ -76,9 +75,9 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     }
 
     @Nullable
-    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
+    public ScreenHandler createMenu(CreateMenuEvent e) {
         IInventory filterInventory = () -> this.filter;
-        return new EMCExporterScreenHandler(syncId, inv, this, filterInventory);
+        return new EMCExporterScreenHandler(e.syncId, e.playerInventory, this, filterInventory);
     }
 
     @Override
@@ -108,11 +107,11 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         return IInventory.super.removeStack(slot, count);
     }
 
-    public DefaultedList<ItemStack> CACHE = DefaultedList.ofSize(9, ItemStackUtil.empty());
+    public ItemStackList CACHE = ItemStackList.ofSize(9, ItemStackUtil.empty());
 
     @Override
-    public DefaultedList<ItemStack> getItems() {
-        DefaultedList<ItemStack> result = DefaultedList.ofSize(filter.size(), ItemStackUtil.empty());
+    public ItemStackList getItems() {
+        ItemStackList result = ItemStackList.ofSize(filter.size(), ItemStackUtil.empty());
 
         if (!hasTeam()) return result;
         if (getFilterCount() <= 0) return result;
@@ -157,22 +156,12 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getAvailableSlots(AvailableSlotsArgs args) {
         int[] result = new int[getItems().size()];
         for (int i = 0; i < result.length; i++) {
             result[i] = i;
         }
         return result;
-    }
-
-    @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        return dir != Direction.DOWN;
-    }
-
-    @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        return dir == Direction.DOWN;
     }
 
     @Override
