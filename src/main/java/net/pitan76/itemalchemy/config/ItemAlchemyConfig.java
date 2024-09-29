@@ -6,7 +6,8 @@ import net.pitan76.mcpitanlib.api.util.PlatformUtil;
 import java.io.File;
 
 public class ItemAlchemyConfig {
-    private static final File file = new File(PlatformUtil.getConfigFolderAsFile(), "itemalchemy/config.json");
+    private static final File dir = new File(PlatformUtil.getConfigFolderAsFile(), "itemalchemy");
+    private static final File file = new File(dir, "config.json");
     private static final JsonConfig config = new JsonConfig(file);
 
     public static boolean isChanged;
@@ -17,7 +18,7 @@ public class ItemAlchemyConfig {
         removeDataFromCopyStack = config.getBooleanOrCreate("remove_data_from_copy_stack", true);
 
         if (!file.exists() || !file.isFile()) {
-            if (file.mkdirs())
+            if (dir.mkdirs())
                 save();
         }
     }
