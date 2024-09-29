@@ -10,6 +10,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
+import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.base.EMCStorageBlockEntity;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.event.block.*;
@@ -113,7 +114,9 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
 
         if (PlatformUtil.isDevelopmentEnvironment()) {
             if (e.isClient()) return ActionResult.SUCCESS;
-            if (e.isSneaking()) return ActionResult.SUCCESS;
+            if (e.isSneaking()) return ActionResult.PASS;
+            if (e.stack.getItem() instanceof Wrench)
+                return ActionResult.PASS;
 
             e.player.sendMessage(TextUtil.literal("facing: " + e.state.get(FACING).toString() +
                     " side1: " + e.state.get(SIDE1).toString() +

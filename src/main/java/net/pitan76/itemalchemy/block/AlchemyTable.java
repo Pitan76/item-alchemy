@@ -10,6 +10,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
+import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.entity.Player;
@@ -44,6 +45,8 @@ public class AlchemyTable extends ExtendBlock implements IUseableWrench {
     @Override
     public ActionResult onRightClick(BlockUseEvent e) {
         if (e.isClient()) return ActionResult.SUCCESS;
+        if (e.stack.getItem() instanceof Wrench)
+            return ActionResult.PASS;
 
         if (e.player.isServerPlayerEntity())
             EMCManager.syncS2C(e.player);

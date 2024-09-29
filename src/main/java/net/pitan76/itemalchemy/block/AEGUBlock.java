@@ -8,6 +8,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
+import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.AEGUTile;
 import net.pitan76.itemalchemy.tile.EMCCondenserTile;
 import net.pitan76.itemalchemy.tile.Tiles;
@@ -66,6 +67,9 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider,
 
     @Override
     public ActionResult onRightClick(BlockUseEvent e) {
+        if (e.stack.getItem() instanceof Wrench)
+            return ActionResult.PASS;
+
         BlockPos blockPos = AEGUTile.getNearEMCCondenserPos(e.world, e.pos);
         if (blockPos == null) return ActionResult.FAIL;
         BlockEntity blockEntity = WorldUtil.getBlockEntity(e.world, blockPos);

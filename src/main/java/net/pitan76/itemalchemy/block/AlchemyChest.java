@@ -10,6 +10,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Direction;
+import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.AlchemyChestTile;
 import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
@@ -66,8 +67,9 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
 
     @Override
     public ActionResult onRightClick(BlockUseEvent e) {
-        if (e.isClient())
-            return ActionResult.SUCCESS;
+        if (e.isClient()) return ActionResult.SUCCESS;
+        if (e.stack.getItem() instanceof Wrench)
+            return ActionResult.PASS;
 
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof AlchemyChestTile) {

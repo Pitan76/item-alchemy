@@ -7,6 +7,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.EMCImporterTile;
 import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
@@ -44,6 +45,8 @@ public class EMCImporter extends ExtendBlock implements ExtendBlockEntityProvide
     @Override
     public ActionResult onRightClick(BlockUseEvent e) {
         if (e.isClient()) return ActionResult.SUCCESS;
+        if (e.stack.getItem() instanceof Wrench)
+            return ActionResult.PASS;
 
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof EMCImporterTile) {
