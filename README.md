@@ -16,6 +16,34 @@ This MOD adds philosopher's stone etc. which can be equivalently exchanged with 
 - [Designer] Murderman25 Provided the textures
 - [Translator] 54sda Translated to Chinese (zh_cn.json)
 
+## Developing an Add-on
+
+### Maven
+https://maven.pitan76.net/v/#net/pitan76/itemalchemy/ <br />
+Check the latest version on the above link.
+
+- gradle.properties
+```properties
+# check these on https://maven.pitan76.net/v/#net/pitan76/
+mcpitanlib_version=+1.18.2:2.4.9
+itemalchemy_version=1.0.5
+```
+
+----
+
+- build.gradle
+```groovy
+repositories {
+    maven { url "https://maven.pitan76.net/" }
+}
+
+dependencies {
+    modImplementation "net.pitan76:mcpitanlib:${project.mcpitanlib_version}"
+    modImplementation "net.pitan76:itemalchemy:${project.itemalchemy_version}"
+}
+
+```
+
 ## License
 - MIT License
 
@@ -35,8 +63,37 @@ This MOD adds philosopher's stone etc. which can be equivalently exchanged with 
 ## 協力者 (Thanks!)
 - [開発者＆デザイン] OffsetMonkey538 テクスチャ改良とバグ修正
 - [開発者] mymai1208 チーム機能、チャージ機能の実装とバグ修正
+- [開発者] anthonymendez TBD
 - [デザイン] Murderman25 テクスチャ提供
 - [翻訳者] 54sda 中国語への翻訳 (zh_cn.json)
+
+## アドオン開発
+
+### Maven
+https://maven.pitan76.net/v/#net/pitan76/itemalchemy/ <br />
+上記リンクから最新バージョンを確認してください。
+
+- gradle.properties
+```properties
+# check these on https://maven.pitan76.net/v/#net/pitan76/
+mcpitanlib_version=+1.18.2:2.4.9
+itemalchemy_version=1.0.5
+```
+
+----
+
+- build.gradle
+```groovy
+repositories {
+    maven { url "https://maven.pitan76.net/" }
+}
+
+dependencies {
+    modImplementation "net.pitan76:mcpitanlib:${project.mcpitanlib_version}"
+    modImplementation "net.pitan76:itemalchemy:${project.itemalchemy_version}"
+}
+
+```
 
 ## ライセンス
 - MIT License
