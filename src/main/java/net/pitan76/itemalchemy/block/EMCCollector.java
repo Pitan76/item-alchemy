@@ -88,17 +88,17 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
 
     @Override
     public ActionResult onRightClick(BlockUseEvent e) {
-        if (e.isClient()) return ActionResult.SUCCESS;
+        if (e.isClient()) return e.success();
         if (e.stack.getItem() instanceof Wrench)
-            return ActionResult.PASS;
+            return e.pass();
 
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof EMCCollectorTile) {
             EMCCollectorTile tile = (EMCCollectorTile)blockEntity;
             e.player.openExtendedMenu(tile);
-            return ActionResult.CONSUME;
+            return e.consume();
         }
-        return ActionResult.PASS;
+        return e.pass();
     }
 
     @Nullable

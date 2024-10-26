@@ -44,16 +44,16 @@ public class AlchemyTable extends ExtendBlock implements IUseableWrench {
 
     @Override
     public ActionResult onRightClick(BlockUseEvent e) {
-        if (e.isClient()) return ActionResult.SUCCESS;
+        if (e.isClient()) return e.success();
         if (e.stack.getItem() instanceof Wrench)
-            return ActionResult.PASS;
+            return e.pass();
 
         if (e.player.isServerPlayerEntity())
             EMCManager.syncS2C(e.player);
 
         Player player = e.player;
         player.openGuiScreen(new AlchemyTableScreenHandlerFactory());
-        return ActionResult.CONSUME;
+        return e.consume();
     }
 
     @Override

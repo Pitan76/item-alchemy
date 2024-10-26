@@ -71,7 +71,7 @@ public class EMCBatteryScreenHandler extends ExtendedScreenHandler {
             ItemStack originalStack = SlotUtil.getStack(slot);
             // TargetSlot
             if (index == 37) {
-                Slot targetSlot = this.slots.get(37);
+                Slot targetSlot = ScreenHandlerUtil.getSlot(this, 37);
                 SlotUtil.setStack(targetSlot, ItemStackUtil.empty());
                 return ItemStackUtil.empty();
             }
@@ -84,7 +84,7 @@ public class EMCBatteryScreenHandler extends ExtendedScreenHandler {
                 }
 
                 // TargetSlot
-                Slot targetSlot = this.slots.get(37);
+                Slot targetSlot = ScreenHandlerUtil.getSlot(this, 37);
                 if (SlotUtil.getStack(targetSlot).isEmpty()) {
                     ItemStack newTargetStack = originalStack.copy();
                     newTargetStack.setCount(1);

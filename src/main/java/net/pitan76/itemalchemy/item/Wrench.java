@@ -26,12 +26,12 @@ public class Wrench extends ExtendItem {
 
     @Override
     public ActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
-        if (e.isClient()) return ActionResult.SUCCESS;
+        if (e.isClient()) return e.success();
 
         Block block = e.getBlockState().getBlock();
         BlockPos pos = e.getBlockPos();
 
-        if (block == null) return ActionResult.PASS;
+        if (block == null) return e.pass();
 
         if (block instanceof IUseableWrench) {
             WorldUtil.playSound(e.world, null, e.getBlockPos(), CompatSoundEvents.BLOCK_ANVIL_PLACE, CompatSoundCategory.BLOCKS, 0.75f, 1.5f);
@@ -50,12 +50,12 @@ public class Wrench extends ExtendItem {
                     itemEntity.setToDefaultPickupDelay();
                     WorldUtil.spawnEntity(e.getWorld(), itemEntity);
 
-                    return ActionResult.SUCCESS;
+                    return e.success();
                 }
             }
 
             WorldUtil.breakBlock(e.getWorld(), e.getBlockPos(), true, e.getPlayer());
-            return ActionResult.SUCCESS;
+            return e.success();
 
         }
 
