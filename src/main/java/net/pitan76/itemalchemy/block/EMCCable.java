@@ -30,7 +30,7 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
     public static final BooleanProperty T_CHAR = BooleanProperty.of("tchar");
     public static final BooleanProperty CROSS = BooleanProperty.of("cross");
 
-    public static final DirectionProperty FACING = PropertyUtil.createDirectionProperty("facing");
+    public static final DirectionProperty FACING = CompatProperties.FACING;
 
     public static final VoxelShape NONE = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D);
     public static final VoxelShape NS_BOTH_CONNECT = VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
