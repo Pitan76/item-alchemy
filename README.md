@@ -25,8 +25,8 @@ Check the latest version on the above link.
 - gradle.properties
 ```properties
 # check these on https://maven.pitan76.net/v/#net/pitan76/
-mcpitanlib_version=+1.18.2:2.4.9
-itemalchemy_version=1.0.5
+mcpitanlib_version=+1.18.2:3.0.3
+itemalchemy_version=1.0.6
 ```
 
 ----
