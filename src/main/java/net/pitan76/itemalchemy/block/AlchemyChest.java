@@ -2,35 +2,36 @@ package net.pitan76.itemalchemy.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Direction;
 import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.AlchemyChestTile;
 import net.pitan76.itemalchemy.tile.Tiles;
-import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
-import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
+import net.pitan76.mcpitanlib.api.block.v2.CompatBlock;
+import net.pitan76.mcpitanlib.api.block.v2.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.api.event.block.PlacementStateArgs;
 import net.pitan76.mcpitanlib.api.event.block.StateReplacedEvent;
-import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
+import net.pitan76.mcpitanlib.api.state.property.CompatProperties;
+import net.pitan76.mcpitanlib.api.state.property.DirectionProperty;
+import net.pitan76.mcpitanlib.api.util.CompatActionResult;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
+import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
+import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 import org.jetbrains.annotations.Nullable;
 
-public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvider, IUseableWrench {
-    public static DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+public class AlchemyChest extends CompatBlock implements ExtendBlockEntityProvider, IUseableWrench {
+    public static DirectionProperty FACING = CompatProperties.HORIZONTAL_FACING;
 
     private static final Text TITLE = TextUtil.translatable("block.itemalchemy.alchemy_chest");
 
-    protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(AlchemyChest::new);
+    protected CompatMapCodec<? extends Block> CODEC = CompatBlockMapCodecUtil.createCodec(AlchemyChest::new);
 
     @Override
     public CompatMapCodec<? extends Block> getCompatCodec() {
@@ -39,7 +40,7 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
 
     public AlchemyChest(CompatibleBlockSettings settings) {
         super(settings);
-        setNewDefaultState(BlockStateUtil.getDefaultState(this).with(FACING, Direction.NORTH));
+        setNewDefaultState(FACING.with(getNewDefaultState(), Direction.NORTH));
     }
 
     @Override
@@ -58,26 +59,26 @@ public class AlchemyChest extends ExtendBlock implements ExtendBlockEntityProvid
 
     @Override
     public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
-        return args.withBlockState(FACING, args.getHorizontalPlayerFacing().getOpposite());
+        return args.withBlockState(FACING.getProperty(), args.getHorizontalPlayerFacing().getOpposite());
     }
 
-    public AlchemyChest() {
-        this(CompatibleBlockSettings.copy(net.minecraft.block.Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f));
+    public AlchemyChest(CompatIdentifier id) {
+        this(CompatibleBlockSettings.copy(id, net.minecraft.block.Blocks.STONE).mapColor(CompatMapColor.YELLOW).strength(2f, 7.0f));
     }
 
     @Override
-    public ActionResult onRightClick(BlockUseEvent e) {
-        if (e.isClient()) return ActionResult.SUCCESS;
+    public CompatActionResult onRightClick(BlockUseEvent e) {
+        if (e.isClient()) return e.success();
         if (e.stack.getItem() instanceof Wrench)
-            return ActionResult.PASS;
+            return e.pass();
 
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof AlchemyChestTile) {
             AlchemyChestTile tile = (AlchemyChestTile)blockEntity;
             e.player.openMenu(tile);
-            return ActionResult.CONSUME;
+            return e.consume();
         }
-        return ActionResult.PASS;
+        return e.pass();
     }
 
     @Nullable

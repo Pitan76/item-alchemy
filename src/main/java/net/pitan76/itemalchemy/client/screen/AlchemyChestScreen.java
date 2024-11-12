@@ -1,9 +1,9 @@
 package net.pitan76.itemalchemy.client.screen;
 
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
-import net.pitan76.mcpitanlib.api.client.CompatInventoryScreen;
+import net.pitan76.itemalchemy.gui.screen.AlchemyChestScreenHandler;
+import net.pitan76.mcpitanlib.api.client.gui.screen.CompatInventoryScreen;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawBackgroundArgs;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawForegroundArgs;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
@@ -11,10 +11,10 @@ import net.pitan76.mcpitanlib.api.util.TextUtil;
 
 import static net.pitan76.itemalchemy.ItemAlchemy._id;
 
-public class AlchemyChestScreen extends CompatInventoryScreen {
+public class AlchemyChestScreen extends CompatInventoryScreen<AlchemyChestScreenHandler> {
     public PlayerInventory playerInventory;
 
-    public AlchemyChestScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
+    public AlchemyChestScreen(AlchemyChestScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, TextUtil.literal(""));
 
         this.playerInventory = inventory;

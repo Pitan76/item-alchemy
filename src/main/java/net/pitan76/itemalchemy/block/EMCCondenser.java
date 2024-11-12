@@ -3,38 +3,35 @@ package net.pitan76.itemalchemy.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.EMCCondenserTile;
 import net.pitan76.itemalchemy.tile.Tiles;
-import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
-import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
+import net.pitan76.mcpitanlib.api.block.v2.CompatBlock;
+import net.pitan76.mcpitanlib.api.block.v2.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.event.block.*;
-import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
-import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
-import net.pitan76.mcpitanlib.api.util.TextUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.state.property.CompatProperties;
+import net.pitan76.mcpitanlib.api.state.property.DirectionProperty;
+import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
+import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvider, IUseableWrench {
-    public static DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+public class EMCCondenser extends CompatBlock implements ExtendBlockEntityProvider, IUseableWrench {
+    public static DirectionProperty FACING = CompatProperties.HORIZONTAL_FACING;
     public static final Text TITLE = TextUtil.translatable("container.itemalchemy.emc_condenser");
 
     public long maxEMC = 100000;
 
-    protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(EMCCondenser::new);
+    protected CompatMapCodec<? extends Block> CODEC = CompatBlockMapCodecUtil.createCodec(EMCCondenser::new);
 
     @Override
     public CompatMapCodec<? extends Block> getCompatCodec() {
@@ -43,11 +40,11 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
 
     public EMCCondenser(CompatibleBlockSettings settings) {
         super(settings);
-        BlockStateUtil.getDefaultState(this).with(FACING, Direction.NORTH);
+        setNewDefaultState(BlockStateUtil.getDefaultState(this).with(FACING.getProperty(), Direction.NORTH));
     }
 
-    public EMCCondenser() {
-        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.BLACK).strength(2f, 7.0f));
+    public EMCCondenser(CompatIdentifier id) {
+        this(CompatibleBlockSettings.copy(id, Blocks.STONE).mapColor(CompatMapColor.BLACK).strength(2f, 7.0f));
     }
 
     public long getMaxEMC() {
@@ -79,22 +76,22 @@ public class EMCCondenser extends ExtendBlock implements ExtendBlockEntityProvid
 
     @Override
     public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
-        return args.withBlockState(FACING, args.getHorizontalPlayerFacing().getOpposite());
+        return args.withBlockState(FACING.getProperty(), args.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override
-    public ActionResult onRightClick(BlockUseEvent e) {
-        if (e.isClient()) return ActionResult.SUCCESS;
+    public CompatActionResult onRightClick(BlockUseEvent e) {
+        if (e.isClient()) return CompatActionResult.SUCCESS;
         if (e.stack.getItem() instanceof Wrench)
-            return ActionResult.PASS;
+            return CompatActionResult.PASS;
 
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof EMCCondenserTile) {
             EMCCondenserTile tile = (EMCCondenserTile)blockEntity;
             e.player.openExtendedMenu(tile);
-            return ActionResult.CONSUME;
+            return CompatActionResult.CONSUME;
         }
-        return ActionResult.PASS;
+        return CompatActionResult.PASS;
     }
 
     @Nullable

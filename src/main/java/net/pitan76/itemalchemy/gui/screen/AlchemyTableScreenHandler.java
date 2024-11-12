@@ -18,6 +18,7 @@ import net.pitan76.itemalchemy.gui.slot.RemoveSlot;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.SimpleScreenHandler;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 
 import java.util.ArrayList;
 import java.util.List;

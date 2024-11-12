@@ -23,10 +23,10 @@ import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
 import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
+import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.VanillaStyleSidedInventory;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.AvailableSlotsArgs;
 import net.pitan76.mcpitanlib.api.gui.v2.ExtendedScreenHandlerFactory;
-import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
@@ -95,11 +95,11 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
                     || WorldUtil.getBlockState(world, pos.east()).getLuminance() > 10 || WorldUtil.getBlockState(world, pos.west()).getLuminance() > 10) {
                 storedEMC++;
                 if (maxEMC >= 100000) {
-                    storedEMC += Math.round(maxEMC / 100000) + 2;
+                    storedEMC += Math.round((float) maxEMC / 100000) + 2;
                 }
             }
         }
-        coolDown += 1 + Math.pow(maxEMC / 10000 - 1, 2);
+        coolDown += (int) (1 + Math.pow((double) maxEMC / 10000 - 1, 2));
         if (coolDown >= getMaxCoolDown()) {
             coolDown = 0;
         }

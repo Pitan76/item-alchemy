@@ -2,27 +2,29 @@ package net.pitan76.itemalchemy.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.EMCImporterTile;
 import net.pitan76.itemalchemy.tile.Tiles;
-import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
-import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
+import net.pitan76.mcpitanlib.api.block.v2.CompatBlock;
+import net.pitan76.mcpitanlib.api.block.v2.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.api.event.block.StateReplacedEvent;
+import net.pitan76.mcpitanlib.api.util.CompatActionResult;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
+import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
+import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCImporter extends ExtendBlock implements ExtendBlockEntityProvider, IUseableWrench {
+public class EMCImporter extends CompatBlock implements ExtendBlockEntityProvider, IUseableWrench {
     private static final Text TITLE = TextUtil.translatable("container.itemalchemy.emc_importer");
 
-    protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(EMCImporter::new);
+    protected CompatMapCodec<? extends Block> CODEC = CompatBlockMapCodecUtil.createCodec(EMCImporter::new);
 
     @Override
     public CompatMapCodec<? extends Block> getCompatCodec() {
@@ -33,8 +35,8 @@ public class EMCImporter extends ExtendBlock implements ExtendBlockEntityProvide
         super(settings);
     }
 
-    public EMCImporter() {
-        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f));
+    public EMCImporter(CompatIdentifier id) {
+        this(CompatibleBlockSettings.copy(id, Blocks.STONE).mapColor(CompatMapColor.YELLOW).strength(2f, 7.0f));
     }
 
     @Override
@@ -43,10 +45,10 @@ public class EMCImporter extends ExtendBlock implements ExtendBlockEntityProvide
     }
 
     @Override
-    public ActionResult onRightClick(BlockUseEvent e) {
-        if (e.isClient()) return ActionResult.SUCCESS;
+    public CompatActionResult onRightClick(BlockUseEvent e) {
+        if (e.isClient()) return e.success();
         if (e.stack.getItem() instanceof Wrench)
-            return ActionResult.PASS;
+            return e.pass();
 
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof EMCImporterTile) {
@@ -56,15 +58,15 @@ public class EMCImporter extends ExtendBlock implements ExtendBlockEntityProvide
                 boolean isSuccess = tile.setTeam(e.player);
                 if (!isSuccess) {
                     e.player.sendMessage(TextUtil.translatable("message.itemalchemy.failed_to_set_team"));
-                    return ActionResult.FAIL;
+                    return e.fail();
                 }
             }
 
             e.player.openExtendedMenu(tile);
-            return ActionResult.CONSUME;
+            return e.consume();
         }
 
-        return ActionResult.PASS;
+        return e.pass();
     }
 
     @Nullable

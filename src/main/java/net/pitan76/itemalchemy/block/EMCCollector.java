@@ -2,39 +2,36 @@ package net.pitan76.itemalchemy.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.EMCCollectorTile;
 import net.pitan76.itemalchemy.tile.Tiles;
-import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
-import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
+import net.pitan76.mcpitanlib.api.block.v2.CompatBlock;
+import net.pitan76.mcpitanlib.api.block.v2.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.event.block.*;
-import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
-import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
-import net.pitan76.mcpitanlib.api.util.TextUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.state.property.CompatProperties;
+import net.pitan76.mcpitanlib.api.state.property.DirectionProperty;
+import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
+import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 import org.jetbrains.annotations.Nullable;
 
-public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvider, IUseableWrench {
-    public static DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+public class EMCCollector extends CompatBlock implements ExtendBlockEntityProvider, IUseableWrench {
+    public static DirectionProperty FACING = CompatProperties.HORIZONTAL_FACING;
 
     private static final Text TITLE = TextUtil.translatable("container.itemalchemy.emc_collector");
 
     public long maxEMC;
 
-    protected CompatMapCodec<? extends EMCCollector> CODEC = CompatMapCodec.createCodecOfExtendBlock(EMCCollector::new);
+    protected CompatMapCodec<? extends EMCCollector> CODEC = CompatBlockMapCodecUtil.createCodec(EMCCollector::new);
 
     @Override
     public CompatMapCodec<? extends EMCCollector> getCompatCodec() {
@@ -43,7 +40,7 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
 
     public EMCCollector(CompatibleBlockSettings settings, long maxEMC) {
         super(settings);
-        setNewDefaultState(BlockStateUtil.getDefaultState(this).with(FACING, Direction.NORTH));
+        setNewDefaultState(BlockStateUtil.getDefaultState(this).with(FACING.getProperty(), Direction.NORTH));
         this.maxEMC = maxEMC;
     }
 
@@ -51,12 +48,12 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
         this(settings, 10000);
     }
 
-    public EMCCollector() {
-        this(10000);
+    public EMCCollector(CompatIdentifier id) {
+        this(id, 10000);
     }
 
-    public EMCCollector(long maxEMC) {
-        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f), maxEMC);
+    public EMCCollector(CompatIdentifier id, long maxEMC) {
+        this(CompatibleBlockSettings.copy(id, Blocks.STONE).mapColor(CompatMapColor.YELLOW).strength(2f, 7.0f), maxEMC);
     }
 
     @Override
@@ -83,11 +80,11 @@ public class EMCCollector extends ExtendBlock implements ExtendBlockEntityProvid
 
     @Override
     public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
-        return args.withBlockState(FACING, args.getHorizontalPlayerFacing().getOpposite());
+        return args.withBlockState(FACING.getProperty(), args.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override
-    public ActionResult onRightClick(BlockUseEvent e) {
+    public CompatActionResult onRightClick(BlockUseEvent e) {
         if (e.isClient()) return e.success();
         if (e.stack.getItem() instanceof Wrench)
             return e.pass();

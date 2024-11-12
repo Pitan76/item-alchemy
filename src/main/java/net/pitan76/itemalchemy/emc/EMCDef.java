@@ -4,8 +4,8 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.mcpitanlib.api.tag.TagKey;
-import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
-import net.pitan76.mcpitanlib.api.util.ItemUtil;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 
 public abstract class EMCDef {
     public abstract void addAll();
@@ -23,12 +23,16 @@ public abstract class EMCDef {
     }
 
     public static void addByTag(Identifier identifier, long emc) {
-        ItemUtil.getItems(identifier).forEach(item -> {
+        addByTag(CompatIdentifier.fromMinecraft(identifier), emc);
+    }
+
+    public static void addByTag(CompatIdentifier id, long emc) {
+        ItemUtil.getInTag(id).forEach(item -> {
             add(item, emc);
         });
     }
 
     public static void addByTag(String id, long emc) {
-        addByTag(IdentifierUtil.id(id), emc);
+        addByTag(CompatIdentifier.of(id), emc);
     }
 }

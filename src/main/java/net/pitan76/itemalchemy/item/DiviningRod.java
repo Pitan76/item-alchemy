@@ -1,16 +1,15 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.TypedActionResult;
 import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseEvent;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseOnBlockEvent;
-import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
-import net.pitan76.mcpitanlib.api.item.ExtendItem;
+import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
+import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.util.CompatActionResult;
+import net.pitan76.mcpitanlib.api.util.StackActionResult;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 
-public class DiviningRod extends ExtendItem {
+public class DiviningRod extends CompatItem  {
     public DiviningRod(int i, CompatibleItemSettings settings) {
         super(settings);
     }
@@ -20,12 +19,12 @@ public class DiviningRod extends ExtendItem {
     }
 
     @Override
-    public ActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
+    public CompatActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
         return super.onRightClickOnBlock(e);
     }
 
     @Override
-    public TypedActionResult<ItemStack> onRightClick(ItemUseEvent e) {
+    public StackActionResult onRightClick(ItemUseEvent e) {
         return super.onRightClick(e);
     }
 

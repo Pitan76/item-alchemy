@@ -7,12 +7,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.api.PlayerRegisteredItemUtil;
 import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
-import net.pitan76.mcpitanlib.api.client.CompatInventoryScreen;
+import net.pitan76.mcpitanlib.api.client.gui.screen.CompatInventoryScreen;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawBackgroundArgs;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawForegroundArgs;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.KeyEventArgs;
@@ -30,10 +29,10 @@ import java.util.List;
 
 import static net.pitan76.itemalchemy.ItemAlchemy._id;
 
-public class AlchemyTableScreen extends CompatInventoryScreen {
+public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreenHandler> {
     public PlayerInventory playerInventory;
     public TextFieldWidget searchBox;
-    public AlchemyTableScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
+    public AlchemyTableScreen(AlchemyTableScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         ScreenUtil.setPassEvents(this, false);
 
@@ -73,7 +72,7 @@ public class AlchemyTableScreen extends CompatInventoryScreen {
         PacketByteUtil.writeNbt(buf, translations);
         ClientNetworking.send(_id("search"), buf);
 
-        AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
+        AlchemyTableScreenHandler screenHandler = getScreenHandlerOverride();
 
         screenHandler.setSearchText(searchBox.getText());
         screenHandler.setTranslations(translations);
@@ -101,12 +100,10 @@ public class AlchemyTableScreen extends CompatInventoryScreen {
         searchBox.setText("");
         addDrawableChild_compatibility(searchBox);
 
-        addDrawableCTBW(ScreenUtil.createTexturedButtonWidget(x + 113, y + 110, 18, 18, 208, 0, 18, getTexture(), (buttonWidget) -> {
-            // クライアントの反映
-            if (this.getScreenHandler() instanceof AlchemyTableScreenHandler) {
-                AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
-                screenHandler.prevExtractSlots();
-            }
+        addDrawableCTBW(ScreenUtil.createTexturedButtonWidget(x + 113, y + 110, 18, 18, 208, 0, 18, getCompatTexture(), (buttonWidget) -> {
+
+            AlchemyTableScreenHandler screenHandler = getScreenHandlerOverride();
+            screenHandler.prevExtractSlots();
 
             // サーバーに送信
             PacketByteBuf buf = PacketByteUtil.create();
@@ -116,12 +113,10 @@ public class AlchemyTableScreen extends CompatInventoryScreen {
             ClientNetworking.send(_id("network"), buf);
         }));
 
-        addDrawableCTBW(ScreenUtil.createTexturedButtonWidget(x + 171, y + 110, 18, 18, 226, 0, 18, getTexture(), (buttonWidget) -> {
+        addDrawableCTBW(ScreenUtil.createTexturedButtonWidget(x + 171, y + 110, 18, 18, 226, 0, 18, getCompatTexture(), (buttonWidget) -> {
             // クライアントの反映
-            if (this.getScreenHandler() instanceof AlchemyTableScreenHandler) {
-                AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) getScreenHandler();
-                screenHandler.nextExtractSlots();
-            }
+            AlchemyTableScreenHandler screenHandler = getScreenHandlerOverride();
+            screenHandler.nextExtractSlots();
 
             PacketByteBuf buf = PacketByteUtil.create();
             NbtCompound nbt = NbtUtil.create();

@@ -9,7 +9,7 @@ import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
-import net.pitan76.mcpitanlib.api.util.ItemUtil;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;

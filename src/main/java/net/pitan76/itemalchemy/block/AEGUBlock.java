@@ -2,31 +2,32 @@ package net.pitan76.itemalchemy.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.AEGUTile;
 import net.pitan76.itemalchemy.tile.EMCCondenserTile;
 import net.pitan76.itemalchemy.tile.Tiles;
-import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
-import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
+import net.pitan76.mcpitanlib.api.block.v2.CompatBlock;
+import net.pitan76.mcpitanlib.api.block.v2.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
-import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
+import net.pitan76.mcpitanlib.api.state.property.BooleanProperty;
+import net.pitan76.mcpitanlib.api.util.CompatActionResult;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
+import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 import org.jetbrains.annotations.Nullable;
 
-public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider, IUseableWrench {
+public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider, IUseableWrench {
     public static BooleanProperty CONNECTED = BooleanProperty.of("connected");
     public long emc;
 
-    protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(AEGUBlock::new);
+    protected CompatMapCodec<? extends Block> CODEC = CompatBlockMapCodecUtil.createCodec(AEGUBlock::new);
 
     @Override
     public CompatMapCodec<? extends Block> getCompatCodec() {
@@ -35,7 +36,7 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider,
 
     public AEGUBlock(CompatibleBlockSettings settings, long emc) {
         super(settings);
-        setNewDefaultState(BlockStateUtil.getDefaultState(this).with(CONNECTED, false));
+        setNewDefaultState(CONNECTED.with(getNewDefaultState(), false));
         this.emc = emc;
     }
 
@@ -43,12 +44,12 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider,
         this(settings, 10000);
     }
 
-    public AEGUBlock() {
-        this(10000);
+    public AEGUBlock(CompatIdentifier id) {
+        this(id, 10000);
     }
 
-    public AEGUBlock(long emc) {
-        this(CompatibleBlockSettings.copy(net.minecraft.block.Blocks.STONE).mapColor(MapColor.YELLOW).strength(2f, 7.0f), emc);
+    public AEGUBlock(CompatIdentifier id, long emc) {
+        this(CompatibleBlockSettings.copy(id, net.minecraft.block.Blocks.STONE).mapColor(CompatMapColor.YELLOW).strength(2f, 7.0f), emc);
     }
 
     @Override
@@ -58,29 +59,29 @@ public class AEGUBlock extends ExtendBlock implements ExtendBlockEntityProvider,
     }
 
     public static BlockState setConnected(BlockState state, boolean isConnected) {
-        return BlockStateUtil.with(state, CONNECTED, isConnected);
+        return CONNECTED.with(state, isConnected);
     }
 
     public static boolean isConnected(BlockState state) {
-        return state.get(CONNECTED);
+        return CONNECTED.get(state);
     }
 
     @Override
-    public ActionResult onRightClick(BlockUseEvent e) {
+    public CompatActionResult onRightClick(BlockUseEvent e) {
         if (e.stack.getItem() instanceof Wrench)
-            return ActionResult.PASS;
+            return e.pass();
 
         BlockPos blockPos = AEGUTile.getNearEMCCondenserPos(e.world, e.pos);
-        if (blockPos == null) return ActionResult.FAIL;
+        if (blockPos == null) return e.fail();
         BlockEntity blockEntity = WorldUtil.getBlockEntity(e.world, blockPos);
 
         if (blockEntity instanceof EMCCondenserTile) {
             EMCCondenserTile tile = (EMCCondenserTile) blockEntity;
-            if (e.isClient()) return ActionResult.SUCCESS;
+            if (e.isClient()) return e.success();
             e.player.openExtendedMenu(tile);
-            return ActionResult.CONSUME;
+            return e.consume();
         }
-        return ActionResult.PASS;
+        return e.pass();
     }
 
     @Override

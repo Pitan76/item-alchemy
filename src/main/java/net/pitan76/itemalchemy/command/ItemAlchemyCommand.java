@@ -24,6 +24,7 @@ import net.pitan76.mcpitanlib.api.command.argument.StringCommand;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.*;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -189,7 +190,7 @@ public class ItemAlchemyCommand extends LiteralCommand {
 
                     @Override
                     public void execute(ItemCommandEvent event) {
-                        event.sendSuccess("[ItemAlchemy] " + ItemUtil.toCompatID(event.getValue()) + ": " + EMCManager.get(event.getValue()) + "EMC");
+                        event.sendSuccess("[ItemAlchemy] " + ItemUtil.toId(event.getValue()) + ": " + EMCManager.get(event.getValue()) + "EMC");
                     }
 
                     @Override
@@ -384,47 +385,47 @@ public class ItemAlchemyCommand extends LiteralCommand {
                             }
 
                             @Override
-                            public void execute(StringCommandEvent event) {
-                                World world = event.getWorld();
-                                if (event.isClient()) return;
+                            public void execute(StringCommandEvent e) {
+                                World world = e.getWorld();
+                                if (e.isClient()) return;
 
                                 ServerState serverState = ServerState.getServerState(world.getServer());
-                                Optional<TeamState> teamState = serverState.getTeamByName(event.getValue());
+                                Optional<TeamState> teamState = serverState.getTeamByName(e.getValue());
                                 if(!teamState.isPresent()) {
-                                    event.sendSuccess("[ItemAlchemy]§c Not found the team named \"" + event.getValue() + "\"");
+                                    e.sendSuccess("[ItemAlchemy]§c Not found the team named \"" + e.getValue() + "\"");
                                     return;
                                 }
 
-                                event.sendSuccess("[ItemAlchemy] §a§l" + event.getValue() + "§r's Members List");
+                                e.sendSuccess("[ItemAlchemy] §a§l" + e.getValue() + "§r's Members List");
 
                                 List<PlayerState> playerStates = serverState.players.stream().filter(state -> state.teamID.equals(teamState.get().teamID)).collect(Collectors.toList());
 
                                 for (PlayerState state : playerStates) {
-                                    PlayerEntity playerEntity = world.getServer().getPlayerManager().getPlayer(state.playerUUID);
+                                    PlayerEntity playerEntity = PlayerManagerUtil.getPlayerManager(world).getPlayer(state.playerUUID);
                                     if (playerEntity == null) continue;
                                     Player player = new Player(playerEntity);
-                                    event.sendSuccess("- §c" + player.getName());
+                                    e.sendSuccess("- §c" + player.getName());
                                 }
                             }
                         });
                     }
 
                     @Override
-                    public void execute(ServerCommandEvent event) {
-                        event.sendSuccess("[ItemAlchemy] Example: /itemalchemy team members [Team Name]");
+                    public void execute(ServerCommandEvent e) {
+                        e.sendSuccess("[ItemAlchemy] Example: /itemalchemy team members [Team Name]");
                     }
                 });
             }
 
             @Override
-            public void execute(ServerCommandEvent event) {
-                event.sendSuccess("[ItemAlchemy] Example:");
-                event.sendSuccess("/itemalchemy team create [Team Name]");
-                event.sendSuccess("/itemalchemy team join [Team Name]");
-                event.sendSuccess("/itemalchemy team kick [Player Name]");
-                event.sendSuccess("/itemalchemy team leave");
-                event.sendSuccess("/itemalchemy team list");
-                event.sendSuccess("/itemalchemy team members [Team Name]");
+            public void execute(ServerCommandEvent e) {
+                e.sendSuccess("[ItemAlchemy] Example:");
+                e.sendSuccess("/itemalchemy team create [Team Name]");
+                e.sendSuccess("/itemalchemy team join [Team Name]");
+                e.sendSuccess("/itemalchemy team kick [Player Name]");
+                e.sendSuccess("/itemalchemy team leave");
+                e.sendSuccess("/itemalchemy team list");
+                e.sendSuccess("/itemalchemy team members [Team Name]");
             }
         });
 
@@ -496,8 +497,8 @@ public class ItemAlchemyCommand extends LiteralCommand {
     }
 
     @Override
-    public void execute(ServerCommandEvent event) {
-        event.sendSuccess("[ItemAlchemy]"
+    public void execute(ServerCommandEvent e) {
+        e.sendSuccess("[ItemAlchemy]"
                 + "\n- /itemalchemy reloademc...Reload emc_config.json"
                 + "\n- /itemalchemy opentable...Reload emc_config.json"
                 + "\n- /itemalchemy resetemc...Set all emc to default emc"

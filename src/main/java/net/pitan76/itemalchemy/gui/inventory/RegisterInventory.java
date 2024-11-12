@@ -11,9 +11,9 @@ import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import net.pitan76.itemalchemy.item.ILearnableItem;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
-import net.pitan76.mcpitanlib.api.util.ItemUtil;
 import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class RegisterInventory extends SimpleInventory {
                 if (learning) {
                     items.addAll(((ILearnableItem) stack.getItem()).onLearn(player));
                 } else if (EMCManager.get(stack) != 0) {
-                    items.add(ItemUtil.toID(stack.getItem()).toString());
+                    items.add(ItemUtil.toId(stack.getItem()).toString());
                 }
 
                 for (String itemId : items) {

@@ -1,7 +1,7 @@
 package net.pitan76.itemalchemy.item;
 
 import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
-import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 
 public class PickupRing extends Ring {

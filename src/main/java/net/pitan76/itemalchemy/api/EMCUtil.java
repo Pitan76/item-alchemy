@@ -6,7 +6,7 @@ import net.pitan76.itemalchemy.emc.EMCDef;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.tag.TagKey;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
-import net.pitan76.mcpitanlib.api.util.ItemUtil;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 
 public class EMCUtil {
 

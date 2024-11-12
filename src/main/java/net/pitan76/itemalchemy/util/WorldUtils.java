@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.pitan76.mcpitanlib.api.util.BlockUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.block.BlockUtil;
 
 import java.util.ArrayList;
 import java.util.List;

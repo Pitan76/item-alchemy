@@ -3,30 +3,33 @@ package net.pitan76.itemalchemy.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.MapColor;
-import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.gui.AlchemyTableScreenHandlerFactory;
 import net.pitan76.itemalchemy.item.Wrench;
-import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
-import net.pitan76.mcpitanlib.api.block.ExtendBlock;
+import net.pitan76.mcpitanlib.api.block.v2.CompatBlock;
+import net.pitan76.mcpitanlib.api.block.v2.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.api.event.block.OutlineShapeEvent;
 import net.pitan76.mcpitanlib.api.event.block.PlacementStateArgs;
+import net.pitan76.mcpitanlib.api.state.property.CompatProperties;
+import net.pitan76.mcpitanlib.api.state.property.DirectionProperty;
+import net.pitan76.mcpitanlib.api.util.CompatActionResult;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.PropertyUtil;
 import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
+import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
+import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 
-public class AlchemyTable extends ExtendBlock implements IUseableWrench {
+public class AlchemyTable extends CompatBlock implements IUseableWrench {
 
-    protected CompatMapCodec<? extends Block> CODEC = CompatMapCodec.createCodecOfExtendBlock(AlchemyTable::new);
+    protected CompatMapCodec<? extends Block> CODEC = CompatBlockMapCodecUtil.createCodec(AlchemyTable::new);
 
-    public static final DirectionProperty FACING = PropertyUtil.facing();
+    public static final DirectionProperty FACING = CompatProperties.FACING;
 
     @Override
     public CompatMapCodec<? extends Block> getCompatCodec() {
@@ -35,15 +38,15 @@ public class AlchemyTable extends ExtendBlock implements IUseableWrench {
 
     public AlchemyTable(CompatibleBlockSettings settings) {
         super(settings);
-        setNewDefaultState(getNewDefaultState().with(FACING, Direction.DOWN));
+        setNewDefaultState(FACING.with(getNewDefaultState(), Direction.DOWN));
     }
 
-    public AlchemyTable() {
-        this(CompatibleBlockSettings.copy(Blocks.STONE).mapColor(MapColor.BLACK).strength(1.5f, 7.0f));
+    public AlchemyTable(CompatIdentifier id) {
+        this(CompatibleBlockSettings.copy(id, Blocks.STONE).mapColor(CompatMapColor.BLACK).strength(1.5f, 7.0f));
     }
 
     @Override
-    public ActionResult onRightClick(BlockUseEvent e) {
+    public CompatActionResult onRightClick(BlockUseEvent e) {
         if (e.isClient()) return e.success();
         if (e.stack.getItem() instanceof Wrench)
             return e.pass();
@@ -58,7 +61,7 @@ public class AlchemyTable extends ExtendBlock implements IUseableWrench {
 
     @Override
     public VoxelShape getOutlineShape(OutlineShapeEvent e) {
-        Direction dir = e.state.contains(FACING) ? e.getProperty(FACING) : Direction.DOWN;
+        Direction dir = PropertyUtil.contains(e.state, FACING.getProperty()) ? e.getProperty(FACING.getProperty()) : Direction.DOWN;
 
         switch (dir) {
             case UP:
@@ -85,6 +88,6 @@ public class AlchemyTable extends ExtendBlock implements IUseableWrench {
     @Override
     public BlockState getPlacementState(PlacementStateArgs args) {
 
-        return args.withBlockState(FACING, args.getSide().getOpposite());
+        return args.withBlockState(FACING.getProperty(), args.getSide().getOpposite());
     }
 }

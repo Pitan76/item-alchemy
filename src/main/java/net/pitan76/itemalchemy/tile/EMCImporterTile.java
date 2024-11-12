@@ -1,8 +1,6 @@
 package net.pitan76.itemalchemy.tile;
 
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandler;
@@ -22,15 +20,15 @@ import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
 import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
+import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.VanillaStyleSidedInventory;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.AvailableSlotsArgs;
-import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.CanExtractArgs;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.CanInsertArgs;
 import net.pitan76.mcpitanlib.api.gui.v2.ExtendedScreenHandlerFactory;
-import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEntityTicker<EMCImporterTile>, VanillaStyleSidedInventory, IInventory, ExtendedScreenHandlerFactory {
@@ -129,7 +127,7 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
         @SuppressWarnings("OptionalGetWithoutIsPresent")
         TeamState teamState = getTeamState().get();
-        if (!teamState.registeredItems.contains(ItemUtil.toCompatID(stack.getItem()).toString())) return;
+        if (!teamState.registeredItems.contains(ItemUtil.toIdAsString(stack.getItem()))) return;
 
         teamState.storedEMC += emc;
         inv.set(0, ItemStackUtil.empty());
@@ -181,7 +179,7 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         @SuppressWarnings("OptionalGetWithoutIsPresent")
         TeamState teamState = getTeamState().get();
 
-        return teamState.registeredItems.contains(ItemUtil.toCompatID(stack.getItem()).toString());
+        return teamState.registeredItems.contains(ItemUtil.toIdAsString(stack.getItem()));
     }
 
     @Override

@@ -8,9 +8,9 @@ import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
-import net.pitan76.mcpitanlib.api.util.ItemUtil;
 import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class PlayerRegisteredItemUtil {
     public static void setItems(Player player, List<Item> items) {
         List<String> ids = new ArrayList<>();
         for (Item item : items) {
-            ids.add(ItemUtil.toID(item).toString());
+            ids.add(ItemUtil.toId(item).toString());
         }
         setItemsForString(player, ids);
     }

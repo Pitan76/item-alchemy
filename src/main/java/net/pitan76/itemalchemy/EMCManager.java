@@ -26,6 +26,7 @@ import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tag.TagKey;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -43,7 +44,7 @@ public class EMCManager {
     private static Map<String, Long> map = new LinkedHashMap<>();
 
     public static String itemToId(Item item) {
-        return ItemUtil.toID(item).toString();
+        return ItemUtil.toId(item).toString();
     }
 
     public static void add(Item item, long emc) {
@@ -96,8 +97,8 @@ public class EMCManager {
     }
 
     public static void add2(TagKey<Item> tagKey, long emc) {
-        for (Item item : ItemUtil.getAllItems()) {
-            if (ItemUtil.isIn(item, tagKey)) {
+        for (Item item : ItemUtil.getItems()) {
+            if (ItemUtil.isInTag(item, tagKey)) {
                 add(item, emc);
             }
         }
@@ -317,9 +318,9 @@ public class EMCManager {
                     HashMap<String, Long> tempMap = gson.fromJson(json, listType);
                     for (Map.Entry<String, Long> entry : map.entrySet()) {
                         CompatIdentifier tagId = CompatIdentifier.of(entry.getKey());
-                        for (Item item : ItemUtil.getItems(tagId)) {
-                            if (tempMap.containsKey(ItemUtil.toID(item).toString())) continue;
-                            tempMap.put(ItemUtil.toID(item).toString(), entry.getValue());
+                        for (Item item : ItemUtil.getInTag(tagId)) {
+                            if (tempMap.containsKey(ItemUtil.toId(item).toString())) continue;
+                            tempMap.put(ItemUtil.toId(item).toString(), entry.getValue());
                         }
                     }
                     map = tempMap;

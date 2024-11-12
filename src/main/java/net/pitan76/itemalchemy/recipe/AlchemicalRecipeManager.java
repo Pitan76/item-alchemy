@@ -15,6 +15,7 @@ import net.pitan76.itemalchemy.item.Items;
 import net.pitan76.mcpitanlib.api.event.v0.event.RecipeManagerEvent;
 import net.pitan76.mcpitanlib.api.recipe.CompatibleRecipeEntry;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;

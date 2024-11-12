@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -16,11 +15,12 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.item.EnchantableArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseOnBlockEvent;
-import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
-import net.pitan76.mcpitanlib.api.item.ExtendItem;
 import net.pitan76.mcpitanlib.api.item.FixedRecipeRemainderItem;
+import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
+import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.block.BlockUtil;
 import net.pitan76.mcpitanlib.core.Dummy;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainderItem, ItemCharge {
+public class PhilosopherStone extends CompatItem implements FixedRecipeRemainderItem, ItemCharge {
     public static Map<Block, Block> exchange_map = new HashMap<>();
     public static Map<Block, Block> shift_exchange_map = new HashMap<>();
 
@@ -37,17 +37,21 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
     }
 
     // 賢者の石の等価変換に追加する
-    public static boolean addExchangeInMap(Identifier target, Identifier replace) {
+    public static boolean addExchangeInMap(CompatIdentifier target, CompatIdentifier replace) {
         if (BlockUtil.isExist(target) && BlockUtil.isExist(replace)) {
-            addExchangeInMap(BlockUtil.block(target), BlockUtil.block(replace));
+            addExchangeInMap(BlockUtil.fromId(target), BlockUtil.fromId(replace));
             return true;
         }
 
         return false;
     }
 
+    public static boolean addExchangeInMap(Identifier target, Identifier replace) {
+        return addExchangeInMap(CompatIdentifier.fromMinecraft(target), CompatIdentifier.fromMinecraft(replace));
+    }
+
     public static boolean addExchangeInMap(String target, String replace) {
-        return addExchangeInMap(IdentifierUtil.id(target), IdentifierUtil.id(replace));
+        return addExchangeInMap(CompatIdentifier.of(target), CompatIdentifier.of(replace));
     }
 
     public static boolean addShiftExchangeInMap(Block target, Block replace) {
@@ -55,9 +59,9 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
         return true;
     }
 
-    public static boolean addShiftExchangeInMap(Identifier target, Identifier replace) {
+    public static boolean addShiftExchangeInMap(CompatIdentifier target, CompatIdentifier replace) {
         if (BlockUtil.isExist(target) && BlockUtil.isExist(replace)) {
-            addShiftExchangeInMap(BlockUtil.block(target), BlockUtil.block(replace));
+            addShiftExchangeInMap(BlockUtil.fromId(target), BlockUtil.fromId(replace));
             return true;
         }
 
@@ -65,7 +69,7 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
     }
 
     public static boolean addShiftExchangeInMap(String target, String replace) {
-        return addShiftExchangeInMap(IdentifierUtil.id(target), IdentifierUtil.id(replace));
+        return addShiftExchangeInMap(CompatIdentifier.of(target), CompatIdentifier.of(replace));
     }
 
     static {
@@ -134,7 +138,7 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
     }
 
     @Override
-    public ActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
+    public CompatActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
         World world = e.world;
         if (!e.isClient()) {
             BlockPos targetPos = e.getBlockPos();
@@ -142,19 +146,19 @@ public class PhilosopherStone extends ExtendItem implements FixedRecipeRemainder
             Player player = e.player;
 
             if (!isExchange(targetBlockState.getBlock()))
-                return ActionResult.SUCCESS;
+                return e.success();
 
             List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, targetPos, ItemUtils.getCharge(e.stack), true, true);
 
-            Block replaceBlock = getExchangeBlock(targetBlockState.getBlock(), player.getPlayerEntity().isSneaking());
+            Block replaceBlock = getExchangeBlock(targetBlockState.getBlock(), player.isSneaking());
 
             if (replaceBlock == null)
-                return ActionResult.SUCCESS;
+                return e.success();
 
             blocks.forEach(pos -> exchangeBlock(world, pos, BlockStateUtil.getDefaultState(replaceBlock), WorldUtil.getBlockState(world, pos)));
 
             WorldUtil.playSound(world, null, targetPos, Sounds.EXCHANGE_SOUND, CompatSoundCategory.PLAYERS, 0.15f, 1f);
-            return ActionResult.SUCCESS;
+            return e.success();
         }
 
         return super.onRightClickOnBlock(e);

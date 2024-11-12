@@ -1,10 +1,9 @@
 package net.pitan76.itemalchemy.client.screen;
 
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.gui.screen.EMCBatteryScreenHandler;
-import net.pitan76.mcpitanlib.api.client.CompatInventoryScreen;
+import net.pitan76.mcpitanlib.api.client.gui.screen.CompatInventoryScreen;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawBackgroundArgs;
 import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawForegroundArgs;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
@@ -14,19 +13,17 @@ import net.pitan76.mcpitanlib.api.util.client.ScreenUtil;
 
 import static net.pitan76.itemalchemy.ItemAlchemy._id;
 
-public class EMCBatteryScreen extends CompatInventoryScreen {
+public class EMCBatteryScreen extends CompatInventoryScreen<EMCBatteryScreenHandler> {
     public PlayerInventory playerInventory;
 
     EMCBatteryScreenHandler screenHandler;
 
-    public EMCBatteryScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
+    public EMCBatteryScreen(EMCBatteryScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         this.playerInventory = inventory;
         setBackgroundWidth(208);
         setBackgroundHeight(166);
-        if (handler instanceof EMCBatteryScreenHandler)
-            screenHandler = (EMCBatteryScreenHandler) handler;
-
+        screenHandler = handler;
     }
 
     @Override

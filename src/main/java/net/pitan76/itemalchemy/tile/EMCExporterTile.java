@@ -17,13 +17,14 @@ import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
 import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
-import net.pitan76.mcpitanlib.api.gui.v2.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.VanillaStyleSidedInventory;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.AvailableSlotsArgs;
+import net.pitan76.mcpitanlib.api.gui.v2.ExtendedScreenHandlerFactory;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEntityTicker<EMCExporterTile>, VanillaStyleSidedInventory, IInventory, ExtendedScreenHandlerFactory {
@@ -134,7 +135,7 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
             if (neededEMC <= 0) continue;
             if (aveEMC < neededEMC) continue;
-            if (!teamState.registeredItems.contains(ItemUtil.toCompatID(filterStack.getItem()).toString())) continue;
+            if (!teamState.registeredItems.contains(ItemUtil.toIdAsString(filterStack.getItem()))) continue;
 
             ItemStack stack = filterStack.copy();
             stack.setCount(Math.min((int) Math.floorDiv(aveEMC, neededEMC), MAX_STACK_COUNT));
