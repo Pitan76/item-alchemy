@@ -40,7 +40,7 @@ public class EMCCondenser extends CompatBlock implements ExtendBlockEntityProvid
 
     public EMCCondenser(CompatibleBlockSettings settings) {
         super(settings);
-        setNewDefaultState(BlockStateUtil.getDefaultState(this).with(FACING.getProperty(), Direction.NORTH));
+        setDefaultState(getDefaultMidohraState().with(FACING, Direction.NORTH));
     }
 
     public EMCCondenser(CompatIdentifier id) {
