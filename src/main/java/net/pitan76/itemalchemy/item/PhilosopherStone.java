@@ -158,7 +158,7 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
 
             blocks.forEach(pos -> exchangeBlock(world, pos, BlockState.of(BlockStateUtil.getDefaultState(replaceBlock)), world.getBlockState(pos)));
 
-            world.playSound(null, targetPos, Sounds.EXCHANGE_SOUND, CompatSoundCategory.PLAYERS, 0.15f, 1f);
+            WorldUtil.playSound(world.getRaw(), null, targetPos.toMinecraft(), Sounds.EXCHANGE_SOUND, CompatSoundCategory.PLAYERS, 0.15f, 1f);
             return e.success();
         }
 
