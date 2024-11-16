@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.block;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -13,6 +12,7 @@ import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.EMCCollectorTile;
 import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
+import net.pitan76.mcpitanlib.api.block.args.v2.PlacementStateArgs;
 import net.pitan76.mcpitanlib.api.block.v2.CompatBlock;
 import net.pitan76.mcpitanlib.api.block.v2.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.event.block.*;
@@ -22,6 +22,7 @@ import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
+import net.pitan76.mcpitanlib.midohra.block.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCCollector extends CompatBlock implements ExtendBlockEntityProvider, IUseableWrench {
@@ -80,7 +81,7 @@ public class EMCCollector extends CompatBlock implements ExtendBlockEntityProvid
 
     @Override
     public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
-        return args.withBlockState(FACING.getProperty(), args.getHorizontalPlayerFacing().getOpposite());
+        return args.with(FACING, args.getHorizontalPlayerFacing().getOpposite().getRaw());
     }
 
     @Override

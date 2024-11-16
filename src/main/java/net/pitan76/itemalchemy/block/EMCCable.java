@@ -1,11 +1,8 @@
 package net.pitan76.itemalchemy.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Waterloggable;
 import net.minecraft.fluid.FluidState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.base.EMCStorageBlockEntity;
@@ -15,9 +12,15 @@ import net.pitan76.mcpitanlib.api.state.property.BooleanProperty;
 import net.pitan76.mcpitanlib.api.state.property.CompatProperties;
 import net.pitan76.mcpitanlib.api.state.property.DirectionProperty;
 import net.pitan76.mcpitanlib.api.util.*;
-import net.pitan76.mcpitanlib.api.util.world.WorldAccessUtil;
+import net.pitan76.mcpitanlib.api.block.args.v2.PlacementStateArgs;
+import net.pitan76.mcpitanlib.api.block.args.v2.StateForNeighborUpdateArgs;
+import net.pitan76.mcpitanlib.api.block.args.v2.OutlineShapeEvent;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
+import net.pitan76.mcpitanlib.midohra.block.BlockState;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
+import net.pitan76.mcpitanlib.midohra.util.math.Direction;
+import net.pitan76.mcpitanlib.midohra.world.IWorldView;
 
 public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggable {
 
@@ -82,7 +85,7 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
 
     @Override
     public BlockState getPlacementState(PlacementStateArgs args) {
-        return args.getMidohraBlockState().with(WATERLOGGED, WorldUtil.getFluidState(args.getWorld(), args.getPos()).getFluid() == FluidUtil.water()).toMinecraft();
+        return args.with(WATERLOGGED, args.getWorld().getFluidState(args.getPos().toMinecraft()).getFluid() == FluidUtil.water());
     }
 
     @Override
@@ -136,29 +139,31 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(StateForNeighborUpdateArgs args) {
+    public net.minecraft.block.BlockState getStateForNeighborUpdate(StateForNeighborUpdateArgs args) {
         args.state = super.getStateForNeighborUpdate(args);
 
-        BlockState state = args.getState();
+        BlockState state = args.getBlockState();
         BlockPos pos = args.getPos();
 
+        IWorldView world = args.getWorldView();
+
         // TODO: ScheduleTickView of Midohra を使うべき
-        if (WATERLOGGED.get(state))
-            WorldAccessUtil.scheduleFluidTick(args.world, pos, FluidUtil.water(), FluidUtil.getTickRate(FluidUtil.water(), args.world));
+        if (state.get(WATERLOGGED))
+            args.getTickView().scheduleFluidTick(pos.toMinecraft(), FluidUtil.water(), FluidUtil.getTickRate(FluidUtil.water(), args.world));
 
-        BlockState north = args.getBlockState(pos.north());
-        BlockState south = args.getBlockState(pos.south());
-        BlockState east = args.getBlockState(pos.east());
-        BlockState west = args.getBlockState(pos.west());
-        BlockState up = args.getBlockState(pos.up());
-        BlockState down = args.getBlockState(pos.down());
+        BlockState north = world.getBlockState(pos.north());
+        BlockState south = world.getBlockState(pos.south());
+        BlockState east = world.getBlockState(pos.east());
+        BlockState west = world.getBlockState(pos.west());
+        BlockState up = world.getBlockState(pos.up());
+        BlockState down = world.getBlockState(pos.down());
 
-        boolean north_only = north.getBlock() == this || args.getBlockEntity(pos.north()) instanceof EMCStorageBlockEntity || north.getBlock() instanceof EMCRepeater;
-        boolean south_only = south.getBlock() == this || args.getBlockEntity(pos.south()) instanceof EMCStorageBlockEntity || south.getBlock() instanceof EMCRepeater;
-        boolean east_only = east.getBlock() == this || args.getBlockEntity(pos.east()) instanceof EMCStorageBlockEntity || east.getBlock() instanceof EMCRepeater;
-        boolean west_only = west.getBlock() == this || args.getBlockEntity(pos.west()) instanceof EMCStorageBlockEntity || west.getBlock() instanceof EMCRepeater;
-        boolean up_only = up.getBlock() == this || args.getBlockEntity(pos.up()) instanceof EMCStorageBlockEntity || up.getBlock() instanceof EMCRepeater;
-        boolean down_only = down.getBlock() == this || args.getBlockEntity(pos.down()) instanceof EMCStorageBlockEntity || down.getBlock() instanceof EMCRepeater;
+        boolean north_only = north.getBlock().get() == this || world.getBlockEntity(pos.north()).get() instanceof EMCStorageBlockEntity || north.getBlock().get() instanceof EMCRepeater;
+        boolean south_only = south.getBlock().get() == this || world.getBlockEntity(pos.south()).get() instanceof EMCStorageBlockEntity || south.getBlock().get() instanceof EMCRepeater;
+        boolean east_only = east.getBlock().get() == this || world.getBlockEntity(pos.east()).get() instanceof EMCStorageBlockEntity || east.getBlock().get() instanceof EMCRepeater;
+        boolean west_only = west.getBlock().get() == this || world.getBlockEntity(pos.west()).get() instanceof EMCStorageBlockEntity || west.getBlock().get() instanceof EMCRepeater;
+        boolean up_only = up.getBlock().get() == this || world.getBlockEntity(pos.up()).get() instanceof EMCStorageBlockEntity || up.getBlock().get() instanceof EMCRepeater;
+        boolean down_only = down.getBlock().get() == this || world.getBlockEntity(pos.down()).get() instanceof EMCStorageBlockEntity || down.getBlock().get() instanceof EMCRepeater;
 
         if (north_only || south_only || east_only || west_only || up_only || down_only) {
 
@@ -169,48 +174,48 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
             boolean both_ud = (up_only && down_only);
 
             if (east_only || west_only) {
-                state = FACING.with(state, Direction.NORTH);
+                state = state.with(FACING, Direction.NORTH);
             } else if (north_only || south_only) {
-                state = FACING.with(state, Direction.EAST);
+                state = state.with(FACING, Direction.EAST);
             } else if (up_only || down_only) {
-                state = FACING.with(state, Direction.UP);
+                state = state.with(FACING, Direction.UP);
             }
 
             // 交差
             if (both_ns && both_ew || both_ns && both_ud || both_ew && both_ud) {
-                return CROSS.with(state, true);
+                return state.with(CROSS, true).toMinecraft();
             }
 
             // T字
             if (both_ns && east_only) {
-                return T_CHAR.with(state, true).with(FACING, Direction.SOUTH);
+                return state.with(T_CHAR, true).with(FACING, Direction.SOUTH).toMinecraft();
             } else if (both_ns && west_only) {
-                return T_CHAR.with(state, true).with(FACING, Direction.NORTH);
+                return state.with(T_CHAR, true).with(FACING, Direction.NORTH).toMinecraft();
             } else if (both_ew && north_only) {
-                return T_CHAR.with(state, true).with(FACING, Direction.EAST);
+                return state.with(T_CHAR, true).with(FACING, Direction.EAST).toMinecraft();
             } else if (both_ew && south_only) {
-                return T_CHAR.with(state, true).with(FACING, Direction.WEST);
+                return state.with(T_CHAR, true).with(FACING, Direction.WEST).toMinecraft();
             }
 
             if (both_ns || both_ew || both_ud) {
-                return SIDE1.with(state, true).with(SIDE2, true);
+                return state.with(SIDE1, true).with(SIDE2, true).toMinecraft();
             }
 
             // 角 東西南北
             if (north_only && east_only || north_only && west_only || south_only && east_only || south_only && west_only) {
                 if (north_only && west_only ) {
-                    return CONNER.with(state, true).with(FACING, Direction.NORTH);
+                    return state.with(CONNER, true).with(FACING, Direction.NORTH).toMinecraft();
                 }
 
                 if (north_only) {
-                    return CONNER.with(state, true).with(FACING, Direction.EAST);
+                    return state.with(CONNER, true).with(FACING, Direction.EAST).toMinecraft();
                 }
 
                 if (west_only) {
-                    return CONNER.with(state, true).with(FACING, Direction.WEST);
+                    return state.with(CONNER, true).with(FACING, Direction.WEST).toMinecraft();
                 }
 
-                return CONNER.with(state, true).with(FACING, Direction.SOUTH);
+                return state.with(CONNER, true).with(FACING, Direction.SOUTH).toMinecraft();
             }
 
             // 角 上下
@@ -218,50 +223,50 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
                     up_only && north_only || up_only && south_only || down_only && north_only || down_only && south_only) {
 
                 if (up_only && west_only) {
-                    return CONNER.with(state, true).with(FACING, Direction.UP);
+                    return state.with(CONNER, true).with(FACING, Direction.UP).toMinecraft();
                 }
                 if (up_only && north_only) {
-                    return CONNER.with(state, true).with(FACING, Direction.UP).with(SIDE1, true);
+                    return state.with(CONNER, true).with(FACING, Direction.UP).with(SIDE1, true).toMinecraft();
                 }
                 if (up_only && south_only) {
-                    return CONNER.with(state, true).with(FACING, Direction.UP).with(SIDE2, true);
+                    return state.with(CONNER, true).with(FACING, Direction.UP).with(SIDE2, true).toMinecraft();
                 }
                 if (up_only) {
-                    return CONNER.with(state, true).with(FACING, Direction.UP).with(SIDE1, true).with(SIDE2, true);
+                    return state.with(CONNER, true).with(FACING, Direction.UP).with(SIDE1, true).with(SIDE2, true).toMinecraft();
                 }
 
                 if (west_only) {
-                    return CONNER.with(state, true).with(FACING, Direction.DOWN);
+                    return state.with(CONNER, true).with(FACING, Direction.DOWN).toMinecraft();
                 }
                 if (north_only) {
-                    return CONNER.with(state, true).with(FACING, Direction.DOWN).with(SIDE1, true);
+                    return state.with(CONNER, true).with(FACING, Direction.DOWN).with(SIDE1, true).toMinecraft();
                 }
                 if (south_only) {
-                    return CONNER.with(state, true).with(FACING, Direction.DOWN).with(SIDE2, true);
+                    return state.with(CONNER, true).with(FACING, Direction.DOWN).with(SIDE2, true).toMinecraft();
                 }
-                return CONNER.with(state, true).with(FACING, Direction.DOWN).with(SIDE1, true).with(SIDE2, true);
+                return state.with(CONNER, true).with(FACING, Direction.DOWN).with(SIDE1, true).with(SIDE2, true).toMinecraft();
             }
 
 
             if (north_only || west_only || up_only) {
-                return SIDE1.with(state, true);
+                return state.with(SIDE1, true).toMinecraft();
             }
 
-            return SIDE2.with(state, true);
+            return state.with(SIDE2, true).toMinecraft();
         }
 
-        return CONNER.with(state, false).with(SIDE1, false).with(SIDE2, false)
-                .with(T_CHAR, false).with(CROSS, false).with(FACING, Direction.NORTH);
+        return state.with(CONNER, false).with(SIDE1, false).with(SIDE2, false)
+                .with(T_CHAR, false).with(CROSS, false).with(FACING, Direction.NORTH).toMinecraft();
 
     }
 
     @Override
     public VoxelShape getOutlineShape(OutlineShapeEvent e) {
-        Direction direction = e.getProperty(FACING);
+        Direction direction = Direction.of(e.get(FACING));
 
-        if (e.getProperty(SIDE1) && e.getProperty(SIDE2)) {
+        if (e.get(SIDE1) && e.get(SIDE2)) {
             // 角
-            if (e.getProperty(CONNER)) {
+            if (e.get(CONNER)) {
                 if (direction == Direction.UP) {
                     return VoxelShapeUtil.union(
                             VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D),
@@ -284,9 +289,9 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
             } else {
                 return UD_BOTH_CONNECT;
             }
-        } else if (e.getProperty(SIDE1)) {
+        } else if (e.get(SIDE1)) {
             // 角
-            if (e.getProperty(CONNER)) {
+            if (e.get(CONNER)) {
                 if (direction == Direction.UP) {
                     return VoxelShapeUtil.union(
                             VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 10.0D),
@@ -309,9 +314,9 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
             } else {
                 return UD_ONE_CONNECT_SIDE2;
             }
-        } else if (e.getProperty(SIDE2)) {
+        } else if (e.get(SIDE2)) {
             // 角
-            if (e.getProperty(CONNER)) {
+            if (e.get(CONNER)) {
                 if (direction == Direction.UP) {
                     return VoxelShapeUtil.union(
                             VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 16.0D),
@@ -334,7 +339,7 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
             } else {
                 return UD_ONE_CONNECT_SIDE1;
             }
-        } else if (e.getProperty(CONNER)) {
+        } else if (e.get(CONNER)) {
             // 角上下
             if (direction == Direction.UP) {
                 return VoxelShapeUtil.union(
@@ -361,7 +366,7 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
             if (direction == Direction.WEST) {
                 return WEST_CONNER_CONNECT;
             }
-        } else if (e.getProperty(T_CHAR)) {
+        } else if (e.get(T_CHAR)) {
             if (direction == Direction.NORTH) {
                 return NORTH_CONNER_CONNECT;
             } else if (direction == Direction.SOUTH) {
@@ -371,7 +376,7 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
             } else if (direction == Direction.WEST) {
                 return WEST_CONNER_CONNECT;
             }
-        } else if (e.getProperty(CROSS)) {
+        } else if (e.get(CROSS)) {
             return VoxelShapeUtil.union(NS_BOTH_CONNECT, EW_BOTH_CONNECT);
         }
 
