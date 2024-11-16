@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.Direction;
 import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.AlchemyChestTile;
 import net.pitan76.itemalchemy.tile.Tiles;
@@ -24,6 +23,7 @@ import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 import net.pitan76.mcpitanlib.midohra.block.BlockState;
+import net.pitan76.mcpitanlib.midohra.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 public class AlchemyChest extends CompatBlock implements ExtendBlockEntityProvider, IUseableWrench {
@@ -40,7 +40,7 @@ public class AlchemyChest extends CompatBlock implements ExtendBlockEntityProvid
 
     public AlchemyChest(CompatibleBlockSettings settings) {
         super(settings);
-        setNewDefaultState(FACING.with(getNewDefaultState(), Direction.NORTH));
+        setDefaultState(getDefaultMidohraState().with(FACING, Direction.NORTH));
     }
 
     @Override
@@ -59,7 +59,7 @@ public class AlchemyChest extends CompatBlock implements ExtendBlockEntityProvid
 
     @Override
     public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
-        return args.with(FACING, args.getHorizontalPlayerFacing().getOpposite().getRaw());
+        return args.getBlockState().with(FACING, args.getHorizontalPlayerFacing().getOpposite());
     }
 
     public AlchemyChest(CompatIdentifier id) {

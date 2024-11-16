@@ -1,10 +1,8 @@
 package net.pitan76.itemalchemy.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.util.math.BlockPos;
 import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.AEGUTile;
 import net.pitan76.itemalchemy.tile.EMCCondenserTile;
@@ -21,6 +19,8 @@ import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
+import net.pitan76.mcpitanlib.midohra.block.BlockState;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider, IUseableWrench {
@@ -36,7 +36,7 @@ public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider,
 
     public AEGUBlock(CompatibleBlockSettings settings, long emc) {
         super(settings);
-        setNewDefaultState(CONNECTED.with(getNewDefaultState(), false));
+        setDefaultState(getDefaultMidohraState().with(CONNECTED, false));
         this.emc = emc;
     }
 
@@ -59,11 +59,19 @@ public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider,
     }
 
     public static BlockState setConnected(BlockState state, boolean isConnected) {
-        return CONNECTED.with(state, isConnected);
+        return state.with(CONNECTED, isConnected);
+    }
+
+    public static net.minecraft.block.BlockState setConnected(net.minecraft.block.BlockState state, boolean isConnected) {
+        return setConnected(BlockState.of(state), isConnected).toMinecraft();
     }
 
     public static boolean isConnected(BlockState state) {
-        return CONNECTED.get(state);
+        return state.get(CONNECTED);
+    }
+
+    public static boolean isConnected(net.minecraft.block.BlockState state) {
+        return isConnected(BlockState.of(state));
     }
 
     @Override
@@ -71,9 +79,11 @@ public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider,
         if (e.stack.getItem() instanceof Wrench)
             return e.pass();
 
-        BlockPos blockPos = AEGUTile.getNearEMCCondenserPos(e.world, e.pos);
-        if (blockPos == null) return e.fail();
-        BlockEntity blockEntity = WorldUtil.getBlockEntity(e.world, blockPos);
+        net.minecraft.util.math.BlockPos rawPos = AEGUTile.getNearEMCCondenserPos(e.world, e.pos);
+        if (rawPos == null) return e.fail();
+
+        BlockPos blockPos = BlockPos.of(rawPos);
+        BlockEntity blockEntity = e.getMidohraWorld().getBlockEntity(blockPos).get();
 
         if (blockEntity instanceof EMCCondenserTile) {
             EMCCondenserTile tile = (EMCCondenserTile) blockEntity;

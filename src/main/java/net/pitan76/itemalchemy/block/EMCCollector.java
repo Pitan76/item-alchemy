@@ -5,9 +5,6 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.EMCCollectorTile;
 import net.pitan76.itemalchemy.tile.Tiles;
@@ -23,6 +20,9 @@ import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 import net.pitan76.mcpitanlib.midohra.block.BlockState;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
+import net.pitan76.mcpitanlib.midohra.util.math.Direction;
+import net.pitan76.mcpitanlib.midohra.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCCollector extends CompatBlock implements ExtendBlockEntityProvider, IUseableWrench {
@@ -41,7 +41,7 @@ public class EMCCollector extends CompatBlock implements ExtendBlockEntityProvid
 
     public EMCCollector(CompatibleBlockSettings settings, long maxEMC) {
         super(settings);
-        setNewDefaultState(BlockStateUtil.getDefaultState(this).with(FACING.getProperty(), Direction.NORTH));
+        setDefaultState(getDefaultMidohraState().with(FACING, Direction.NORTH));
         this.maxEMC = maxEMC;
     }
 
@@ -65,11 +65,11 @@ public class EMCCollector extends CompatBlock implements ExtendBlockEntityProvid
 
     @Override
     public void onStateReplaced(StateReplacedEvent e) {
-        World world = e.world;
-        BlockPos pos = e.pos;
+        World world = e.getMidohraWorld();
+        BlockPos pos = e.getMidohraPos();
         if (e.isSameState()) return;
 
-        BlockEntity blockEntity = WorldUtil.getBlockEntity(world, pos);
+        BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof Inventory) {
             Inventory inventory = (Inventory) blockEntity;
             inventory.setStack(1, ItemStackUtil.empty());
@@ -81,7 +81,7 @@ public class EMCCollector extends CompatBlock implements ExtendBlockEntityProvid
 
     @Override
     public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
-        return args.with(FACING, args.getHorizontalPlayerFacing().getOpposite().getRaw());
+        return args.with(FACING, args.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override
