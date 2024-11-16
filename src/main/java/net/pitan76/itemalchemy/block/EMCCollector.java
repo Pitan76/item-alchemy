@@ -81,7 +81,9 @@ public class EMCCollector extends CompatBlock implements ExtendBlockEntityProvid
 
     @Override
     public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
-        return args.with(FACING, args.getHorizontalPlayerFacing().getOpposite());
+        BlockState state = super.getPlacementState(args);
+
+        return state.with(FACING, args.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override

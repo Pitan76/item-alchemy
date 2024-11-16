@@ -59,7 +59,9 @@ public class AlchemyChest extends CompatBlock implements ExtendBlockEntityProvid
 
     @Override
     public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
-        return args.getBlockState().with(FACING, args.getHorizontalPlayerFacing().getOpposite());
+        BlockState state = super.getPlacementState(args);
+
+        return state.with(FACING, args.getHorizontalPlayerFacing().getOpposite());
     }
 
     public AlchemyChest(CompatIdentifier id) {

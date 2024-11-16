@@ -90,6 +90,8 @@ public class AlchemyTable extends CompatBlock implements IUseableWrench {
 
     @Override
     public BlockState getPlacementState(PlacementStateArgs args) {
-        return args.getBlockState().with(FACING, args.getSide().getOpposite());
+        BlockState state = super.getPlacementState(args);
+
+        return state.with(FACING, args.getSide().getOpposite());
     }
 }

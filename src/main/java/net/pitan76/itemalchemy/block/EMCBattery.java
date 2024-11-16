@@ -87,7 +87,9 @@ public class EMCBattery extends EMCRepeater implements ExtendBlockEntityProvider
 
     @Override
     public BlockState getPlacementState(PlacementStateArgs args) {
-        return args.with(FACING, args.getHorizontalPlayerFacing().getOpposite().getRaw());
+        BlockState state = super.getPlacementState(args);
+
+        return state.with(FACING, args.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override

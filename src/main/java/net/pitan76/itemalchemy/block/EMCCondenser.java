@@ -77,7 +77,9 @@ public class EMCCondenser extends CompatBlock implements ExtendBlockEntityProvid
 
     @Override
     public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
-        return args.with(FACING, args.getHorizontalPlayerFacing().getOpposite().getRaw());
+        BlockState state = super.getPlacementState(args);
+
+        return state.with(FACING, args.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override
