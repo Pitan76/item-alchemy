@@ -1,12 +1,8 @@
 package net.pitan76.itemalchemy.item;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.pitan76.itemalchemy.sound.Sounds;
 import net.pitan76.itemalchemy.util.ItemCharge;
 import net.pitan76.itemalchemy.util.ItemUtils;
@@ -19,9 +15,14 @@ import net.pitan76.mcpitanlib.api.item.FixedRecipeRemainderItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
+import net.pitan76.mcpitanlib.api.state.property.CompatProperties;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.block.BlockUtil;
 import net.pitan76.mcpitanlib.core.Dummy;
+import net.pitan76.mcpitanlib.midohra.block.BlockState;
+import net.pitan76.mcpitanlib.midohra.block.BlockWrapper;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
+import net.pitan76.mcpitanlib.midohra.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -139,10 +140,10 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
 
     @Override
     public CompatActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
-        World world = e.world;
+        World world = e.getMidohraWorld();
         if (!e.isClient()) {
-            BlockPos targetPos = e.getBlockPos();
-            BlockState targetBlockState = e.getBlockState();
+            BlockPos targetPos = e.getMidohraPos();
+            BlockState targetBlockState = e.getMidohraState();
             Player player = e.player;
 
             if (!isExchange(targetBlockState.getBlock()))
@@ -155,9 +156,9 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
             if (replaceBlock == null)
                 return e.success();
 
-            blocks.forEach(pos -> exchangeBlock(world, pos, BlockStateUtil.getDefaultState(replaceBlock), WorldUtil.getBlockState(world, pos)));
+            blocks.forEach(pos -> exchangeBlock(world, pos, BlockState.of(BlockStateUtil.getDefaultState(replaceBlock)), world.getBlockState(pos)));
 
-            WorldUtil.playSound(world, null, targetPos, Sounds.EXCHANGE_SOUND, CompatSoundCategory.PLAYERS, 0.15f, 1f);
+            world.playSound(null, targetPos, Sounds.EXCHANGE_SOUND, CompatSoundCategory.PLAYERS, 0.15f, 1f);
             return e.success();
         }
 
@@ -165,14 +166,18 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
     }
 
     public void exchangeBlock(World world, BlockPos blockPos, BlockState newBlockState, BlockState blockState) {
-        if (newBlockState.contains(Properties.FACING) && blockState.contains(Properties.FACING)) {
-            newBlockState = newBlockState.with(Properties.FACING, blockState.get(Properties.FACING));
+        if (newBlockState.contains(CompatProperties.FACING) && blockState.contains(CompatProperties.FACING)) {
+            newBlockState = newBlockState.with(CompatProperties.FACING, blockState.get(CompatProperties.FACING));
         }
-        if (newBlockState.contains(Properties.HORIZONTAL_FACING) && blockState.contains(Properties.HORIZONTAL_FACING)) {
-            newBlockState = newBlockState.with(Properties.HORIZONTAL_FACING, blockState.get(Properties.HORIZONTAL_FACING));
+        if (newBlockState.contains(CompatProperties.HORIZONTAL_FACING) && blockState.contains(CompatProperties.HORIZONTAL_FACING)) {
+            newBlockState = newBlockState.with(CompatProperties.HORIZONTAL_FACING, blockState.get(CompatProperties.HORIZONTAL_FACING));
         }
-        //world.playSound(null, blockPos, Sounds.EXCHANGE_SOUND, CompatSoundCategory.PLAYERS, 0.15f, 1f);
-        WorldUtil.setBlockState(world, blockPos, newBlockState);
+
+        world.setBlockState(blockPos, newBlockState);
+    }
+
+    public void exchangeBlock(net.minecraft.world.World world, net.minecraft.util.math.BlockPos blockPos, net.minecraft.block.BlockState newBlockState, net.minecraft.block.BlockState blockState) {
+        exchangeBlock(World.of(world), BlockPos.of(blockPos), BlockState.of(newBlockState), BlockState.of(blockState));
     }
 
     @Override
@@ -205,8 +210,16 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
         return null;
     }
 
+    public static Block getExchangeBlock(BlockWrapper target, boolean isSneaking) {
+        return getExchangeBlock(target.get(), isSneaking);
+    }
+
     public static boolean isExchange(Block block) {
         return exchange_map.containsKey(block) || shift_exchange_map.containsKey(block);
+    }
+
+    public static boolean isExchange(BlockWrapper block) {
+        return isExchange(block.get());
     }
 
     @Override

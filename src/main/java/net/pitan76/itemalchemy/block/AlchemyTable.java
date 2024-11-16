@@ -37,7 +37,7 @@ public class AlchemyTable extends CompatBlock implements IUseableWrench {
 
     public AlchemyTable(CompatibleBlockSettings settings) {
         super(settings);
-        setDefaultState(FACING.with(getDefaultMidohraState(), Direction.DOWN));
+        setDefaultState(getDefaultMidohraState().with(FACING, Direction.DOWN));
     }
 
     public AlchemyTable(CompatIdentifier id) {

@@ -40,4 +40,14 @@ public class WorldUtils {
 
         return blocks;
     }
+
+    public static List<net.pitan76.mcpitanlib.midohra.util.math.BlockPos> getTargetBlocks(net.pitan76.mcpitanlib.midohra.world.World world, net.pitan76.mcpitanlib.midohra.util.math.BlockPos pos, int range, boolean isHeightScan, boolean isSameBlock) {
+        List<net.pitan76.mcpitanlib.midohra.util.math.BlockPos> blocks = new ArrayList<>();
+
+        for (BlockPos p : getTargetBlocks(world.getRaw(), pos.toMinecraft(), range, isHeightScan, isSameBlock)) {
+            blocks.add(net.pitan76.mcpitanlib.midohra.util.math.BlockPos.of(p));
+        }
+
+        return blocks;
+    }
 }
