@@ -70,7 +70,7 @@ public class Items {
     public static RegistryResult<Item> RED_MATTER_HOE;
 
     public static void init() {
-        PHILOSOPHER_STONE = registry.registerItem(_id("philosopher_stone"), () -> new PhilosopherStone(ChargeItemSettings.of(_id("philosopher_stone")).addGroup(ItemGroups.ITEM_ALCHEMY).rarity(CompatRarity.EPIC).recipeRemainder(Items.PHILOSOPHER_STONE.getOrNull())));
+        PHILOSOPHER_STONE = registry.registerItem(_id("philosopher_stone"), () -> new PhilosopherStone(ChargeItemSettings.of(_id("philosopher_stone")).addGroup(ItemGroups.ITEM_ALCHEMY).rarity(CompatRarity.EPIC)));
         ALCHEMY_TABLE = registry.registerItem(_id("alchemy_table"), () -> ItemUtil.create(Blocks.ALCHEMY_TABLE.getOrNull(), CompatibleItemSettings.of(_id("alchemy_table")).addGroup(ItemGroups.ITEM_ALCHEMY)));
         TOME_OF_KNOWLEDGE = registry.registerItem(_id("tome_of_knowledge"), () -> new TomeOfKnowledge(CompatibleItemSettings.of(_id("tome_of_knowledge")).rarity(CompatRarity.EPIC).maxCount(1).addGroup(ItemGroups.ITEM_ALCHEMY)));
         EMC_COLLECTOR_MK1 = registry.registerItem(_id("emc_collector_mk1"), () -> ItemUtil.create(Blocks.EMC_COLLECTOR_MK1.getOrNull(), CompatibleItemSettings.of(_id("emc_collector_mk1")).addGroup(ItemGroups.ITEM_ALCHEMY)));
