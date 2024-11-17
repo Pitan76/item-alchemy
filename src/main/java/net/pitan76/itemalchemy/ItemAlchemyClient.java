@@ -47,9 +47,7 @@ public class ItemAlchemyClient {
 
         WorldRenderRegistry.registerWorldRenderBeforeBlockOutline(new BlockRenderer());
 
-        ClientNetworking.registerReceiver(_id("sync_emc"), (e) -> {
-            itemAlchemyNbt = PacketByteUtil.readNbt(e.buf);
-        });
+        ClientNetworking.registerReceiver(_id("sync_emc"), (e) -> itemAlchemyNbt = PacketByteUtil.readNbt(e.buf));
 
         ClientNetworking.registerReceiver(_id("sync_emc_map"), (e) -> {
             Map<String, Long> map = PacketByteUtil.readMap(e.buf, PacketByteUtil::readString, PacketByteBuf::readLong);

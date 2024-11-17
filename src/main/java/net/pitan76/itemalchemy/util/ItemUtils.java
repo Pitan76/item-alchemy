@@ -85,7 +85,6 @@ public class ItemUtils {
     if (!isItemChargeable(stack)) return;
 
     // Needed as method is under Guava beta right now.
-    //noinspection UnstableApiUsage
     charge = constrainToRange(charge, MIN_CHARGE_VALUE, MAX_CHARGE_VALUE);
 
     NbtCompound nbt = CustomDataUtil.get(stack, ItemAlchemy.MOD_ID);

@@ -20,10 +20,8 @@ public class PlayerRegisteredItemUtil {
     public static List<String> getItemsAsString(Player player) {
         Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
 
-        if (!teamState.isPresent())
-            return new ArrayList<>();
+        return teamState.<List<String>>map(state -> new ArrayList<>(state.registeredItems)).orElseGet(ArrayList::new);
 
-        return new ArrayList<>(teamState.get().registeredItems);
     }
 
     public static List<Item> getItems(Player player) {

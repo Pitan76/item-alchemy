@@ -27,9 +27,7 @@ public abstract class EMCDef {
     }
 
     public static void addByTag(CompatIdentifier id, long emc) {
-        ItemUtil.getInTag(id).forEach(item -> {
-            add(item, emc);
-        });
+        ItemUtil.getInTag(id).forEach(item -> add(item, emc));
     }
 
     public static void addByTag(String id, long emc) {
