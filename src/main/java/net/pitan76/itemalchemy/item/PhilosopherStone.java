@@ -142,23 +142,24 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
     public CompatActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
         World world = e.getMidohraWorld();
         if (!e.isClient()) {
-            BlockPos targetPos = e.getMidohraPos();
-            BlockState targetBlockState = e.getMidohraState();
+            BlockPos pos = e.getMidohraPos();
+            BlockState state = e.getMidohraState();
             Player player = e.player;
 
-            if (!isExchange(targetBlockState.getBlock()))
+            if (!isExchange(state.getBlock()))
                 return e.success();
 
-            List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, targetPos, ItemUtils.getCharge(e.stack), true, true);
+            List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, pos, ItemUtils.getCharge(e.stack), true, true);
 
-            Block replaceBlock = getExchangeBlock(targetBlockState.getBlock(), player.isSneaking());
+            Block replaceBlock = getExchangeBlock(state.getBlock(), player.isSneaking());
+            BlockState replaceState = BlockState.of(replaceBlock);
 
             if (replaceBlock == null)
                 return e.success();
 
-            blocks.forEach(pos -> exchangeBlock(world, pos, BlockState.of(BlockStateUtil.getDefaultState(replaceBlock)), world.getBlockState(pos)));
+            blocks.forEach(pos2 -> exchangeBlock(world, pos2, replaceState, world.getBlockState(pos)));
 
-            WorldUtil.playSound(world.getRaw(), null, targetPos.toMinecraft(), Sounds.EXCHANGE_SOUND, CompatSoundCategory.PLAYERS, 0.15f, 1f);
+            world.playSound(null, pos, Sounds.EXCHANGE_SOUND, CompatSoundCategory.PLAYERS, 0.15f, 1f);
             return e.success();
         }
 

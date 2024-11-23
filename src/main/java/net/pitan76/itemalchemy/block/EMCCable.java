@@ -89,7 +89,7 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
     public BlockState getPlacementState(PlacementStateArgs args) {
         BlockState state = super.getPlacementState(args);
 
-        FluidState fluidState = args.getWorld().getFluidState(args.getPos().toMinecraft());
+        FluidState fluidState = args.getWorldView().getFluidState(args.getPos().toMinecraft());
         return state.with(WATERLOGGED, fluidState.getFluid() == FluidUtil.water());
     }
 
@@ -123,7 +123,6 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
 
     @Override
     public CompatActionResult onRightClick(BlockUseEvent e) {
-
         if (PlatformUtil.isDevelopmentEnvironment()) {
             if (e.isClient()) return e.success();
             if (e.isSneaking()) return e.pass();
