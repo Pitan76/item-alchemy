@@ -26,7 +26,7 @@ import net.pitan76.mcpitanlib.midohra.util.math.Direction;
 
 public class AlchemyTable extends CompatBlock implements IUseableWrench {
 
-    protected CompatMapCodec<? extends Block> CODEC = CompatBlockMapCodecUtil.createCodec(AlchemyTable::new);
+    protected CompatMapCodec<? extends CompatBlock> CODEC = CompatBlockMapCodecUtil.createCodec(AlchemyTable::new);
 
     public static final DirectionProperty FACING = CompatProperties.FACING;
 

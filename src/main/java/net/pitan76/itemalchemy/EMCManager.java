@@ -6,14 +6,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
 import net.pitan76.easyapi.config.Config;
 import net.pitan76.easyapi.config.JsonConfig;
 import net.pitan76.itemalchemy.data.ModState;
@@ -27,6 +23,12 @@ import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tag.TagKey;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
+import net.pitan76.mcpitanlib.midohra.recipe.*;
+import net.pitan76.mcpitanlib.midohra.recipe.entry.RecipeEntry;
+import net.pitan76.mcpitanlib.midohra.recipe.entry.ShapedRecipeEntry;
+import net.pitan76.mcpitanlib.midohra.recipe.entry.ShapelessRecipeEntry;
+import net.pitan76.mcpitanlib.midohra.server.MCServer;
+import net.pitan76.mcpitanlib.midohra.world.ServerWorld;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -114,6 +116,10 @@ public class EMCManager {
     public static Config config;
 
     public static void init(MinecraftServer server) {
+        init(MCServer.of(server));
+    }
+
+    public static void init(MCServer server) {
         ItemAlchemy.INSTANCE.info("init emc manager");
         if (!map.isEmpty()) map = new LinkedHashMap<>();
         config = new JsonConfig();
@@ -139,15 +145,15 @@ public class EMCManager {
             defaultMap();
         }
 
-        ServerWorld world = WorldUtil.getOverworld(server);
+        ServerWorld world = server.getOverworld();
         setEmcFromRecipes(world);
         for (Map.Entry<String, Long> entry : getMap().entrySet()) {
             config.set(entry.getKey(), entry.getValue());
         }
         config.save(file);
 
-        if (!WorldUtil.isClient(world)) {
-            for (Player player : WorldUtil.getPlayers(world)) {
+        if (!world.isClient()) {
+            for (Player player : world.getPlayers()) {
                 syncS2C_emc_map(player);
             }
         }
@@ -162,32 +168,54 @@ public class EMCManager {
         defs.forEach(EMCDef::addAll);
     }
 
-    public static void setEmcFromRecipes(World world) {
-        List<Recipe<?>> unsetRecipes = new ArrayList<>();
-        List<Recipe<?>> recipes = RecipeUtil.getAllRecipes(world);
+    public static void setEmcFromRecipes(ServerWorld world) {
+        List<Recipe> unsetRecipes = new ArrayList<>();
 
-        for (Recipe<?> recipe : recipes) {
+        ServerRecipeManager recipeManager = world.getRecipeManager();
+
+        Collection<RecipeEntry> recipes = recipeManager.getNormalRecipeEntries();
+
+        for (RecipeEntry recipeEntry : recipes) {
             try {
-                ItemStack outStack = RecipeUtil.getOutput(recipe, world);
-                addEmcFromRecipe(outStack, recipe, unsetRecipes, false);
+                ItemStack outStack;
+                if (recipeEntry instanceof ShapedRecipeEntry) {
+                    outStack = ((ShapedRecipeEntry) recipeEntry).getRecipe().craft();
+                } else if (recipeEntry instanceof ShapelessRecipeEntry) {
+                    outStack = ((ShapelessRecipeEntry) recipeEntry).getRecipe().craft();
+                } else {
+                    continue;
+                }
+
+                addEmcFromRecipe(outStack, recipeEntry.getRecipe(), unsetRecipes, false);
             } catch (NoClassDefFoundError | Exception ignore) {}
         }
-        List<Recipe<?>> dummy = new ArrayList<>();
-        for (Recipe<?> recipe : unsetRecipes) {
+        List<Recipe> dummy = new ArrayList<>();
+        for (Recipe recipe : unsetRecipes) {
             try {
-                ItemStack outStack = RecipeUtil.getOutput(recipe, world);
+
+                ItemStack outStack;
+                if (recipe instanceof ShapedRecipe) {
+                    outStack = ((ShapedRecipe) recipe).craft();
+                } else if (recipe instanceof ShapelessRecipe) {
+                    outStack = ((ShapelessRecipe) recipe).craft();
+                } else {
+                    continue;
+                }
                 addEmcFromRecipe(outStack, recipe, dummy, true);
+
             } catch (NoClassDefFoundError | Exception ignore) {}
         }
     }
 
-    public static boolean addEmcFromRecipe(ItemStack outStack, Recipe<?> recipe, List<Recipe<?>> unsetRecipes, boolean last) {
+    public static boolean addEmcFromRecipe(ItemStack outStack, Recipe recipe, List<Recipe> unsetRecipes, boolean last) {
         if (outStack == null) return false;
         if (!contains(outStack.getItem())) {
             long totalEmc = 0;
-            for (Ingredient ingredient : RecipeUtil.getInputs(recipe)) {
-                if (IngredientUtil.getMatchingStacks(ingredient).length > 0) {
-                    ItemStack stack = IngredientUtil.getMatchingStacks(ingredient)[0];
+            for (net.minecraft.recipe.Ingredient rawIngredient : recipe.getInputs()) {
+                Ingredient ingredient = Ingredient.of(rawIngredient);
+                ItemStack[] stacks = ingredient.getMatchingStacks();
+                if (stacks.length > 0) {
+                    ItemStack stack = stacks[0];
                     if (contains(stack.getItem())) {
                         if (ItemStackUtil.getCount(outStack) == 0) {
                             totalEmc += get(stack.getItem());
