@@ -1,14 +1,13 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.util.ItemCharge;
-import net.pitan76.mcpitanlib.api.item.ExtendItemProvider;
+import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleAxeItem;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 
-public class AlchemicalAxe extends CompatibleAxeItem implements ExtendItemProvider, ItemCharge {
+public class AlchemicalAxe extends CompatibleAxeItem implements ItemCharge {
     public AlchemicalAxe(CompatibleToolMaterial toolMaterial, float attackDamage, float attackSpeed, CompatibleItemSettings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
     }
@@ -19,7 +18,7 @@ public class AlchemicalAxe extends CompatibleAxeItem implements ExtendItemProvid
     }
 
     @Override
-    public boolean isItemBarVisible(ItemStack stack) {
-        return CustomDataUtil.contains(stack, "itemalchemy");
+    public boolean isItemBarVisible(ItemBarVisibleArgs args, Options options) {
+        return CustomDataUtil.contains(args.getStack(), "itemalchemy");
     }
 }
