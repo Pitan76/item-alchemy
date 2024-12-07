@@ -2,6 +2,7 @@ package net.pitan76.itemalchemy.gui.screen;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandlerType;
@@ -191,8 +192,8 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             String translatedName = "";
 
             CompatIdentifier itemIdentifier = CompatIdentifier.of(id);
-            ItemStack itemStack = ItemStackUtil.create(ItemUtil.fromId(itemIdentifier));
-            String itemTranslationKey = itemStack.getTranslationKey();
+            Item item = ItemUtil.fromId(itemIdentifier);
+            String itemTranslationKey = ItemUtil.getTranslationKey(item);
 
             // If the item has a translation, we should use that instead of the identifier.
             if (translations.contains(itemTranslationKey)) {
@@ -217,7 +218,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
                     (searchNamespace.isEmpty() || itemNamespace.contains(searchNamespace)) &&
                             (itemId.contains(searchText) ||
                                     translatedName.contains(searchText) ||
-                                    TextUtil.txt2str(itemStack.getName()).contains(searchText))
+                                    ItemUtil.getNameAsString(item).contains(searchText))
             ) {
                 sortedIds.add(id);
             }

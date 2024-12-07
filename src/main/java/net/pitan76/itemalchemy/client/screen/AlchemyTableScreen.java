@@ -24,6 +24,7 @@ import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.client.ScreenUtil;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 
 import java.util.List;
 
@@ -59,8 +60,7 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
 
         List<Item> items = PlayerRegisteredItemUtil.getItems(new Player(playerInventory.player));
         for (Item item : items) {
-            ItemStack stack = ItemStackUtil.create(item);
-            String itemTranslationKey = stack.getTranslationKey();
+            String itemTranslationKey = ItemUtil.getTranslationKey(item);
             if (I18n.hasTranslation(itemTranslationKey)) {
                 translations.putString(itemTranslationKey, I18n.translate(itemTranslationKey));
             }
