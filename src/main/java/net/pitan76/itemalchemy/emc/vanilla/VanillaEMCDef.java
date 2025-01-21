@@ -211,6 +211,9 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.GOLD_ORE, 2048);
         add(Items.DIAMOND_ORE, 8192);
         add(Items.NETHERITE_INGOT, 57344);
+        add(Items.DIAMOND, 8192);
+        add(Items.EMERALD, 1024);
+        add(Items.LAPIS_LAZULI, 864);
 
         add(Items.DEEPSLATE_COPPER_ORE, 85);
         add(Items.DEEPSLATE_COAL_ORE, 128);
