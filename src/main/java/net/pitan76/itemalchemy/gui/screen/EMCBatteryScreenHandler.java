@@ -108,10 +108,11 @@ public class EMCBatteryScreenHandler extends ExtendedScreenHandler {
     public void overrideOnSlotClick(int slotIndex, int button, SlotActionType actionType, Player player) {
         if (slotIndex == 37) { // Target Slot
             ItemStack oldStack = getCursorStack().copy();
-            super.overrideOnSlotClick(slotIndex, button, actionType, player);
             if (!ItemStackUtil.isEmpty(oldStack)) {
                 callSetCursorStack(oldStack);
             }
+            super.overrideOnSlotClick(slotIndex, button, actionType, player);
+
             return;
         }
         super.overrideOnSlotClick(slotIndex, button, actionType, player);
