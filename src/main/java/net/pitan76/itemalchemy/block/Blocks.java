@@ -44,7 +44,7 @@ public class Blocks {
         EMC_COLLECTOR_MK5 = registry.registerBlock(_id("emc_collector_mk5"), () -> new EMCCollector(_id("emc_collector_mk5"), 2000000));
         ALCHEMY_CHEST = registry.registerBlock(_id("alchemy_chest"), () -> new AlchemyChest(_id("alchemy_chest")));
         EMC_CONDENSER = registry.registerBlock(_id("emc_condenser"), () -> new EMCCondenser(_id("emc_condenser")));
-        EMC_CONDENSER_MK2 = registry.registerBlock(_id("emc_condenser_mk2"), () -> new EMCCondenser(_id("emc_condenser_mk2")));
+        EMC_CONDENSER_MK2 = registry.registerBlock(_id("emc_condenser_mk2"), () -> new EMCCondenserMK2(_id("emc_condenser_mk2")));
         EMC_REPEATER = registry.registerBlock(_id("emc_repeater"), () -> new EMCRepeater(_id("emc_repeater")));
         AEGU = registry.registerBlock(_id("aegu"), () -> new AEGUBlock(_id("aegu"), 40 / 10));
         ADVANCED_AEGU = registry.registerBlock(_id("advanced_aegu"), () -> new AEGUBlock(_id("advanced_aegu"), 1000 / 10));
