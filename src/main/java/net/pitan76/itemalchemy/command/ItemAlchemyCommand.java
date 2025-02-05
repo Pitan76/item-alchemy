@@ -23,6 +23,8 @@ import net.pitan76.mcpitanlib.api.command.argument.PlayerCommand;
 import net.pitan76.mcpitanlib.api.command.argument.StringCommand;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.*;
+import net.pitan76.mcpitanlib.api.offlineplayer.OfflinePlayer;
+import net.pitan76.mcpitanlib.api.offlineplayer.OfflinePlayerManager;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 import net.pitan76.mcpitanlib.midohra.server.MCServer;
@@ -224,6 +226,9 @@ public class ItemAlchemyCommand extends LiteralCommand {
                             @Override
                             public void execute(StringCommandEvent e) {
                                 try {
+                                    if (OfflinePlayerManager.INSTANCE != null)
+                                        OfflinePlayerManager.INSTANCE.addPlayer(e.getPlayer().getUUID().toString(), e.getPlayer().getName());
+
                                     if (!e.isClient()) {
                                         if (TeamUtil.createTeam(e.getPlayer(), e.getValue(), true)) {
                                             e.sendSuccess("[ItemAlchemy] Created Team");
@@ -259,6 +264,9 @@ public class ItemAlchemyCommand extends LiteralCommand {
                             @Override
                             public void execute(StringCommandEvent e) {
                                 try {
+                                    if (OfflinePlayerManager.INSTANCE != null)
+                                        OfflinePlayerManager.INSTANCE.addPlayer(e.getPlayer().getUUID().toString(), e.getPlayer().getName());
+
                                     if (!e.isClient()) {
                                         if (TeamUtil.joinTeam(e.getPlayer(), e.getValue())) {
                                             e.sendFailure(TextUtil.literal("[ItemAlchemy] Joined Team"));
@@ -314,6 +322,58 @@ public class ItemAlchemyCommand extends LiteralCommand {
                                 try {
                                     Player player = e.getPlayer();
                                     Player targetPlayer = new Player((PlayerEntity) e.getValue());
+
+                                    ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
+
+                                    Optional<TeamState> senderTeam = serverState.getTeamByPlayer(player.getUUID());
+                                    Optional<TeamState> targetTeam = serverState.getTeamByPlayer(targetPlayer.getUUID());
+
+                                    if (!senderTeam.isPresent() || !targetTeam.isPresent()) {
+                                        e.sendFailure(TextUtil.literal("[ItemAlchemy] Not Found Team"));
+                                        return;
+                                    }
+
+                                    if (senderTeam.get().owner != player.getUUID()) {
+                                        e.sendFailure(TextUtil.literal("[ItemAlchemy] You don't have permission"));
+                                        return;
+                                    }
+
+                                    if (senderTeam.get().teamID != targetTeam.get().teamID) {
+                                        e.sendFailure(TextUtil.literal("[ItemAlchemy] " + targetPlayer.getName() + " is not in your team"));
+                                        return;
+                                    }
+
+                                    if (TeamUtil.kickTeam(player.getWorld().getServer(), targetTeam.get().teamID, targetPlayer.getUUID())) {
+                                        e.sendSuccess("[ItemAlchemy] Kicked " + targetPlayer.getName());
+                                        return;
+                                    }
+
+                                    e.sendFailure(TextUtil.literal("[ItemAlchemy]§c Failed leave"));
+
+                                } catch (CommandSyntaxException ex) {
+                                    e.sendFailure(TextUtil.literal("[ItemAlchemy] " + ex.getMessage()));
+                                }
+                            }
+
+                            @Override
+                            public String getArgumentName() {
+                                return "player";
+                            }
+                        });
+
+                        addArgumentCommand("offlineplayer", new StringCommand() {
+                            @Override
+                            public void execute(StringCommandEvent e) {
+                                if (e.isClient()) return;
+
+                                try {
+                                    Player player = e.getPlayer();
+                                    OfflinePlayer targetPlayer = OfflinePlayerManager.INSTANCE.getPlayerByName(e.getValue());
+
+                                    if (targetPlayer == null) {
+                                        e.sendFailure(TextUtil.literal("[ItemAlchemy] Not registered player in offlineplayer.json"));
+                                        return;
+                                    }
 
                                     ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
 
