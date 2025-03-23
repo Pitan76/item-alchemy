@@ -13,9 +13,20 @@ public class ItemAlchemyConfig {
     public static boolean isChanged;
 
     private static boolean removeDataFromCopyStack = true;
+    private static boolean showEmcInTooltip = true; // requires restart game to apply (ReloadCommand is not working)
+
+    public static boolean initialized = false;
+
+    public static void initOnce() {
+        if (!initialized) {
+            init();
+            initialized = true;
+        }
+    }
 
     public static void init() {
         removeDataFromCopyStack = config.getBooleanOrCreate("remove_data_from_copy_stack", true);
+        showEmcInTooltip = config.getBooleanOrCreate("show_emc_in_tooltip", true);
 
         if (!file.exists() || !file.isFile()) {
             if (dir.mkdirs())
@@ -29,6 +40,15 @@ public class ItemAlchemyConfig {
 
     public static void setRemoveDataFromCopyStack(boolean removeDataFromCopyStack) {
         ItemAlchemyConfig.removeDataFromCopyStack = removeDataFromCopyStack;
+        isChanged = true;
+    }
+
+    public static boolean isShowEmcInTooltip() {
+        return showEmcInTooltip;
+    }
+
+    public static void setShowEmcInTooltip(boolean showEmcInTooltip) {
+        ItemAlchemyConfig.showEmcInTooltip = showEmcInTooltip;
         isChanged = true;
     }
 
@@ -60,6 +80,7 @@ public class ItemAlchemyConfig {
 
     public static Boolean reset() {
         config.setBoolean("remove_data_from_copy_stack", true);
+        config.setBoolean("show_emc_in_tooltip", true);
         return true;
     }
 }

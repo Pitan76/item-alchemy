@@ -7,6 +7,7 @@ import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.client.renderer.BlockRenderer;
 import net.pitan76.itemalchemy.client.screen.*;
+import net.pitan76.itemalchemy.config.ItemAlchemyConfig;
 import net.pitan76.itemalchemy.gui.screen.EMCBatteryScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
@@ -31,8 +32,11 @@ public class ItemAlchemyClient {
     public static NbtCompound itemAlchemyNbt;
 
     public static void init() {
+        ItemAlchemyConfig.initOnce();
+
         // Mixinを使った場合、関数が1.20から変更されているために使えないのでこちらで対処しておく
-        ItemTooltipRegistry.registerItemTooltip((context) -> context.addTooltip(getEmcText(context.getStack())));
+        if (ItemAlchemyConfig.isShowEmcInTooltip())
+            ItemTooltipRegistry.registerItemTooltip((context) -> context.addTooltip(getEmcText(context.getStack())));
 
         CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.ALCHEMY_TABLE, AlchemyTableScreen::new);
         CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.EMC_COLLECTOR, EMCCollectorScreen::new);

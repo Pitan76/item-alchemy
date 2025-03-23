@@ -41,7 +41,7 @@ public class ItemAlchemy extends CommonModInitializer {
         registry = super.registry;
         logger = super.logger;
 
-        ItemAlchemyConfig.init();
+        ItemAlchemyConfig.initOnce();
 
         RecipeManagerRegistry.register(AlchemicalRecipeManager::new);
 
