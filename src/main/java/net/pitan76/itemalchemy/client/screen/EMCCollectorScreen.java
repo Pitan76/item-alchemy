@@ -26,11 +26,6 @@ public class EMCCollectorScreen extends CompatInventoryScreen<EMCCollectorScreen
     }
 
     @Override
-    public void initOverride() {
-        super.initOverride();
-    }
-
-    @Override
     public CompatIdentifier getCompatTexture() {
         return _id("textures/gui/emc_collector.png");
     }

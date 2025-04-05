@@ -98,7 +98,7 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
                     if (useEMC == 0) useEMC = 1;
                     if (storedEMC >= useEMC) {
                         ItemStack newStack = targetStack.copy();
-                        newStack.setCount(1);
+                        ItemStackUtil.setCount(newStack, 1);
                         // Remove NBT
                         CustomDataUtil.setNbt(newStack, NbtUtil.create());
                         //newStack.setNbt(new NbtCompound());

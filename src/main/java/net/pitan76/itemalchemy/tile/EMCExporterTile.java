@@ -93,7 +93,7 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
         storedEMC = Math.min(teamState.storedEMC, getMaxEMC());
         oldStoredEMC = storedEMC;
-        markDirty();
+        BlockEntityUtil.markDirty(this);
     }
 
     @Override
@@ -137,8 +137,8 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
             if (aveEMC < neededEMC) continue;
             if (!teamState.registeredItems.contains(ItemUtil.toIdAsString(filterStack.getItem()))) continue;
 
-            ItemStack stack = filterStack.copy();
-            stack.setCount(Math.min((int) Math.floorDiv(aveEMC, neededEMC), MAX_STACK_COUNT));
+            ItemStack stack = ItemStackUtil.copy(filterStack);
+            ItemStackUtil.setCount(stack, Math.min((int) Math.floorDiv(aveEMC, neededEMC), MAX_STACK_COUNT));
 
             result.set(i, stack);
         }
@@ -182,9 +182,9 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
             getTeamState().ifPresent(teamState -> {
 
                 if (ownerName == null || ownerName.isEmpty()) {
-                    if (getWorld() == null) return;
+                    if (callGetWorld() == null) return;
 
-                    Player player = PlayerManagerUtil.getPlayerByUUID(getWorld(), teamState.owner);
+                    Player player = PlayerManagerUtil.getPlayerByUUID(callGetWorld(), teamState.owner);
                     if (player.getEntity() == null) return;
 
                     ownerName = player.getName();

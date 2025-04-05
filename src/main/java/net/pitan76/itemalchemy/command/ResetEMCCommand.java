@@ -61,7 +61,7 @@ public class ResetEMCCommand extends LiteralCommand {
                 }
                 EMCManager.config.save(file);
             }
-            ;
+
             if (e.getWorld() instanceof net.minecraft.server.world.ServerWorld) {
                 ServerWorld serverWorld = ServerWorld.of((net.minecraft.server.world.ServerWorld) e.getWorld());
                 EMCManager.setEmcFromRecipes(serverWorld);

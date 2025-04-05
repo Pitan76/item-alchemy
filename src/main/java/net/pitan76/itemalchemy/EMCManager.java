@@ -179,9 +179,10 @@ public class EMCManager {
             try {
                 ItemStack outStack;
                 if (recipeEntry instanceof ShapedRecipeEntry) {
-                    outStack = ((ShapedRecipeEntry) recipeEntry).getRecipe().craft();
+
+                    outStack = ((ShapedRecipeEntry) recipeEntry).getRecipe().craft(world);
                 } else if (recipeEntry instanceof ShapelessRecipeEntry) {
-                    outStack = ((ShapelessRecipeEntry) recipeEntry).getRecipe().craft();
+                    outStack = ((ShapelessRecipeEntry) recipeEntry).getRecipe().craft(world);
                 } else {
                     continue;
                 }
@@ -195,9 +196,9 @@ public class EMCManager {
 
                 ItemStack outStack;
                 if (recipe instanceof ShapedRecipe) {
-                    outStack = ((ShapedRecipe) recipe).craft();
+                    outStack = ((ShapedRecipe) recipe).craft(world);
                 } else if (recipe instanceof ShapelessRecipe) {
-                    outStack = ((ShapelessRecipe) recipe).craft();
+                    outStack = ((ShapelessRecipe) recipe).craft(world);
                 } else {
                     continue;
                 }

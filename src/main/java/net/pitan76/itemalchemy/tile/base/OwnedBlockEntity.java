@@ -8,6 +8,7 @@ import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.api.util.BlockEntityUtil;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -25,9 +26,9 @@ public abstract class OwnedBlockEntity extends EMCStorageBlockEntity {
     }
 
     public Optional<TeamState> getTeamState() {
-        if (getWorld() == null) return Optional.empty();
+        if (callGetWorld() == null) return Optional.empty();
 
-        ServerState serverState = ServerState.of(getWorld());
+        ServerState serverState = ServerState.of(callGetWorld());
         if (serverState == null || teamUUID == null)
             return Optional.empty();
 
@@ -53,7 +54,7 @@ public abstract class OwnedBlockEntity extends EMCStorageBlockEntity {
 
     public void setTeam(UUID teamUUID) {
         this.teamUUID = teamUUID;
-        markDirty();
+        BlockEntityUtil.markDirty(this);
     }
 
     /**
@@ -62,7 +63,7 @@ public abstract class OwnedBlockEntity extends EMCStorageBlockEntity {
      * @return boolean success or fail
      */
     public boolean setTeam(Player player) {
-        ServerState serverState = ServerState.of(getWorld());
+        ServerState serverState = ServerState.of(callGetWorld());
         if (serverState == null) return false;
 
         Optional<PlayerState> optionalPlayerState = serverState.getPlayer(player.getUUID());

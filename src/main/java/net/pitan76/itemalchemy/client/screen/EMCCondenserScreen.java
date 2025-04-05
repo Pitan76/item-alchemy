@@ -26,11 +26,6 @@ public class EMCCondenserScreen extends CompatInventoryScreen<EMCCondenserScreen
 
     }
 
-    @Override
-    public void initOverride() {
-        super.initOverride();
-    }
-
     public CompatIdentifier getCompatTexture() {
         return _id("textures/gui/emc_condenser.png");
     }

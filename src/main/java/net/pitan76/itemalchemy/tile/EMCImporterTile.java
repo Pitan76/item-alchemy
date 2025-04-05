@@ -105,7 +105,7 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
             teamState.storedEMC += storedEMC;
             storedEMC = 0;
-            markDirty();
+            BlockEntityUtil.markDirty(this);
         }
 
         if (inv.get(0).isEmpty()) return;
@@ -199,9 +199,9 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
             getTeamState().ifPresent(teamState -> {
 
                 if (ownerName == null || ownerName.isEmpty()) {
-                    if (getWorld() == null) return;
+                    if (callGetWorld() == null) return;
 
-                    Player player = PlayerManagerUtil.getPlayerByUUID(getWorld(), teamState.owner);
+                    Player player = PlayerManagerUtil.getPlayerByUUID(callGetWorld(), teamState.owner);
                     if (player.getEntity() == null) return;
 
                     ownerName = player.getName();
