@@ -15,15 +15,18 @@ import net.pitan76.itemalchemy.recipe.AlchemicalRecipeManager;
 import net.pitan76.itemalchemy.sound.Sounds;
 import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.itemalchemy.util.ItemCharge;
+import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.mcpitanlib.api.CommonModInitializer;
 import net.pitan76.mcpitanlib.api.command.CommandRegistry;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.v0.EventRegistry;
 import net.pitan76.mcpitanlib.api.event.v0.event.ItemStackActionEvent;
 import net.pitan76.mcpitanlib.api.event.v1.RecipeManagerRegistry;
+import net.pitan76.mcpitanlib.api.event.v2.ItemEventRegistry;
 import net.pitan76.mcpitanlib.api.registry.v2.CompatRegistryV2;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.Logger;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
 
 public class ItemAlchemy extends CommonModInitializer {
 
@@ -58,7 +61,6 @@ public class ItemAlchemy extends CommonModInitializer {
 
         EventRegistry.ServerConnection.join((p) -> {
             if (p == null) return;
-
             Player player = new Player(p);
 
             EMCManager.syncS2C_emc_map(player);
@@ -67,6 +69,13 @@ public class ItemAlchemy extends CommonModInitializer {
             serverState.createPlayer(player);
 
             EMCManager.syncS2C(player);
+        });
+
+        ItemEventRegistry.INVENTORY_TICK.register((e) -> {
+            if (e.isClient()) return;
+            if (e.isSelected() && ItemUtils.isItemChargeable(e.getStack())) {
+                ItemUtils.handleItemChargeInventoryTick(e.getStack());
+            }
         });
 
         //EventRegistry.ServerLifecycle.serverStopped(EMCManager::exit);

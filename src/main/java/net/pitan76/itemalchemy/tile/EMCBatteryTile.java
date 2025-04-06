@@ -81,9 +81,8 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
 
     @Override
     public void tick(TileTickEvent<EMCBatteryTile> e) {
+        if (e.isClient()) return;
         World world = e.world;
-
-        if (WorldUtil.isClient(world)) return;
 
         if (maxEMC == -1)
             maxEMC = ((EMCBattery) e.state.getBlock()).getMaxEMC();

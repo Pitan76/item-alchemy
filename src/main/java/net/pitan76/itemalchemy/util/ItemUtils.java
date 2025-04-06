@@ -5,7 +5,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.ItemAlchemy;
-import net.pitan76.itemalchemy.mixins.ItemMixin;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
@@ -29,7 +28,7 @@ public class ItemUtils {
   public static final int MAX_CHARGE_VALUE = 4;
 
   /**
-   * Handles {@link ItemMixin#itemalchemy$inventoryTick(ItemStack, World, Entity, int, boolean, CallbackInfo)}
+   * Handles {@link ItemAlchemy#init()} ItemEventRegistry.INVENTORY_TICK
    * if the selected inventory item is of {@link ItemCharge}.
    *
    * @param stack that is selected and of {@link ItemCharge}.

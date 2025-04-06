@@ -75,9 +75,7 @@ public class AEGUTile extends CompatBlockEntity implements ExtendBlockEntityTick
     }
 
     public static Optional<EMCCondenserTile> getNearEMCCondenserByTargetPos(World world, BlockPos targetPos) {
-        if (world == null) return Optional.empty();
-
-        if (targetPos == null) return Optional.empty();
+        if (world == null || targetPos == null) return Optional.empty();
         return Optional.ofNullable((EMCCondenserTile) WorldUtil.getBlockEntity(world, targetPos));
     }
 

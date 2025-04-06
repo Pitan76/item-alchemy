@@ -249,7 +249,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
             if (definedStack != null && ItemStackUtil.isEmpty(stack) && EMCManager.getEmcFromPlayer(player) >= EMCManager.get(definedStack) * receivable) {
                 EMCManager.decrementEmc(player, EMCManager.get(definedStack) * receivable);
-                SlotUtil.setStack(extractSlot, definedStack.copy());
+                SlotUtil.setStack(extractSlot, ItemStackUtil.copy(definedStack));
 
                 if (receivable > 1) {
                     ItemStack addedStack = definedStack.copy();

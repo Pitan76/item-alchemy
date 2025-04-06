@@ -78,9 +78,8 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
 
     @Override
     public void tick(TileTickEvent<EMCCondenserTile> e) {
+        if (e.isClient()) return;
         World world = e.world;
-        if (WorldUtil.isClient(world)) return;
-
         if (!getItems().isEmpty()) {
             ItemStack targetStack = getItems().get(0);
             if (!ItemStackUtil.isEmpty(targetStack)) {

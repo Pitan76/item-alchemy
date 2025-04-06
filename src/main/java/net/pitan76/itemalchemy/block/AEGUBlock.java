@@ -7,6 +7,7 @@ import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.AEGUTile;
 import net.pitan76.itemalchemy.tile.EMCCondenserTile;
 import net.pitan76.itemalchemy.tile.Tiles;
+import net.pitan76.mcpitanlib.api.block.CompatBlocks;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
 import net.pitan76.mcpitanlib.api.block.v2.CompatBlock;
 import net.pitan76.mcpitanlib.api.block.v2.CompatibleBlockSettings;
@@ -19,7 +20,6 @@ import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 import net.pitan76.mcpitanlib.midohra.block.BlockState;
-import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider, IUseableWrench {
@@ -48,7 +48,7 @@ public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider,
     }
 
     public AEGUBlock(CompatIdentifier id, long emc) {
-        this(CompatibleBlockSettings.copy(id, net.minecraft.block.Blocks.STONE).mapColor(CompatMapColor.YELLOW).strength(2f, 7.0f), emc);
+        this(CompatibleBlockSettings.copy(id, CompatBlocks.STONE).mapColor(CompatMapColor.YELLOW).strength(2f, 7.0f), emc);
     }
 
     @Override
@@ -81,9 +81,7 @@ public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider,
         net.minecraft.util.math.BlockPos rawPos = AEGUTile.getNearEMCCondenserPos(e.world, e.pos);
         if (rawPos == null) return e.fail();
 
-        BlockPos blockPos = BlockPos.of(rawPos);
-        BlockEntity blockEntity = e.getMidohraWorld().getBlockEntity(blockPos).get();
-
+        BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof EMCCondenserTile) {
             EMCCondenserTile tile = (EMCCondenserTile) blockEntity;
             if (e.isClient()) return e.success();

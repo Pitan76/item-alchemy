@@ -4,22 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.resource.Resource;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.item.Items;
 import net.pitan76.mcpitanlib.api.event.v0.event.RecipeManagerEvent;
-import net.pitan76.mcpitanlib.api.recipe.CompatibleRecipeEntry;
+import net.pitan76.mcpitanlib.api.recipe.v3.CompatRecipe;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
-import org.apache.commons.io.IOUtils;
+import net.pitan76.mcpitanlib.midohra.resource.Resource;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import static net.pitan76.itemalchemy.ItemAlchemy._id;
@@ -45,22 +38,18 @@ public class AlchemicalRecipeManager {
     public void apply() {
 
         // load EMC
-        EMCManager.loadDefaultEMCs(event.getResourceManager());
+        EMCManager.loadDefaultEMCs(event.getResourceManagerM());
 
         count = 0;
 
-        Map<Identifier, Resource> resourceIds;
-        try {
-            resourceIds = ResourceUtil.findResources(event.getResourceManager(), "alchemical_craft", ".json");
-        } catch (IOException e) {
-            ItemAlchemy.INSTANCE.error("Failed to read alchemy.json: " + e.getMessage());
+        Map<CompatIdentifier, Resource> resourceIds;
+        resourceIds = event.getResourceManagerM().findResources("alchemical_craft", ".json");
+        if (resourceIds == null || resourceIds.isEmpty())
             return;
-        }
 
         resourceIds.forEach((resourceId, resource) -> {
             try {
-                String json = IOUtils.toString(ResourceUtil.getInputStream(resource), StandardCharsets.UTF_8);
-                ResourceUtil.close(resource);
+                String json = resource.getContent();
                 JsonArray jsonArray = gson.fromJson(json, JsonArray.class);
                 jsonArray.forEach((jsonElement) -> handle(jsonElement.getAsJsonObject()));
             } catch (Exception e) {
@@ -93,23 +82,7 @@ public class AlchemicalRecipeManager {
 
         CompatIdentifier id = _id("alchemical_craft/n" + count++);
 
-        CompatibleRecipeEntry recipe = CompatibleRecipeEntryUtil.createShapelessRecipe(id, "", RecipeUtil.CompatibilityCraftingRecipeCategory.MISC, ItemStackUtil.create(output), buildInput(inputs));
-        event.putCompatibleRecipeEntry(recipe);
-    }
-
-    private DefaultedList<Ingredient> buildInput(Object[] input) {
-        DefaultedList<Ingredient> list = DefaultedList.of();
-        for (Object obj : input) {
-            Ingredient ingredient = null;
-            if (obj instanceof Ingredient)
-                ingredient = (Ingredient) obj;
-
-            if (obj instanceof ItemConvertible)
-                ingredient = Ingredient.ofItems((ItemConvertible) obj);
-
-            if (ingredient != null)
-                list.add(ingredient);
-        }
-        return list;
+        CompatRecipe recipe = CompatibleRecipeEntryUtil.createShapelessAsCompatRecipe(id, "", RecipeUtil.CompatibilityCraftingRecipeCategory.MISC, ItemStackUtil.create(output), IngredientUtil.buildInput(inputs));
+        event.putRecipe(recipe);
     }
 }

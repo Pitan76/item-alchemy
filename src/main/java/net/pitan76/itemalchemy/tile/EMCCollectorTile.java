@@ -56,7 +56,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
     @Override
     public long getMaxEMC() {
         if (maxEMC == -1)
-            return ((EMCCollector) getCachedState().getBlock()).maxEMC;
+            return ((EMCCollector) BlockStateUtil.getBlock(getCachedState())).maxEMC;
 
         return maxEMC;
     }
@@ -160,8 +160,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
 
             if (oldStoredEMC != storedEMC) {
                 oldStoredEMC = storedEMC;
-                for (ServerPlayerEntity p : ((ServerWorld) world).getPlayers()) {
-                    Player player = new Player(p);
+                for (Player player : PlayerManagerUtil.getPlayers(world)) {
                     if (player.hasNetworkHandler() && player.getCurrentScreenHandler() instanceof EMCCollectorScreenHandler && ((EMCCollectorScreenHandler) player.getCurrentScreenHandler()).tile == this) {
                         PacketByteBuf buf = PacketByteUtil.create();
                         PacketByteUtil.writeLong(buf, storedEMC);
@@ -214,7 +213,6 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
         return ItemStackUtil.empty();
     }
 
-
     @Override
     public ItemStackList getItems() {
         return inventory;
@@ -236,12 +234,10 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
 
     @Override
     public void writeExtraData(ExtraDataArgs args) {
-        NbtCompound data = NbtUtil.create();
-        NbtUtil.putInt(data, "x", pos.getX());
-        NbtUtil.putInt(data, "y", pos.getY());
-        NbtUtil.putInt(data, "z", pos.getZ());
-        NbtUtil.putLong(data, "stored_emc", storedEMC);
-        NbtUtil.putLong(data, "max_emc", ((EMCCollector) getCachedState().getBlock()).maxEMC);
-        args.writeVar(data);
+        NbtCompound nbt = NbtUtil.create();
+        NbtUtil.setBlockPosDirect(nbt, pos);
+        NbtUtil.putLong(nbt, "stored_emc", storedEMC);
+        NbtUtil.putLong(nbt, "max_emc", ((EMCCollector) BlockStateUtil.getBlock(getCachedState())).maxEMC);
+        args.writeVar(nbt);
     }
 }

@@ -6,10 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
 import net.pitan76.easyapi.config.Config;
 import net.pitan76.easyapi.config.JsonConfig;
 import net.pitan76.itemalchemy.data.ModState;
@@ -27,14 +24,13 @@ import net.pitan76.mcpitanlib.midohra.recipe.*;
 import net.pitan76.mcpitanlib.midohra.recipe.entry.RecipeEntry;
 import net.pitan76.mcpitanlib.midohra.recipe.entry.ShapedRecipeEntry;
 import net.pitan76.mcpitanlib.midohra.recipe.entry.ShapelessRecipeEntry;
+import net.pitan76.mcpitanlib.midohra.resource.Resource;
+import net.pitan76.mcpitanlib.midohra.resource.ResourceManager;
 import net.pitan76.mcpitanlib.midohra.server.MCServer;
 import net.pitan76.mcpitanlib.midohra.world.ServerWorld;
-import org.apache.commons.io.IOUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static net.pitan76.itemalchemy.ItemAlchemy._id;
@@ -326,21 +322,17 @@ public class EMCManager {
     public static Map<String, Long> defaultEMCMap = new LinkedHashMap<>();
 
     public static void loadDefaultEMCs(ResourceManager resourceManager) {
-        Map<Identifier, Resource> resourceIds;
-        try {
-            resourceIds = ResourceUtil.findResources(resourceManager, "default_emcs", ".json");
-        } catch (IOException e) {
-            ItemAlchemy.INSTANCE.error("Failed to read default emc: " + e.getMessage());
+        Map<CompatIdentifier, Resource> resourceIds;
+        resourceIds = resourceManager.findResources("default_emcs", ".json");
+        if (resourceIds == null || resourceIds.isEmpty())
             return;
-        }
 
         Gson gson = new Gson();
         Type listType = new TypeToken<HashMap<String, Long>>(){}.getType();
 
         resourceIds.forEach((resourceId, resource) -> {
             try {
-                String json = IOUtils.toString(ResourceUtil.getInputStream(resource), StandardCharsets.UTF_8);
-                ResourceUtil.close(resource);
+                String json = resource.getContent();
                 HashMap<String, Long> map = gson.fromJson(json, listType);
 
                 if (resourceId.toString().endsWith("/tags.json")) {

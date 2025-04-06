@@ -57,9 +57,9 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
 
     @Override
     public void tick(TileTickEvent<EMCCondenserTile> e) {
-        World world = e.world;
-        if (WorldUtil.isClient(world)) return;
+        if (e.isClient()) return;
 
+        World world = e.world;
         if (!getItems().isEmpty()) {
             ItemStack targetStack = getItems().get(0);
             if (!ItemStackUtil.isEmpty(targetStack)) {
@@ -150,7 +150,7 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
                 isInserted = true;
                 break;
             } else if (canMergeItems(stack, insertStack)) {
-                int j = insertStack.getCount();
+                int j = ItemStackUtil.getCount(insertStack);
                 if (!test) ItemStackUtil.incrementCount(stack, j);
                 isInserted = j > 0;
                 break;
