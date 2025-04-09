@@ -41,8 +41,8 @@ public class EMCBatteryScreen extends CompatInventoryScreen<EMCBatteryScreenHand
 
     @Override
     public void drawForegroundOverride(DrawForegroundArgs args) {
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, getTitle(), this.titleX, 6, 4210752);
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, playerInventoryTitle, playerInventoryTitleX + 16, 73, 4210752);
+        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, callGetTitle(), this.titleX, 6, 4210752);
+        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, playerInventoryTitle, getPlayerInvTitleX() + 16, 73, 4210752);
 
         Text storedEmcText = TextUtil.literal(String.format("%,d", screenHandler.storedEMC));
         ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, storedEmcText, 103 - ScreenUtil.getWidth(storedEmcText) / 2, 50, 4210752);

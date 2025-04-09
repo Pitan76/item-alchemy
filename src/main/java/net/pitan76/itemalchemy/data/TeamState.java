@@ -1,7 +1,6 @@
 package net.pitan76.itemalchemy.data;
 
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.pitan76.itemalchemy.ItemAlchemy;
@@ -34,7 +33,7 @@ public class TeamState {
 
         List<String> registeredItems = (NbtUtil.getList(nbt, "registered_items")).stream()
                 .filter(nbtElement -> nbtElement instanceof NbtString)
-                .map(NbtElement::asString)
+                .map(NbtUtil::asString)
                 .collect(Collectors.toList());
 
         this.registeredItems.addAll(registeredItems);
@@ -53,7 +52,7 @@ public class TeamState {
         NbtList registeredItems = NbtUtil.createNbtList();
 
         for (String registeredItem : this.registeredItems) {
-            registeredItems.add(NbtString.of(registeredItem));
+            registeredItems.add(NbtUtil.createString(registeredItem));
         }
 
         NbtUtil.put(nbt, "registered_items", registeredItems);

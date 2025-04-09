@@ -54,7 +54,7 @@ public class RegisterInventory extends SimpleInventory {
                     teamState.registeredItems.add(itemId);
                 }
 
-                PersistentStateUtil.markDirty(state);
+                state.callMarkDirty();
             }
 
             if (slot == 50) {

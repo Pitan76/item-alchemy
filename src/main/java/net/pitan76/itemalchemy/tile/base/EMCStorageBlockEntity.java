@@ -7,6 +7,7 @@ import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
+import net.pitan76.mcpitanlib.api.util.NbtUtil;
 
 public abstract class EMCStorageBlockEntity extends CompatBlockEntity {
     public long storedEMC = 0;
@@ -23,15 +24,15 @@ public abstract class EMCStorageBlockEntity extends CompatBlockEntity {
     @Override
     public void writeNbt(WriteNbtArgs args) {
         super.writeNbt(args);
-        args.getNbt().putLong("stored_emc", storedEMC);
-        args.getNbt().putBoolean("active", isActive);
+        NbtUtil.putLong(args.getNbt(), "stored_emc", storedEMC);
+        NbtUtil.putBoolean(args.getNbt(), "active", isActive);
     }
 
     @Override
     public void readNbt(ReadNbtArgs args) {
         super.readNbt(args);
-        storedEMC = args.getNbt().getLong("stored_emc");
-        isActive = args.getNbt().getBoolean("active");
+        storedEMC = NbtUtil.getLong(args.getNbt(), "stored_emc");
+        isActive = NbtUtil.getBoolean(args.getNbt(), "active");
     }
 
     public void setActive(boolean active) {

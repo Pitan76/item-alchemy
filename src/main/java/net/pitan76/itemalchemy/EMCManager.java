@@ -249,7 +249,7 @@ public class EMCManager {
 
         teamState.storedEMC -= amount;
 
-        PersistentStateUtil.markDirty(state);
+        state.callMarkDirty();
     }
 
     public static void setEMCtoPlayer(Player player, long emc) {
@@ -264,7 +264,7 @@ public class EMCManager {
 
         teamState.storedEMC = emc;
 
-        PersistentStateUtil.markDirty(state);
+        state.callMarkDirty();
     }
 
     public static void incrementEmc(Player player, long amount) {
@@ -278,7 +278,7 @@ public class EMCManager {
 
         teamState.storedEMC += amount;
 
-        PersistentStateUtil.markDirty(state);
+        state.callMarkDirty();
     }
 
     public static long getEmcFromPlayer(Player player) {

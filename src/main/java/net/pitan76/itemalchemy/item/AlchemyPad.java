@@ -8,7 +8,7 @@ import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.StackActionResult;
 
-public class AlchemyPad extends CompatItem  {
+public class AlchemyPad extends CompatItem {
 
     public AlchemyPad(CompatibleItemSettings settings) {
         super(settings);

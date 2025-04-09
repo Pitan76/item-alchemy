@@ -1,5 +1,6 @@
 package net.pitan76.itemalchemy.client.screen;
 
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerInventory;
@@ -22,6 +23,7 @@ import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.client.ScreenUtil;
+import net.pitan76.mcpitanlib.api.util.client.widget.TextFieldUtil;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 
 import java.util.List;
@@ -43,16 +45,16 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
 
     @Override
     public boolean keyPressed(KeyEventArgs args) {
-        if (!searchBox.isFocused() || args.keyCode == 256)
+        if (!TextFieldUtil.isFocused(searchBox) || args.keyCode == 256)
             return super.keyPressed(args);
 
-        return searchBox.keyPressed(args.keyCode, args.scanCode, args.modifiers);
+        return TextFieldUtil.keyPressed(searchBox, args.keyCode, args.scanCode, args.modifiers);
 
     }
 
     @Override
     public boolean keyReleased(KeyEventArgs args) {
-        if (!searchBox.isFocused() || args.keyCode == 256)
+        if (!TextFieldUtil.isFocused(searchBox) || args.keyCode == 256)
             return super.keyReleased(args);
 
         NbtCompound translations = NbtUtil.create();
@@ -67,13 +69,13 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
 
         PacketByteBuf buf = PacketByteUtil.create();
 
-        PacketByteUtil.writeString(buf, searchBox.getText());
+        PacketByteUtil.writeString(buf, TextFieldUtil.getText(searchBox));
         PacketByteUtil.writeNbt(buf, translations);
         ClientNetworking.send(_id("search"), buf);
 
         AlchemyTableScreenHandler screenHandler = getScreenHandlerOverride();
 
-        screenHandler.setSearchText(searchBox.getText());
+        screenHandler.setSearchText(TextFieldUtil.getText(searchBox));
         screenHandler.setTranslations(translations);
         screenHandler.index = 0;
         screenHandler.sortBySearch();
@@ -83,7 +85,7 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
 
     public void removedOverride() {
         super.removedOverride();
-        if (searchBox.isFocused())
+        if (TextFieldUtil.isFocused(searchBox))
             ScreenUtil.setRepeatEvents(false);
     }
 
@@ -91,12 +93,12 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
     public void initOverride() {
         super.initOverride();
 
-        searchBox = new TextFieldWidget(this.textRenderer, x + 85,  y + 5, 60, 9, TextUtil.literal(""));
-        searchBox.setDrawsBackground(true);
-        searchBox.setFocusUnlocked(true);
-        ScreenUtil.TextFieldUtil.setFocused(searchBox, false);
-        searchBox.setMaxLength(2048);
-        searchBox.setText("");
+        searchBox = TextFieldUtil.create(callGetTextRenderer(), x + 85,  y + 5, 60, 9);
+        TextFieldUtil.setDrawsBackground(searchBox, true);
+        TextFieldUtil.setFocusUnlocked(searchBox, true);
+        TextFieldUtil.setFocused(searchBox, false);
+        TextFieldUtil.setMaxLength(searchBox, 2048);
+        TextFieldUtil.setText(searchBox, "");
         addDrawableChild_compatibility(searchBox);
 
         addDrawableCTBW(ScreenUtil.createTexturedButtonWidget(x + 113, y + 110, 18, 18, 208, 0, 18, getCompatTexture(), (buttonWidget) -> {
@@ -132,14 +134,16 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
 
     @Override
     public void drawForegroundOverride(DrawForegroundArgs args) {
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, getTitle(), this.titleX, this.titleY, 4210752);
+        TextRenderer textRenderer = callGetTextRenderer();
+
+        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, callGetTitle(), this.getTitleX(), this.getTitleY(), 4210752);
         long emc = EMCManager.getEmcFromPlayer(new Player(playerInventory.player));
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, TextUtil.literal("EMC: " + String.format("%,d", emc)), this.titleX, backgroundHeight / 2, 4210752);
+        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, TextUtil.literal("EMC: " + String.format("%,d", emc)), this.getTitleX(), backgroundHeight / 2, 4210752);
     }
 
     @Override
     public void drawBackgroundOverride(DrawBackgroundArgs args) {
         super.drawBackgroundOverride(args);
-        ScreenUtil.TextFieldUtil.render(searchBox, new RenderArgs(args.drawObjectDM, args.mouseX, args.mouseY, args.delta));
+        TextFieldUtil.render(searchBox, new RenderArgs(args.drawObjectDM, args.mouseX, args.mouseY, args.delta));
     }
 }

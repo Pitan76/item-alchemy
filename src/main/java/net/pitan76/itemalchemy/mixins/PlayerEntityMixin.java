@@ -50,6 +50,6 @@ public class PlayerEntityMixin {
             teamState.registeredItems.addAll(keys);
         }
 
-        PersistentStateUtil.markDirty(serverState);
+        serverState.callMarkDirty();
     }
 }

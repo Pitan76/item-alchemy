@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.api.PlayerRegisteredItemUtil;
 import net.pitan76.itemalchemy.data.ModState;
@@ -18,6 +17,8 @@ import net.pitan76.itemalchemy.gui.slot.RegisterSlot;
 import net.pitan76.itemalchemy.gui.slot.RemoveSlot;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.SimpleScreenHandler;
+import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
+import net.pitan76.mcpitanlib.api.gui.slot.CompatSlotActionType;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 
@@ -136,11 +137,11 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
     @Override
     public ItemStack quickMoveOverride(Player player, int index) {
-        ItemStack newStack;
+        //ItemStack newStack;
         Slot slot = ScreenHandlerUtil.getSlot(this, index);
         if (SlotUtil.hasStack(slot)) {
             ItemStack originalStack = SlotUtil.getStack(slot);
-            newStack = originalStack.copy();
+            //newStack = ItemStackUtil.copy(originalStack);
 
             if (index < 36) { // indexがRegisterサイズより小さい
                 if (!this.callInsertItem(originalStack, 36, 37, true)) {
@@ -228,31 +229,30 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
     }
 
     @Override
-    public void overrideOnSlotClick(int slotIndex, int button, SlotActionType actionType, Player player) {
-        super.overrideOnSlotClick(slotIndex, button, actionType, player);
+    public void onSlotClick(SlotClickEvent e) {
+        super.onSlotClick(e);
 
         //System.out.println("index: " + slotIndex + ", action: " + actionType.name());
 
-        if (slotIndex >= 50 && !player.isClient() && (actionType == SlotActionType.SWAP || actionType == SlotActionType.PICKUP || actionType == SlotActionType.QUICK_MOVE || actionType == SlotActionType.THROW)) {
+        if (e.slot >= 50 && !e.isClient() && e.getActionType().isSwapOrPickupOrQuickMoveOrThrow()) {
 
-            Slot slot = callGetSlot(slotIndex);
+            Slot slot = callGetSlot(e.slot);
             if (!(slot instanceof ExtractSlot)) return;
             ExtractSlot extractSlot = (ExtractSlot) slot;
-            ItemStack definedStack = extractSlot.inventory.definedStacks.get(slotIndex + 14);
+            ItemStack definedStack = extractSlot.inventory.definedStacks.get(e.slot + 14);
             ItemStack stack = SlotUtil.getStack(extractSlot);
 
             int receivable = 1;
-            if (actionType == SlotActionType.QUICK_MOVE) {
-                receivable = (int) Math.min(Math.floorDiv(EMCManager.getEmcFromPlayer(player), EMCManager.get(definedStack)), definedStack.getMaxCount());
+            if (e.getActionType() == CompatSlotActionType.QUICK_MOVE) {
+                receivable = (int) Math.min(Math.floorDiv(EMCManager.getEmcFromPlayer(player), EMCManager.get(definedStack)), ItemStackUtil.getMaxCount(definedStack));
             }
-
 
             if (definedStack != null && ItemStackUtil.isEmpty(stack) && EMCManager.getEmcFromPlayer(player) >= EMCManager.get(definedStack) * receivable) {
                 EMCManager.decrementEmc(player, EMCManager.get(definedStack) * receivable);
                 SlotUtil.setStack(extractSlot, ItemStackUtil.copy(definedStack));
 
                 if (receivable > 1) {
-                    ItemStack addedStack = definedStack.copy();
+                    ItemStack addedStack = ItemStackUtil.copy(definedStack);
                     ItemStackUtil.setCount(addedStack, receivable - 1);
                     player.offerOrDrop(addedStack);
                 }
