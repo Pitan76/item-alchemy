@@ -51,7 +51,7 @@ public class PlayerRegisteredItemUtil {
         teamState.get().registeredItems = list;
 
         if (!player.isClient()) {
-            PersistentStateUtil.markDirty(ServerState.getServerState(server.get()));
+            ServerState.getServerState(server.get()).callMarkDirty();
         }
     }
 

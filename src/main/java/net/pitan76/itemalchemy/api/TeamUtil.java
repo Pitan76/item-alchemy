@@ -63,7 +63,7 @@ public class TeamUtil {
 
         playerState.get().teamID = teamState.get().teamID;
 
-        PersistentStateUtil.markDirty(serverState);
+        serverState.callMarkDirty();
 
         return true;
     }
@@ -82,7 +82,7 @@ public class TeamUtil {
         }
 
         serverState.teams.remove(teamState.get());
-        PersistentStateUtil.markDirty(serverState);
+        serverState.callMarkDirty();
 
         return true;
     }
@@ -109,7 +109,7 @@ public class TeamUtil {
             removeTeam(server, currentTeamState.teamID);
         }
 
-        PersistentStateUtil.markDirty(serverState);
+        serverState.callMarkDirty();
 
         return true;
     }

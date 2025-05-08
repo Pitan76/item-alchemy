@@ -66,17 +66,13 @@ public class ServerState extends CompatiblePersistentState implements ModState {
 
         for (TeamState teamState : teams) {
             NbtCompound teamNBT = NbtUtil.create();
-
             teamState.writeNbt(teamNBT);
-
             teamNBTList.add(teamNBT);
         }
 
         for (PlayerState playerState : players) {
             NbtCompound playerNBT = NbtUtil.create();
-
             playerState.writeNBT(playerNBT);
-
             playerNBTList.add(playerNBT);
         }
 
