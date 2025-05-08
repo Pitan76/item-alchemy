@@ -167,6 +167,8 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.SLIME_BALL, 32);
 
         add(Items.CHARCOAL, 32);
+        add(Items.COAL, 128);
+
         ItemUtil.getInTag("saplings").forEach((item) -> add(item, 32));
         ItemUtil.getInTag("logs").forEach((item) -> add(item, 32));
         add(Items.PAPER, 32);
