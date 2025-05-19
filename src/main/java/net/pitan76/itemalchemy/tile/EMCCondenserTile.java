@@ -125,7 +125,7 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
                             newStack = targetStack.copy();
                         }
 
-                        newStack.setCount(1);
+                        ItemStackUtil.setCount(newStack, 1);
 
                         if (insertItem(newStack, getItems(), true)) {
                             insertItem(newStack, getItems());
