@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "net.pitan76.itemalchemy.mixins",
   "mixins": [
-    "PlayerEntityMixin"
+
   ],
   "injectors": {
     "defaultRequire": 1
