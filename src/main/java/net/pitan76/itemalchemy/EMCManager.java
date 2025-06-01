@@ -50,8 +50,16 @@ public class EMCManager {
     }
 
     public static void add(String item, long emc) {
+        if (!item.contains(":"))
+            item = "minecraft:" + item;
+
         if (contains(item)) return;
         map.put(item, emc);
+    }
+
+    public static void addExist(String itemId, long emc) {
+        if (ItemUtil.isExist(itemId))
+            add(itemId, emc);
     }
 
     public static void set(Item item, long emc) {

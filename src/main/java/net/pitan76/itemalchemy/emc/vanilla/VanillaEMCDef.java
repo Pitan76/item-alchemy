@@ -338,5 +338,18 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.HONEY_BOTTLE, 48);
         add(Items.RABBIT_FOOT, 128);
         add(Items.TRIDENT, 16463);
+
+        addExist("soul_soil", 64);
+        addExist("soul_torch", 9);
+        addExist("glass_pane", 1);
+        addExist("glass_bottle", 1);
+        addExist("big_dripleaf", 4);
+        addExist("small_dripleaf", 2);
+        addExist("blackstone", 1);
+        addExist("shroomlight", 64);
+        addExist("warped_wart_block", 16);
+        addExist("nether_wart_block", 16);
+        addExist("warped_roots", 4);
+        addExist("crimson_roots", 4);
     }
 }

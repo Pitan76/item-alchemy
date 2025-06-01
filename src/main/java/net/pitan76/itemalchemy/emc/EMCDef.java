@@ -18,6 +18,10 @@ public abstract class EMCDef {
         EMCManager.add(item, emc);
     }
 
+    public static void addExist(String itemId, long emc) {
+        EMCManager.addExist(itemId, emc);
+    }
+
     public static void addByTag(TagKey<Item> tagKey, long emc) {
         EMCManager.add2(tagKey, emc);
     }
