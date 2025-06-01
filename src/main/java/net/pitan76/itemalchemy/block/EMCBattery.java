@@ -17,6 +17,7 @@ import net.pitan76.mcpitanlib.api.state.property.CompatProperties;
 import net.pitan76.mcpitanlib.api.state.property.DirectionProperty;
 import net.pitan76.mcpitanlib.api.util.CompatActionResult;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
@@ -62,7 +63,7 @@ public class EMCBattery extends EMCRepeater implements ExtendBlockEntityProvider
     @Override
     public CompatActionResult onRightClick(BlockUseEvent e) {
         if (e.isClient()) return CompatActionResult.SUCCESS;
-        if (e.stack.getItem() instanceof Wrench)
+        if (ItemStackUtil.getItem(e.stack) instanceof Wrench)
             return CompatActionResult.PASS;
 
         BlockEntity blockEntity = e.getBlockEntity();
@@ -89,7 +90,8 @@ public class EMCBattery extends EMCRepeater implements ExtendBlockEntityProvider
     public BlockState getPlacementState(PlacementStateArgs args) {
         BlockState state = super.getPlacementState(args);
 
-        return state.with(FACING, args.getHorizontalPlayerFacing().getOpposite());
+        return (state == null || !state.contains(FACING)) ? state :
+                state.with(FACING, args.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override

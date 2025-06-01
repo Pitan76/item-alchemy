@@ -69,29 +69,12 @@ public class EMCBatteryScreenHandler extends ExtendedScreenHandler {
         Slot slot = ScreenHandlerUtil.getSlot(this, index);
         if (SlotUtil.hasStack(slot)) {
             ItemStack originalStack = SlotUtil.getStack(slot);
-            // TargetSlot
-            if (index == 37) {
-                Slot targetSlot = ScreenHandlerUtil.getSlot(this, 37);
-                SlotUtil.setStack(targetSlot, ItemStackUtil.empty());
-                return ItemStackUtil.empty();
-            }
 
             if (index < 36) {
-                if (!this.callInsertItem(originalStack, 36 + 3, 36 + 16 + 3, false)) {
-                    if (!this.callInsertItem(originalStack, 36, 36 + 3, false)) {
-                        return ItemStackUtil.empty();
-                    }
-                }
-
-                // TargetSlot
-                Slot targetSlot = ScreenHandlerUtil.getSlot(this, 37);
-                if (SlotUtil.getStack(targetSlot).isEmpty()) {
-                    ItemStack newTargetStack = originalStack.copy();
-                    newTargetStack.setCount(1);
-                    SlotUtil.setStack(targetSlot, newTargetStack);
+                if (!this.callInsertItem(originalStack, 36, 38, false))
                     return ItemStackUtil.empty();
-                }
-            } else if (!this.callInsertItem(originalStack, 0, 36, false)) {
+
+            } else if (!this.callInsertItem(originalStack, 0, 35, false)) {
                 return ItemStackUtil.empty();
             }
 
@@ -102,19 +85,5 @@ public class EMCBatteryScreenHandler extends ExtendedScreenHandler {
             }
         }
         return ItemStackUtil.empty();
-    }
-
-    @Override
-    public void overrideOnSlotClick(int slotIndex, int button, SlotActionType actionType, Player player) {
-        if (slotIndex == 37) { // Target Slot
-            ItemStack oldStack = getCursorStack().copy();
-            if (!ItemStackUtil.isEmpty(oldStack)) {
-                callSetCursorStack(oldStack);
-            }
-            super.overrideOnSlotClick(slotIndex, button, actionType, player);
-
-            return;
-        }
-        super.overrideOnSlotClick(slotIndex, button, actionType, player);
     }
 }

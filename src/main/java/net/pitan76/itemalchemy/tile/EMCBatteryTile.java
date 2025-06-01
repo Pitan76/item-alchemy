@@ -1,14 +1,13 @@
 package net.pitan76.itemalchemy.tile;
 
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.api.EMCStorageUtil;
@@ -32,6 +31,7 @@ import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
+import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlockEntityTicker<EMCBatteryTile>, VanillaStyleSidedInventory, IInventory, ExtendedScreenHandlerFactory {
@@ -57,7 +57,7 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
     @Override
     public long getMaxEMC() {
         if (maxEMC == -1)
-            return ((EMCBattery) getCachedState().getBlock()).getMaxEMC();
+            return ((EMCBattery) BlockStateUtil.getBlock(getCachedState())).getMaxEMC();
 
         return maxEMC;
     }
@@ -85,7 +85,7 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
         World world = e.world;
 
         if (maxEMC == -1)
-            maxEMC = ((EMCBattery) e.state.getBlock()).getMaxEMC();
+            maxEMC = ((EMCBattery) BlockStateUtil.getBlock(e.state)).getMaxEMC();
 
         //if (maxEMC <= storedEMC) return;
 
@@ -114,7 +114,7 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
     }
 
     @Override
-    public DefaultedList<ItemStack> getItems() {
+    public ItemStackList getItems() {
         return inventory;
     }
 
@@ -135,11 +135,13 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
     @Override
     public void writeExtraData(ExtraDataArgs args) {
         NbtCompound data = NbtUtil.create();
-        NbtUtil.putInt(data, "x", pos.getX());
-        NbtUtil.putInt(data, "y", pos.getY());
-        NbtUtil.putInt(data, "z", pos.getZ());
+        BlockPos pos = callGetPos();
+
+        NbtUtil.putInt(data, "x", PosUtil.x(pos));
+        NbtUtil.putInt(data, "y", PosUtil.y(pos));
+        NbtUtil.putInt(data, "z", PosUtil.z(pos));
         NbtUtil.putLong(data, "stored_emc", storedEMC);
-        NbtUtil.putLong(data, "max_emc", ((EMCBattery) getCachedState().getBlock()).getMaxEMC());
+        NbtUtil.putLong(data, "max_emc", getMaxEMC());
         args.writeVar(data);
     }
 }
