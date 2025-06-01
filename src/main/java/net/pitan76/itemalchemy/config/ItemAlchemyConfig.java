@@ -4,6 +4,7 @@ import net.pitan76.easyapi.config.JsonConfig;
 import net.pitan76.mcpitanlib.api.util.PlatformUtil;
 
 import java.io.File;
+import java.util.LinkedHashMap;
 
 public class ItemAlchemyConfig {
     private static final File dir = new File(PlatformUtil.getConfigFolderAsFile(), "itemalchemy");
@@ -25,6 +26,8 @@ public class ItemAlchemyConfig {
     }
 
     public static void init() {
+        if (config.configMap == null) config.configMap = new LinkedHashMap<>();
+
         removeDataFromCopyStack = config.getBooleanOrCreate("remove_data_from_copy_stack", true);
         showEmcInTooltip = config.getBooleanOrCreate("show_emc_in_tooltip", true);
 
