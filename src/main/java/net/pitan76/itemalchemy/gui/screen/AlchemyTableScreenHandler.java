@@ -197,8 +197,8 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             String itemTranslationKey = ItemUtil.getTranslationKey(item);
 
             // If the item has a translation, we should use that instead of the identifier.
-            if (translations.contains(itemTranslationKey)) {
-                translatedName = translations.getString(itemTranslationKey);
+            if (NbtUtil.has(translations, itemTranslationKey)) {
+                translatedName = NbtUtil.getString(translations, itemTranslationKey);
             }
 
             // Include only the name of the item in the id when searching
