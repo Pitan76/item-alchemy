@@ -5,7 +5,6 @@ import net.pitan76.itemalchemy.data.PlayerState;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import org.jetbrains.annotations.Nullable;
 

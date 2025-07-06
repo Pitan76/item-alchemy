@@ -79,6 +79,7 @@ publishing {
     publications {
         create("mavenJava", MavenPublication) {
             artifactId = project.archives_base_name
+            version = project.mod_version
             from components.java
 
             pom.withXml {
@@ -99,10 +100,14 @@ publishing {
 
     // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/PTOM76/maven")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
     }
 }
 
@@ -128,6 +133,8 @@ curseforge {
             addGameVersion '1.21.3'
             addGameVersion '1.21.4'
             addGameVersion '1.21.5'
+            addGameVersion '1.21.6'
+            addGameVersion '1.21.7'
 
             addGameVersion "Fabric"
             relations {
@@ -151,7 +158,7 @@ modrinth {
         projectId = 'cfQx2fbQ'
         versionNumber = project.mod_version
         uploadFile = remapJar
-        gameVersions = ['1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.20', '1.20.1', '1.20.3', '1.20.4', '1.21', '1.21.1', '1.21.2', '1.21.3', '1.21.4', '1.21.5']
+        gameVersions = ['1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.20', '1.20.1', '1.20.3', '1.20.4', '1.21', '1.21.1', '1.21.2', '1.21.3', '1.21.4', '1.21.5', '1.21.6', '1.21.7']
         versionType = 'release'
         loaders = ['fabric']
         changelog = rootProject.changelog + "\nMCPitanLib version: " + mcpitanlib_version.split(":")[1]

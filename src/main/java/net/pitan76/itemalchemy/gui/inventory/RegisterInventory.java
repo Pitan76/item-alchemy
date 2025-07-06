@@ -11,7 +11,6 @@ import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import net.pitan76.itemalchemy.item.ILearnableItem;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
-import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 
