@@ -76,8 +76,8 @@ https://maven.pitan76.net/v/#net/pitan76/itemalchemy/ <br />
 - gradle.properties
 ```properties
 # check these on https://maven.pitan76.net/v/#net/pitan76/
-mcpitanlib_version=+1.18.2:2.4.9
-itemalchemy_version=1.0.5
+mcpitanlib_version=1.18.2:3.3.7
+itemalchemy_version=1.1.3
 ```
 
 ----
@@ -89,7 +89,7 @@ repositories {
 }
 
 dependencies {
-    modImplementation "net.pitan76:mcpitanlib:${project.mcpitanlib_version}"
+    modImplementation "net.pitan76:mcpitanlib-fabric-${project.mcpitanlib_version}"
     modImplementation "net.pitan76:itemalchemy:${project.itemalchemy_version}"
 }
 
