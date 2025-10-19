@@ -8,6 +8,7 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.ItemAlchemy;
@@ -221,6 +222,8 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
     @Override
     public void writeExtraData(ExtraDataArgs args) {
         NbtCompound data = NbtUtil.create();
+        BlockPos pos = callGetPos();
+
         NbtUtil.putInt(data, "x", pos.getX());
         NbtUtil.putInt(data, "y", pos.getY());
         NbtUtil.putInt(data, "z", pos.getZ());

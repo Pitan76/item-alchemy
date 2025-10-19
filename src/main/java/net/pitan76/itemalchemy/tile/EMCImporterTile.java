@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.pitan76.itemalchemy.EMCManager;
@@ -190,6 +191,8 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     @Override
     public void writeExtraData(ExtraDataArgs args) {
         NbtCompound data = NbtUtil.create();
+        BlockPos pos = callGetPos();
+
         NbtUtil.putInt(data, "x", pos.getX());
         NbtUtil.putInt(data, "y", pos.getY());
         NbtUtil.putInt(data, "z", pos.getZ());

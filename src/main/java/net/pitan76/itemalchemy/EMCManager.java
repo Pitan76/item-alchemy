@@ -165,7 +165,11 @@ public class EMCManager {
 
     public static void defaultMap() {
         if (!defaultEMCMap.isEmpty()) {
-            map.putAll(defaultEMCMap);
+            for (Map.Entry<String, Long> entry : defaultEMCMap.entrySet()) {
+                if (!map.containsKey(entry.getKey())) {
+                    map.put(entry.getKey(), entry.getValue());
+                }
+            }
             return;
         }
 
