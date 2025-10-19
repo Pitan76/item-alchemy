@@ -16,9 +16,10 @@ import net.pitan76.mcpitanlib.api.client.event.ItemTooltipRegistry;
 import net.pitan76.mcpitanlib.api.client.event.WorldRenderRegistry;
 import net.pitan76.mcpitanlib.api.client.option.KeyCodes;
 import net.pitan76.mcpitanlib.api.client.registry.CompatRegistryClient;
-import net.pitan76.mcpitanlib.api.client.registry.v2.KeybindingRegistry;
+import net.pitan76.mcpitanlib.api.client.registry.v3.KeybindingRegistry;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ClientNetworking;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 
@@ -87,7 +88,8 @@ public class ItemAlchemyClient {
             }
         });
 
-        KeybindingRegistry.registerOnLevelWithNetwork("key.itemalchemy.charge", KeyCodes.KEY_V, "category.itemalchemy.all", _id("tool_charge"));
+        // category: key.category.itemalchemy.main
+        KeybindingRegistry.registerOnLevelWithNetwork("key.itemalchemy.charge", KeyCodes.KEY_V, _id("main"), _id("tool_charge"));
     }
 
     // display emc to the item's tooltip

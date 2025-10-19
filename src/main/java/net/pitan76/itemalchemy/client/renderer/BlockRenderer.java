@@ -3,7 +3,6 @@ package net.pitan76.itemalchemy.client.renderer;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.Camera;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -14,6 +13,7 @@ import net.pitan76.mcpitanlib.api.client.event.listener.BeforeBlockOutlineEvent;
 import net.pitan76.mcpitanlib.api.client.event.listener.BeforeBlockOutlineListener;
 import net.pitan76.mcpitanlib.api.client.event.listener.WorldRenderContext;
 import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.client.ClientUtil;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class BlockRenderer implements BeforeBlockOutlineListener {
         HitResult hitResult = e.getHitResult();
 
         if (hitResult == null) return true;
-        if (hitResult.getType() != HitResult.Type.BLOCK) return true;
+        if (!e.isBlockType()) return true;
 
         Optional<ItemStack> optionalStack = player.getCurrentHandItem();
         if (!optionalStack.isPresent()) return true;
@@ -42,15 +42,18 @@ public class BlockRenderer implements BeforeBlockOutlineListener {
         Camera camera = context.getCamera();
         World world = e.getWorld();
 
-        BlockPos blockPos = ((BlockHitResult)hitResult).getBlockPos();
+        Optional<BlockPos> optionalBlockPos = e.getBlockPos();
+        if (!optionalBlockPos.isPresent()) return true;
+
+        BlockPos blockPos = optionalBlockPos.get();
 
         Optional<BlockState> optionalBlockState = e.getBlockState();
         if (!optionalBlockState.isPresent()) return true;
 
         BlockState blockState = optionalBlockState.get();
 
-        if (blockState.isAir()) return true;
-        if (!PhilosopherStone.isExchange(blockState.getBlock())) return true;
+        if (BlockStateUtil.isAir(blockState)) return true;
+        if (!PhilosopherStone.isExchange(BlockStateUtil.getBlock(blockState))) return true;
 
         List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, blockPos, ItemUtils.getCharge(stack), true, true);
 

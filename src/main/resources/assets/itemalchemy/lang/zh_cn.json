@@ -59,7 +59,7 @@
 
   "text.itemalchemy.owner": "所有者: %s",
 
-  "category.itemalchemy.all": "Item Alchemy",
+  "key.category.itemalchemy.main": "Item Alchemy",
   "key.itemalchemy.charge": "充电",
 
   "message.itemalchemy.failed_to_set_team": "[Item Alchemy] 无法设置队伍"

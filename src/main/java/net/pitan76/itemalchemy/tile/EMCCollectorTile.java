@@ -5,8 +5,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -238,7 +236,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
     @Override
     public void writeExtraData(ExtraDataArgs args) {
         NbtCompound nbt = NbtUtil.create();
-        NbtUtil.setBlockPosDirect(nbt, pos);
+        NbtUtil.setBlockPosDirect(nbt, callGetPos());
         NbtUtil.putLong(nbt, "stored_emc", storedEMC);
         NbtUtil.putLong(nbt, "max_emc", ((EMCCollector) BlockStateUtil.getBlock(getCachedState())).maxEMC);
         args.writeVar(nbt);
