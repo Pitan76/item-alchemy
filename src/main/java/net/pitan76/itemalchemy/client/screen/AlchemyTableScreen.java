@@ -1,5 +1,6 @@
 package net.pitan76.itemalchemy.client.screen;
 
+import net.minecraft.client.MinecraftClient; // Добавлено
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.I18n;
@@ -45,11 +46,25 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
 
     @Override
     public boolean keyPressed(KeyEventArgs args) {
-        if (!TextFieldUtil.isFocused(searchBox) || args.keyCode == 256)
+        if (args.keyCode == 256) { // ESC
             return super.keyPressed(args);
+        }
 
-        return TextFieldUtil.keyPressed(searchBox, args.keyCode, args.scanCode, args.modifiers);
+        // Если поиск в фокусе, проверяем кнопку выброса
+        if (TextFieldUtil.isFocused(searchBox)) {
+            // Проверяем, нажата ли кнопка выброса предмета (Q)
+            boolean isDropKey = MinecraftClient.getInstance().options.dropKey.matchesKey(args.keyCode, args.scanCode);
+            
+            // Если мышка над слотом и нажата Q, то выбрасываем предмет, а не пишем в поиск
+            if (isDropKey && super.keyPressed(args)) {
+                return true;
+            }
 
+            // Иначе — пишем в поиск
+            return TextFieldUtil.keyPressed(searchBox, args.keyCode, args.scanCode, args.modifiers);
+        }
+
+        return super.keyPressed(args);
     }
 
     @Override
@@ -102,11 +117,8 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
         addDrawableChild_compatibility(searchBox);
 
         addDrawableCTBW(ScreenUtil.createTexturedButtonWidget(x + 113, y + 110, 18, 18, 208, 0, 18, getCompatTexture(), (buttonWidget) -> {
-
             AlchemyTableScreenHandler screenHandler = getScreenHandlerOverride();
             screenHandler.prevExtractSlots();
-
-            // サーバーに送信
             PacketByteBuf buf = PacketByteUtil.create();
             NbtCompound nbt = NbtUtil.create();
             NbtUtil.set(nbt, "control", 0);
@@ -115,10 +127,8 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
         }));
 
         addDrawableCTBW(ScreenUtil.createTexturedButtonWidget(x + 171, y + 110, 18, 18, 226, 0, 18, getCompatTexture(), (buttonWidget) -> {
-            // クライアントの反映
             AlchemyTableScreenHandler screenHandler = getScreenHandlerOverride();
             screenHandler.nextExtractSlots();
-
             PacketByteBuf buf = PacketByteUtil.create();
             NbtCompound nbt = NbtUtil.create();
             NbtUtil.set(nbt, "control", 1);
@@ -135,7 +145,6 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
     @Override
     public void drawForegroundOverride(DrawForegroundArgs args) {
         TextRenderer textRenderer = callGetTextRenderer();
-
         ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, callGetTitle(), this.getTitleX(), this.getTitleY(), 4210752);
         long emc = EMCManager.getEmcFromPlayer(new Player(playerInventory.player));
         ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, TextUtil.literal("EMC: " + String.format("%,d", emc)), this.getTitleX(), backgroundHeight / 2, 4210752);
