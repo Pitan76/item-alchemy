@@ -35,10 +35,12 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.NETHERRACK, 1);
         add(Items.SNOW, 1);
         add(Items.STONE, 1);
+        addExist("smooth_stone", 1);
         add(Items.STONE_BRICKS, 1);
         add(Items.STONE_BRICK_STAIRS, 1);
         add(Items.STONE_SLAB, 1);
         add(Items.STONE_STAIRS, 1);
+        addExist("smooth_stone_stairs", 12);
         add(Items.BASALT, 1);
         add(Items.POLISHED_BASALT, 1);
         add(Items.SMOOTH_BASALT, 1);
@@ -52,6 +54,12 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.NETHER_BRICK, 4);
         add(Items.SANDSTONE, 4);
         add(Items.SANDSTONE_SLAB, 4);
+        addExist("smooth_sandstone", 4);
+        addExist("smooth_sandstone_slab", 4);
+        addExist("smooth_sandstone_stairs", 12);
+        addExist("smooth_red_sandstone", 4);
+        addExist("smooth_red_sandstone_slab", 4);
+        addExist("smooth_red_sandstone_stairs", 12);
         add(Items.FLINT, 4);
         add(Items.STICK, 4);
         add(Items.ROOTED_DIRT, 5);
