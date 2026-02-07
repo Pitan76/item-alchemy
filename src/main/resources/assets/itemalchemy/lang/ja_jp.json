@@ -61,6 +61,7 @@
 
   "key.category.itemalchemy.main": "Item Alchemy",
   "key.itemalchemy.charge": "チャージ",
+  "key.itemalchemy.changemode": "モードチェンジ",
 
   "message.itemalchemy.failed_to_set_team": "[Item Alchemy] チームを設定できませんでした"
 }

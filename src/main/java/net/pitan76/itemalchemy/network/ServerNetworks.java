@@ -3,6 +3,8 @@ package net.pitan76.itemalchemy.network;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
+import net.pitan76.itemalchemy.item.AlchemicalPickaxe;
+import net.pitan76.itemalchemy.item.AlchemicalToolMode;
 import net.pitan76.itemalchemy.sound.Sounds;
 import net.pitan76.itemalchemy.util.ItemCharge;
 import net.pitan76.itemalchemy.util.ItemUtils;
@@ -66,6 +68,19 @@ public class ServerNetworks {
                 if (ItemUtils.getCharge(stack) == afterChargeLevel) {
                     WorldUtil.playSound(player.getWorld(), null, player.getBlockPos(), player.isSneaking() ? Sounds.UNCHARGE_SOUND : Sounds.CHARGE_SOUND, CompatSoundCategory.PLAYERS, 0.15f, 0.4f + afterChargeLevel / 5f);
                 }
+            }
+        });
+
+        ServerNetworking.registerReceiver(_id("change_mode"), (e) -> {
+            Player player = e.player;
+            Optional<ItemStack> stackOptional = player.getCurrentHandItem();
+
+            if (!stackOptional.isPresent()) return;
+
+            ItemStack stack = stackOptional.get();
+            if (stack.getItem() instanceof AlchemicalToolMode) {
+                AlchemicalToolMode tool = (AlchemicalToolMode) stack.getItem();
+                tool.toggleMode(stack);
             }
         });
     }

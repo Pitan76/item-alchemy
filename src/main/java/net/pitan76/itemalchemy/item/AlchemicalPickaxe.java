@@ -7,7 +7,7 @@ import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 
-public class AlchemicalPickaxe extends CompatiblePickaxeItem implements ItemCharge {
+public class AlchemicalPickaxe extends CompatiblePickaxeItem implements ItemCharge, AlchemicalToolMode {
     public AlchemicalPickaxe(CompatibleToolMaterial toolMaterial, int attackDamage, float attackSpeed, CompatibleItemSettings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
     }
@@ -20,5 +20,10 @@ public class AlchemicalPickaxe extends CompatiblePickaxeItem implements ItemChar
     @Override
     public boolean isItemBarVisible(ItemBarVisibleArgs args, Options options) {
         return CustomDataUtil.contains(args.getStack(), "itemalchemy");
+    }
+
+    @Override
+    public String getModeKey() {
+        return "pickaxe_mode";
     }
 }
