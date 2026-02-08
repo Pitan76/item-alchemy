@@ -111,7 +111,7 @@ public class ItemAlchemyClient {
                 int nextMode = (currentMode + 1) % tool.getMaxModeValue();
 
                 ClientNetworking.send(_id("change_mode"), PacketByteUtil.create());
-                player.sendMessage(TextUtil.literal("§a[Item Alchemy] §rSwitched mode to " + nextMode));
+                player.sendMessage(TextUtil.literal("§a[Item Alchemy] §rSwitch mode to " + nextMode));
             }
         });
     }

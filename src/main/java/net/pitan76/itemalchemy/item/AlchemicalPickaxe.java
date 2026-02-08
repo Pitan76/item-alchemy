@@ -18,6 +18,7 @@ import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import net.pitan76.mcpitanlib.midohra.util.math.Direction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AlchemicalPickaxe extends CompatiblePickaxeItem implements ItemCharge, AlchemicalToolMode {
@@ -83,20 +84,44 @@ public class AlchemicalPickaxe extends CompatiblePickaxeItem implements ItemChar
             BlockPos targetPos = PosUtil.offset(originPos, direction, i);
             BlockState targetState = world.getBlockState(targetPos);
             if (isSuitableFor(stack, targetState)) {
-                float speed = this.overrideGetMiningSpeedMultiplier(stack, targetState);
-                if (speed > 1.0f) {
-                    WorldUtil.breakBlock(world, targetPos, true, player);
-                }
+                WorldUtil.breakBlock(world, targetPos, true, player);
             }
         }
     }
 
-    public static List<BlockPos> getTargetBlocks(World world, BlockPos blockPos, Direction direction, int distance) {
-        List<BlockPos> targetBlocks = new java.util.ArrayList<>();
+    public List<BlockPos> getTargetBlocksFromMode(World world, BlockPos blockPos, ItemStack stack, Direction direction, int mode) {
+        List<BlockPos> targetBlocks = new ArrayList<>();
+        switch (mode) {
+            case 0:
+                // Normal mode
+                break;
+            case 1:
+                // Vertical 3 mode
+                getTargetBlocks(targetBlocks, world, blockPos, stack, Direction.UP, 1);
+                getTargetBlocks(targetBlocks, world, blockPos, stack, Direction.DOWN, 1);
+                break;
+            case 2:
+                // Horizontal 3 mode
+                Direction left = direction.rotateYCounterclockwise();
+                Direction right = direction.rotateYClockwise();
+                getTargetBlocks(targetBlocks, world, blockPos, stack, left, 1);
+                getTargetBlocks(targetBlocks, world, blockPos, stack, right, 1);
+                break;
+            case 3:
+                // Depth 3 mode
+                getTargetBlocks(targetBlocks, world, blockPos, stack, direction, 2);
+                break;
+            default:
+                break;
+        }
+        return targetBlocks;
+    }
+
+    public List<BlockPos> getTargetBlocks(List<BlockPos> targetBlocks, World world, BlockPos blockPos, ItemStack stack, Direction direction, int distance) {
         for (int i = 1; i <= distance; i++) {
             BlockPos targetPos = PosUtil.offset(blockPos, direction, i);
             BlockState targetState = world.getBlockState(targetPos);
-            if (!BlockStateUtil.isAir(targetState)) {
+            if (isSuitableFor(stack, targetState)) {
                 targetBlocks.add(targetPos);
             }
         }

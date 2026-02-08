@@ -1,6 +1,9 @@
 package net.pitan76.itemalchemy.item;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.util.ItemCharge;
+import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleAxeItem;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
@@ -20,5 +23,13 @@ public class AlchemicalAxe extends CompatibleAxeItem implements ItemCharge {
     @Override
     public boolean isItemBarVisible(ItemBarVisibleArgs args, Options options) {
         return CustomDataUtil.contains(args.getStack(), "itemalchemy");
+    }
+
+    @Override
+    public float overrideGetMiningSpeedMultiplier(ItemStack stack, BlockState state) {
+        if (!isSuitableFor(stack, state))
+            return super.overrideGetMiningSpeedMultiplier(stack, state);
+
+        return super.overrideGetMiningSpeedMultiplier(stack, state) * (ItemUtils.getCharge(stack) + 1);
     }
 }

@@ -106,7 +106,7 @@ public class BlockRenderer implements BeforeBlockOutlineListener {
         if (mode < 1) return true;
 
         Direction direction = Direction.of(ClientUtil.getClientPlayer().getHorizontalFacing());
-        List<BlockPos> blocks = AlchemicalPickaxe.getTargetBlocks(world, blockPos, direction, mode == 1 ? 1 : 2);
+        List<BlockPos> blocks = pickaxe.getTargetBlocksFromMode(world, blockPos, stack, direction, mode);
         for (BlockPos pos : blocks) {
             Vector3d cameraPos = camera.getCameraPos();
             double x = PosUtil.x(pos) - cameraPos.x;
