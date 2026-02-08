@@ -89,8 +89,8 @@ public class AlchemicalPickaxe extends CompatiblePickaxeItem implements ItemChar
         }
     }
 
-    public List<BlockPos> getTargetBlocksFromMode(World world, BlockPos blockPos, ItemStack stack, Direction direction, int mode) {
-        List<BlockPos> targetBlocks = new ArrayList<>();
+    public List<BlockPos> getTargetBlocksFromMode(List<BlockPos> targetBlocks, World world, BlockPos blockPos, ItemStack stack, Direction direction, int mode) {
+
         switch (mode) {
             case 0:
                 // Normal mode
