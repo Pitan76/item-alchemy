@@ -12,20 +12,24 @@ import net.pitan76.itemalchemy.gui.screen.EMCBatteryScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.ScreenHandlers;
+import net.pitan76.itemalchemy.item.AlchemicalToolMode;
 import net.pitan76.mcpitanlib.api.client.event.ItemTooltipRegistry;
 import net.pitan76.mcpitanlib.api.client.event.WorldRenderRegistry;
+import net.pitan76.mcpitanlib.api.client.option.CompatKeyBinding;
 import net.pitan76.mcpitanlib.api.client.option.KeyCodes;
 import net.pitan76.mcpitanlib.api.client.registry.CompatRegistryClient;
 import net.pitan76.mcpitanlib.api.client.registry.v3.KeybindingRegistry;
+import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ClientNetworking;
-import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
+import net.pitan76.mcpitanlib.api.util.client.ClientUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static net.pitan76.itemalchemy.ItemAlchemy._id;
 
@@ -90,7 +94,26 @@ public class ItemAlchemyClient {
 
         // category: key.category.itemalchemy.main
         KeybindingRegistry.registerOnLevelWithNetwork("key.itemalchemy.charge", KeyCodes.KEY_V, _id("main"), _id("tool_charge"));
-        KeybindingRegistry.registerOnLevelWithNetwork("key.itemalchemy.changemode", KeyCodes.KEY_G, _id("main"), _id("change_mode"));
+//        KeybindingRegistry.registerOnLevelWithNetwork("key.itemalchemy.changemode", KeyCodes.KEY_G, _id("main"), _id("change_mode"));
+
+        CompatKeyBinding keyBinding = new CompatKeyBinding("key.itemalchemy.changemode", KeyCodes.KEY_G, _id("main"));
+        KeybindingRegistry.registerOnLevel(keyBinding, (world) -> {
+            if (keyBinding.toMinecraft().wasPressed()) {
+
+                Player player = ClientUtil.getPlayer();
+                Optional<ItemStack> optionalStack = player.getCurrentHandItem();
+                if (!optionalStack.isPresent()) return;
+                ItemStack stack = optionalStack.get();
+                if (!(ItemStackUtil.getItem(stack) instanceof AlchemicalToolMode)) return;
+
+                AlchemicalToolMode tool = (AlchemicalToolMode) ItemStackUtil.getItem(stack);
+                int currentMode = tool.getMode(stack);
+                int nextMode = (currentMode + 1) % tool.getMaxModeValue();
+
+                ClientNetworking.send(_id("change_mode"), PacketByteUtil.create());
+                player.sendMessage(TextUtil.literal("§a[Item Alchemy] §rSwitched mode to " + nextMode));
+            }
+        });
     }
 
     // display emc to the item's tooltip

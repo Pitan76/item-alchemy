@@ -2,15 +2,21 @@ package net.pitan76.itemalchemy.item;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
 
 public interface AlchemicalToolMode {
-    String getModeKey();
+
+    default int getMaxModeValue() {
+        return 4;
+    }
+
+    default String getModeKey() {
+        return "modechange";
+    }
 
     /**
-     * Get the current mode of the pickaxe (0 = normal, 1 = efficiency mode, etc.)
+     * Get the current mode of the pickaxe
      */
     default int getMode(ItemStack stack) {
         NbtCompound nbt = CustomDataUtil.get(stack, "itemalchemy");
@@ -26,22 +32,19 @@ public interface AlchemicalToolMode {
      * Set the mode of the pickaxe
      */
     default void setMode(ItemStack stack, int mode) {
-        // Mode 0 = normal, Mode 1 = efficiency (when fully charged)
-        mode = Math.max(0, Math.min(1, mode));
         NbtCompound nbt = CustomDataUtil.get(stack, "itemalchemy");
         NbtUtil.set(nbt, getModeKey(), mode);
+        CustomDataUtil.put(stack, "itemalchemy", nbt);
     }
 
     /**
-     * Toggle the mode when the key is pressed
+     * Increment the mode value, wrapping around to 0 after reaching max mode. (default key "G")
+     * @param stack The ItemStack to modify.
      */
-    default void toggleMode(ItemStack stack) {
-        if (!ItemUtils.isItemChargeable(stack)) return;
-        int chargeLevel = ItemUtils.getCharge(stack);
-        // Only allow mode toggle when fully charged
-        if (chargeLevel < ItemUtils.MAX_CHARGE_VALUE) return;
-
+    default void incrementMode(ItemStack stack) {
         int currentMode = getMode(stack);
-        setMode(stack, (currentMode + 1) % 2);
+        int maxMode = getMaxModeValue();
+        int newMode = (currentMode + 1) % maxMode;
+        setMode(stack, newMode);
     }
 }

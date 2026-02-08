@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.pitan76.itemalchemy.item.AlchemicalPickaxe;
 import net.pitan76.itemalchemy.item.PhilosopherStone;
 import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.itemalchemy.util.WorldUtils;
@@ -16,6 +17,7 @@ import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.client.ClientUtil;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import net.pitan76.mcpitanlib.midohra.client.render.CameraWrapper;
+import net.pitan76.mcpitanlib.midohra.util.math.Direction;
 import net.pitan76.mcpitanlib.midohra.util.math.Vector3d;
 
 import java.util.List;
@@ -37,8 +39,14 @@ public class BlockRenderer implements BeforeBlockOutlineListener {
         if (!optionalStack.isPresent()) return true;
         ItemStack stack = optionalStack.get();
 
-        if (!(stack.getItem() instanceof PhilosopherStone)) return true;
+        if (stack.getItem() instanceof PhilosopherStone) return philosopherStone(e, stack);
+        if (stack.getItem() instanceof AlchemicalPickaxe) return alchemicalPickaxe(e, stack);
 
+
+        return true;
+    }
+
+    protected boolean philosopherStone(BeforeBlockOutlineEvent e, ItemStack stack) {
         WorldRenderContext context = e.getContext();
 
         CameraWrapper camera = context.getCameraWrapper();
@@ -59,6 +67,46 @@ public class BlockRenderer implements BeforeBlockOutlineListener {
 
         List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, blockPos, ItemUtils.getCharge(stack), true, true);
 
+        for (BlockPos pos : blocks) {
+            Vector3d cameraPos = camera.getCameraPos();
+            double x = PosUtil.x(pos) - cameraPos.x;
+            double y = PosUtil.y(pos) - cameraPos.y;
+            double z = PosUtil.z(pos) - cameraPos.z;
+
+            e.push();
+            e.translate(x, y, z);
+            e.drawBox(1f, 0.6f, 1f, 1f);
+            e.pop();
+        }
+
+        return false;
+    }
+
+    protected boolean alchemicalPickaxe(BeforeBlockOutlineEvent e, ItemStack stack) {
+        WorldRenderContext context = e.getContext();
+
+        CameraWrapper camera = context.getCameraWrapper();
+        World world = e.getWorld();
+
+        Optional<BlockPos> optionalBlockPos = e.getBlockPos();
+        if (!optionalBlockPos.isPresent()) return true;
+
+        BlockPos blockPos = optionalBlockPos.get();
+
+        Optional<BlockState> optionalBlockState = e.getBlockState();
+        if (!optionalBlockState.isPresent()) return true;
+
+        BlockState blockState = optionalBlockState.get();
+
+        if (BlockStateUtil.isAir(blockState)) return true;
+
+        AlchemicalPickaxe pickaxe = (AlchemicalPickaxe) stack.getItem();
+        int mode = pickaxe.getMode(stack);
+
+        if (mode < 1) return true;
+
+        Direction direction = Direction.of(ClientUtil.getClientPlayer().getHorizontalFacing());
+        List<BlockPos> blocks = AlchemicalPickaxe.getTargetBlocks(world, blockPos, direction, mode == 1 ? 1 : 2);
         for (BlockPos pos : blocks) {
             Vector3d cameraPos = camera.getCameraPos();
             double x = PosUtil.x(pos) - cameraPos.x;

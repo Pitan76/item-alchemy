@@ -80,7 +80,7 @@ public class ServerNetworks {
             ItemStack stack = stackOptional.get();
             if (stack.getItem() instanceof AlchemicalToolMode) {
                 AlchemicalToolMode tool = (AlchemicalToolMode) stack.getItem();
-                tool.toggleMode(stack);
+                tool.incrementMode(stack);
             }
         });
     }
