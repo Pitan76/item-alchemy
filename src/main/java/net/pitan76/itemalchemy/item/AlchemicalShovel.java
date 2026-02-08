@@ -27,7 +27,7 @@ public class AlchemicalShovel extends CompatibleShovelItem implements ItemCharge
 
     @Override
     public float overrideGetMiningSpeedMultiplier(ItemStack stack, BlockState state) {
-        if (!isSuitableFor(stack, state))
+        if (!overrideIsSuitableFor(state))
             return super.overrideGetMiningSpeedMultiplier(stack, state);
 
         return super.overrideGetMiningSpeedMultiplier(stack, state) * (ItemUtils.getCharge(stack) + 1);

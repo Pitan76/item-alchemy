@@ -13,6 +13,7 @@ import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
+import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 
 import java.util.Optional;
@@ -81,6 +82,8 @@ public class ServerNetworks {
             if (stack.getItem() instanceof AlchemicalToolMode) {
                 AlchemicalToolMode tool = (AlchemicalToolMode) stack.getItem();
                 tool.incrementMode(stack);
+
+                e.player.sendMessage(TextUtil.literal("§a[Item Alchemy] §rSwitch mode to " + tool.getMode(stack)));
             }
         });
     }

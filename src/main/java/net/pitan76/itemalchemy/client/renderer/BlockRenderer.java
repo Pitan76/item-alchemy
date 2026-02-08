@@ -106,7 +106,7 @@ public class BlockRenderer implements BeforeBlockOutlineListener {
 
         if (mode < 1) return true;
 
-        Direction direction = Direction.of(ClientUtil.getClientPlayer().getHorizontalFacing());
+        Direction direction = Direction.of(ClientUtil.getPlayer().getHorizontalFacing());
 
         List<BlockPos> blocks = new ArrayList<>();
 
