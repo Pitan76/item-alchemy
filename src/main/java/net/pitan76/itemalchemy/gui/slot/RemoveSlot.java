@@ -3,7 +3,6 @@ package net.pitan76.itemalchemy.gui.slot;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.data.ModState;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
@@ -40,7 +39,7 @@ public class RemoveSlot extends CompatibleSlot {
         List<String> items = new ArrayList<>();
         if (stack.getItem() instanceof ILearnableItem) {
             items.addAll(((ILearnableItem) stack.getItem()).onLearn(player));
-        } else if (EMCManager.get(stack) != 0) {
+        } else {
             items.add(ItemUtil.toId(stack.getItem()).toString());
         }
 
