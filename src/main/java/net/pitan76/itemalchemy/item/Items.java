@@ -37,6 +37,8 @@ public class Items {
     public static RegistryResult<Item> EMC_CABLE;
     public static RegistryResult<Item> EMC_BATTERY;
 
+    public static RegistryResult<Item> INTERDICTION_TORCH;
+
     // Material
     public static RegistryResult<Item> ALCHEMICAL_FUEL;
     public static RegistryResult<Item> MOBIUS_FUEL;
@@ -89,6 +91,8 @@ public class Items {
         EMC_EXPORTER = registry.registerItem(_id("emc_exporter"), () -> ItemUtil.create(Blocks.EMC_EXPORTER.getOrNull(), CompatibleItemSettings.of(_id("emc_exporter")).addGroup(ItemGroups.ITEM_ALCHEMY)));
         EMC_CABLE = registry.registerItem(_id("emc_cable"), () -> ItemUtil.create(Blocks.EMC_CABLE.getOrNull(), CompatibleItemSettings.of(_id("emc_cable")).addGroup(ItemGroups.ITEM_ALCHEMY)));
         EMC_BATTERY = registry.registerItem(_id("emc_battery"), () -> ItemUtil.create(Blocks.EMC_BATTERY.getOrNull(), CompatibleItemSettings.of(_id("emc_battery")).addGroup(ItemGroups.ITEM_ALCHEMY)));
+
+        INTERDICTION_TORCH = registry.registerItem(_id("interdiction_torch"), () -> ItemUtil.create(Blocks.INTERDICTION_TORCH.getOrNull(), CompatibleItemSettings.of(_id("interdiction_torch")).addGroup(ItemGroups.ITEM_ALCHEMY)));
 
         ALCHEMY_PAD = registry.registerItem(_id("alchemy_pad"), () -> new AlchemyPad(CompatibleItemSettings.of(_id("alchemy_pad")).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
 

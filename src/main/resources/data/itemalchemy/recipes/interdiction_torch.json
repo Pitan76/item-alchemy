@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TRT",
+    "RGR",
+    "TRT"
+  ],
+  "key": {
+    "T": {
+      "item": "minecraft:torch"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "G": {
+      "item": "minecraft:glowstone"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:interdiction_torch",
+    "count": 1
+  }
+}

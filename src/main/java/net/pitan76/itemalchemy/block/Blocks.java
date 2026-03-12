@@ -35,6 +35,8 @@ public class Blocks {
 
     public static RegistryResult<Block> EMC_BATTERY;
 
+    public static RegistryResult<Block> INTERDICTION_TORCH;
+
     public static void init() {
         ALCHEMY_TABLE = registry.registerBlock(_id("alchemy_table"), () -> new AlchemyTable(_id("alchemy_table")));
         EMC_COLLECTOR_MK1 = registry.registerBlock(_id("emc_collector_mk1"), () -> new EMCCollector(_id("emc_collector_mk1"), 10000));
@@ -58,5 +60,7 @@ public class Blocks {
 
         EMC_CABLE = registry.registerBlock(_id("emc_cable"), () -> new EMCCable(CompatibleBlockSettings.of(_id("emc_cable"), CompatibleMaterial.STONE).strength(2.0f, 5.0f)));
         EMC_BATTERY = registry.registerBlock(_id("emc_battery"), () -> new EMCBattery(_id("emc_battery"), 100_000));
+
+        INTERDICTION_TORCH = registry.registerBlock(_id("interdiction_torch"), () -> new InterdictionTorch(_id("interdiction_torch")));
     }
 }

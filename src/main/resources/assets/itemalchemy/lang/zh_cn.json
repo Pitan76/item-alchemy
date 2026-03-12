@@ -49,6 +49,7 @@
   "block.itemalchemy.emc_exporter": "EMC输出器",
   "block.itemalchemy.emc_cable": "EMC电缆",
   "block.itemalchemy.emc_battery": "EMC电池",
+  "block.itemalchemy.interdiction_torch": "禁阻火把",
 
   "container.itemalchemy.alchemy_table": "转换桌",
   "container.itemalchemy.emc_condenser": "EMC冷凝器",
