@@ -1,5 +1,9 @@
 {
   "variants": {
-    "": { "model": "itemalchemy:block/interdiction_torch" }
+    "facing=up": { "model": "itemalchemy:block/interdiction_torch" },
+    "facing=north": { "model": "itemalchemy:block/interdiction_wall_torch", "y": 270 },
+    "facing=south": { "model": "itemalchemy:block/interdiction_wall_torch", "y": 90 },
+    "facing=east": { "model": "itemalchemy:block/interdiction_wall_torch" },
+    "facing=west": { "model": "itemalchemy:block/interdiction_wall_torch", "y": 180 }
   }
 }

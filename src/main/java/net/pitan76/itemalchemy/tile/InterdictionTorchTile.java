@@ -6,7 +6,9 @@ import net.minecraft.entity.mob.Monster;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.pitan76.itemalchemy.block.InterdictionTorch;
 import net.minecraft.world.World;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
@@ -36,9 +38,19 @@ public class InterdictionTorchTile extends CompatBlockEntity implements ExtendBl
         BlockPos blockPos = callGetPos();
 
         if (e.isClient()) {
-            double x = blockPos.getX() + 0.5;
-            double y = blockPos.getY() + 0.7;
-            double z = blockPos.getZ() + 0.5;
+            Direction facing = world.getBlockState(blockPos).get(InterdictionTorch.FACING.getProperty());
+
+            double x, y, z;
+            if (facing == Direction.UP) {
+                x = blockPos.getX() + 0.5;
+                y = blockPos.getY() + 0.7;
+                z = blockPos.getZ() + 0.5;
+            } else {
+                Direction wallDir = facing.getOpposite();
+                x = blockPos.getX() + 0.5 + 0.27 * wallDir.getOffsetX();
+                y = blockPos.getY() + 0.92;
+                z = blockPos.getZ() + 0.5 + 0.27 * wallDir.getOffsetZ();
+            }
 
             particleTick++;
 
