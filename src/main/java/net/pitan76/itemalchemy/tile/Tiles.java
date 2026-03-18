@@ -19,6 +19,7 @@ public class Tiles {
     public static RegistryResult<BlockEntityType<?>> EMC_IMPORTER;
     public static RegistryResult<BlockEntityType<?>> EMC_EXPORTER;
     public static RegistryResult<BlockEntityType<?>> EMC_BATTERY;
+    public static RegistryResult<BlockEntityType<?>> INTERDICTION_TORCH;
 
     public static void init() {
         EMC_COLLECTOR = registry.registerBlockEntityType(_id("emc_collector"), () -> create(EMCCollectorTile::new, Blocks.EMC_COLLECTOR_MK1.getOrNull(), Blocks.EMC_COLLECTOR_MK2.getOrNull(), Blocks.EMC_COLLECTOR_MK3.getOrNull(), Blocks.EMC_COLLECTOR_MK4.getOrNull(), Blocks.EMC_COLLECTOR_MK5.getOrNull()));
@@ -29,6 +30,7 @@ public class Tiles {
         EMC_IMPORTER = registry.registerBlockEntityType(_id("emc_importer"), () -> create(EMCImporterTile::new, Blocks.EMC_IMPORTER.getOrNull()));
         EMC_EXPORTER = registry.registerBlockEntityType(_id("emc_exporter"), () -> create(EMCExporterTile::new, Blocks.EMC_EXPORTER.getOrNull()));
         EMC_BATTERY = registry.registerBlockEntityType(_id("emc_battery"), () -> create(EMCBatteryTile::new, Blocks.EMC_BATTERY.getOrNull()));
+        INTERDICTION_TORCH = registry.registerBlockEntityType(_id("interdiction_torch"), () -> create(InterdictionTorchTile::new, Blocks.INTERDICTION_TORCH.getOrNull()));
     }
 
     public static <T extends BlockEntity> BlockEntityType<T> create(BlockEntityTypeBuilder.Factory<T> supplier, Block... blocks) {

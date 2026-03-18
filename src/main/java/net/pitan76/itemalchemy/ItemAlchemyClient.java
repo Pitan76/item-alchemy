@@ -48,6 +48,7 @@ public class ItemAlchemyClient {
         CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.EMC_BATTERY, EMCBatteryScreen::new);
 
         CompatRegistryClient.registerCutoutBlock(Blocks.EMC_CABLE.getOrNull());
+        CompatRegistryClient.registerCutoutBlock(Blocks.INTERDICTION_TORCH.getOrNull());
 
         WorldRenderRegistry.registerWorldRenderBeforeBlockOutline(new BlockRenderer());
 

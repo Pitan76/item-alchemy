@@ -1,3 +1,4 @@
 - 54sda zh_cn.json
 - Pitan ja_jp.json, en_us.json
 - OffsetMonkey538 en_us.json
+- mikkelchokolate ru_ru.json
