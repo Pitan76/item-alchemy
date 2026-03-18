@@ -67,5 +67,6 @@
   "message.itemalchemy.failed_to_set_team": "[Item Alchemy] 无法设置队伍",
   "message.itemalchemy.diving_rod_switch_mode": "切换到%s模式",
   "message.itemalchemy.diving_rod_average_emc": "%d个方块的平均EMC: %d",
-  "message.itemalchemy.diving_rod_total_emc": "总EMC: %d"
+  "message.itemalchemy.diving_rod_total_emc": "总EMC: %d",
+  "message.itemalchemy.diving_rod_max_emc": "最大EMC: %d"
 }

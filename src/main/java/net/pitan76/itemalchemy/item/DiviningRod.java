@@ -79,6 +79,7 @@ public class DiviningRod extends CompatItem  {
             }
         }
 
+        long maxEMC = 0;
         long totalEMC = 0;
         int blockCount = 0;
 
@@ -90,14 +91,20 @@ public class DiviningRod extends CompatItem  {
                     if (WorldUtil.isAir(e.world, checkPos.toRaw())) continue;
 
                     Block block = WorldUtil.getBlock(e.world, checkPos.toRaw());
-                    totalEMC += EMCManager.get(BlockUtil.toItem(block));
+                    long emc = EMCManager.get(BlockUtil.toItem(block));
+
+                    if (emc > maxEMC)
+                        maxEMC = emc;
+
+                    totalEMC += emc;
+
                     blockCount++;
                 }
             }
         }
 
         e.getPlayer().sendMessage(TextUtil.translatable("message.itemalchemy.diving_rod_average_emc", "Average EMC for " + blockCount + " blocks: " + (blockCount > 0 ? totalEMC / blockCount : 0)));
-        e.getPlayer().sendMessage(TextUtil.translatable("message.itemalchemy.diving_rod_total_emc", totalEMC));
+        e.getPlayer().sendMessage(TextUtil.translatable("message.itemalchemy.diving_rod_max_emc", maxEMC));
 
         return super.onRightClickOnBlock(e);
     }

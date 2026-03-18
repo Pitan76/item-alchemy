@@ -67,5 +67,6 @@
   "message.itemalchemy.failed_to_set_team": "[Item Alchemy] Failed to set team",
   "message.itemalchemy.diving_rod_switch_mode": "Switched to %s Mode",
   "message.itemalchemy.diving_rod_average_emc": "Average EMC for %d blocks: %d",
-  "message.itemalchemy.diving_rod_total_emc": "Total EMC: %d"
+  "message.itemalchemy.diving_rod_total_emc": "Total EMC: %d",
+  "message.itemalchemy.diving_rod_max_emc": "Max EMC: %d"
 }
