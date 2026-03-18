@@ -64,5 +64,8 @@
   "key.itemalchemy.charge": "Charge",
   "key.itemalchemy.changemode": "Change Mode",
 
-  "message.itemalchemy.failed_to_set_team": "[Item Alchemy] Failed to set team"
+  "message.itemalchemy.failed_to_set_team": "[Item Alchemy] Failed to set team",
+  "message.itemalchemy.diving_rod_switch_mode": "Switched to %s Mode",
+  "message.itemalchemy.diving_rod_average_emc": "Average EMC for %d blocks: %d",
+  "message.itemalchemy.diving_rod_total_emc": "Total EMC: %d"
 }
