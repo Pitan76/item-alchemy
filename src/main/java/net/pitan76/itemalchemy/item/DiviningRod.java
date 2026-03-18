@@ -25,7 +25,7 @@ public class DiviningRod extends CompatItem  {
 
     @Override
     public CompatActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
-        // TODO: 3x3x3以外に切り替えられるようにする
+        // TODO: 3x3x3以外に切り替えられるようにする、メッセージの多言語対応
         BlockPos center = e.getMidohraPos();
 
         int x = 1;
@@ -49,7 +49,7 @@ public class DiviningRod extends CompatItem  {
             }
         }
 
-        e.getPlayer().sendMessage(TextUtil.literal("Average EMC for checked blocks: " + (blockCount > 0 ? totalEMC / blockCount : 0)));
+        e.getPlayer().sendMessage(TextUtil.literal("Average EMC for " + blockCount + " blocks: " + (blockCount > 0 ? totalEMC / blockCount : 0)));
         e.getPlayer().sendMessage(TextUtil.literal("Max EMC: " + totalEMC));
 
         return super.onRightClickOnBlock(e);
