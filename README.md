@@ -66,6 +66,8 @@ dependencies {
 - [開発者] anthonymendez TBD
 - [デザイン] Murderman25 テクスチャ提供
 - [翻訳者] 54sda 中国語への翻訳 (zh_cn.json)
+- [開発者] alexandrelefourner バグ修正
+- [開発者＆翻訳者] mikkelchokolate 
 
 ## アドオン開発
 
