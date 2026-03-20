@@ -8,6 +8,8 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.math.BoxUtil;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.block.pedestal.IPedestalItem;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
@@ -103,47 +105,17 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
     }
 
     private void spawnActiveParticles(World world, BlockPos pos) {
-        double cx = pos.getX() + 0.5;
-        double cy = pos.getY() + 0.9;
-        double cz = pos.getZ() + 0.5;
-
-        double angle = (tickCount % 40) * (Math.PI * 2.0 / 40.0);
-        double radius = 0.4;
-        double px = cx + Math.cos(angle) * radius;
-        double pz = cz + Math.sin(angle) * radius;
-        world.addParticle(ParticleTypes.ENCHANT, px, cy + 0.3, pz, 0, -0.1, 0);
-
-        double angle2 = angle + Math.PI;
-        double px2 = cx + Math.cos(angle2) * radius;
-        double pz2 = cz + Math.sin(angle2) * radius;
-        world.addParticle(ParticleTypes.ENCHANT, px2, cy + 0.3, pz2, 0, -0.1, 0);
-
-        double witchAngle = (tickCount % 20) * (Math.PI * 2.0 / 20.0);
-        world.addParticle(ParticleTypes.WITCH,
-                cx + Math.cos(witchAngle) * 0.25, cy + 0.1, cz + Math.sin(witchAngle) * 0.25,
-                0, 0.05, 0);
-
-        if (tickCount % 15 == 0) {
-            for (int i = 0; i < 3; i++) {
-                double a = Math.random() * Math.PI * 2;
-                double r = 0.15 + Math.random() * 0.3;
-                world.addParticle(ParticleTypes.PORTAL,
-                        cx + Math.cos(a) * r, cy + 0.05, cz + Math.sin(a) * r,
-                        (Math.random() - 0.5) * 0.05, 0.04 + Math.random() * 0.04, (Math.random() - 0.5) * 0.05);
-            }
-        }
-
         if (tickCount % 10 == 0) {
-            world.addParticle(ParticleTypes.FLAME, pos.getX() + 0.2, pos.getY() + 0.3, pos.getZ() + 0.2, 0, 0.01, 0);
-            world.addParticle(ParticleTypes.FLAME, pos.getX() + 0.8, pos.getY() + 0.3, pos.getZ() + 0.2, 0, 0.01, 0);
-            world.addParticle(ParticleTypes.FLAME, pos.getX() + 0.2, pos.getY() + 0.3, pos.getZ() + 0.8, 0, 0.01, 0);
-            world.addParticle(ParticleTypes.FLAME, pos.getX() + 0.8, pos.getY() + 0.3, pos.getZ() + 0.8, 0, 0.01, 0);
+            WorldUtil.addParticle(world, ParticleTypes.FLAME, pos.getX() + 0.2, pos.getY() + 0.3, pos.getZ() + 0.2, 0, 0.01, 0);
+            WorldUtil.addParticle(world, ParticleTypes.FLAME, pos.getX() + 0.8, pos.getY() + 0.3, pos.getZ() + 0.2, 0, 0.01, 0);
+            WorldUtil.addParticle(world, ParticleTypes.FLAME, pos.getX() + 0.2, pos.getY() + 0.3, pos.getZ() + 0.8, 0, 0.01, 0);
+            WorldUtil.addParticle(world, ParticleTypes.FLAME, pos.getX() + 0.8, pos.getY() + 0.3, pos.getZ() + 0.8, 0, 0.01, 0);
         }
     }
 
     public Box getEffectBounds() {
         BlockPos pos = callGetPos();
-        return new Box(
+        return BoxUtil.createBox(
                 pos.getX() - RANGE, pos.getY() - RANGE, pos.getZ() - RANGE,
                 pos.getX() + RANGE + 1, pos.getY() + RANGE + 1, pos.getZ() + RANGE + 1
         );

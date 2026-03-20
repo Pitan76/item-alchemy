@@ -1,7 +1,9 @@
 package net.pitan76.itemalchemy.client.renderer.blockentity;
 
 import net.minecraft.item.ItemStack;
+import net.pitan76.itemalchemy.item.Items;
 import net.pitan76.mcpitanlib.api.client.render.CompatItemRenderUtil;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 import net.pitan76.itemalchemy.tile.DMPedestalTile;
 import net.pitan76.mcpitanlib.api.client.registry.CompatRegistryClient;
 import net.pitan76.mcpitanlib.api.client.render.block.entity.event.BlockEntityRenderEvent;
@@ -39,7 +41,8 @@ public class DMPedestalBlockEntityRenderer extends CompatBlockEntityRenderer<DMP
         event.translate(0, bobbing, 0);
 
         // Rotating
-        float rotation = time * 2.0F;
+        boolean fastSpin = entity.getActive() && ItemUtil.isOf(stack, Items.WATCH_OF_FLOWING_TIME.getOrNull());
+        float rotation = time * (fastSpin ? 6.0F : 2.0F);
         event.multiply(MathUtil.RotationAxisType.POSITIVE_Y, rotation);
 
         event.scale(0.5f, 0.5f, 0.5f);

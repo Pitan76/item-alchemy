@@ -3,12 +3,10 @@ package net.pitan76.itemalchemy.block.pedestal;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
 import net.pitan76.itemalchemy.tile.DMPedestalTile;
 import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
@@ -19,7 +17,9 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.api.event.block.StateReplacedEvent;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
+import net.pitan76.mcpitanlib.api.sound.CompatSoundEvent;
 import net.pitan76.mcpitanlib.api.util.CompatActionResult;
+import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
@@ -29,10 +29,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider {
 
-    protected static final VoxelShape SHAPE = VoxelShapes.union(
-            Block.createCuboidShape(3, 0, 3, 13, 2, 13),
-            Block.createCuboidShape(6, 2, 6, 10, 9, 10),
-            Block.createCuboidShape(5, 9, 5, 11, 10, 11)
+    protected static final VoxelShape SHAPE = VoxelShapeUtil.union(
+            VoxelShapeUtil.blockCuboid(3, 0, 3, 13, 2, 13),
+            VoxelShapeUtil.blockCuboid(6, 2, 6, 10, 9, 10),
+            VoxelShapeUtil.blockCuboid(5, 9, 5, 11, 10, 11)
     );
 
     protected CompatMapCodec<? extends Block> CODEC = CompatBlockMapCodecUtil.createCodec(DMPedestal::new);
@@ -95,9 +95,9 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
                 pedestal.setActive(newActive);
                 BlockPos pos = e.pos;
                 if (newActive) {
-                    WorldUtil.playSound(e.world, null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, net.minecraft.sound.SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    WorldUtil.playSound(e.world, null, pos, CompatSoundEvent.of(SoundEvents.BLOCK_BEACON_ACTIVATE), CompatSoundCategory.BLOCKS, 1.0F, 1.0F);
                 } else {
-                    WorldUtil.playSound(e.world, null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, net.minecraft.sound.SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    WorldUtil.playSound(e.world, null, pos, CompatSoundEvent.of(SoundEvents.BLOCK_BEACON_DEACTIVATE), CompatSoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
                 return e.success();
             }
@@ -154,8 +154,7 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
             }
 
             if (!toDrop.isEmpty()) {
-                e.world.spawnEntity(new ItemEntity(e.world,
-                        e.pos.getX() + 0.5, e.pos.getY() + 0.5, e.pos.getZ() + 0.5, toDrop));
+                WorldUtil.spawnStack(e.world, e.pos, toDrop);
             }
         }
         super.onStateReplaced(e);
