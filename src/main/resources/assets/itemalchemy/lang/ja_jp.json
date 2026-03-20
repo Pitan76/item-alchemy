@@ -49,7 +49,7 @@
   "block.itemalchemy.emc_exporter": "EMC搬出器",
   "block.itemalchemy.emc_cable": "EMCケーブル",
   "block.itemalchemy.emc_battery": "EMCバッテリー",
-  "block.itemalchemy.interdiction_torch": "阻止の松明",
+  "block.itemalchemy.interdiction_torch": "結界の灯火",
 
   "container.itemalchemy.alchemy_table": "錬金テーブル",
   "container.itemalchemy.emc_condenser": "EMCコンデンサー",
@@ -64,5 +64,9 @@
   "key.itemalchemy.charge": "チャージ",
   "key.itemalchemy.changemode": "モードチェンジ",
 
-  "message.itemalchemy.failed_to_set_team": "[Item Alchemy] チームを設定できませんでした"
+  "message.itemalchemy.failed_to_set_team": "[Item Alchemy] チームを設定できませんでした",
+  "message.itemalchemy.diving_rod_switch_mode": "%sモードに切り替えました",
+  "message.itemalchemy.diving_rod_average_emc": "%dブロックあたりの平均EMC: %d",
+  "message.itemalchemy.diving_rod_total_emc": "合計EMC: %d",
+  "message.itemalchemy.diving_rod_max_emc": "最大EMC: %d"
 }

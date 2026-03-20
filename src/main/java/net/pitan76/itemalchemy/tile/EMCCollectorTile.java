@@ -87,13 +87,16 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
 
         BlockPos pos = callGetPos();
 
-        if (coolDown == 0 && !isFull()) {
-            long time = world.getTimeOfDay() % 24000L;
-            boolean isDay = time < 12000L;
-            if ((!WorldUtil.isRaining(world) && !WorldUtil.isThundering(world) && (WorldUtil.hasSkyLight(world) && isDay) && WorldUtil.isSkyVisible(world, pos.up()))
-                    || WorldUtil.getBlockState(world, pos.up()).getLuminance() > 10 || WorldUtil.getBlockState(world, pos.down()).getLuminance() > 10
-                    || WorldUtil.getBlockState(world, pos.north()).getLuminance() > 10 || WorldUtil.getBlockState(world, pos.south()).getLuminance() > 10
-                    || WorldUtil.getBlockState(world, pos.east()).getLuminance() > 10 || WorldUtil.getBlockState(world, pos.west()).getLuminance() > 10) {
+        if (coolDown == 0) {
+            if (isFull()) return;
+            float skyAngle = WorldUtil.getSkyAngle(world, 0);
+            if ((!WorldUtil.isRaining(world) && !WorldUtil.isThundering(world) && (WorldUtil.hasSkyLight(world) && skyAngle <= 0.25 || skyAngle >= 0.75) && WorldUtil.isSkyVisible(world, pos.up()))
+                    || BlockStateUtil.getLuminance(WorldUtil.getBlockState(world, pos.up())) > 10
+                    || BlockStateUtil.getLuminance(WorldUtil.getBlockState(world, pos.down())) > 10
+                    || BlockStateUtil.getLuminance(WorldUtil.getBlockState(world, pos.north())) > 10
+                    || BlockStateUtil.getLuminance(WorldUtil.getBlockState(world, pos.south())) > 10
+                    || BlockStateUtil.getLuminance(WorldUtil.getBlockState(world, pos.east())) > 10
+                    || BlockStateUtil.getLuminance(WorldUtil.getBlockState(world, pos.west())) > 10) {
                 storedEMC++;
                 if (maxEMC >= 100000) {
                     storedEMC += Math.round((float) maxEMC / 100000) + 2;

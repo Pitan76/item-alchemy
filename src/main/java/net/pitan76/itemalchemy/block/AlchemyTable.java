@@ -74,7 +74,7 @@ public class AlchemyTable extends CompatBlock implements IUseableWrench {
             return VoxelShapeUtil.cuboid(0, 0, 0.875, 1, 1, 1);
 
         if (dir.equals(Direction.WEST))
-            VoxelShapeUtil.cuboid(0, 0, 0, 0.125, 1, 1);
+            return VoxelShapeUtil.cuboid(0, 0, 0, 0.125, 1, 1);
 
         if (dir.equals(Direction.EAST))
             return VoxelShapeUtil.cuboid(0.875, 0, 0, 1, 1, 1);
