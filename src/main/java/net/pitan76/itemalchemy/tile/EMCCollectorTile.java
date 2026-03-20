@@ -87,8 +87,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
 
         BlockPos pos = callGetPos();
 
-        if (coolDown == 0) {
-            if (isFull()) return;
+        if (coolDown == 0 && !isFull()) {
             long time = world.getTimeOfDay() % 24000L;
             boolean isDay = time < 12000L;
             if ((!WorldUtil.isRaining(world) && !WorldUtil.isThundering(world) && (WorldUtil.hasSkyLight(world) && isDay) && WorldUtil.isSkyVisible(world, pos.up()))
@@ -129,7 +128,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
                             ItemStackUtil.decrementCount(inventory.get(index), 1);
                             ItemStackUtil.setCount(stack, 1);
                             inventory.set(nextIndex, stack);
-                        } else if (inventory.get(nextIndex).getItem() == stack.getItem()) {
+                        } else if (inventory.get(nextIndex).getItem() == stack.getItem() && inventory.get(nextIndex).getCount() < inventory.get(nextIndex).getMaxCount()) {
                             ItemStackUtil.decrementCount(inventory.get(index), 1);
                             ItemStackUtil.incrementCount(inventory.get(nextIndex), 1);
                         }
@@ -146,7 +145,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
                     ItemStack stack = convertStack(inventory.get(2).copy());
                     if (!ItemStackUtil.isEmpty(stack)) {
                         inventory.set(0, stack);
-                        inventory.set(2, ItemStackUtil.empty());
+                        ItemStackUtil.decrementCount(inventory.get(2), 1);
                     }
                 }
             }
