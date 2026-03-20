@@ -39,6 +39,9 @@ public class Items {
 
     public static RegistryResult<Item> INTERDICTION_TORCH;
 
+    public static RegistryResult<Item> DM_PEDESTAL;
+    public static RegistryResult<Item> WATCH_OF_FLOWING_TIME;
+
     // Material
     public static RegistryResult<Item> ALCHEMICAL_FUEL;
     public static RegistryResult<Item> MOBIUS_FUEL;
@@ -93,6 +96,9 @@ public class Items {
         EMC_BATTERY = registry.registerItem(_id("emc_battery"), () -> ItemUtil.create(Blocks.EMC_BATTERY.getOrNull(), CompatibleItemSettings.of(_id("emc_battery")).addGroup(ItemGroups.ITEM_ALCHEMY)));
 
         INTERDICTION_TORCH = registry.registerItem(_id("interdiction_torch"), () -> ItemUtil.create(Blocks.INTERDICTION_TORCH.getOrNull(), CompatibleItemSettings.of(_id("interdiction_torch")).addGroup(ItemGroups.ITEM_ALCHEMY)));
+
+        DM_PEDESTAL = registry.registerItem(_id("dm_pedestal"), () -> ItemUtil.create(Blocks.DM_PEDESTAL.getOrNull(), CompatibleItemSettings.of(_id("dm_pedestal")).addGroup(ItemGroups.ITEM_ALCHEMY)));
+        WATCH_OF_FLOWING_TIME = registry.registerItem(_id("watch_of_flowing_time"), () -> new WatchOfFlowingTime(CompatibleItemSettings.of(_id("watch_of_flowing_time")).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
 
         ALCHEMY_PAD = registry.registerItem(_id("alchemy_pad"), () -> new AlchemyPad(CompatibleItemSettings.of(_id("alchemy_pad")).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
 

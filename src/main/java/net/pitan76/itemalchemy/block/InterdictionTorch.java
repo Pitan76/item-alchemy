@@ -5,6 +5,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.shape.VoxelShape;
 import net.pitan76.itemalchemy.tile.Tiles;
+import net.pitan76.mcpitanlib.api.block.CompatBlocks;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
 import net.pitan76.mcpitanlib.api.block.args.v2.OutlineShapeEvent;
 import net.pitan76.mcpitanlib.api.block.args.v2.PlacementStateArgs;
@@ -14,7 +15,9 @@ import net.pitan76.mcpitanlib.api.block.v2.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.state.property.CompatProperties;
 import net.pitan76.mcpitanlib.api.state.property.DirectionProperty;
+import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
+import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 import net.pitan76.mcpitanlib.midohra.block.BlockState;
@@ -27,11 +30,11 @@ public class InterdictionTorch extends CompatBlock implements ExtendBlockEntityP
 
     public static final DirectionProperty FACING = CompatProperties.FACING;
 
-    protected static final VoxelShape FLOOR_SHAPE = Block.createCuboidShape(6.0, 0.0, 6.0, 10.0, 10.0, 10.0);
-    protected static final VoxelShape NORTH_SHAPE = Block.createCuboidShape(5.5, 3.0, 11.0, 10.5, 13.0, 16.0);
-    protected static final VoxelShape SOUTH_SHAPE = Block.createCuboidShape(5.5, 3.0, 0.0, 10.5, 13.0, 5.0);
-    protected static final VoxelShape EAST_SHAPE = Block.createCuboidShape(0.0, 3.0, 5.5, 5.0, 13.0, 10.5);
-    protected static final VoxelShape WEST_SHAPE = Block.createCuboidShape(11.0, 3.0, 5.5, 16.0, 13.0, 10.5);
+    protected static final VoxelShape FLOOR_SHAPE = VoxelShapeUtil.blockCuboid(6.0, 0.0, 6.0, 10.0, 10.0, 10.0);
+    protected static final VoxelShape NORTH_SHAPE = VoxelShapeUtil.blockCuboid(5.5, 3.0, 11.0, 10.5, 13.0, 16.0);
+    protected static final VoxelShape SOUTH_SHAPE = VoxelShapeUtil.blockCuboid(5.5, 3.0, 0.0, 10.5, 13.0, 5.0);
+    protected static final VoxelShape EAST_SHAPE = VoxelShapeUtil.blockCuboid(0.0, 3.0, 5.5, 5.0, 13.0, 10.5);
+    protected static final VoxelShape WEST_SHAPE = VoxelShapeUtil.blockCuboid(11.0, 3.0, 5.5, 16.0, 13.0, 10.5);
 
     protected CompatMapCodec<? extends Block> CODEC = CompatBlockMapCodecUtil.createCodec(InterdictionTorch::new);
 
@@ -46,7 +49,7 @@ public class InterdictionTorch extends CompatBlock implements ExtendBlockEntityP
     }
 
     public InterdictionTorch(CompatIdentifier id) {
-        this(CompatibleBlockSettings.copy(id, net.minecraft.block.Blocks.TORCH));
+        this(CompatibleBlockSettings.copy(id, CompatBlocks.TORCH));
     }
 
     @Override
@@ -69,12 +72,42 @@ public class InterdictionTorch extends CompatBlock implements ExtendBlockEntityP
     public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
         Direction side = args.getSide();
         BlockState state = getDefaultMidohraState();
+        IWorldView world = args.getWorldView();
+        BlockPos pos = args.getPos();
 
         if (side.equals(Direction.DOWN)) {
-            return null;
+            return findSupportedPlacement(state, world, pos,
+                    Direction.UP,
+                    Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+        }
+
+        if (!isSolid(world, getSupportPos(pos, side))) {
+            if (side.equals(Direction.UP)) {
+                return findSupportedPlacement(state, world, pos,
+                        Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+            } else {
+                return findSupportedPlacement(state, world, pos,
+                        Direction.UP,
+                        Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+            }
         }
 
         return state.with(FACING, side);
+    }
+
+    private BlockState findSupportedPlacement(BlockState state, IWorldView world,
+                                               BlockPos pos, Direction... candidates) {
+        for (Direction candidate : candidates) {
+            if (!candidate.equals(Direction.DOWN) && isSolid(world, getSupportPos(pos, candidate))) {
+                return state.with(FACING, candidate);
+            }
+        }
+        return BlockState.of((net.minecraft.block.BlockState) null); // no valid support — cancel placement
+    }
+
+    private boolean isSolid(IWorldView world, BlockPos pos) {
+        net.minecraft.block.BlockState vanilla = world.getBlockState(pos).toMinecraft();
+        return vanilla != null && !vanilla.isAir() && vanilla.isOpaque();
     }
 
     @Override
@@ -87,7 +120,7 @@ public class InterdictionTorch extends CompatBlock implements ExtendBlockEntityP
         BlockPos supportPos = getSupportPos(pos, facing);
 
         if (world.getBlockState(supportPos).isAir()) {
-            return BlockState.of(net.minecraft.block.Blocks.AIR.getDefaultState());
+            return BlockStateUtil.getMidohraDefaultState(CompatBlocks.AIR);
         }
 
         return super.getStateForNeighborUpdate(args);
