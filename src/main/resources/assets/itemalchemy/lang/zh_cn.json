@@ -50,6 +50,8 @@
   "block.itemalchemy.emc_cable": "EMC电缆",
   "block.itemalchemy.emc_battery": "EMC电池",
   "block.itemalchemy.interdiction_torch": "屏障灯",
+  "block.itemalchemy.dm_pedestal": "暗物质基座",
+  "item.itemalchemy.watch_of_flowing_time": "时间洪流怀表",
 
   "container.itemalchemy.alchemy_table": "转换桌",
   "container.itemalchemy.emc_condenser": "EMC冷凝器",
