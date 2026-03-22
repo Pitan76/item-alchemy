@@ -8,12 +8,14 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.client.renderer.BlockRenderer;
+import net.pitan76.itemalchemy.client.renderer.blockentity.DMPedestalBlockEntityRenderer;
 import net.pitan76.itemalchemy.client.screen.*;
 import net.pitan76.itemalchemy.config.ItemAlchemyConfig;
 import net.pitan76.itemalchemy.gui.screen.EMCBatteryScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.ScreenHandlers;
+import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.client.event.ItemTooltipRegistry;
 import net.pitan76.mcpitanlib.api.client.event.WorldRenderRegistry;
 import net.pitan76.mcpitanlib.api.client.option.KeyCodes;
@@ -54,7 +56,7 @@ public class ItemAlchemyClient {
         CompatRegistryClient.registerCutoutBlock(Blocks.EMC_CABLE.getOrNull());
         CompatRegistryClient.registerCutoutBlock(Blocks.INTERDICTION_TORCH.getOrNull());
 
-        CompatRegistryClient.registerBlockEntityRenderer((net.minecraft.block.entity.BlockEntityType<net.pitan76.itemalchemy.tile.DMPedestalTile>) (Object) net.pitan76.itemalchemy.tile.Tiles.DM_PEDESTAL.getOrNull(), net.pitan76.itemalchemy.client.renderer.blockentity.DMPedestalBlockEntityRenderer::new);
+        CompatRegistryClient.registerCompatBlockEntityRenderer(Tiles.DM_PEDESTAL.getOrNull(), DMPedestalBlockEntityRenderer::new);
 
         WorldRenderRegistry.registerWorldRenderBeforeBlockOutline(new BlockRenderer());
 

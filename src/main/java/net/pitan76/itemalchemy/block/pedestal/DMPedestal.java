@@ -4,11 +4,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.pitan76.itemalchemy.tile.DMPedestalTile;
 import net.pitan76.itemalchemy.tile.Tiles;
+import net.pitan76.mcpitanlib.api.block.CompatibleMaterial;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
 import net.pitan76.mcpitanlib.api.block.args.v2.OutlineShapeEvent;
 import net.pitan76.mcpitanlib.api.block.v2.CompatBlock;
@@ -17,11 +17,8 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.api.event.block.StateReplacedEvent;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
-import net.pitan76.mcpitanlib.api.sound.CompatSoundEvent;
-import net.pitan76.mcpitanlib.api.util.CompatActionResult;
-import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
-import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.sound.CompatSoundEvents;
+import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
@@ -47,7 +44,7 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
     }
 
     public DMPedestal(CompatIdentifier id) {
-        this(CompatibleBlockSettings.of(id, net.pitan76.mcpitanlib.api.block.CompatibleMaterial.STONE)
+        this(CompatibleBlockSettings.of(id, CompatibleMaterial.STONE)
                 .mapColor(CompatMapColor.BLACK)
                 .strength(3.5f, 7.0f)
                 .nonOpaque());
@@ -66,60 +63,65 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
 
         Player player = e.player;
         ItemStack heldStack = e.stack;
+        ItemStack pedestalStack = pedestal.getStack();
 
         if (e.isClient()) {
-            if (!player.isSneaking()) {
-                if (!pedestal.getStack().isEmpty()) {
-                    pedestal.setStackFromPacket(ItemStack.EMPTY);
-                } else if (!heldStack.isEmpty()) {
-                    ItemStack toPlace = heldStack.copy();
-                    toPlace.setCount(1);
+            if (e.isSneaking()) {
+                // Client-side prediction: toggle active state immediately
+                if (!ItemStackUtil.isEmpty(pedestalStack) && ItemStackUtil.getItem(pedestalStack) instanceof IPedestalItem) {
+                    pedestal.setActiveFromPacket(!pedestal.getActive());
+                }
+
+                return e.success();
+            }
+
+            if (ItemStackUtil.isEmpty(pedestalStack)) {
+                if (!ItemStackUtil.isEmpty(heldStack)) {
+                    ItemStack toPlace = ItemStackUtil.copy(heldStack);
+                    ItemStackUtil.setCount(toPlace, 1);
                     pedestal.setStackFromPacket(toPlace);
                 }
             } else {
-                // Client-side prediction: toggle active state immediately
-                if (!pedestal.getStack().isEmpty() && pedestal.getStack().getItem() instanceof IPedestalItem) {
-                    pedestal.setActiveFromPacket(!pedestal.getActive());
-                }
+                pedestal.setStackFromPacket(ItemStackUtil.empty());
             }
+
             return e.success();
         }
 
-        if (player.isSneaking()) {
+        if (e.isSneaking()) {
             // Sneak + right-click: toggle active state
-            if (!pedestal.getStack().isEmpty()) {
+            if (!ItemStackUtil.isEmpty(pedestalStack)) {
                 boolean newActive = !pedestal.getActive();
-                if (newActive && !(pedestal.getStack().getItem() instanceof IPedestalItem)) {
+                if (newActive && !(ItemStackUtil.getItem(pedestalStack) instanceof IPedestalItem)) {
                     return e.pass();
                 }
                 pedestal.setActive(newActive);
                 BlockPos pos = e.pos;
                 if (newActive) {
-                    WorldUtil.playSound(e.world, null, pos, CompatSoundEvent.of(SoundEvents.BLOCK_BEACON_ACTIVATE), CompatSoundCategory.BLOCKS, 1.0F, 1.0F);
+                    WorldUtil.playSound(e.world, null, pos, CompatSoundEvents.BLOCK_BEACON_ACTIVATE, CompatSoundCategory.BLOCKS, 1.0F, 1.0F);
                 } else {
-                    WorldUtil.playSound(e.world, null, pos, CompatSoundEvent.of(SoundEvents.BLOCK_BEACON_DEACTIVATE), CompatSoundCategory.BLOCKS, 1.0F, 1.0F);
+                    WorldUtil.playSound(e.world, null, pos, CompatSoundEvents.BLOCK_BEACON_DEACTIVATE, CompatSoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
                 return e.success();
             }
         } else {
             // Right-click (not sneaking): place/remove items
-            ItemStack pedestalStack = pedestal.getStack();
-            if (!pedestalStack.isEmpty()) {
+            if (!ItemStackUtil.isEmpty(pedestalStack)) {
                 // Remove item from pedestal
                 pedestal.setActive(false);
-                if (heldStack.isEmpty()) {
-                    player.setStackInHand(e.getHand(), pedestalStack.copy());
+                if (ItemStackUtil.isEmpty(heldStack)) {
+                    player.setStackInHand(e.getHand(), ItemStackUtil.copy(pedestalStack));
                 } else {
-                    player.getInventory().offerOrDrop(pedestalStack.copy());
+                    player.offerOrDrop(ItemStackUtil.copy(pedestalStack));
                 }
-                pedestal.setStack(ItemStack.EMPTY);
+                pedestal.setStack(ItemStackUtil.empty());
                 return e.success();
-            } else if (!heldStack.isEmpty()) {
+            } else if (!ItemStackUtil.isEmpty(heldStack)) {
                 // Place item on pedestal
-                ItemStack toPlace = heldStack.copy();
-                toPlace.setCount(1);
+                ItemStack toPlace = ItemStackUtil.copy(heldStack);
+                ItemStackUtil.setCount(toPlace, 1);
                 pedestal.setStack(toPlace);
-                heldStack.decrement(1);
+                ItemStackUtil.decrementCount(heldStack, 1);
                 return e.success();
             }
         }

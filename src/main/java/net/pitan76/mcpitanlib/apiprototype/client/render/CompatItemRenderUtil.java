@@ -1,4 +1,4 @@
-package net.pitan76.mcpitanlib.api.client.render;
+package net.pitan76.mcpitanlib.apiprototype.client.render;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
