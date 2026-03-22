@@ -13,6 +13,7 @@ import net.pitan76.itemalchemy.tile.DMPedestalTile;
 import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
+import net.pitan76.mcpitanlib.api.util.EntityUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.math.BoxUtil;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
@@ -74,11 +75,11 @@ public class WatchOfFlowingTime extends CompatItem implements IPedestalItem {
         if (!(world instanceof ServerWorld)) return;
         ServerWorld serverWorld = (ServerWorld) world;
 
-        BlockPos min = new BlockPos((int) box.minX, (int) box.minY, (int) box.minZ);
-        BlockPos max = new BlockPos((int) box.maxX, (int) box.maxY, (int) box.maxZ);
+        BlockPos min = PosUtil.flooredBlockPos((int) box.minX, (int) box.minY, (int) box.minZ);
+        BlockPos max = PosUtil.flooredBlockPos((int) box.maxX, (int) box.maxY, (int) box.maxZ);
 
-        for (BlockPos pos : BlockPos.iterate(min, max)) {
-            net.minecraft.block.BlockState state = world.getBlockState(pos);
+        for (BlockPos pos : PosUtil.iterate(min, max)) {
+            BlockState state = WorldUtil.getBlockState(world, pos);
             if (BlockStateUtil.hasRandomTicks(state)) {
                 BlockPos immutable = pos.toImmutable();
                 for (int i = 0; i < BONUS_TICKS; i++) {
@@ -89,9 +90,9 @@ public class WatchOfFlowingTime extends CompatItem implements IPedestalItem {
     }
 
     private void slowMobs(World world, Box box) {
-        List<MobEntity> mobs = world.getEntitiesByClass(MobEntity.class, box, e -> true);
+        List<MobEntity> mobs = WorldUtil.getEntitiesByClass(world, MobEntity.class, box, e -> true);
         for (MobEntity mob : mobs) {
-            mob.setVelocity(mob.getVelocity().multiply(MOB_SLOWDOWN, 1.0, MOB_SLOWDOWN));
+            mob.setVelocity(EntityUtil.getVelocity(mob).multiply(MOB_SLOWDOWN, 1.0, MOB_SLOWDOWN));
         }
     }
 }
