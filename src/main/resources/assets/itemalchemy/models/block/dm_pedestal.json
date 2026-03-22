@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "itemalchemy:block/dm_pedestal_side",
+    "pedestal": "itemalchemy:block/dm_pedestal_side"
+  },
+  "elements": [
+    {
+      "from": [3, 0, 3],
+      "to": [13, 2, 13],
+      "faces": {
+        "down":  { "texture": "#pedestal", "uv": [3, 3, 10, 10], "cullface": "down" },
+        "up":    { "texture": "#pedestal", "uv": [3, 3, 10, 10] },
+        "north": { "texture": "#pedestal", "uv": [3, 0, 10, 2] },
+        "south": { "texture": "#pedestal", "uv": [3, 0, 10, 2] },
+        "west":  { "texture": "#pedestal", "uv": [3, 0, 10, 2] },
+        "east":  { "texture": "#pedestal", "uv": [3, 0, 10, 2] }
+      }
+    },
+    {
+      "from": [6, 2, 6],
+      "to": [10, 9, 10],
+      "faces": {
+        "north": { "texture": "#pedestal", "uv": [6, 4, 4, 7] },
+        "south": { "texture": "#pedestal", "uv": [6, 4, 4, 7] },
+        "west":  { "texture": "#pedestal", "uv": [6, 4, 4, 7] },
+        "east":  { "texture": "#pedestal", "uv": [6, 4, 4, 7] }
+      }
+    },
+    {
+      "from": [5, 9, 5],
+      "to": [11, 10, 11],
+      "faces": {
+        "down":  { "texture": "#pedestal", "uv": [6, 6, 6, 6] },
+        "up":    { "texture": "#pedestal", "uv": [6, 6, 6, 6] },
+        "north": { "texture": "#pedestal", "uv": [0, 0, 6, 1] },
+        "south": { "texture": "#pedestal", "uv": [0, 0, 6, 1] },
+        "west":  { "texture": "#pedestal", "uv": [0, 0, 6, 1] },
+        "east":  { "texture": "#pedestal", "uv": [0, 0, 6, 1] }
+      }
+    }
+  ]
+}

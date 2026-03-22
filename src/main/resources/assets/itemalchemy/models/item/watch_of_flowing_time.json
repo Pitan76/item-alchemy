@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "itemalchemy:item/watch_of_flowing_time"
+  }
+}

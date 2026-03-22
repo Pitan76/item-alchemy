@@ -50,6 +50,8 @@
   "block.itemalchemy.emc_cable": "EMC кабель",
   "block.itemalchemy.emc_battery": "EMC батарея",
   "block.itemalchemy.interdiction_torch": "Факел запрета",
+  "block.itemalchemy.dm_pedestal": "Пьедестал тёмной материи",
+  "item.itemalchemy.watch_of_flowing_time": "Часы текущего времени",
 
   "container.itemalchemy.alchemy_table": "Стол трансмутации",
   "container.itemalchemy.emc_condenser": "Конденсатор антиматерии",

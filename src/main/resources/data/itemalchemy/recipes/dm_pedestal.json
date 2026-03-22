@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RDR",
+    " D ",
+    "DDD"
+  ],
+  "key": {
+    "D": {
+      "item": "itemalchemy:dark_matter"
+    },
+    "R": {
+      "item": "minecraft:redstone_torch"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:dm_pedestal",
+    "count": 1
+  }
+}

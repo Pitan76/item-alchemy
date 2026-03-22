@@ -1,6 +1,7 @@
 package net.pitan76.itemalchemy.block;
 
 import net.minecraft.block.Block;
+import net.pitan76.itemalchemy.block.pedestal.DMPedestal;
 import net.pitan76.mcpitanlib.api.block.CompatibleMaterial;
 import net.pitan76.mcpitanlib.api.block.v2.CompatBlock;
 import net.pitan76.mcpitanlib.api.block.v2.CompatibleBlockSettings;
@@ -37,6 +38,8 @@ public class Blocks {
 
     public static RegistryResult<Block> INTERDICTION_TORCH;
 
+    public static RegistryResult<Block> DM_PEDESTAL;
+
     public static void init() {
         ALCHEMY_TABLE = registry.registerBlock(_id("alchemy_table"), () -> new AlchemyTable(_id("alchemy_table")));
         EMC_COLLECTOR_MK1 = registry.registerBlock(_id("emc_collector_mk1"), () -> new EMCCollector(_id("emc_collector_mk1"), 10000));
@@ -62,5 +65,7 @@ public class Blocks {
         EMC_BATTERY = registry.registerBlock(_id("emc_battery"), () -> new EMCBattery(_id("emc_battery"), 100_000));
 
         INTERDICTION_TORCH = registry.registerBlock(_id("interdiction_torch"), () -> new InterdictionTorch(_id("interdiction_torch")));
+
+        DM_PEDESTAL = registry.registerBlock(_id("dm_pedestal"), () -> new DMPedestal(_id("dm_pedestal")));
     }
 }

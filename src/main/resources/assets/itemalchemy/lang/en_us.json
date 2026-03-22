@@ -50,6 +50,8 @@
   "block.itemalchemy.emc_cable": "EMC Cable",
   "block.itemalchemy.emc_battery": "EMC Battery",
   "block.itemalchemy.interdiction_torch": "Interdiction Torch",
+  "block.itemalchemy.dm_pedestal": "Dark Matter Pedestal",
+  "item.itemalchemy.watch_of_flowing_time": "Watch of Flowing Time",
 
   "container.itemalchemy.alchemy_table": "Alchemy Table",
   "container.itemalchemy.emc_condenser": "EMC Condenser",

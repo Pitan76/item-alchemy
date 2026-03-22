@@ -1,25 +1,31 @@
 package net.pitan76.itemalchemy;
 
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.client.renderer.BlockRenderer;
+import net.pitan76.itemalchemy.client.renderer.blockentity.DMPedestalBlockEntityRenderer;
 import net.pitan76.itemalchemy.client.screen.*;
 import net.pitan76.itemalchemy.config.ItemAlchemyConfig;
 import net.pitan76.itemalchemy.gui.screen.EMCBatteryScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.itemalchemy.gui.screen.ScreenHandlers;
+import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.client.event.ItemTooltipRegistry;
 import net.pitan76.mcpitanlib.api.client.event.WorldRenderRegistry;
 import net.pitan76.mcpitanlib.api.client.option.KeyCodes;
 import net.pitan76.mcpitanlib.api.client.registry.CompatRegistryClient;
 import net.pitan76.mcpitanlib.api.client.registry.v3.KeybindingRegistry;
+import net.pitan76.itemalchemy.tile.DMPedestalTile;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ClientNetworking;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
+import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 
 import java.util.ArrayList;
@@ -50,7 +56,26 @@ public class ItemAlchemyClient {
         CompatRegistryClient.registerCutoutBlock(Blocks.EMC_CABLE.getOrNull());
         CompatRegistryClient.registerCutoutBlock(Blocks.INTERDICTION_TORCH.getOrNull());
 
+        CompatRegistryClient.registerCompatBlockEntityRenderer(Tiles.DM_PEDESTAL.getOrNull(), DMPedestalBlockEntityRenderer::new);
+
         WorldRenderRegistry.registerWorldRenderBeforeBlockOutline(new BlockRenderer());
+
+        ClientNetworking.registerReceiver(_id("pedestal_sync"), (e) -> {
+            BlockPos pos = PacketByteUtil.readBlockPos(e.buf);
+            NbtCompound nbt = PacketByteUtil.readNbt(e.buf);
+            net.minecraft.world.World world = e.getWorld();
+            if (world == null) return;
+            BlockEntity be = world.getBlockEntity(pos);
+            if (!(be instanceof DMPedestalTile)) return;
+            DMPedestalTile tile = (DMPedestalTile) be;
+            if (NbtUtil.has(nbt, "PedestalItem")) {
+                java.util.Optional<ItemStack> opt = NbtUtil.getSimpleItemStack(nbt, "PedestalItem");
+                tile.setStackFromPacket(opt.orElse(ItemStackUtil.empty()));
+            } else {
+                tile.setStackFromPacket(ItemStack.EMPTY);
+            }
+            tile.setActiveFromPacket(NbtUtil.getBoolean(nbt, "Active"));
+        });
 
         ClientNetworking.registerReceiver(_id("sync_emc"), (e) -> itemAlchemyNbt = PacketByteUtil.readNbt(e.buf));
 

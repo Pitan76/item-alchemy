@@ -107,36 +107,35 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
 
                             long emc = EMCManager.get(stack.getItem());
                             if (emc == 0) continue;
-                            //if (emc + storedEMC <= maxEMC) {
                             storedEMC += emc;
                             ItemStackUtil.decrementCount(stack, 1);
                             break;
-                            //}
                         }
-                    }
-
-                    long useEMC = EMCManager.get(targetStack.getItem());
-                    if (useEMC == 0) useEMC = 1;
-                    if (storedEMC >= useEMC) {
-                        ItemStack newStack;
-                        if (ItemAlchemyConfig.isRemoveDataFromCopyStack()) {
-                            // Remove Data
-                            newStack = new ItemStack(targetStack.getItem());
-                        } else {
-                            newStack = targetStack.copy();
-                        }
-
-                        ItemStackUtil.setCount(newStack, 1);
-
-                        if (insertItem(newStack, getItems(), true)) {
-                            insertItem(newStack, getItems());
-                            storedEMC -= useEMC;
-
-                            BlockEntityUtil.markDirty(this);
-                        }
-
                     }
                 }
+
+                long useEMC = EMCManager.get(targetStack.getItem());
+                if (useEMC == 0) useEMC = 1;
+                if (storedEMC >= useEMC) {
+                    ItemStack newStack;
+                    if (ItemAlchemyConfig.isRemoveDataFromCopyStack()) {
+                        // Remove Data
+                        newStack = new ItemStack(targetStack.getItem());
+                    } else {
+                        newStack = targetStack.copy();
+                    }
+
+                    ItemStackUtil.setCount(newStack, 1);
+
+                    if (insertItem(newStack, getItems(), true)) {
+                        insertItem(newStack, getItems());
+                        storedEMC -= useEMC;
+
+                        BlockEntityUtil.markDirty(this);
+                    }
+
+                }
+
                 coolDown++;
                 if (coolDown >= getMaxCoolDown()) {
                     coolDown = 0;
@@ -180,7 +179,7 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
                 if (!test) inventory.set(i, insertStack);
                 isInserted = true;
                 break;
-            } else if (canMergeItems(stack, insertStack)) {
+            } else if (canMergeItems(stack, insertStack) && stack.getCount() < stack.getMaxCount()) {
                 int j = insertStack.getCount();
                 if (!test) ItemStackUtil.incrementCount(stack, j);
                 isInserted = j > 0;

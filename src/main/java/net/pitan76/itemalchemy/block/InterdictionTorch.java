@@ -72,12 +72,42 @@ public class InterdictionTorch extends CompatBlock implements ExtendBlockEntityP
     public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
         Direction side = args.getSide();
         BlockState state = getDefaultMidohraState();
+        IWorldView world = args.getWorldView();
+        BlockPos pos = args.getPos();
 
         if (side.equals(Direction.DOWN)) {
-            return null;
+            return findSupportedPlacement(state, world, pos,
+                    Direction.UP,
+                    Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+        }
+
+        if (!isSolid(world, getSupportPos(pos, side))) {
+            if (side.equals(Direction.UP)) {
+                return findSupportedPlacement(state, world, pos,
+                        Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+            } else {
+                return findSupportedPlacement(state, world, pos,
+                        Direction.UP,
+                        Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+            }
         }
 
         return state.with(FACING, side);
+    }
+
+    private BlockState findSupportedPlacement(BlockState state, IWorldView world,
+                                               BlockPos pos, Direction... candidates) {
+        for (Direction candidate : candidates) {
+            if (!candidate.equals(Direction.DOWN) && isSolid(world, getSupportPos(pos, candidate))) {
+                return state.with(FACING, candidate);
+            }
+        }
+        return BlockState.of((net.minecraft.block.BlockState) null); // no valid support — cancel placement
+    }
+
+    private boolean isSolid(IWorldView world, BlockPos pos) {
+        net.minecraft.block.BlockState vanilla = world.getBlockState(pos).toMinecraft();
+        return vanilla != null && !vanilla.isAir() && vanilla.isOpaque();
     }
 
     @Override
