@@ -224,6 +224,33 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
                 return state.with(CROSS, true).with(FACING, Direction.SOUTH);
             }
 
+            // 4方向接続 (3D T字: バー + 直交する2本のステム)
+            if (both_ns && up_only && east_only) {
+                return state.with(CONNER, true).with(T_CHAR, true).with(FACING, Direction.NORTH).with(SIDE1, true);
+            } else if (both_ns && up_only && west_only) {
+                return state.with(CONNER, true).with(T_CHAR, true).with(FACING, Direction.NORTH).with(SIDE2, true);
+            } else if (both_ns && down_only && east_only) {
+                return state.with(CONNER, true).with(T_CHAR, true).with(FACING, Direction.SOUTH).with(SIDE1, true);
+            } else if (both_ns && down_only && west_only) {
+                return state.with(CONNER, true).with(T_CHAR, true).with(FACING, Direction.SOUTH).with(SIDE2, true);
+            } else if (both_ew && up_only && north_only) {
+                return state.with(CONNER, true).with(T_CHAR, true).with(FACING, Direction.EAST).with(SIDE1, true);
+            } else if (both_ew && up_only && south_only) {
+                return state.with(CONNER, true).with(T_CHAR, true).with(FACING, Direction.EAST).with(SIDE2, true);
+            } else if (both_ew && down_only && north_only) {
+                return state.with(CONNER, true).with(T_CHAR, true).with(FACING, Direction.WEST).with(SIDE1, true);
+            } else if (both_ew && down_only && south_only) {
+                return state.with(CONNER, true).with(T_CHAR, true).with(FACING, Direction.WEST).with(SIDE2, true);
+            } else if (both_ud && north_only && east_only) {
+                return state.with(CONNER, true).with(T_CHAR, true).with(FACING, Direction.UP).with(SIDE1, true);
+            } else if (both_ud && north_only && west_only) {
+                return state.with(CONNER, true).with(T_CHAR, true).with(FACING, Direction.UP).with(SIDE2, true);
+            } else if (both_ud && south_only && east_only) {
+                return state.with(CONNER, true).with(T_CHAR, true).with(FACING, Direction.DOWN).with(SIDE1, true);
+            } else if (both_ud && south_only && west_only) {
+                return state.with(CONNER, true).with(T_CHAR, true).with(FACING, Direction.DOWN).with(SIDE2, true);
+            }
+
             // T字 (水平)
             if (both_ns && east_only) {
                 return state.with(T_CHAR, true).with(FACING, Direction.SOUTH);

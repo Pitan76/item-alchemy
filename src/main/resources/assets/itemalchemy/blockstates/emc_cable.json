@@ -158,6 +158,59 @@
       "y": 270
     },
 
+    "conner=true,cross=false,facing=north,side1=true,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_4way"
+    },
+    "conner=true,cross=false,facing=north,side1=false,side2=true,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_4way",
+      "y": 180
+    },
+    "conner=true,cross=false,facing=south,side1=true,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_4way",
+      "x": 180
+    },
+    "conner=true,cross=false,facing=south,side1=false,side2=true,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_4way",
+      "x": 180,
+      "y": 180
+    },
+    "conner=true,cross=false,facing=east,side1=true,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_4way",
+      "y": 90
+    },
+    "conner=true,cross=false,facing=east,side1=false,side2=true,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_4way",
+      "y": 270
+    },
+    "conner=true,cross=false,facing=west,side1=true,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_4way",
+      "x": 180,
+      "y": 90
+    },
+    "conner=true,cross=false,facing=west,side1=false,side2=true,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_4way",
+      "x": 180,
+      "y": 270
+    },
+    "conner=true,cross=false,facing=up,side1=true,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_4way",
+      "x": 90
+    },
+    "conner=true,cross=false,facing=up,side1=false,side2=true,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_4way",
+      "x": 270,
+      "y": 180
+    },
+    "conner=true,cross=false,facing=down,side1=true,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_4way",
+      "x": 270
+    },
+    "conner=true,cross=false,facing=down,side1=false,side2=true,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_4way",
+      "x": 90,
+      "y": 180
+    },
+
 
     "conner=false,cross=true,facing=up,side1=false,side2=false,tchar=true": {
       "model": "itemalchemy:block/emc_cable_cross_tchar"
