@@ -190,11 +190,41 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
             }
 
             // 交差
-            if (both_ns && both_ew || both_ns && both_ud || both_ew && both_ud) {
-                return state.with(CROSS, true);
+            if (both_ns && both_ew && both_ud) {
+                // 全6方向接続
+                return state.with(CROSS, true).with(FACING, Direction.DOWN);
+            }
+            // 5方向接続 (水平十字 + 上/下ステム)
+            else if (both_ns && both_ew && up_only) {
+                return state.with(CROSS, true).with(T_CHAR, true).with(FACING, Direction.UP);
+            } else if (both_ns && both_ew && down_only) {
+                return state.with(CROSS, true).with(T_CHAR, true).with(FACING, Direction.DOWN);
+            }
+            // 5方向接続 (垂直(NS+UD) + 東/西ステム) - YZ平面のクロス + X方向ステム
+            else if (both_ns && both_ud && east_only) {
+                return state.with(CROSS, true).with(T_CHAR, true).with(FACING, Direction.EAST);
+            } else if (both_ns && both_ud && west_only) {
+                return state.with(CROSS, true).with(T_CHAR, true).with(FACING, Direction.WEST);
+            }
+            // 5方向接続 (垂直(EW+UD) + 南/北ステム) - XY平面のクロス + Z方向ステム
+            else if (both_ew && both_ud && south_only) {
+                return state.with(CROSS, true).with(T_CHAR, true).with(FACING, Direction.SOUTH);
+            } else if (both_ew && both_ud && north_only) {
+                return state.with(CROSS, true).with(T_CHAR, true).with(FACING, Direction.NORTH);
+            }
+            // 4方向接続 (十字)
+            else if (both_ns && both_ew) {
+                // 水平十字 (NS+EW)
+                return state.with(CROSS, true).with(FACING, Direction.NORTH);
+            } else if (both_ew && both_ud) {
+                // EW+UD垂直十字
+                return state.with(CROSS, true).with(FACING, Direction.EAST);
+            } else if (both_ns && both_ud) {
+                // NS+UD垂直十字
+                return state.with(CROSS, true).with(FACING, Direction.SOUTH);
             }
 
-            // T字
+            // T字 (水平)
             if (both_ns && east_only) {
                 return state.with(T_CHAR, true).with(FACING, Direction.SOUTH);
             } else if (both_ns && west_only) {
@@ -203,6 +233,26 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
                 return state.with(T_CHAR, true).with(FACING, Direction.EAST);
             } else if (both_ew && south_only) {
                 return state.with(T_CHAR, true).with(FACING, Direction.WEST);
+            }
+            // T字 (垂直 - 水平バー + 上下ステム)
+            else if (both_ew && up_only) {
+                return state.with(T_CHAR, true).with(FACING, Direction.UP);
+            } else if (both_ew && down_only) {
+                return state.with(T_CHAR, true).with(FACING, Direction.DOWN);
+            } else if (both_ns && up_only) {
+                return state.with(T_CHAR, true).with(FACING, Direction.UP).with(SIDE1, true);
+            } else if (both_ns && down_only) {
+                return state.with(T_CHAR, true).with(FACING, Direction.DOWN).with(SIDE1, true);
+            }
+            // T字 (垂直 - 上下バー + 水平ステム)
+            else if (both_ud && north_only) {
+                return state.with(T_CHAR, true).with(FACING, Direction.UP).with(SIDE2, true);
+            } else if (both_ud && south_only) {
+                return state.with(T_CHAR, true).with(FACING, Direction.DOWN).with(SIDE2, true);
+            } else if (both_ud && east_only) {
+                return state.with(T_CHAR, true).with(FACING, Direction.UP).with(SIDE1, true).with(SIDE2, true);
+            } else if (both_ud && west_only) {
+                return state.with(T_CHAR, true).with(FACING, Direction.DOWN).with(SIDE1, true).with(SIDE2, true);
             }
 
             if (both_ns || both_ew || both_ud) {
@@ -374,6 +424,20 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
             if (direction == Direction.WEST) {
                 return WEST_CONNER_CONNECT;
             }
+        } else if (e.get(CROSS) && e.get(T_CHAR)) {
+            if (direction == Direction.UP) {
+                return VoxelShapeUtil.union(NS_BOTH_CONNECT, EW_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 16.0D, 10.0D));
+            } else if (direction == Direction.DOWN) {
+                return VoxelShapeUtil.union(NS_BOTH_CONNECT, EW_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D));
+            } else if (direction == Direction.EAST) {
+                return VoxelShapeUtil.union(EW_BOTH_CONNECT, UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D));
+            } else if (direction == Direction.WEST) {
+                return VoxelShapeUtil.union(EW_BOTH_CONNECT, UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D));
+            } else if (direction == Direction.NORTH) {
+                return VoxelShapeUtil.union(NS_BOTH_CONNECT, UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 10.0D));
+            } else if (direction == Direction.SOUTH) {
+                return VoxelShapeUtil.union(NS_BOTH_CONNECT, UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 16.0D));
+            }
         } else if (e.get(T_CHAR)) {
             if (direction == Direction.NORTH) {
                 return NORTH_CONNER_CONNECT;
@@ -383,8 +447,45 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
                 return EAST_CONNER_CONNECT;
             } else if (direction == Direction.WEST) {
                 return WEST_CONNER_CONNECT;
+            } else if (direction == Direction.UP) {
+                if (e.get(SIDE2)) {
+                    // UD bar + horizontal stem (north or east)
+                    if (e.get(SIDE1)) {
+                        return VoxelShapeUtil.union(UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D));
+                    }
+                    return VoxelShapeUtil.union(UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 10.0D));
+                } else if (e.get(SIDE1)) {
+                    // NS bar + up stem
+                    return VoxelShapeUtil.union(EW_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 16.0D, 10.0D));
+                }
+                // EW bar + up stem
+                return VoxelShapeUtil.union(NS_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 16.0D, 10.0D));
+            } else if (direction == Direction.DOWN) {
+                if (e.get(SIDE2)) {
+                    // UD bar + horizontal stem (south or west)
+                    if (e.get(SIDE1)) {
+                        return VoxelShapeUtil.union(UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D));
+                    }
+                    return VoxelShapeUtil.union(UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 16.0D));
+                } else if (e.get(SIDE1)) {
+                    // NS bar + down stem
+                    return VoxelShapeUtil.union(EW_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D));
+                }
+                // EW bar + down stem
+                return VoxelShapeUtil.union(NS_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D));
             }
         } else if (e.get(CROSS)) {
+            if (direction == Direction.DOWN) {
+                // 全6方向
+                return VoxelShapeUtil.union(NS_BOTH_CONNECT, EW_BOTH_CONNECT, UD_BOTH_CONNECT);
+            } else if (direction == Direction.EAST) {
+                // EW+UD -> 東西(x方向)はNS_BOTH_CONNECT
+                return VoxelShapeUtil.union(NS_BOTH_CONNECT, UD_BOTH_CONNECT);
+            } else if (direction == Direction.SOUTH) {
+                // NS+UD -> 南北(z方向)はEW_BOTH_CONNECT
+                return VoxelShapeUtil.union(EW_BOTH_CONNECT, UD_BOTH_CONNECT);
+            }
+            // NS+EW -> 水平十字
             return VoxelShapeUtil.union(NS_BOTH_CONNECT, EW_BOTH_CONNECT);
         }
 

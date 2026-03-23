@@ -1,132 +1,188 @@
 {
   "variants": {
-    "side1=false,side2=false,conner=false,cross=false,tchar=false": {
+    "conner=false,cross=false,side1=false,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable"
     },
-    "side1=true,side2=false,conner=false,facing=north": {
+    "conner=false,cross=false,facing=north,side1=true,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable_left"
     },
-    "side1=false,side2=true,conner=false,facing=north": {
+    "conner=false,cross=false,facing=north,side1=false,side2=true,tchar=false": {
       "model": "itemalchemy:block/emc_cable_right"
     },
-    "side1=true,side2=true,conner=false,facing=north": {
+    "conner=false,cross=false,facing=north,side1=true,side2=true,tchar=false": {
       "model": "itemalchemy:block/emc_cable_both"
     },
 
-    "side1=true,side2=false,conner=false,facing=east": {
+    "conner=false,cross=false,facing=east,side1=true,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable_left",
       "y": 90
     },
-    "side1=false,side2=true,conner=false,facing=east": {
+    "conner=false,cross=false,facing=east,side1=false,side2=true,tchar=false": {
       "model": "itemalchemy:block/emc_cable_right",
       "y": 90
     },
-    "side1=true,side2=true,conner=false,facing=east": {
+    "conner=false,cross=false,facing=east,side1=true,side2=true,tchar=false": {
       "model": "itemalchemy:block/emc_cable_both",
       "y": 90
     },
 
-    "side1=true,side2=false,conner=false,facing=up": {
+    "conner=false,cross=false,facing=up,side1=true,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable_left_ud",
       "x": 180
     },
-    "side1=false,side2=true,conner=false,facing=up": {
+    "conner=false,cross=false,facing=up,side1=false,side2=true,tchar=false": {
       "model": "itemalchemy:block/emc_cable_left_ud"
     },
-    "side1=true,side2=true,conner=false,facing=up": {
+    "conner=false,cross=false,facing=up,side1=true,side2=true,tchar=false": {
       "model": "itemalchemy:block/emc_cable_both_ud"
     },
 
-    "side1=false,side2=false,conner=true,facing=north": {
+    "conner=true,cross=false,facing=north,side1=false,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable_conner"
     },
-    "side1=false,side2=false,conner=true,facing=east": {
+    "conner=true,cross=false,facing=east,side1=false,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable_conner",
       "y": 90
     },
-    "side1=false,side2=false,conner=true,facing=south": {
+    "conner=true,cross=false,facing=south,side1=false,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable_conner",
       "y": 180
     },
-    "side1=false,side2=false,conner=true,facing=west": {
+    "conner=true,cross=false,facing=west,side1=false,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable_conner",
       "y": 270
     },
 
-    "side1=false,side2=false,conner=true,facing=up": {
+    "conner=true,cross=false,facing=up,side1=false,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable_conner_ud",
       "x": 0,
       "y": 270
     },
-    "side1=true,side2=false,conner=true,facing=up": {
+    "conner=true,cross=false,facing=up,side1=true,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable_conner_ud",
       "x": 270,
       "y": 180
     },
-    "side1=false,side2=true,conner=true,facing=up": {
+    "conner=true,cross=false,facing=up,side1=false,side2=true,tchar=false": {
       "model": "itemalchemy:block/emc_cable_conner_ud",
       "x": 270,
       "y": 0
     },
-    "side1=true,side2=true,conner=true,facing=up": {
+    "conner=true,cross=false,facing=up,side1=true,side2=true,tchar=false": {
       "model": "itemalchemy:block/emc_cable_conner_ud",
       "x": 0,
       "y": 90
     },
 
-    "side1=false,side2=false,conner=true,facing=down": {
+    "conner=true,cross=false,facing=down,side1=false,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable_conner_ud",
       "x": 180,
       "y": 90
     },
-    "side1=true,side2=false,conner=true,facing=down": {
+    "conner=true,cross=false,facing=down,side1=true,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable_conner_ud",
       "x": 90,
       "y": 0
     },
-    "side1=false,side2=true,conner=true,facing=down": {
+    "conner=true,cross=false,facing=down,side1=false,side2=true,tchar=false": {
       "model": "itemalchemy:block/emc_cable_conner_ud",
       "x": 90,
       "y": 180
     },
-    "side1=true,side2=true,conner=true,facing=down": {
+    "conner=true,cross=false,facing=down,side1=true,side2=true,tchar=false": {
       "model": "itemalchemy:block/emc_cable_conner_ud",
       "x": 180,
       "y": 270
     },
 
-
-
-
-    "side1=false,side2=false,conner=false,tchar=false,cross=true,facing=north": {
+    "conner=false,cross=true,facing=north,side1=false,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable_cross"
     },
-    "side1=false,side2=false,conner=false,tchar=false,cross=true,facing=east": {
+    "conner=false,cross=true,facing=east,side1=false,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable_cross",
+      "x": 90
+    },
+    "conner=false,cross=true,facing=south,side1=false,side2=false,tchar=false": {
+      "model": "itemalchemy:block/emc_cable_cross",
+      "x": 90,
       "y": 90
     },
-    "side1=false,side2=false,conner=false,tchar=false,cross=true,facing=south": {
-      "model": "itemalchemy:block/emc_cable_cross",
-      "y": 180
+    "conner=false,cross=true,facing=down,side1=false,side2=false,tchar=false": {
+      "model": "itemalchemy:block/emc_cable_cross_all"
     },
-    "side1=false,side2=false,conner=false,tchar=false,cross=true,facing=west": {
-      "model": "itemalchemy:block/emc_cable_cross",
-      "y": 270
-    },
-    "side1=false,side2=false,conner=false,tchar=true,cross=false,facing=north": {
+    "conner=false,cross=false,facing=north,side1=false,side2=false,tchar=true": {
       "model": "itemalchemy:block/emc_cable_tchar"
     },
-    "side1=false,side2=false,conner=false,tchar=true,cross=false,facing=east": {
+    "conner=false,cross=false,facing=east,side1=false,side2=false,tchar=true": {
       "model": "itemalchemy:block/emc_cable_tchar",
       "y": 90
     },
-    "side1=false,side2=false,conner=false,tchar=true,cross=false,facing=south": {
+    "conner=false,cross=false,facing=south,side1=false,side2=false,tchar=true": {
       "model": "itemalchemy:block/emc_cable_tchar",
       "y": 180
     },
-    "side1=false,side2=false,conner=false,tchar=true,cross=false,facing=west": {
+    "conner=false,cross=false,facing=west,side1=false,side2=false,tchar=true": {
       "model": "itemalchemy:block/emc_cable_tchar",
       "y": 270
+    },
+
+    "conner=false,cross=false,facing=up,side1=false,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_y",
+      "y": 90
+    },
+    "conner=false,cross=false,facing=down,side1=false,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_y",
+      "x": 180,
+      "y": 90
+    },
+    "conner=false,cross=false,facing=up,side1=true,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_y"
+    },
+    "conner=false,cross=false,facing=down,side1=true,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_y",
+      "x": 180
+    },
+    "conner=false,cross=false,facing=up,side1=false,side2=true,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_ud"
+    },
+    "conner=false,cross=false,facing=down,side1=false,side2=true,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_ud",
+      "y": 180
+    },
+    "conner=false,cross=false,facing=up,side1=true,side2=true,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_ud",
+      "y": 90
+    },
+    "conner=false,cross=false,facing=down,side1=true,side2=true,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_tchar_ud",
+      "y": 270
+    },
+
+
+    "conner=false,cross=true,facing=up,side1=false,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_cross_tchar"
+    },
+    "conner=false,cross=true,facing=down,side1=false,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_cross_tchar",
+      "x": 180
+    },
+    "conner=false,cross=true,facing=north,side1=false,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_cross_tchar",
+      "x": 90
+    },
+    "conner=false,cross=true,facing=south,side1=false,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_cross_tchar",
+      "x": 270
+    },
+    "conner=false,cross=true,facing=east,side1=false,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_cross_tchar",
+      "x": 90,
+      "y": 270
+    },
+    "conner=false,cross=true,facing=west,side1=false,side2=false,tchar=true": {
+      "model": "itemalchemy:block/emc_cable_cross_tchar",
+      "x": 90,
+      "y": 90
     }
   }
 }
