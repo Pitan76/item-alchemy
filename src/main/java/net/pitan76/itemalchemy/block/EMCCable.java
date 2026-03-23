@@ -282,6 +282,31 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
                 return state.with(T_CHAR, true).with(FACING, Direction.DOWN).with(SIDE1, true).with(SIDE2, true);
             }
 
+            // 3軸コーナー (3D角: 3軸から1方向ずつ、計3本のステム)
+            if ((north_only || south_only) && (east_only || west_only) && (up_only || down_only)) {
+                if (up_only) {
+                    if (north_only && west_only) { // NWU
+                        return state.with(CONNER, true).with(FACING, Direction.NORTH).with(SIDE1, true);
+                    } else if (north_only && east_only) { // NEU
+                        return state.with(CONNER, true).with(FACING, Direction.EAST).with(SIDE1, true);
+                    } else if (south_only && east_only) { // SEU
+                        return state.with(CONNER, true).with(FACING, Direction.SOUTH).with(SIDE1, true);
+                    } else if (south_only && west_only) { // SWU
+                        return state.with(CONNER, true).with(FACING, Direction.WEST).with(SIDE1, true);
+                    }
+                } else if (down_only) {
+                    if (south_only && west_only) { // SWD
+                        return state.with(CONNER, true).with(FACING, Direction.NORTH).with(SIDE2, true);
+                    } else if (north_only && west_only) { // NWD
+                        return state.with(CONNER, true).with(FACING, Direction.WEST).with(SIDE2, true);
+                    } else if (north_only && east_only) { // NED
+                        return state.with(CONNER, true).with(FACING, Direction.SOUTH).with(SIDE2, true);
+                    } else if (south_only && east_only) { // SED
+                        return state.with(CONNER, true).with(FACING, Direction.EAST).with(SIDE2, true);
+                    }
+                }
+            }
+
             if (both_ns || both_ew || both_ud) {
                 return state.with(SIDE1, true).with(SIDE2, true);
             }
@@ -348,6 +373,27 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
     @Override
     public VoxelShape getOutlineShape(OutlineShapeEvent e) {
         Direction direction = e.get(FACING);
+
+        if (e.get(CONNER) && !e.get(CROSS) && !e.get(T_CHAR) && (e.get(SIDE1) ^ e.get(SIDE2))) {
+            VoxelShape n = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 10.0D);
+            VoxelShape s = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 16.0D);
+            VoxelShape w = VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D);
+            VoxelShape ea = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
+            VoxelShape d = VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D);
+            VoxelShape u = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+
+            if (e.get(SIDE1)) {
+                if (direction == Direction.NORTH) return VoxelShapeUtil.union(n, w, u);
+                if (direction == Direction.EAST) return VoxelShapeUtil.union(n, ea, u);
+                if (direction == Direction.SOUTH) return VoxelShapeUtil.union(s, ea, u);
+                if (direction == Direction.WEST) return VoxelShapeUtil.union(s, w, u);
+            } else if (e.get(SIDE2)) {
+                if (direction == Direction.NORTH) return VoxelShapeUtil.union(s, w, d);
+                if (direction == Direction.WEST) return VoxelShapeUtil.union(n, w, d);
+                if (direction == Direction.SOUTH) return VoxelShapeUtil.union(n, ea, d);
+                if (direction == Direction.EAST) return VoxelShapeUtil.union(s, ea, d);
+            }
+        }
 
         if (e.get(SIDE1) && e.get(SIDE2)) {
             // 角

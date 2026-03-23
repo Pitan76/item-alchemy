@@ -53,6 +53,41 @@
       "y": 270
     },
 
+    "conner=true,cross=false,facing=north,side1=true,side2=false,tchar=false": {
+      "model": "itemalchemy:block/emc_cable_conner_3d"
+    },
+    "conner=true,cross=false,facing=east,side1=true,side2=false,tchar=false": {
+      "model": "itemalchemy:block/emc_cable_conner_3d",
+      "y": 90
+    },
+    "conner=true,cross=false,facing=south,side1=true,side2=false,tchar=false": {
+      "model": "itemalchemy:block/emc_cable_conner_3d",
+      "y": 180
+    },
+    "conner=true,cross=false,facing=west,side1=true,side2=false,tchar=false": {
+      "model": "itemalchemy:block/emc_cable_conner_3d",
+      "y": 270
+    },
+    "conner=true,cross=false,facing=north,side1=false,side2=true,tchar=false": {
+      "model": "itemalchemy:block/emc_cable_conner_3d",
+      "x": 180
+    },
+    "conner=true,cross=false,facing=east,side1=false,side2=true,tchar=false": {
+      "model": "itemalchemy:block/emc_cable_conner_3d",
+      "x": 180,
+      "y": 270
+    },
+    "conner=true,cross=false,facing=south,side1=false,side2=true,tchar=false": {
+      "model": "itemalchemy:block/emc_cable_conner_3d",
+      "x": 180,
+      "y": 180
+    },
+    "conner=true,cross=false,facing=west,side1=false,side2=true,tchar=false": {
+      "model": "itemalchemy:block/emc_cable_conner_3d",
+      "x": 180,
+      "y": 90
+    },
+
     "conner=true,cross=false,facing=up,side1=false,side2=false,tchar=false": {
       "model": "itemalchemy:block/emc_cable_conner_ud",
       "x": 0,
