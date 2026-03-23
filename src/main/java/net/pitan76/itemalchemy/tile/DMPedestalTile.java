@@ -25,6 +25,7 @@ import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
+import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
 
 import java.util.Optional;
@@ -41,14 +42,14 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
     private static final ConcurrentHashMap<Long, ItemStack> PENDING_DROPS = new ConcurrentHashMap<>();
 
     public static ItemStack takePendingDrop(BlockPos pos) {
-        return PENDING_DROPS.remove(pos.asLong());
+        return PENDING_DROPS.remove(PosUtil.asLong(pos));
     }
 
     @Override
     public void markRemovedOverride() {
         World world = callGetWorld();
         if (world != null && !world.isClient() && !ItemStackUtil.isEmpty(storedStack)) {
-            PENDING_DROPS.put(callGetPos().asLong(), ItemStackUtil.copy(storedStack));
+            PENDING_DROPS.put(PosUtil.asLong(callGetPos()), ItemStackUtil.copy(storedStack));
         }
         super.markRemovedOverride();
     }
