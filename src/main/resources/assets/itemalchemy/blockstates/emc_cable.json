@@ -220,12 +220,12 @@
     "conner=true,cross=false,facing=west,side1=true,side2=false,tchar=true": {
       "model": "itemalchemy:block/emc_cable_tchar_4way",
       "x": 180,
-      "y": 90
+      "y": 270
     },
     "conner=true,cross=false,facing=west,side1=false,side2=true,tchar=true": {
       "model": "itemalchemy:block/emc_cable_tchar_4way",
       "x": 180,
-      "y": 270
+      "y": 90
     },
     "conner=true,cross=false,facing=up,side1=true,side2=false,tchar=true": {
       "model": "itemalchemy:block/emc_cable_tchar_4way",
@@ -265,12 +265,12 @@
     "conner=false,cross=true,facing=east,side1=false,side2=false,tchar=true": {
       "model": "itemalchemy:block/emc_cable_cross_tchar",
       "x": 90,
-      "y": 270
+      "y": 90
     },
     "conner=false,cross=true,facing=west,side1=false,side2=false,tchar=true": {
       "model": "itemalchemy:block/emc_cable_cross_tchar",
       "x": 90,
-      "y": 90
+      "y": 270
     }
   }
 }
