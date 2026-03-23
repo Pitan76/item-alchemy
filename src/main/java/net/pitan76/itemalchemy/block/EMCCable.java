@@ -19,6 +19,7 @@ import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 import net.pitan76.mcpitanlib.midohra.block.BlockState;
 import net.pitan76.mcpitanlib.midohra.fluid.FluidWrapper;
+import net.pitan76.mcpitanlib.midohra.fluid.Fluids;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.util.math.Direction;
 import net.pitan76.mcpitanlib.midohra.world.IWorldView;
@@ -88,9 +89,10 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
     @Override
     public BlockState getPlacementState(PlacementStateArgs args) {
         BlockState state = super.getPlacementState(args);
+        if (state == null) return null;
 
-        FluidState fluidState = args.getWorldView().getFluidState(args.getPos().toMinecraft());
-        return state.with(WATERLOGGED, fluidState.getFluid() == FluidUtil.water());
+        FluidWrapper fluid = args.getWorldView().getFluid(args.getPos());
+        return state.with(WATERLOGGED, fluid == Fluids.WATER);
     }
 
     @Override
