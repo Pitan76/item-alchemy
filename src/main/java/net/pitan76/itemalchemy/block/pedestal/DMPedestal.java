@@ -137,7 +137,7 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
         }
 
         if (!e.isClient()) {
-            ItemStack toDrop = ItemStack.EMPTY;
+            ItemStack toDrop = ItemStackUtil.empty();
 
             // Direct lookup — works in older MC versions where BE is still accessible here.
             BlockEntity be = e.getBlockEntity();

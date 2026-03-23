@@ -106,8 +106,8 @@ public class InterdictionTorch extends CompatBlock implements ExtendBlockEntityP
     }
 
     private boolean isSolid(IWorldView world, BlockPos pos) {
-        net.minecraft.block.BlockState vanilla = world.getBlockState(pos).toMinecraft();
-        return vanilla != null && !vanilla.isAir() && vanilla.isOpaque();
+        BlockState state = world.getBlockState(pos);
+        return state != null && !state.isAir() && state.isOpaque();
     }
 
     @Override

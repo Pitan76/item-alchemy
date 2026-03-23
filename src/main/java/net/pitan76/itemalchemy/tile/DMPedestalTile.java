@@ -25,6 +25,7 @@ import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
+import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,12 +45,12 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
     }
 
     @Override
-    public void markRemoved() {
+    public void markRemovedOverride() {
         World world = callGetWorld();
         if (world != null && !world.isClient() && !ItemStackUtil.isEmpty(storedStack)) {
             PENDING_DROPS.put(callGetPos().asLong(), ItemStackUtil.copy(storedStack));
         }
-        super.markRemoved();
+        super.markRemovedOverride();
     }
 
     private ItemStack storedStack = ItemStackUtil.empty();
@@ -91,12 +92,8 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
             return;
         }
 
-        if (ItemStackUtil.isEmpty(storedStack)) {
-            setActive(false);
-            return;
-        }
-
-        if (!(ItemStackUtil.getItem(storedStack) instanceof IPedestalItem)) {
+        if (ItemStackUtil.isEmpty(storedStack)
+                || !(ItemStackUtil.getItem(storedStack) instanceof IPedestalItem)) {
             setActive(false);
             return;
         }
@@ -109,10 +106,10 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
         if (tickCount % 10 == 0) {
             net.pitan76.mcpitanlib.midohra.util.math.BlockPos pos2 = net.pitan76.mcpitanlib.midohra.util.math.BlockPos.of(pos);
 
-            WorldUtil.addParticle(world, ParticleTypes.FLAME, pos2.getX() + 0.2, pos2.getY() + 0.3, pos2.getZ() + 0.2, 0, 0.01, 0);
-            WorldUtil.addParticle(world, ParticleTypes.FLAME, pos2.getX() + 0.8, pos2.getY() + 0.3, pos2.getZ() + 0.2, 0, 0.01, 0);
-            WorldUtil.addParticle(world, ParticleTypes.FLAME, pos2.getX() + 0.2, pos2.getY() + 0.3, pos2.getZ() + 0.8, 0, 0.01, 0);
-            WorldUtil.addParticle(world, ParticleTypes.FLAME, pos2.getX() + 0.8, pos2.getY() + 0.3, pos2.getZ() + 0.8, 0, 0.01, 0);
+            WorldUtil.addParticle(world, CompatParticleTypes.FLAME, pos2.getX() + 0.2, pos2.getY() + 0.3, pos2.getZ() + 0.2, 0, 0.01, 0);
+            WorldUtil.addParticle(world, CompatParticleTypes.FLAME, pos2.getX() + 0.8, pos2.getY() + 0.3, pos2.getZ() + 0.2, 0, 0.01, 0);
+            WorldUtil.addParticle(world, CompatParticleTypes.FLAME, pos2.getX() + 0.2, pos2.getY() + 0.3, pos2.getZ() + 0.8, 0, 0.01, 0);
+            WorldUtil.addParticle(world, CompatParticleTypes.FLAME, pos2.getX() + 0.8, pos2.getY() + 0.3, pos2.getZ() + 0.8, 0, 0.01, 0);
         }
     }
 
@@ -138,7 +135,7 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
 
     public void setStack(ItemStack stack) {
         this.storedStack = stack;
-        BlockEntityUtil.markDirty(this);
+        callMarkDirty();
         sendSyncPacket();
     }
 
@@ -149,7 +146,7 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
     public void setActive(boolean active) {
         if (this.isActive != active) {
             this.isActive = active;
-            BlockEntityUtil.markDirty(this);
+            callMarkDirty();
             sendSyncPacket();
         }
     }
