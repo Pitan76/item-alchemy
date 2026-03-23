@@ -176,11 +176,11 @@
     },
     "conner=true,cross=false,facing=east,side1=true,side2=false,tchar=true": {
       "model": "itemalchemy:block/emc_cable_tchar_4way",
-      "y": 90
+      "y": 270
     },
     "conner=true,cross=false,facing=east,side1=false,side2=true,tchar=true": {
       "model": "itemalchemy:block/emc_cable_tchar_4way",
-      "y": 270
+      "y": 90
     },
     "conner=true,cross=false,facing=west,side1=true,side2=false,tchar=true": {
       "model": "itemalchemy:block/emc_cable_tchar_4way",
