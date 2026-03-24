@@ -499,88 +499,95 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
             }
         } else if (e.get(CONNER) && e.get(T_CHAR)) {
             // 4方向接続 (3D T字: バー + 直交する2本のステム)
+            VoxelShape z_bar = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 16.0D); // NS
+            VoxelShape x_bar = VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D); // EW
+            VoxelShape y_bar = VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 16.0D, 10.0D); // UD
+            VoxelShape n_stem = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 10.0D);
+            VoxelShape s_stem = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 16.0D);
+            VoxelShape e_stem = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
+            VoxelShape w_stem = VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D);
+            VoxelShape u_stem = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+            VoxelShape d_stem = VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D);
+
             if (direction == Direction.NORTH) {
-                if (e.get(SIDE1)) return VoxelShapeUtil.union(NS_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D), VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 16.0D, 10.0D));
-                if (e.get(SIDE2)) return VoxelShapeUtil.union(NS_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D), VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 16.0D, 10.0D));
+                if (e.get(SIDE1)) return VoxelShapeUtil.union(z_bar, u_stem, e_stem);
+                if (e.get(SIDE2)) return VoxelShapeUtil.union(z_bar, u_stem, w_stem);
             } else if (direction == Direction.SOUTH) {
-                if (e.get(SIDE1)) return VoxelShapeUtil.union(NS_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D), VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D));
-                if (e.get(SIDE2)) return VoxelShapeUtil.union(NS_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D), VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D));
+                if (e.get(SIDE1)) return VoxelShapeUtil.union(z_bar, d_stem, e_stem);
+                if (e.get(SIDE2)) return VoxelShapeUtil.union(z_bar, d_stem, w_stem);
             } else if (direction == Direction.EAST) {
-                if (e.get(SIDE1)) return VoxelShapeUtil.union(EW_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 10.0D), VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 16.0D, 10.0D));
-                if (e.get(SIDE2)) return VoxelShapeUtil.union(EW_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 16.0D), VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 16.0D, 10.0D));
+                if (e.get(SIDE1)) return VoxelShapeUtil.union(x_bar, u_stem, n_stem);
+                if (e.get(SIDE2)) return VoxelShapeUtil.union(x_bar, u_stem, s_stem);
             } else if (direction == Direction.WEST) {
-                if (e.get(SIDE1)) return VoxelShapeUtil.union(EW_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 10.0D), VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D));
-                if (e.get(SIDE2)) return VoxelShapeUtil.union(EW_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 16.0D), VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D));
+                if (e.get(SIDE1)) return VoxelShapeUtil.union(x_bar, d_stem, n_stem);
+                if (e.get(SIDE2)) return VoxelShapeUtil.union(x_bar, d_stem, s_stem);
             } else if (direction == Direction.UP) {
-                if (e.get(SIDE1)) return VoxelShapeUtil.union(UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 10.0D), VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D));
-                if (e.get(SIDE2)) return VoxelShapeUtil.union(UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 10.0D), VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D));
+                if (e.get(SIDE1)) return VoxelShapeUtil.union(y_bar, n_stem, e_stem);
+                if (e.get(SIDE2)) return VoxelShapeUtil.union(y_bar, n_stem, w_stem);
             } else if (direction == Direction.DOWN) {
-                if (e.get(SIDE1)) return VoxelShapeUtil.union(UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 16.0D), VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D));
-                if (e.get(SIDE2)) return VoxelShapeUtil.union(UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 16.0D), VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D));
+                if (e.get(SIDE1)) return VoxelShapeUtil.union(y_bar, s_stem, e_stem);
+                if (e.get(SIDE2)) return VoxelShapeUtil.union(y_bar, s_stem, w_stem);
             }
+            return NONE;
         } else if (e.get(CROSS) && e.get(T_CHAR)) {
-            if (direction == Direction.UP) {
-                return VoxelShapeUtil.union(NS_BOTH_CONNECT, EW_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 16.0D, 10.0D));
-            } else if (direction == Direction.DOWN) {
-                return VoxelShapeUtil.union(NS_BOTH_CONNECT, EW_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D));
-            } else if (direction == Direction.EAST) {
-                return VoxelShapeUtil.union(EW_BOTH_CONNECT, UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D));
-            } else if (direction == Direction.WEST) {
-                return VoxelShapeUtil.union(EW_BOTH_CONNECT, UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D));
-            } else if (direction == Direction.NORTH) {
-                return VoxelShapeUtil.union(NS_BOTH_CONNECT, UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 10.0D));
-            } else if (direction == Direction.SOUTH) {
-                return VoxelShapeUtil.union(NS_BOTH_CONNECT, UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 16.0D));
-            }
+            // 5方向接続 (十字 + 1ステム)
+            VoxelShape z_bar = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 16.0D); // NS
+            VoxelShape x_bar = VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D); // EW
+            VoxelShape y_bar = VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 16.0D, 10.0D); // UD
+            VoxelShape n_stem = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 10.0D);
+            VoxelShape s_stem = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 16.0D);
+            VoxelShape e_stem = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
+            VoxelShape w_stem = VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D);
+            VoxelShape u_stem = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+            VoxelShape d_stem = VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D);
+
+            if (direction == Direction.UP) return VoxelShapeUtil.union(z_bar, x_bar, u_stem);
+            else if (direction == Direction.DOWN) return VoxelShapeUtil.union(z_bar, x_bar, d_stem);
+            else if (direction == Direction.EAST) return VoxelShapeUtil.union(z_bar, y_bar, e_stem);
+            else if (direction == Direction.WEST) return VoxelShapeUtil.union(z_bar, y_bar, w_stem);
+            else if (direction == Direction.SOUTH) return VoxelShapeUtil.union(x_bar, y_bar, s_stem);
+            else if (direction == Direction.NORTH) return VoxelShapeUtil.union(x_bar, y_bar, n_stem);
+            return NONE;
         } else if (e.get(T_CHAR)) {
-            if (direction == Direction.NORTH) {
-                return NORTH_CONNER_CONNECT;
-            } else if (direction == Direction.SOUTH) {
-                return SOUTH_CONNER_CONNECT;
-            } else if (direction == Direction.EAST) {
-                return EAST_CONNER_CONNECT;
-            } else if (direction == Direction.WEST) {
-                return WEST_CONNER_CONNECT;
-            } else if (direction == Direction.UP) {
-                if (e.get(SIDE2)) {
-                    // UD bar + horizontal stem (north or east)
-                    if (e.get(SIDE1)) {
-                        return VoxelShapeUtil.union(UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D));
-                    }
-                    return VoxelShapeUtil.union(UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 10.0D));
-                } else if (e.get(SIDE1)) {
-                    // NS bar + up stem
-                    return VoxelShapeUtil.union(EW_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 16.0D, 10.0D));
-                }
-                // EW bar + up stem
-                return VoxelShapeUtil.union(NS_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 16.0D, 10.0D));
-            } else if (direction == Direction.DOWN) {
-                if (e.get(SIDE2)) {
-                    // UD bar + horizontal stem (south or west)
-                    if (e.get(SIDE1)) {
-                        return VoxelShapeUtil.union(UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D));
-                    }
-                    return VoxelShapeUtil.union(UD_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 16.0D));
-                } else if (e.get(SIDE1)) {
-                    // NS bar + down stem
-                    return VoxelShapeUtil.union(EW_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D));
-                }
-                // EW bar + down stem
-                return VoxelShapeUtil.union(NS_BOTH_CONNECT, VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D));
-            }
+            // T字 (バー + 1ステム)
+            VoxelShape z_bar = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 16.0D); // NS
+            VoxelShape x_bar = VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D); // EW
+            VoxelShape y_bar = VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 16.0D, 10.0D); // UD
+            VoxelShape n_stem = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 10.0D);
+            VoxelShape s_stem = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 10.0D, 16.0D);
+            VoxelShape e_stem = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
+            VoxelShape w_stem = VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 10.0D, 10.0D, 10.0D);
+            VoxelShape u_stem = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+            VoxelShape d_stem = VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D);
+
+            boolean s1 = e.get(SIDE1);
+            boolean s2 = e.get(SIDE2);
+
+            if (direction == Direction.SOUTH && !s1 && !s2) return VoxelShapeUtil.union(z_bar, e_stem);
+            if (direction == Direction.NORTH && !s1 && !s2) return VoxelShapeUtil.union(z_bar, w_stem);
+            if (direction == Direction.EAST && !s1 && !s2) return VoxelShapeUtil.union(x_bar, n_stem);
+            if (direction == Direction.WEST && !s1 && !s2) return VoxelShapeUtil.union(x_bar, s_stem);
+
+            if (direction == Direction.UP && !s1 && !s2) return VoxelShapeUtil.union(x_bar, u_stem);
+            if (direction == Direction.DOWN && !s1 && !s2) return VoxelShapeUtil.union(x_bar, d_stem);
+            if (direction == Direction.UP && s1 && !s2) return VoxelShapeUtil.union(z_bar, u_stem);
+            if (direction == Direction.DOWN && s1 && !s2) return VoxelShapeUtil.union(z_bar, d_stem);
+
+            if (direction == Direction.UP && !s1 && s2) return VoxelShapeUtil.union(y_bar, n_stem);
+            if (direction == Direction.DOWN && !s1 && s2) return VoxelShapeUtil.union(y_bar, s_stem);
+            if (direction == Direction.UP && s1 && s2) return VoxelShapeUtil.union(y_bar, e_stem);
+            if (direction == Direction.DOWN && s1 && s2) return VoxelShapeUtil.union(y_bar, w_stem);
+
+            return NONE;
         } else if (e.get(CROSS)) {
-            if (direction == Direction.DOWN) {
-                // 全6方向
-                return VoxelShapeUtil.union(NS_BOTH_CONNECT, EW_BOTH_CONNECT, UD_BOTH_CONNECT);
-            } else if (direction == Direction.EAST) {
-                // EW+UD -> 東西(x方向)はNS_BOTH_CONNECT
-                return VoxelShapeUtil.union(NS_BOTH_CONNECT, UD_BOTH_CONNECT);
-            } else if (direction == Direction.SOUTH) {
-                // NS+UD -> 南北(z方向)はEW_BOTH_CONNECT
-                return VoxelShapeUtil.union(EW_BOTH_CONNECT, UD_BOTH_CONNECT);
-            }
-            // NS+EW -> 水平十字
-            return VoxelShapeUtil.union(NS_BOTH_CONNECT, EW_BOTH_CONNECT);
+            VoxelShape z_bar = VoxelShapeUtil.blockCuboid(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 16.0D); // NS
+            VoxelShape x_bar = VoxelShapeUtil.blockCuboid(0.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D); // EW
+            VoxelShape y_bar = VoxelShapeUtil.blockCuboid(6.0D, 0.0D, 6.0D, 10.0D, 16.0D, 10.0D); // UD
+
+            if (direction == Direction.DOWN) return VoxelShapeUtil.union(z_bar, x_bar, y_bar); // 全6方向
+            else if (direction == Direction.EAST) return VoxelShapeUtil.union(x_bar, y_bar); // EW+UD
+            else if (direction == Direction.SOUTH) return VoxelShapeUtil.union(z_bar, y_bar); // NS+UD
+            return VoxelShapeUtil.union(z_bar, x_bar); // NS+EW
         }
 
         return NONE;
