@@ -26,6 +26,7 @@ import net.pitan76.mcpitanlib.api.gui.inventory.sided.VanillaStyleSidedInventory
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.AvailableSlotsArgs;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.CanInsertArgs;
 import net.pitan76.mcpitanlib.api.gui.v2.ExtendedScreenHandlerFactory;
+import net.pitan76.mcpitanlib.api.registry.CompatRegistryLookup;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
@@ -44,6 +45,23 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     public EMCImporterTile(TileCreateEvent e) {
         this(Tiles.EMC_IMPORTER.getOrNull(), e);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt(CompatRegistryLookup registryLookup) {
+        NbtCompound nbt = NbtUtil.create();
+
+        NbtCompound filterNbt = NbtUtil.create();
+        InventoryUtil.writeNbt(registryLookup, filterNbt, filter);
+        NbtUtil.put(nbt, "filter", filterNbt);
+
+        if (teamUUID != null)
+            NbtUtil.putUuid(nbt, "team", teamUUID);
+
+        if (ownerName != null && !ownerName.isEmpty())
+            NbtUtil.putString(nbt, "ownerName", ownerName);
+
+        return nbt;
     }
 
     @Override
@@ -95,8 +113,7 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     @Override
     public void tick(TileTickEvent<EMCImporterTile> e) {
-        World world = e.world;
-        if (WorldUtil.isClient(world)) return;
+        if (e.isClient()) return;
         if (!hasTeam()) return;
 
         EMCStorageUtil.transferAllEMC(this);
