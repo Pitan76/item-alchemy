@@ -12,6 +12,7 @@ import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.block.BlockUtil;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.util.math.Direction;
+import net.pitan76.mcpitanlib.midohra.world.World;
 
 public class DiviningRod extends CompatItem  {
 
@@ -29,6 +30,7 @@ public class DiviningRod extends CompatItem  {
     @Override
     public CompatActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
         BlockPos center = e.getMidohraPos();
+        World world = e.getMidohraWorld();
 
         // スニークしている場合、レベルを変更する、最大をこえるとレベル1に戻る
         if (e.player.isSneaking()) {
@@ -121,7 +123,7 @@ public class DiviningRod extends CompatItem  {
             CustomDataUtil.put(stack, "divining_rod_level", level);
             e.user.sendMessage(TextUtil.literal("Divining Rod Level: " + level + " (3x3x" + (3 + getAdditionalDepth(level)) + ")"));
 
-            return StackActionResult.success(e.getStack());
+            return e.success();
         }
 
         return super.onRightClick(e);

@@ -2,9 +2,7 @@ package net.pitan76.itemalchemy.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.pitan76.itemalchemy.block.IUseableWrench;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseOnBlockEvent;
 import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
@@ -17,6 +15,8 @@ import net.pitan76.mcpitanlib.api.util.CompatActionResult;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.entity.ItemEntityUtil;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
+import net.pitan76.mcpitanlib.midohra.world.World;
 
 public class Wrench extends CompatItem  {
 
@@ -29,12 +29,13 @@ public class Wrench extends CompatItem  {
         if (e.isClient()) return e.success();
 
         Block block = e.getBlockState().getBlock();
-        BlockPos pos = e.getBlockPos();
+        BlockPos pos = e.getMidohraPos();
+        World world = e.getMidohraWorld();
 
         if (block == null) return e.pass();
 
         if (block instanceof IUseableWrench) {
-            WorldUtil.playSound(e.world, null, e.getBlockPos(), CompatSoundEvents.BLOCK_ANVIL_PLACE, CompatSoundCategory.BLOCKS, 0.75f, 1.5f);
+            world.playSound(pos, CompatSoundEvents.BLOCK_ANVIL_PLACE, CompatSoundCategory.BLOCKS, 0.75f, 1.5f);
 
             if (e.hasBlockEntity()) {
                 BlockEntity blockEntity = e.getBlockEntity();
@@ -43,12 +44,10 @@ public class Wrench extends CompatItem  {
                     ItemStack dropStack = ItemStackUtil.create(block);
                     BlockEntityDataUtil.writeCompatBlockEntityNbtToStack(dropStack, (CompatBlockEntity) blockEntity);
 
-                    WorldUtil.removeBlockEntity(e.getWorld(), e.getBlockPos());
-                    WorldUtil.removeBlock(e.getWorld(), e.getBlockPos(), false);
+                    world.removeBlockEntity(pos);
+                    world.removeBlock(pos, false);
 
-                    ItemEntity itemEntity = ItemEntityUtil.create(e.getWorld(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, dropStack);
-                    itemEntity.setToDefaultPickupDelay();
-                    WorldUtil.spawnEntity(e.getWorld(), itemEntity);
+                    ItemEntityUtil.createWithSpawn(e.getWorld(), dropStack, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
 
                     return e.success();
                 }
