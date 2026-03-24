@@ -139,7 +139,10 @@ public class EMCManager {
                     add(entry.getKey(), Long.valueOf((Integer) entry.getValue()));
                 }
                 if (entry.getValue() instanceof Double) {
-                    add(entry.getKey(), (Math.round((Double) entry.getValue())));
+                    add(entry.getKey(), Math.round((Double) entry.getValue()));
+                }
+                if (entry.getValue() instanceof Float) {
+                    add(entry.getKey(), Math.round((Float) entry.getValue()));
                 }
                 if (entry.getValue() instanceof String) {
                     add(entry.getKey(), Long.parseLong((String) entry.getValue()));
@@ -186,7 +189,6 @@ public class EMCManager {
             try {
                 ItemStack outStack;
                 if (recipeEntry instanceof ShapedRecipeEntry) {
-
                     outStack = ((ShapedRecipeEntry) recipeEntry).getRecipe().craft(world);
                 } else if (recipeEntry instanceof ShapelessRecipeEntry) {
                     outStack = ((ShapelessRecipeEntry) recipeEntry).getRecipe().craft(world);
@@ -200,7 +202,6 @@ public class EMCManager {
         List<Recipe> dummy = new ArrayList<>();
         for (Recipe recipe : unsetRecipes) {
             try {
-
                 ItemStack outStack;
                 if (recipe instanceof ShapedRecipe) {
                     outStack = ((ShapedRecipe) recipe).craft(world);
