@@ -164,16 +164,15 @@ public class EMCManager {
     }
 
     public static void defaultMap() {
+        defs.forEach(EMCDef::addAll);
+
         if (!defaultEMCMap.isEmpty()) {
             for (Map.Entry<String, Long> entry : defaultEMCMap.entrySet()) {
                 if (!map.containsKey(entry.getKey())) {
                     map.put(entry.getKey(), entry.getValue());
                 }
             }
-            return;
         }
-
-        defs.forEach(EMCDef::addAll);
     }
 
     public static void setEmcFromRecipes(ServerWorld world) {
