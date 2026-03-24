@@ -17,6 +17,9 @@ import net.pitan76.itemalchemy.gui.screen.EMCCondenserMK2ScreenHandler;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.AvailableSlotsArgs;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.CanExtractArgs;
+import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.CanInsertArgs;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.util.*;
@@ -165,5 +168,10 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
             }
         }
         return isInserted;
+    }
+
+    @Override
+    public boolean canExtract(CanExtractArgs args) {
+        return args.getSlot() >= 43;
     }
 }
