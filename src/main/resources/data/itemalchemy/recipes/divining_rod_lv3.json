@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#O#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "itemalchemy:high_covalence_dust"
+    },
+    "O": {
+      "item": "minecraft:divining_rod_lv2"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:divining_rod_lv3",
+    "count": 1
+  }
+}
