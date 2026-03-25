@@ -43,6 +43,10 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
         return PENDING_DROPS.remove(PosUtil.asLong(pos));
     }
 
+    public static net.pitan76.mcpitanlib.midohra.item.ItemStack takePendingDropM(net.pitan76.mcpitanlib.midohra.util.math.BlockPos pos) {
+        return net.pitan76.mcpitanlib.midohra.item.ItemStack.of(takePendingDrop(pos.toRaw()));
+    }
+
     @Override
     public void markRemovedOverride() {
         World world = callGetWorld();
@@ -124,8 +128,16 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
         return storedStack;
     }
 
+    public net.pitan76.mcpitanlib.midohra.item.ItemStack getStackM() {
+        return net.pitan76.mcpitanlib.midohra.item.ItemStack.of(storedStack);
+    }
+
     public void setStackFromPacket(ItemStack stack) {
         this.storedStack = stack;
+    }
+
+    public void setStackFromPacket(net.pitan76.mcpitanlib.midohra.item.ItemStack stack) {
+        setStackFromPacket(stack.toMinecraft());
     }
 
     public void setActiveFromPacket(boolean active) {
@@ -136,6 +148,10 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
         this.storedStack = stack;
         callMarkDirty();
         sendSyncPacket();
+    }
+
+    public void setStack(net.pitan76.mcpitanlib.midohra.item.ItemStack stack) {
+        setStack(stack.toMinecraft());
     }
 
     public boolean getActive() {

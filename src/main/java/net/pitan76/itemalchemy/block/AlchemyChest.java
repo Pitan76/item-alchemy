@@ -61,7 +61,7 @@ public class AlchemyChest extends CompatBlock implements ExtendBlockEntityProvid
     public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
         BlockState state = super.getPlacementState(args);
 
-        return state.with(FACING, args.getHorizontalPlayerFacing().getOpposite());
+        return (state == null || !state.contains(FACING)) ? state : state.with(FACING, args.getHorizontalPlayerFacing().getOpposite());
     }
 
     public AlchemyChest(CompatIdentifier id) {
@@ -71,12 +71,12 @@ public class AlchemyChest extends CompatBlock implements ExtendBlockEntityProvid
     @Override
     public CompatActionResult onRightClick(BlockUseEvent e) {
         if (e.isClient()) return e.success();
-        if (e.stack.getItem() instanceof Wrench)
+        if (e.getItem() instanceof Wrench)
             return e.pass();
 
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof AlchemyChestTile) {
-            AlchemyChestTile tile = (AlchemyChestTile)blockEntity;
+            AlchemyChestTile tile = (AlchemyChestTile) blockEntity;
             e.player.openMenu(tile);
             return e.consume();
         }

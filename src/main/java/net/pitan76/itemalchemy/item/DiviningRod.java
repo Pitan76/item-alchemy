@@ -33,7 +33,7 @@ public class DiviningRod extends CompatItem  {
         World world = e.getMidohraWorld();
 
         // スニークしている場合、レベルを変更する、最大をこえるとレベル1に戻る
-        if (e.player.isSneaking()) {
+        if (e.isSneaking()) {
             ItemStack stack = e.getStack();
             int level = 1;
             if (CustomDataUtil.contains(stack, "divining_rod_level")) {
@@ -90,9 +90,9 @@ public class DiviningRod extends CompatItem  {
             for (int dy = y1; dy <= y2; dy++) {
                 for (int dz = z1; dz <= z2; dz++) {
                     BlockPos checkPos = center.add(dx, dy, dz);
-                    if (WorldUtil.isAir(e.world, checkPos.toRaw())) continue;
+                    if (world.isAir(checkPos)) continue;
 
-                    Block block = WorldUtil.getBlock(e.world, checkPos.toRaw());
+                    Block block = world.getBlock(checkPos);
                     long emc = EMCManager.get(BlockUtil.toItem(block));
 
                     if (emc > maxEMC)
@@ -121,7 +121,7 @@ public class DiviningRod extends CompatItem  {
                 if (level > maxLevel) level = 1;
             }
             CustomDataUtil.put(stack, "divining_rod_level", level);
-            e.user.sendMessage(TextUtil.literal("Divining Rod Level: " + level + " (3x3x" + (3 + getAdditionalDepth(level)) + ")"));
+            e.user.sendMessage("Divining Rod Level: " + level + " (3x3x" + (3 + getAdditionalDepth(level)) + ")");
 
             return e.success();
         }
@@ -135,9 +135,9 @@ public class DiviningRod extends CompatItem  {
         ItemStack stack = e.getStack();
         if (CustomDataUtil.contains(stack, "divining_rod_level")) {
             int level = CustomDataUtil.get(stack, "divining_rod_level", Integer.class);
-            e.addTooltip(TextUtil.literal("Mode: §b3x3x" + (3 + getAdditionalDepth(level))));
+            e.addTooltip("Mode: §b3x3x" + (3 + getAdditionalDepth(level)));
         } else {
-            e.addTooltip(TextUtil.literal("Mode: §b3x3x3"));
+            e.addTooltip("Mode: §b3x3x3");
         }
     }
 

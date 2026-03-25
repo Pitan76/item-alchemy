@@ -47,12 +47,12 @@ public class EMCImporter extends CompatBlock implements ExtendBlockEntityProvide
     @Override
     public CompatActionResult onRightClick(BlockUseEvent e) {
         if (e.isClient()) return e.success();
-        if (e.stack.getItem() instanceof Wrench)
+        if (e.getItem() instanceof Wrench)
             return e.pass();
 
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof EMCImporterTile) {
-            EMCImporterTile tile = (EMCImporterTile)blockEntity;
+            EMCImporterTile tile = (EMCImporterTile) blockEntity;
 
             if (!tile.hasTeam()) {
                 boolean isSuccess = tile.setTeam(e.player);

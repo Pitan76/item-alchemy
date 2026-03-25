@@ -62,16 +62,16 @@ public class EMCBattery extends EMCRepeater implements ExtendBlockEntityProvider
 
     @Override
     public CompatActionResult onRightClick(BlockUseEvent e) {
-        if (e.isClient()) return CompatActionResult.SUCCESS;
-        if (ItemStackUtil.getItem(e.stack) instanceof Wrench)
-            return CompatActionResult.PASS;
+        if (e.isClient()) return e.success();
+        if (e.getItem() instanceof Wrench)
+            return e.pass();
 
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof EMCBatteryTile) {
             e.player.openExtendedMenu((EMCBatteryTile)blockEntity);
-            return CompatActionResult.CONSUME;
+            return e.consume();
         }
-        return CompatActionResult.PASS;
+        return e.pass();
     }
 
     @Override

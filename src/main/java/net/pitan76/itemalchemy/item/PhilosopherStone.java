@@ -140,30 +140,29 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
 
     @Override
     public CompatActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
+        if (e.isClient()) return super.onRightClickOnBlock(e);
+
         World world = e.getMidohraWorld();
-        if (!e.isClient()) {
-            BlockPos pos = e.getMidohraPos();
-            BlockState state = e.getMidohraState();
-            Player player = e.player;
+        BlockPos pos = e.getMidohraPos();
+        BlockState state = e.getMidohraState();
+        Player player = e.player;
 
-            if (!isExchange(state.getBlock()))
-                return e.success();
-
-            List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, pos, ItemUtils.getCharge(e.stack), true, true);
-
-            Block replaceBlock = getExchangeBlock(state.getBlock(), player.isSneaking());
-            BlockState replaceState = BlockState.of(replaceBlock);
-
-            if (replaceBlock == null)
-                return e.success();
-
-            blocks.forEach(pos2 -> exchangeBlock(world, pos2, replaceState, world.getBlockState(pos)));
-
-            world.playSound(null, pos, Sounds.EXCHANGE_SOUND, CompatSoundCategory.PLAYERS, 0.15f, 1f);
+        if (!isExchange(state.getBlock()))
             return e.success();
-        }
 
-        return super.onRightClickOnBlock(e);
+        List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, pos, ItemUtils.getCharge(e.stack), true, true);
+
+        Block replaceBlock = getExchangeBlock(state.getBlock(), player.isSneaking());
+        BlockState replaceState = BlockState.of(replaceBlock);
+
+        if (replaceBlock == null)
+            return e.success();
+
+        blocks.forEach(pos2 -> exchangeBlock(world, pos2, replaceState, world.getBlockState(pos)));
+
+        world.playSound(null, pos, Sounds.EXCHANGE_SOUND, CompatSoundCategory.PLAYERS, 0.15f, 1f);
+
+        return e.success();
     }
 
     public void exchangeBlock(World world, BlockPos blockPos, BlockState newBlockState, BlockState blockState) {

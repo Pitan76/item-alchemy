@@ -47,7 +47,7 @@ public class AlchemyTable extends CompatBlock implements IUseableWrench {
     @Override
     public CompatActionResult onRightClick(BlockUseEvent e) {
         if (e.isClient()) return e.success();
-        if (e.stack.getItem() instanceof Wrench)
+        if (e.getItem() instanceof Wrench)
             return e.pass();
 
         if (e.player.isServerPlayerEntity())

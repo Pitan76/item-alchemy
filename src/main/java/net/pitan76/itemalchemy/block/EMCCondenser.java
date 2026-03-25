@@ -79,22 +79,22 @@ public class EMCCondenser extends CompatBlock implements ExtendBlockEntityProvid
     public @Nullable BlockState getPlacementState(PlacementStateArgs args) {
         BlockState state = super.getPlacementState(args);
 
-        return state.with(FACING, args.getHorizontalPlayerFacing().getOpposite());
+        return (state == null || !state.contains(FACING)) ? state : state.with(FACING, args.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override
     public CompatActionResult onRightClick(BlockUseEvent e) {
-        if (e.isClient()) return CompatActionResult.SUCCESS;
-        if (e.stack.getItem() instanceof Wrench)
-            return CompatActionResult.PASS;
+        if (e.isClient()) return e.success();
+        if (e.getItem() instanceof Wrench)
+            return e.pass();
 
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof EMCCondenserTile) {
             EMCCondenserTile tile = (EMCCondenserTile)blockEntity;
             e.player.openExtendedMenu(tile);
-            return CompatActionResult.CONSUME;
+            return e.consume();
         }
-        return CompatActionResult.PASS;
+        return e.pass();
     }
 
     @Nullable

@@ -3,6 +3,7 @@ package net.pitan76.itemalchemy.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.pitan76.itemalchemy.item.Wrench;
 import net.pitan76.itemalchemy.tile.EMCCondenserMK2Tile;
 import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.block.v2.CompatibleBlockSettings;
@@ -39,8 +40,9 @@ public class EMCCondenserMK2 extends EMCCondenser {
 
     @Override
     public CompatActionResult onRightClick(BlockUseEvent e) {
-        if (e.isClient())
-            return e.success();
+        if (e.isClient()) return e.success();
+        if (e.getItem() instanceof Wrench)
+            return e.pass();
 
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof EMCCondenserMK2Tile) {

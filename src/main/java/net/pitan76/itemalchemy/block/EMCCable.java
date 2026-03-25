@@ -128,18 +128,18 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, Waterloggab
         if (PlatformUtil.isDevelopmentEnvironment()) {
             if (e.isClient()) return e.success();
             if (e.isSneaking()) return e.pass();
-            if (e.stack.getItem() instanceof Wrench)
+            if (e.getItem() instanceof Wrench)
                 return e.pass();
 
             BlockState state = e.getMidohraState();
 
-            e.player.sendMessage(TextUtil.literal(
+            e.player.sendMessage(
                     "facing: " + state.get(FACING).toString() +
                     " side1: " + state.get(SIDE1).toString() +
                     " side2: " + state.get(SIDE2).toString() +
                     " conner: " + state.get(CONNER).toString() +
                     " tchar: " + state.get(T_CHAR).toString() +
-                    " cross: " + state.get(CROSS).toString()));
+                    " cross: " + state.get(CROSS).toString());
 
         }
         return super.onRightClick(e);

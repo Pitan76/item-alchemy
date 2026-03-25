@@ -75,7 +75,7 @@ public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider,
 
     @Override
     public CompatActionResult onRightClick(BlockUseEvent e) {
-        if (e.stack.getItem() instanceof Wrench)
+        if (e.getItem() instanceof Wrench)
             return e.pass();
 
         net.minecraft.util.math.BlockPos rawPos = AEGUTile.getNearEMCCondenserPos(e.world, e.pos);
