@@ -20,6 +20,7 @@ import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tag.TagKey;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
+import net.pitan76.mcpitanlib.midohra.item.ItemWrapper;
 import net.pitan76.mcpitanlib.midohra.recipe.*;
 import net.pitan76.mcpitanlib.midohra.recipe.entry.RecipeEntry;
 import net.pitan76.mcpitanlib.midohra.recipe.entry.ShapedRecipeEntry;
@@ -85,6 +86,14 @@ public class EMCManager {
     public static long get(ItemStack stack) {
         if (!contains(stack.getItem())) return 0;
         return get(stack.getItem()) * ItemStackUtil.getCount(stack);
+    }
+
+    public static long get(ItemWrapper item) {
+        return get(item.get());
+    }
+
+    public static long get(net.pitan76.mcpitanlib.midohra.item.ItemStack stack) {
+        return get(stack.toMinecraft());
     }
 
     public static Map<String, Long> getMap() {

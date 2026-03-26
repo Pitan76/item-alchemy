@@ -14,6 +14,7 @@ import net.pitan76.itemalchemy.gui.slot.TargetSlot;
 import net.pitan76.itemalchemy.tile.EMCCondenserTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
+import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
@@ -174,10 +175,10 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     }
 
     @Override
-    public void overrideOnSlotClick(int slotIndex, int button, SlotActionType actionType, Player player) {
+    public void onSlotClick(SlotClickEvent e) {
         Slot targetSlot = callGetSlot(36);
 
-        if (slotIndex == 36) { // Target Slot
+        if (e.slot == 36) { // Target Slot
             // カーソルでアイテムを持ってない場合
             if (getCursorStack().isEmpty()) {
                 setTargetStack(ItemStackUtil.empty());
@@ -191,7 +192,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
             if(EMCManager.get(oldStack.getItem()) == 0) {
                 callSetCursorStack(getCursorStack());
 
-                super.overrideOnSlotClick(slotIndex, button, actionType, player);
+                super.onSlotClick(e);
 
                 return;
             }
@@ -204,7 +205,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
             return;
         }
 
-        super.overrideOnSlotClick(slotIndex, button, actionType, player);
+        super.onSlotClick(e);
     }
 
     protected void setTargetStack(ItemStack stack) {

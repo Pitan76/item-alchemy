@@ -11,6 +11,7 @@ import net.pitan76.itemalchemy.gui.slot.TargetSlot;
 import net.pitan76.itemalchemy.tile.EMCCollectorTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
+import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
@@ -102,15 +103,15 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
     }
 
     @Override
-    public void overrideOnSlotClick(int slotIndex, int button, SlotActionType actionType, Player player) {
-        if (slotIndex == 37) { // Target Slot
+    public void onSlotClick(SlotClickEvent e) {
+        if (e.slot == 37) { // Target Slot
             ItemStack oldStack = getCursorStack().copy();
-            super.overrideOnSlotClick(slotIndex, button, actionType, player);
+            super.onSlotClick(e);
             if (!ItemStackUtil.isEmpty(oldStack)) {
                 callSetCursorStack(oldStack);
             }
             return;
         }
-        super.overrideOnSlotClick(slotIndex, button, actionType, player);
+        super.onSlotClick(e);
     }
 }
