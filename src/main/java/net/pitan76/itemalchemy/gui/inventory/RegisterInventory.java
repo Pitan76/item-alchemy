@@ -9,6 +9,7 @@ import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import net.pitan76.itemalchemy.item.ILearnableItem;
+import net.pitan76.itemalchemy.item.KleinStar;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
@@ -28,6 +29,27 @@ public class RegisterInventory extends SimpleInventory {
     @Override
     public void setStack(int slot, ItemStack stack) {
         if (!ItemStackUtil.isEmpty(stack)) {
+
+            // Klein Star in circle slots (52-63): charge with EMC from player's pool
+            if (slot >= 52 && slot <= 63 && stack.getItem() instanceof KleinStar) {
+                if (!player.isClient()) {
+                    KleinStar star = (KleinStar) stack.getItem();
+                    long space = star.getMaxEmc() - KleinStar.getStoredEmc(stack);
+                    long available = EMCManager.getEmcFromPlayer(player);
+                    long toCharge = Math.min(space, available);
+                    if (toCharge > 0) {
+                        KleinStar.addEmc(stack, toCharge);
+                        EMCManager.decrementEmc(player, toCharge);
+                    }
+                    if (player.isServerPlayerEntity())
+                        EMCManager.syncS2C(player);
+                    player.offerOrDrop(stack.copy());
+                }
+
+                super.setStack(slot, ItemStackUtil.empty());
+                return;
+            }
+
             boolean consumedItem = false,
                     learning = stack.getItem() instanceof ILearnableItem;
 
@@ -59,6 +81,8 @@ public class RegisterInventory extends SimpleInventory {
             if (slot == 50) {
                 if (!player.isClient() && EMCManager.get(stack) != 0) {
                     EMCManager.writeEmcToPlayer(player, stack);
+                    if (player.isServerPlayerEntity())
+                        EMCManager.syncS2C(player);
                 }
             } else {
                 player.offerOrDrop(stack.copy());

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {"item": "itemalchemy:klein_star_vier"},
+    {"item": "itemalchemy:klein_star_vier"},
+    {"item": "itemalchemy:klein_star_vier"},
+    {"item": "itemalchemy:klein_star_vier"}
+  ],
+  "result": {
+    "item": "itemalchemy:klein_star_sphere",
+    "count": 1
+  }
+}

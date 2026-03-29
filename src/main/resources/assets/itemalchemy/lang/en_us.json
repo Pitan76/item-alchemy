@@ -2,56 +2,264 @@
   "itemGroup.itemalchemy.item_alchemy": "Item Alchemy",
 
   "item.itemalchemy.tome_of_knowledge": "Tome of Knowledge",
+  "item.itemalchemy.tome_of_knowledge.desc": "§7A mystical book containing knowledge of all items",
+  "item.itemalchemy.tome_of_knowledge.desc_shift": "§9Learns EMC values of nearby items|||§9Stores knowledge permanently|||§6Hold in hand §7- Learn nearby items|||§fUsed for transmutation recipes",
+
   "item.itemalchemy.philosopher_stone": "Philosopher's Stone",
+  "item.itemalchemy.philosopher_stone.desc": "§6The legendary stone of equivalent exchange",
+  "item.itemalchemy.philosopher_stone.desc_shift": "§9Foundation of all alchemy|||§9Converts blocks to other blocks|||§6Right-Click §7- Transform block|||§6Sneak+Right-Click §7- Alternative recipe|||§fCharge increases area of effect",
+
   "item.itemalchemy.alchemy_pad": "Alchemy Pad",
+  "item.itemalchemy.alchemy_pad.desc": "§7A circular platform for alchemical rituals",
+  "item.itemalchemy.alchemy_pad.desc_shift": "§9Performs basic transmutations|||§9Crafting component|||§fPlace items on pad and activate with|||Philosopher's Stone for transmutation",
+
   "item.itemalchemy.alchemical_fuel": "Alchemical Fuel",
+  "item.itemalchemy.alchemical_fuel.desc": "§7Basic fuel created through alchemy",
+  "item.itemalchemy.alchemical_fuel.desc_shift": "§9Burn time: 4000 ticks (200s)|||§fCrafted from coal using|||Philosopher's Stone",
+
   "item.itemalchemy.mobius_fuel": "Mobius Fuel",
+  "item.itemalchemy.mobius_fuel.desc": "§7Advanced fuel with incredible burning power",
+  "item.itemalchemy.mobius_fuel.desc_shift": "§9Burn time: 12800 ticks (640s)|||§fCreated by compressing|||Alchemical Fuel",
+
   "item.itemalchemy.aeternalis_fuel": "Aeternalis Fuel",
+  "item.itemalchemy.aeternalis_fuel.desc": "§7The ultimate fuel, burning with eternal flame",
+  "item.itemalchemy.aeternalis_fuel.desc_shift": "§9Burn time: 25600 ticks (1280s)|||§fMost concentrated fuel available",
+
   "item.itemalchemy.dark_matter": "Dark Matter",
+  "item.itemalchemy.dark_matter.desc": "§5Mysterious material forged from compressed fuel",
+  "item.itemalchemy.dark_matter.desc_shift": "§9Deep purple appearance|||§9Strange alchemical properties|||§fCreated by compressing Mobius Fuel|||with EMC",
+
   "item.itemalchemy.red_matter": "Red Matter",
+  "item.itemalchemy.red_matter.desc": "§cThe ultimate alchemical material",
+  "item.itemalchemy.red_matter.desc_shift": "§9Strongest material in alchemy|||§9Glows with red energy|||§fCreated from Aeternalis Fuel|||and Dark Matter",
+
   "item.itemalchemy.low_covalence_dust": "Low Covalence Dust",
+  "item.itemalchemy.low_covalence_dust.desc": "§7Dust with weak bonding properties",
+  "item.itemalchemy.low_covalence_dust.desc_shift": "§9Basic alchemical component|||§fCreated from burning items|||with low EMC value",
+
   "item.itemalchemy.middle_covalence_dust": "Middle Covalence Dust",
+  "item.itemalchemy.middle_covalence_dust.desc": "§7Dust with moderate bonding properties",
+  "item.itemalchemy.middle_covalence_dust.desc_shift": "§9Advanced component|||§fCreated from items with|||medium EMC value",
+
   "item.itemalchemy.high_covalence_dust": "High Covalence Dust",
+  "item.itemalchemy.high_covalence_dust.desc": "§7Dust with powerful bonding properties",
+  "item.itemalchemy.high_covalence_dust.desc_shift": "§9Complex recipe component|||§fCreated from items with|||high EMC value",
+
   "item.itemalchemy.dark_matter_sword": "Dark Matter Sword",
+  "item.itemalchemy.dark_matter_sword.desc": "§5A sword forged from Dark Matter",
+  "item.itemalchemy.dark_matter_sword.desc_shift": "§9Fast attack speed|||§9Bonus damage when charged|||§6Release §7- Lunging attack|||§5Durability restored via EMC",
+
   "item.itemalchemy.dark_matter_axe": "Dark Matter Axe",
+  "item.itemalchemy.dark_matter_axe.desc": "§5An axe forged from Dark Matter",
+  "item.itemalchemy.dark_matter_axe.desc_shift": "§9Chops wood efficiently|||§9Faster when charged|||§fFull charge fells entire trees",
+
   "item.itemalchemy.dark_matter_pickaxe": "Dark Matter Pickaxe",
+  "item.itemalchemy.dark_matter_pickaxe.desc": "§5A pickaxe forged from Dark Matter",
+  "item.itemalchemy.dark_matter_pickaxe.desc_shift": "§9Mines stone-type blocks|||§9Faster than diamond|||§9Charge expands mining area|||§fFull charge mines 3x3 area",
+
   "item.itemalchemy.dark_matter_shovel": "Dark Matter Shovel",
+  "item.itemalchemy.dark_matter_shovel.desc": "§5A shovel forged from Dark Matter",
+  "item.itemalchemy.dark_matter_shovel.desc_shift": "§9Digs dirt, sand, gravel|||§9Charge expands digging area|||§fFull charge clears 3x3 area",
+
   "item.itemalchemy.dark_matter_hoe": "Dark Matter Hoe",
+  "item.itemalchemy.dark_matter_hoe.desc": "§5A hoe forged from Dark Matter",
+  "item.itemalchemy.dark_matter_hoe.desc_shift": "§9Tills land instantly|||§9Harvests mature crops|||§9Charge expands tilling area|||§fFull charge tills 9x9 area",
+
   "item.itemalchemy.red_matter_sword": "Red Matter Sword",
+  "item.itemalchemy.red_matter_sword.desc": "§cThe ultimate sword",
+  "item.itemalchemy.red_matter_sword.desc_shift": "§9Very fast attack speed|||§9Bonus damage when charged|||§fMax charge creates shockwave|||§cUnbreakable with EMC",
+
   "item.itemalchemy.red_matter_axe": "Red Matter Axe",
+  "item.itemalchemy.red_matter_axe.desc": "§cThe ultimate axe",
+  "item.itemalchemy.red_matter_axe.desc_shift": "§9Chops any wood instantly|||§9Faster when charged|||§fFull charge fells massive areas",
+
   "item.itemalchemy.red_matter_pickaxe": "Red Matter Pickaxe",
+  "item.itemalchemy.red_matter_pickaxe.desc": "§cThe ultimate pickaxe",
+  "item.itemalchemy.red_matter_pickaxe.desc_shift": "§9Mines any block instantly|||§9Mines obsidian unenchanted|||§9Charge expands mining area|||§fFull charge mines 5x5 area",
+
   "item.itemalchemy.red_matter_shovel": "Red Matter Shovel",
+  "item.itemalchemy.red_matter_shovel.desc": "§cThe ultimate shovel",
+  "item.itemalchemy.red_matter_shovel.desc_shift": "§9Digs any block instantly|||§9Charge expands digging area|||§fFull charge clears 5x5 area",
+
   "item.itemalchemy.red_matter_hoe": "Red Matter Hoe",
+  "item.itemalchemy.red_matter_hoe.desc": "§cThe ultimate hoe",
+  "item.itemalchemy.red_matter_hoe.desc_shift": "§9Tills massive areas|||§9Auto-replants from inventory|||§9Charge expands tilling area|||§fFull charge tills 11x11 area",
+
   "item.itemalchemy.wrench": "IA Wrench",
+  "item.itemalchemy.wrench.desc": "§7A tool for configuring alchemical machines",
+  "item.itemalchemy.wrench.desc_shift": "§9Changes machine facing|||§9Picks up machines intact|||§6Right-Click §7- Change direction|||§6Sneak+Right-Click §7- Pick up machine",
+
   "item.itemalchemy.ring": "Ring",
-  "item.itemalchemy.pickup_ring": "Pickup Ring",
+  "item.itemalchemy.ring.desc": "§7A basic ring with minor magical properties",
+  "item.itemalchemy.ring.desc_shift": "§9Worn in ring slot or offhand|||§9Upgrade component|||§fCan be upgraded into specialized|||rings like Black Hole Band",
+
+  "item.itemalchemy.black_hole_band": "Black Hole Band",
+  "item.itemalchemy.black_hole_band.desc": "§9A ring that attracts nearby items",
+  "item.itemalchemy.black_hole_band.desc_shift": "§9Pulls items from 7 blocks away|||§9Auto-collects to inventory|||§6Worn/Offhand §7- Collect to player|||§9Pedestal Mode:|||§916 block range|||§916-slot internal storage|||§9Hopper extraction below|||§6Right-Click §7- Extract one item|||§6Sneak+Right-Click §7- Extract all items",
+
   "item.itemalchemy.void_ring": "Void Ring",
+  "item.itemalchemy.void_ring.desc": "§5A ring that converts items to EMC",
+  "item.itemalchemy.void_ring.desc_shift": "§9Items to EMC conversion|||§9Configurable filter|||§6Sneak+Right-Click §7- Configure filter|||§fWear to activate",
+
   "item.itemalchemy.divining_rod_lv1": "Divining Rod (Lv1)",
+  "item.itemalchemy.divining_rod_lv1.desc": "§7Basic rod for EMC detection",
+  "item.itemalchemy.divining_rod_lv1.desc_shift": "§9Mode 1: Average EMC|||§9Mode 2: Total EMC|||§9Mode 3: Highest EMC block|||§6Right-Click §7- Scan|||§fLimited range",
+
   "item.itemalchemy.divining_rod_lv2": "Divining Rod (Lv2)",
+  "item.itemalchemy.divining_rod_lv2.desc": "§7Improved rod with better EMC detection",
+  "item.itemalchemy.divining_rod_lv2.desc_shift": "§9Greater range than Lv1|||§9More precise readings|||§6Right-Click §7- Scan|||§6Charge §7- Increase radius",
+
   "item.itemalchemy.divining_rod_lv3": "Divining Rod (Lv3)",
+  "item.itemalchemy.divining_rod_lv3.desc": "§9The ultimate rod for EMC detection",
+  "item.itemalchemy.divining_rod_lv3.desc_shift": "§9Maximum range and precision|||§9Detects specific ore types|||§6Right-Click §7- Scan|||§fFull charge reveals all high-EMC blocks",
 
   "block.itemalchemy.alchemy_table": "Alchemy Table",
+  "block.itemalchemy.alchemy_table.desc": "§7The basic crafting station for alchemy",
+  "block.itemalchemy.alchemy_table.desc_shift": "§9Crafts alchemical items|||§9Shows EMC costs in GUI|||§fPlace Philosopher's Stone in center|||and surround with materials",
+
   "block.itemalchemy.emc_collector_mk1": "EMC Collector MK-1",
+  "block.itemalchemy.emc_collector_mk1.desc": "§7Generates EMC from sunlight",
+  "block.itemalchemy.emc_collector_mk1.desc_shift": "§9Generation: Slow|||§9Requires: Direct sunlight|||§fPlace in sunlight to generate EMC|||Outputs to adjacent machines",
+
   "block.itemalchemy.emc_collector_mk2": "EMC Collector MK-2",
+  "block.itemalchemy.emc_collector_mk2.desc": "§7Improved EMC generator",
+  "block.itemalchemy.emc_collector_mk2.desc_shift": "§9Generation: Moderate|||§9Requires: Lower light|||§fFaster than MK-1|||Can form generation arrays",
+
   "block.itemalchemy.emc_collector_mk3": "EMC Collector MK-3",
+  "block.itemalchemy.emc_collector_mk3.desc": "§7Advanced EMC generator",
+  "block.itemalchemy.emc_collector_mk3.desc_shift": "§9Generation: Fast|||§9Requires: Partial shade OK|||§fRequired for mid-tier operations",
+
   "block.itemalchemy.emc_collector_mk4": "EMC Collector MK-4",
+  "block.itemalchemy.emc_collector_mk4.desc": "§7High-tier EMC generator",
+  "block.itemalchemy.emc_collector_mk4.desc_shift": "§9Generation: Very Fast|||§9Requires: Minimal light|||§fCan power multiple machines",
+
   "block.itemalchemy.emc_collector_mk5": "EMC Collector MK-5",
+  "block.itemalchemy.emc_collector_mk5.desc": "§9The ultimate EMC generator",
+  "block.itemalchemy.emc_collector_mk5.desc_shift": "§9Generation: Maximum|||§9Requires: Works in darkness|||§fSingle collector can power|||entire alchemical base",
+
   "block.itemalchemy.alchemy_chest": "Alchemy Chest",
+  "block.itemalchemy.alchemy_chest.desc": "§7Storage chest powered by EMC",
+  "block.itemalchemy.alchemy_chest.desc_shift": "§9Stores items as EMC|||§9Auto-pulls from adjacent|||§fAccess stored EMC from|||connected machines",
+
   "block.itemalchemy.emc_condenser": "EMC Condenser",
+  "block.itemalchemy.emc_condenser.desc": "§7Converts EMC into physical items",
+  "block.itemalchemy.emc_condenser.desc_shift": "§9Creates items from EMC|||§9Auto-crafts when ready|||§fPlace target item in center slot|||Essential for mass production",
+
   "block.itemalchemy.emc_condenser_mk2": "EMC Condenser MK-2",
+  "block.itemalchemy.emc_condenser_mk2.desc": "§7Advanced condenser with extraction",
+  "block.itemalchemy.emc_condenser_mk2.desc_shift": "§9Auto item extraction|||§9Filter system|||§fOutputs to adjacent inventories|||Faster condensation speed",
+
   "block.itemalchemy.emc_repeater": "EMC Repeater",
-  "block.itemalchemy.aegu": "Alchemical Energy Generating Unit",
-  "block.itemalchemy.advanced_aegu": "Advanced AEGU",
-  "block.itemalchemy.ultimate_aegu": "Ultimate AEGU",
-  "block.itemalchemy.dark_matter_block": "Dark Matter Block",
-  "block.itemalchemy.red_matter_block": "Red Matter Block",
+  "block.itemalchemy.emc_repeater.desc": "§7Amplifies and extends EMC networks",
+  "block.itemalchemy.emc_repeater.desc_shift": "§9Amplifies EMC signals|||§9Small buffer|||§fPlace between cables to|||extend network range",
+
+  "block.itemalchemy.aegu": "Alchemical Energy Generator",
+  "block.itemalchemy.aegu.desc": "§7Converts EMC to Forge Energy (FE)",
+  "block.itemalchemy.aegu.desc_shift": "§9EMC to FE conversion|||§9Configurable output rate|||§fConnect EMC on one side|||Output FE on other sides",
+
+  "block.itemalchemy.advanced_aegu": "Advanced AEG",
+  "block.itemalchemy.advanced_aegu.desc": "§7Improved energy converter",
+  "block.itemalchemy.advanced_aegu.desc_shift": "§9Higher efficiency|||§9Multiple connections|||§fBetter EMC to FE|||conversion ratio",
+
+  "block.itemalchemy.ultimate_aegu": "Ultimate AEG",
+  "block.itemalchemy.ultimate_aegu.desc": "§9The ultimate energy converter",
+  "block.itemalchemy.ultimate_aegu.desc_shift": "§9Maximum efficiency|||§9Powers entire factories|||§fMinimal EMC loss|||Multi-system output",
+
+  "block.itemalchemy.dark_matter_block": "Block of Dark Matter",
+  "block.itemalchemy.dark_matter_block.desc": "§5Solid block of Dark Matter",
+  "block.itemalchemy.dark_matter_block.desc_shift": "§9Decorative block|||§9Compact storage (9 items)|||§fCrafts back into 9 Dark Matter|||Unique purple-black appearance",
+
+  "block.itemalchemy.red_matter_block": "Block of Red Matter",
+  "block.itemalchemy.red_matter_block.desc": "§cSolid block of Red Matter",
+  "block.itemalchemy.red_matter_block.desc_shift": "§9Prestigious building block|||§9Compact storage (9 items)|||§fCrafts back into 9 Red Matter|||Faintly glows with red energy",
+
   "block.itemalchemy.emc_importer": "EMC Importer",
+  "block.itemalchemy.emc_importer.desc": "§7Automatically imports items using EMC",
+  "block.itemalchemy.emc_importer.desc_shift": "§9Pulls from inventories|||§9Converts to EMC|||§9Configurable filter|||§fEssential for automatic|||EMC generation",
+
   "block.itemalchemy.emc_exporter": "EMC Exporter",
+  "block.itemalchemy.emc_exporter.desc": "§7Automatically exports items from EMC",
+  "block.itemalchemy.emc_exporter.desc_shift": "§9Creates items from EMC|||§9Outputs to inventories|||§fSet item and quantity|||Perfect for production lines",
+
   "block.itemalchemy.emc_cable": "EMC Cable",
+  "block.itemalchemy.emc_cable.desc": "§7Transmits EMC between machines",
+  "block.itemalchemy.emc_cable.desc_shift": "§9Low transmission loss|||§9Transparent design|||§6Right-Click with wrench §7- Configure|||§fCan be hidden in walls",
+
   "block.itemalchemy.emc_battery": "EMC Battery",
+  "block.itemalchemy.emc_battery.desc": "§7Stores large amounts of EMC",
+  "block.itemalchemy.emc_battery.desc_shift": "§9Huge storage capacity|||§9Auto charge/discharge|||§fCharges from any EMC source|||Powers machines when needed",
+
   "block.itemalchemy.interdiction_torch": "Interdiction Torch",
+  "block.itemalchemy.interdiction_torch.desc": "§7Torch that repels hostile mobs",
+  "block.itemalchemy.interdiction_torch.desc_shift": "§9Repels hostile mobs|||§9Configurable mob types|||§fRange increases with EMC supply|||Perfect for base defense",
+
   "block.itemalchemy.dm_pedestal": "Dark Matter Pedestal",
+  "block.itemalchemy.dm_pedestal.desc": "§5Pedestal for displaying alchemical items",
+  "block.itemalchemy.dm_pedestal.desc_shift": "§9Beam effect|||§9Charges items over time|||§6Right-Click §7- Place/Remove item|||§6Sneak+Right-Click §7- Take item",
+
   "item.itemalchemy.watch_of_flowing_time": "Watch of Flowing Time",
+  "item.itemalchemy.watch_of_flowing_time.desc": "§9A watch that speeds up time around it",
+  "item.itemalchemy.watch_of_flowing_time.desc_shift": "§9Speeds up tile entities|||§9Higher charge = faster|||§fPlace on DM Pedestal|||Speeds up furnaces, farms, machines",
+
+  "item.itemalchemy.repair_talisman": "Repair Talisman",
+  "item.itemalchemy.repair_talisman.desc": "§7A talisman that repairs items in inventory",
+  "item.itemalchemy.repair_talisman.desc_shift": "§9Auto-repairs inventory items|||§9Uses EMC for repair|||§fWorks on all repairable items|||Can be disabled for specific items",
+
+  "item.itemalchemy.dark_matter_helmet": "Dark Matter Helmet",
+  "item.itemalchemy.dark_matter_helmet.desc": "§5A helmet forged from Dark Matter",
+  "item.itemalchemy.dark_matter_helmet.desc_shift": "§9Special ability: Night vision|||§6Charge §7- Activate abilities|||§5Self-repair via EMC",
+
+  "item.itemalchemy.dark_matter_chestplate": "Dark Matter Chestplate",
+  "item.itemalchemy.dark_matter_chestplate.desc": "§5A chestplate forged from Dark Matter",
+  "item.itemalchemy.dark_matter_chestplate.desc_shift": "§9Special ability: Damage resistance|||§6Charge §7- Activate abilities|||§5Self-repair via EMC",
+
+  "item.itemalchemy.dark_matter_leggings": "Dark Matter Leggings",
+  "item.itemalchemy.dark_matter_leggings.desc": "§5Leggings forged from Dark Matter",
+  "item.itemalchemy.dark_matter_leggings.desc_shift": "§9Special ability: Speed boost|||§6Charge §7- Activate abilities|||§5Self-repair via EMC",
+
+  "item.itemalchemy.dark_matter_boots": "Dark Matter Boots",
+  "item.itemalchemy.dark_matter_boots.desc": "§5Boots forged from Dark Matter",
+  "item.itemalchemy.dark_matter_boots.desc_shift": "§9Special ability: Jump boost, step up|||§6Charge §7- Activate abilities|||§5Self-repair via EMC",
+
+  "item.itemalchemy.red_matter_helmet": "Red Matter Helmet",
+  "item.itemalchemy.red_matter_helmet.desc": "§cThe ultimate helmet",
+  "item.itemalchemy.red_matter_helmet.desc_shift": "§9Special ability: Night vision, HUD|||§fFull set grants special abilities|||§cMaximum protection",
+
+  "item.itemalchemy.red_matter_chestplate": "Red Matter Chestplate",
+  "item.itemalchemy.red_matter_chestplate.desc": "§cThe ultimate chestplate",
+  "item.itemalchemy.red_matter_chestplate.desc_shift": "§9Special ability: Temporary invulnerability|||§6Charge §7- Flight ability|||§cStrongest chest protection",
+
+  "item.itemalchemy.red_matter_leggings": "Red Matter Leggings",
+  "item.itemalchemy.red_matter_leggings.desc": "§cThe ultimate leggings",
+  "item.itemalchemy.red_matter_leggings.desc_shift": "§9Special ability: Phase through blocks|||§fSpeed boost always active|||§cUnmatched leg protection",
+
+  "item.itemalchemy.red_matter_boots": "Red Matter Boots",
+  "item.itemalchemy.red_matter_boots.desc": "§cThe ultimate boots",
+  "item.itemalchemy.red_matter_boots.desc_shift": "§9Special ability: Flight, water walk|||§6Charge §7- Air walk|||§cPerfect footwear",
+
+  "item.itemalchemy.klein_star_ein": "Klein Star Ein",
+  "item.itemalchemy.klein_star_ein.desc": "§7First tier Klein Star",
+  "item.itemalchemy.klein_star_ein.desc_shift": "§9Speed: Base|||§6Right-Click §7- Charge from inventory|||§cSneak+Right-Click §7- Discharge|||§6Path: Ein → Zwei → Drei → Vier → Sphere → Omega",
+
+  "item.itemalchemy.klein_star_zwei": "Klein Star Zwei",
+  "item.itemalchemy.klein_star_zwei.desc": "§7Second tier Klein Star",
+  "item.itemalchemy.klein_star_zwei.desc_shift": "§9Speed: Improved|||§6Right-Click §7- Charge from inventory|||§cSneak+Right-Click §7- Discharge|||§6Path: Ein → Zwei → Drei → Vier → Sphere → Omega",
+
+  "item.itemalchemy.klein_star_drei": "Klein Star Drei",
+  "item.itemalchemy.klein_star_drei.desc": "§7Third tier Klein Star",
+  "item.itemalchemy.klein_star_drei.desc_shift": "§9Speed: Fast|||§6Right-Click §7- Charge from inventory|||§cSneak+Right-Click §7- Discharge|||§6Path: Ein → Zwei → Drei → Vier → Sphere → Omega",
+
+  "item.itemalchemy.klein_star_vier": "Klein Star Vier",
+  "item.itemalchemy.klein_star_vier.desc": "§7Fourth tier Klein Star",
+  "item.itemalchemy.klein_star_vier.desc_shift": "§9Speed: Very Fast|||§6Right-Click §7- Charge from inventory|||§cSneak+Right-Click §7- Discharge|||§6Path: Ein → Zwei → Drei → Vier → Sphere → Omega",
+
+  "item.itemalchemy.klein_star_sphere": "Klein Star Sphere",
+  "item.itemalchemy.klein_star_sphere.desc": "§7Fifth tier Klein Star",
+  "item.itemalchemy.klein_star_sphere.desc_shift": "§9Speed: Rapid|||§9Can be placed as block|||§6Right-Click §7- Charge from inventory|||§cSneak+Right-Click §7- Discharge|||§6Path: Ein → Zwei → Drei → Vier → Sphere → Omega",
+
+  "item.itemalchemy.klein_star_omega": "Klein Star Omega",
+  "item.itemalchemy.klein_star_omega.desc": "§9The ultimate Klein Star",
+  "item.itemalchemy.klein_star_omega.desc_shift": "§9Speed: Infinite|||§9Can power anything|||§6Right-Click §7- Charge from inventory|||§cSneak+Right-Click §7- Discharge|||§6Path: Ein → Zwei → Drei → Vier → Sphere → Omega|||§9Final tier",
 
   "container.itemalchemy.alchemy_table": "Alchemy Table",
   "container.itemalchemy.emc_condenser": "EMC Condenser",
@@ -61,14 +269,18 @@
   "container.itemalchemy.emc_battery": "EMC Battery",
 
   "text.itemalchemy.owner": "Owner: %s",
+  "text.itemalchemy.shift_info": "§7Press [Shift] for details",
+  "text.itemalchemy.charge": "Charge: %d%%",
+  "text.itemalchemy.emc_stored": "EMC Stored: %d",
+  "text.itemalchemy.max_emc": "Max EMC: %d",
 
   "key.category.itemalchemy.main": "Item Alchemy",
   "key.itemalchemy.charge": "Charge",
   "key.itemalchemy.changemode": "Change Mode",
 
   "message.itemalchemy.failed_to_set_team": "[Item Alchemy] Failed to set team",
-  "message.itemalchemy.diving_rod_switch_mode": "Switched to %s Mode",
+  "message.itemalchemy.diving_rod_switch_mode": "Switched to mode %s",
   "message.itemalchemy.diving_rod_average_emc": "Average EMC for %d blocks: %d",
   "message.itemalchemy.diving_rod_total_emc": "Total EMC: %d",
-  "message.itemalchemy.diving_rod_max_emc": "Max EMC: %d"
+  "message.itemalchemy.diving_rod_max_emc": "Maximum EMC: %d"
 }

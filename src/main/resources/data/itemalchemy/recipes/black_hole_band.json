@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "OOO",
+    "DRD",
+    "OOO"
+  ],
+  "key": {
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "D": {
+      "item": "itemalchemy:dark_matter"
+    },
+    "R": {
+      "item": "itemalchemy:ring"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:black_hole_band",
+    "count": 1
+  }
+}
