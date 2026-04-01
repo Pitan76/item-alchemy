@@ -55,7 +55,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
     @Override
     public long getMaxEMC() {
         if (maxEMC == -1)
-            return ((EMCCollector) BlockStateUtil.getBlock(getCachedState())).maxEMC;
+            return ((EMCCollector) BlockStateUtil.getBlock(callGetCachedState())).maxEMC;
 
         return maxEMC;
     }
@@ -241,7 +241,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
         NbtCompound nbt = NbtUtil.create();
         NbtUtil.setBlockPosDirect(nbt, callGetPos());
         NbtUtil.putLong(nbt, "stored_emc", storedEMC);
-        NbtUtil.putLong(nbt, "max_emc", ((EMCCollector) BlockStateUtil.getBlock(getCachedState())).maxEMC);
+        NbtUtil.putLong(nbt, "max_emc", ((EMCCollector) BlockStateUtil.getBlock(callGetCachedState())).maxEMC);
         args.writeVar(nbt);
     }
 }

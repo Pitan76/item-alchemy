@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
 import net.pitan76.itemalchemy.gui.slot.TargetSlot;
 import net.pitan76.itemalchemy.tile.EMCCollectorTile;
 import net.pitan76.mcpitanlib.api.entity.Player;

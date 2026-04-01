@@ -57,7 +57,7 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
     @Override
     public long getMaxEMC() {
         if (maxEMC == -1)
-            return ((EMCBattery) BlockStateUtil.getBlock(getCachedState())).getMaxEMC();
+            return ((EMCBattery) BlockStateUtil.getBlock(callGetCachedState())).getMaxEMC();
 
         return maxEMC;
     }
