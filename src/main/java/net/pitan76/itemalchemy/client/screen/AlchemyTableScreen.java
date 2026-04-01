@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.client.screen;
 
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerInventory;
@@ -134,11 +133,9 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
 
     @Override
     public void drawForegroundOverride(DrawForegroundArgs args) {
-        TextRenderer textRenderer = callGetTextRenderer();
-
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, callGetTitle(), this.getTitleX(), this.getTitleY(), 4210752);
+        drawText(args.drawObjectDM, callGetTitle(), this.getTitleX(), this.getTitleY(), 4210752);
         long emc = EMCManager.getEmcFromPlayer(new Player(playerInventory.player));
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, TextUtil.literal("EMC: " + String.format("%,d", emc)), this.getTitleX(), backgroundHeight / 2, 4210752);
+        drawText(args.drawObjectDM, TextUtil.literal("EMC: " + String.format("%,d", emc)), this.getTitleX(), backgroundHeight / 2, 4210752);
     }
 
     @Override

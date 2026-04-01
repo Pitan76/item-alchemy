@@ -36,7 +36,7 @@ public class EMCCollectorScreen extends CompatInventoryScreen<EMCCollectorScreen
         long emc = (screenHandler.storedEMC + screenHandler.tile.storedEMC);
         if (emc > screenHandler.maxEMC) emc = screenHandler.maxEMC;
 
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, TextUtil.literal(String.format("%,d", emc)), 92, 32, 4210752);
+        drawText(args.drawObjectDM, TextUtil.literal(String.format("%,d", emc)), 92, 32, 4210752);
     }
 
     @Override

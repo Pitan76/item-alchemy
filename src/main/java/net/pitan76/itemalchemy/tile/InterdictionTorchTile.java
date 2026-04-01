@@ -67,7 +67,7 @@ public class InterdictionTorchTile extends CompatBlockEntity implements ExtendBl
         Box box = new Box(blockPos).expand(RADIUS);
         List<LivingEntity> entities = WorldUtil.getMonsters(world.getRaw(), box);
 
-        Vector3d torchPos = Vector3d.of(blockPos.getX(), blockPos.getY(), blockPos.getZ()).ofCenter();
+        Vector3d torchPos = blockPos.toCenterVector3d();
 
         for (LivingEntity entity : entities) {
             Vector3d entityPos = EntityUtil.getPosM(entity);

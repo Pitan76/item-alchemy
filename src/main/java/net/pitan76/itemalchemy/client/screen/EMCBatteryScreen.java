@@ -41,17 +41,17 @@ public class EMCBatteryScreen extends CompatInventoryScreen<EMCBatteryScreenHand
 
     @Override
     public void drawForegroundOverride(DrawForegroundArgs args) {
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, callGetTitle(), getTitleX(), 6, 4210752);
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, getPlayerInvTitle(), getPlayerInvTitleX() + 16, 73, 4210752);
+        drawText(args.drawObjectDM, callGetTitle(), getTitleX(), 6, 4210752);
+        drawText(args.drawObjectDM, getPlayerInvTitle(), getPlayerInvTitleX() + 16, 73, 4210752);
 
         Text storedEmcText = TextUtil.literal(String.format("%,d", screenHandler.storedEMC));
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, storedEmcText, 103 - ScreenUtil.getWidth(storedEmcText) / 2, 50, 4210752);
+        drawText(args.drawObjectDM, storedEmcText, 103 - ScreenUtil.getWidth(storedEmcText) / 2, 50, 4210752);
 
         Text inputChargeItemEmcText = TextUtil.literal("0");
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, inputChargeItemEmcText, 16, 66, 4210752);
+        drawText(args.drawObjectDM, inputChargeItemEmcText, 16, 66, 4210752);
 
         Text outputChargeItemEmcText = TextUtil.literal("0");
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, outputChargeItemEmcText, 161, 66, 4210752);
+        drawText(args.drawObjectDM, outputChargeItemEmcText, 161, 66, 4210752);
     }
 
     @Override

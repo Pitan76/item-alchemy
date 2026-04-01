@@ -41,15 +41,15 @@ public class EMCImporterScreen extends CompatInventoryScreen<EMCImporterScreenHa
 
     @Override
     public void drawForegroundOverride(DrawForegroundArgs args) {
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, callGetTitle(), getTitleX(), 10, 4210752);
-        ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, getPlayerInvTitle(), getPlayerInvTitleX(), 90, 4210752);
+        drawText(args.drawObjectDM, callGetTitle(), getTitleX(), 10, 4210752);
+        drawText(args.drawObjectDM, getPlayerInvTitle(), getPlayerInvTitleX(), 90, 4210752);
 
         if (screenHandler.ownerName != null && !screenHandler.ownerName.isEmpty()) {
             Text owner = TextUtil.translatable("text.itemalchemy.owner", screenHandler.ownerName);
-            ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, owner, backgroundWidth - 10 - ScreenUtil.getWidth(owner), 90, 4210752);
+            drawText(args.drawObjectDM, owner, backgroundWidth - 10 - ScreenUtil.getWidth(owner), 90, 4210752);
         }
         //super.drawForegroundOverride(args);
-        //ScreenUtil.RendererUtil.drawText(textRenderer, args.drawObjectDM, TextUtil.literal(String.format("%,d", emc)), 140, 10, 4210752);
+        //drawText(args.drawObjectDM, TextUtil.literal(String.format("%,d", emc)), 140, 10, 4210752);
     }
 
     @Override
