@@ -2,19 +2,19 @@ package net.pitan76.itemalchemy.tile;
 
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.particle.ParticleTypes;
 import net.pitan76.itemalchemy.block.InterdictionTorch;
-import net.minecraft.world.World;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
 import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.EntityUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.util.math.Box;
 import net.pitan76.mcpitanlib.midohra.util.math.Direction;
 import net.pitan76.mcpitanlib.midohra.util.math.Vector3d;
+import net.pitan76.mcpitanlib.midohra.world.World;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class InterdictionTorchTile extends CompatBlockEntity implements ExtendBl
 
     @Override
     public void tick(TileTickEvent<InterdictionTorchTile> e) {
-        World world = e.world;
+        World world = e.getMidohraWorld();
         BlockPos blockPos = e.getMidohraPos();
 
         if (e.isClient()) {
@@ -56,14 +56,16 @@ public class InterdictionTorchTile extends CompatBlockEntity implements ExtendBl
             particleTick++;
 
             if (particleTick % 3 == 0) {
-                WorldUtil.addParticle(world, ParticleTypes.SMOKE, x, y, z, 0.0, 0.0, 0.0);
-                WorldUtil.addParticle(world, ParticleTypes.SOUL_FIRE_FLAME, x, y, z, 0.0, 0.0, 0.0);
+                WorldUtil.addParticle(world.getRaw(), CompatParticleTypes.SMOKE, x, y, z, 0.0, 0.0, 0.0);
+                WorldUtil.addParticle(world.getRaw(), CompatParticleTypes.SOUL_FIRE_FLAME, x, y, z, 0.0, 0.0, 0.0);
+//                world.addParticle(CompatParticleTypes.SMOKE, x, y, z, 0.0, 0.0, 0.0);
+//                world.addParticle(CompatParticleTypes.SOUL_FIRE_FLAME, x, y, z, 0.0, 0.0, 0.0);
             }
             return;
         }
 
         Box box = new Box(blockPos).expand(RADIUS);
-        List<LivingEntity> entities = WorldUtil.getMonsters(world, box);
+        List<LivingEntity> entities = WorldUtil.getMonsters(world.getRaw(), box);
 
         Vector3d torchPos = Vector3d.of(blockPos.getX(), blockPos.getY(), blockPos.getZ()).ofCenter();
 

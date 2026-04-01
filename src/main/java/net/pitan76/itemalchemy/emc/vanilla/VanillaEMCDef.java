@@ -1,9 +1,9 @@
 package net.pitan76.itemalchemy.emc.vanilla;
 
-import net.minecraft.item.Items;
 import net.pitan76.itemalchemy.emc.EMCDef;
 import net.pitan76.mcpitanlib.api.item.CompatItems;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
+import net.pitan76.mcpitanlib.midohra.item.Items;
 
 public class VanillaEMCDef extends EMCDef {
 
@@ -14,14 +14,14 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.CRIMSON_NYLIUM, 2);
         add(Items.WARPED_NYLIUM, 2);
         add(Items.PODZOL, 2);
-        add(Items.TUFF, 4);
-        add(Items.CALCITE, 32);
+        addExist("tuff", 4);
+        addExist("calcite", 32);
         add(Items.ANDESITE, 16);
         add(Items.DIORITE, 16);
         add(Items.GRANITE, 6);
-        add(Items.DRIPSTONE_BLOCK, 64);
-        add(Items.COBBLED_DEEPSLATE, 2);
-        add(Items.DEEPSLATE, 2);
+        addExist("dripstone_block", 64);
+        addExist("cobbled_deepslate", 2);
+        addExist("deepslate", 2);
         add(Items.COBBLESTONE_SLAB, 1);
         add(Items.DEAD_BUSH, 1);
         add(Items.FERN, 1);
@@ -43,7 +43,7 @@ public class VanillaEMCDef extends EMCDef {
         addExist("smooth_stone_stairs", 12);
         add(Items.BASALT, 1);
         add(Items.POLISHED_BASALT, 1);
-        add(Items.SMOOTH_BASALT, 1);
+        addExist("smooth_basalt", 1);
         add(Items.END_STONE, 1);
         add(Items.MAGMA_BLOCK, 128);
         ItemUtil.getInTag("leaves").forEach((item) -> add(item, 1));
@@ -62,7 +62,7 @@ public class VanillaEMCDef extends EMCDef {
         addExist("smooth_red_sandstone_stairs", 12);
         add(Items.FLINT, 4);
         add(Items.STICK, 4);
-        add(Items.ROOTED_DIRT, 5);
+        addExist("rooted_dirt", 5);
         add(Items.LEVER, 5);
         add(Items.CACTUS, 8);
         ItemUtil.getInTag("planks").forEach((item) -> add(item, 8));
@@ -208,14 +208,14 @@ public class VanillaEMCDef extends EMCDef {
 
         add(Items.ENDER_PEARL, 1024);
 
-        add(Items.COPPER_ORE, 128);
-        add(Items.COPPER_BLOCK, 1152);
-        add(Items.WEATHERED_COPPER, 1152);
-        add(Items.EXPOSED_COPPER, 1152);
-        add(Items.OXIDIZED_COPPER, 1152);
+        addExist("copper_ore", 128);
+        addExist("copper_block", 1152);
+        addExist("weathered_copper", 1152);
+        addExist("exposed_copper", 1152);
+        addExist("oxidized_copper", 1152);
         add(Items.COAL_ORE, 128);
         add(Items.IRON_ORE, 256);
-        add(Items.AMETHYST_SHARD, 32);
+        addExist("amethyst_shard", 32);
         add(Items.LAPIS_ORE, 864);
         add(Items.EMERALD_ORE, 1024);
         add(Items.GOLD_ORE, 2048);
@@ -225,24 +225,24 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.EMERALD, 1024);
         add(Items.LAPIS_LAZULI, 864);
 
-        add(Items.DEEPSLATE_COPPER_ORE, 85);
-        add(Items.DEEPSLATE_COAL_ORE, 128);
-        add(Items.DEEPSLATE_IRON_ORE, 256);
-        add(Items.DEEPSLATE_LAPIS_ORE, 864);
-        add(Items.DEEPSLATE_EMERALD_ORE, 1024);
-        add(Items.DEEPSLATE_GOLD_ORE, 2048);
-        add(Items.DEEPSLATE_DIAMOND_ORE, 8192);
+        addExist("deepslate_copper_ore", 85);
+        addExist("deepslate_coal_ore", 128);
+        addExist("deepslate_iron_ore", 256);
+        addExist("deepslate_lapis_ore", 864);
+        addExist("deepslate_emerald_ore", 1024);
+        addExist("deepslate_gold_ore", 2048);
+        addExist("deepslate_diamond_ore", 8192);
 
-        add(Items.RAW_COPPER, 128);
-        add(Items.RAW_IRON, 256);
-        add(Items.RAW_GOLD, 2048);
+        addExist("raw_copper", 128);
+        addExist("raw_iron", 256);
+        addExist("raw_gold", 2048);
 
         add(Items.NETHER_GOLD_ORE, 2048);
         add(Items.NETHER_QUARTZ_ORE, 128);
         add(Items.QUARTZ, 256);
 
         add(Items.REDSTONE_ORE, 256);
-        add(Items.DEEPSLATE_REDSTONE_ORE, 256);
+        addExist("deepslate_redstone_ore", 256);
 
 
         add(Items.NETHERITE_SCRAP, 12288);
@@ -254,18 +254,18 @@ public class VanillaEMCDef extends EMCDef {
 
         add(Items.WATER_BUCKET, 768);
         add(Items.LAVA_BUCKET, 832);
-        add(Items.POWDER_SNOW_BUCKET, 784);
+        addExist("powder_snow_bucket", 784);
         add(Items.SNOWBALL, 1);
         add(Items.MILK_BUCKET, 784);
         add(Items.PUFFERFISH_BUCKET, 832);
         add(Items.SALMON_BUCKET, 832);
         add(Items.COD_BUCKET, 832);
         add(Items.TROPICAL_FISH_BUCKET, 832);
-        add(Items.AXOLOTL_BUCKET, 832);
+        addExist("axolotl_bucket", 832);
         add(Items.BRICK, 16);
         add(Items.CLAY_BALL, 16);
         add(Items.INK_SAC, 16);
-        add(Items.GLOW_INK_SAC, 400);
+        addExist("glow_ink_sac", 400);
         add(Items.COCOA_BEANS, 64);
         add(Items.INK_SAC, 16);
 
@@ -290,7 +290,8 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.GOLD_NUGGET, 227);
         add(Items.ENDER_EYE, 1792);
         add(Items.BLAZE_ROD, 1536);
-        ItemUtil.getInTag("music_discs").forEach((item) -> add(item, 2048));
+        addByTag("music_discs", 2048);
+//        ItemUtil.getInTag("music_discs").forEach((item) -> add(item, 2048));
         add(Items.CRYING_OBSIDIAN, 768);
         add(Items.GHAST_TEAR, 4096);
         add(Items.PHANTOM_MEMBRANE, 192);
@@ -305,12 +306,12 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.SUGAR_CANE, 32);
         add(Items.KELP, 1);
         add(Items.BAMBOO, 32);
-        add(Items.MOSS_CARPET, 8);
-        add(Items.MOSS_BLOCK, 12);
+        addExist("moss_carpet", 8);
+        addExist("moss_block", 12);
         add(Items.SEA_PICKLE, 16);
-        add(Items.HANGING_ROOTS, 4);
+        addExist("hanging_roots", 4);
         add(Items.VINE, 8);
-        add(Items.GLOW_LICHEN, 8);
+        addExist("glow_lichen", 8);
         add(Items.SHULKER_BOX, 4097);
         add(Items.CREEPER_HEAD, 256);
         add(Items.ZOMBIE_HEAD, 256);
@@ -331,7 +332,7 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.GRAY_SHULKER_BOX, 4176);
         add(Items.PURPLE_SHULKER_BOX, 4176);
         add(Items.POTION, 1);
-        add(Items.POINTED_DRIPSTONE, 16);
+        addExist("pointed_dripstone", 16);
         add(Items.APPLE, 128);
         add(Items.POTATO, 64);
         add(Items.BAKED_POTATO, 64);
@@ -342,7 +343,7 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.MELON_SLICE, 16);
         add(Items.BEETROOT, 64);
         add(Items.RABBIT, 64);
-        add(Items.GLOW_BERRIES, 16);
+        addExist("glow_berries", 16);
         add(Items.HONEY_BOTTLE, 48);
         add(Items.RABBIT_FOOT, 128);
         add(Items.TRIDENT, 16463);

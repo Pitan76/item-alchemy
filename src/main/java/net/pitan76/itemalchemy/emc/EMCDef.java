@@ -6,6 +6,7 @@ import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.mcpitanlib.api.tag.TagKey;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
+import net.pitan76.mcpitanlib.midohra.item.ItemWrapper;
 
 public abstract class EMCDef {
     public abstract void addAll();
@@ -16,6 +17,10 @@ public abstract class EMCDef {
 
     public static void add(Item item, long emc) {
         EMCManager.add(item, emc);
+    }
+
+    public static void add(ItemWrapper item, long emc) {
+        EMCManager.add(item.get(), emc);
     }
 
     public static void addExist(String itemId, long emc) {
