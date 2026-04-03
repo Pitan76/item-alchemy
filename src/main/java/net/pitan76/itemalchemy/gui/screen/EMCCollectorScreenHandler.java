@@ -14,6 +14,8 @@ import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
+import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityWrapper;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
@@ -26,19 +28,14 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
 
     public EMCCollectorScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
         this(syncId, playerInventory, null, InventoryUtil.createSimpleInventory(16 + 3));
-        NbtCompound data = PacketByteUtil.readNbt(buf);
-        if (data == null) return;
-        int x, y, z;
-        if (NbtUtil.has(data, "x") && NbtUtil.has(data, "y") && NbtUtil.has(data, "z")) {
-            x = NbtUtil.getInt(data, "x");
-            y = NbtUtil.getInt(data, "y");
-            z = NbtUtil.getInt(data, "z");
 
-            Player player = new Player(playerInventory.player);
+        Player player = new Player(playerInventory.player);
+        BlockEntityWrapper blockEntity = player.getMidohraWorld().getBlockEntity(BlockPos.of(PacketByteUtil.readBlockPos(buf)));
+        if (blockEntity.isPresent()) {
+            tile = (EMCCollectorTile) blockEntity.get();
 
-            tile = (EMCCollectorTile) WorldUtil.getBlockEntity(player.getWorld(), PosUtil.flooredBlockPos(x, y, z));
-            storedEMC = NbtUtil.getLong(data, "stored_emc") - tile.storedEMC;
-            maxEMC = NbtUtil.getLong(data, "max_emc");
+            storedEMC = PacketByteUtil.readLong(buf) - tile.storedEMC;
+            maxEMC = PacketByteUtil.readLong(buf);
         }
     }
 
