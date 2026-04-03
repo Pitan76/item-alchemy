@@ -45,14 +45,14 @@ public class ItemAlchemy extends CommonModInitializer {
 
         ItemAlchemyConfig.initOnce();
 
-        RecipeManagerRegistry.register(AlchemicalRecipeManager::new);
-
         ItemGroups.init();
         Sounds.init();
         Blocks.init();
         Items.init();
         ScreenHandlers.init();
         Tiles.init();
+
+        RecipeManagerRegistry.register(AlchemicalRecipeManager::new);
 
         EMCUtil.addDef(new VanillaEMCDef(), new ItemAlchemyEMCDef());
 
