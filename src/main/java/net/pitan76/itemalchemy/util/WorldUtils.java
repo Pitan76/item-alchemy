@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.block.BlockUtil;
 
@@ -29,9 +30,9 @@ public class WorldUtils {
                     BlockPos targetPos = pos.add(offsetX, offsetY, offsetZ);
                     BlockState block = WorldUtil.getBlockState(world, targetPos);
 
-                    if (block.isAir()) continue;
+                    if (BlockStateUtil.isAir(block)) continue;
 
-                    if (!BlockUtil.isEqual(block.getBlock(), baseBlock.getBlock()) && isSameBlock) continue;
+                    if (!BlockUtil.isEqual(BlockStateUtil.getBlock(block), BlockStateUtil.getBlock(baseBlock)) && isSameBlock) continue;
 
                     blocks.add(targetPos);
                 }
