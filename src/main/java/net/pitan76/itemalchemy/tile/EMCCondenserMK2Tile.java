@@ -7,8 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.World;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.api.EMCStorageUtil;
@@ -17,17 +15,17 @@ import net.pitan76.itemalchemy.gui.screen.EMCCondenserMK2ScreenHandler;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
-import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.AvailableSlotsArgs;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.CanExtractArgs;
-import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.CanInsertArgs;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
+import net.pitan76.mcpitanlib.midohra.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static net.pitan76.mcpitanlib.api.util.InventoryUtil.canMergeItems;
 
@@ -63,7 +61,7 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
     public void tick(TileTickEvent<EMCCondenserTile> e) {
         if (e.isClient()) return;
 
-        World world = e.world;
+        World world = e.getMidohraWorld();
         if (!getItems().isEmpty()) {
             ItemStack targetStack = getItems().get(0);
             if (!ItemStackUtil.isEmpty(targetStack)) {
@@ -133,8 +131,7 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
             oldStoredEMC = storedEMC;
             oldMaxEMC = maxEMC;
 
-            for (ServerPlayerEntity serverPlayerEntity : ((ServerWorld) world).getPlayers()) {
-                Player player = new Player(serverPlayerEntity);
+            for (Player player : world.getPlayers()) {
                 if (player.hasNetworkHandler() && player.getCurrentScreenHandler() instanceof EMCCondenserMK2ScreenHandler && ((EMCCondenserMK2ScreenHandler) player.getCurrentScreenHandler()).tile == this ) {
                     PacketByteBuf buf = PacketByteUtil.create();
                     PacketByteUtil.writeLong(buf, storedEMC);
@@ -142,7 +139,8 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
                     //if (!getTargetStack().isEmpty())
                     //    PacketByteUtil.writeItemStack(buf, getTargetStack());
 
-                    ServerNetworking.send(serverPlayerEntity, ItemAlchemy._id("itemalchemy_emc_condenser"), buf);
+                    Optional<ServerPlayerEntity> serverPlayerEntity = player.getServerPlayer();
+                    serverPlayerEntity.ifPresent(playerEntity -> ServerNetworking.send(playerEntity, ItemAlchemy._id("itemalchemy_emc_condenser"), buf));
                 }
             }
         }

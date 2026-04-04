@@ -5,10 +5,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.api.EMCStorageUtil;
 import net.pitan76.itemalchemy.block.EMCBattery;
@@ -32,7 +30,10 @@ import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
+import net.pitan76.mcpitanlib.midohra.world.World;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlockEntityTicker<EMCBatteryTile>, VanillaStyleSidedInventory, IInventory, ExtendedScreenHandlerFactory {
     public long maxEMC = -1;
@@ -82,7 +83,7 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
     @Override
     public void tick(TileTickEvent<EMCBatteryTile> e) {
         if (e.isClient()) return;
-        World world = e.world;
+        World world = e.getMidohraWorld();
 
         if (maxEMC == -1)
             maxEMC = ((EMCBattery) BlockStateUtil.getBlock(e.state)).getMaxEMC();
@@ -101,11 +102,11 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
 
         if (oldStoredEMC != storedEMC) {
             oldStoredEMC = storedEMC;
-            for (ServerPlayerEntity p : ((ServerWorld) world).getPlayers()) {
-                Player player = new Player(p);
+            for (Player player : world.getPlayers()) {
                 if (player.hasNetworkHandler() && player.getCurrentScreenHandler() instanceof EMCBatteryScreenHandler && ((EMCBatteryScreenHandler) player.getCurrentScreenHandler()).tile == this) {
                     PacketByteBuf buf = PacketByteUtil.create();
                     PacketByteUtil.writeLong(buf, storedEMC);
+                    Optional<ServerPlayerEntity> serverPlayerEntity = player.getServerPlayer();
                     ServerNetworking.send(player, ItemAlchemy._id("itemalchemy_emc_battery"), buf);
                 }
             }

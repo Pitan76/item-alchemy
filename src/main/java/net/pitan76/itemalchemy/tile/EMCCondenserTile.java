@@ -6,10 +6,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.api.EMCStorageUtil;
@@ -33,10 +31,12 @@ import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
+import net.pitan76.mcpitanlib.midohra.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static net.pitan76.mcpitanlib.api.util.InventoryUtil.canMergeItems;
 
@@ -80,7 +80,7 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
     @Override
     public void tick(TileTickEvent<EMCCondenserTile> e) {
         if (e.isClient()) return;
-        World world = e.world;
+        World world = e.getMidohraWorld();
         if (!getItems().isEmpty()) {
             ItemStack targetStack = getItems().get(0);
             if (!ItemStackUtil.isEmpty(targetStack)) {
@@ -149,8 +149,7 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
             oldStoredEMC = storedEMC;
             oldMaxEMC = maxEMC;
 
-            for (ServerPlayerEntity serverPlayerEntity : ((ServerWorld) world).getPlayers()) {
-                Player player = new Player(serverPlayerEntity);
+            for (Player player : world.getPlayers()) {
                 if (player.hasNetworkHandler() && player.getCurrentScreenHandler() instanceof EMCCondenserScreenHandler && ((EMCCondenserScreenHandler) player.getCurrentScreenHandler()).tile == this ) {
                     PacketByteBuf buf = PacketByteUtil.create();
                     PacketByteUtil.writeLong(buf, storedEMC);
@@ -158,7 +157,8 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
                     //if (!getTargetStack().isEmpty())
                     //    PacketByteUtil.writeItemStack(buf, getTargetStack());
 
-                    ServerNetworking.send(serverPlayerEntity, ItemAlchemy._id("itemalchemy_emc_condenser"), buf);
+                    Optional<ServerPlayerEntity> serverPlayerEntity = player.getServerPlayer();
+                    serverPlayerEntity.ifPresent(playerEntity -> ServerNetworking.send(playerEntity, ItemAlchemy._id("itemalchemy_emc_condenser"), buf));
                 }
             }
         }
