@@ -1,7 +1,6 @@
 package net.pitan76.itemalchemy.client.screen;
 
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
@@ -21,6 +20,7 @@ import net.pitan76.mcpitanlib.api.network.v2.ClientNetworking;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
+import net.pitan76.mcpitanlib.api.util.client.LanguageUtil;
 import net.pitan76.mcpitanlib.api.util.client.ScreenUtil;
 import net.pitan76.mcpitanlib.api.util.client.widget.TextFieldUtil;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
@@ -61,8 +61,8 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
         List<Item> items = PlayerRegisteredItemUtil.getItems(new Player(playerInventory.player));
         for (Item item : items) {
             String itemTranslationKey = ItemUtil.getTranslationKey(item);
-            if (I18n.hasTranslation(itemTranslationKey)) {
-                NbtUtil.putString(translations, itemTranslationKey, I18n.translate(itemTranslationKey));
+            if (LanguageUtil.hasTranslation(itemTranslationKey)) {
+                NbtUtil.putString(translations, itemTranslationKey, LanguageUtil.translate(itemTranslationKey));
             }
         }
 
