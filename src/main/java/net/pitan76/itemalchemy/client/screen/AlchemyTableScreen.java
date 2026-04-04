@@ -62,7 +62,7 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
         for (Item item : items) {
             String itemTranslationKey = ItemUtil.getTranslationKey(item);
             if (I18n.hasTranslation(itemTranslationKey)) {
-                translations.putString(itemTranslationKey, I18n.translate(itemTranslationKey));
+                NbtUtil.putString(translations, itemTranslationKey, I18n.translate(itemTranslationKey));
             }
         }
 
