@@ -46,7 +46,7 @@ public class DiviningRod extends CompatItem  {
             CustomDataUtil.put(stack, "divining_rod_level", level);
             e.getPlayer().sendMessage(TextUtil.translatable("message.itemalchemy.diving_rod_switch_mode", "3x3x" + (3 + getAdditionalDepth(level))));
 
-            return CompatActionResult.SUCCESS;
+            return e.success();
         }
 
         int x = 1;
