@@ -201,7 +201,7 @@
   "item.itemalchemy.watch_of_flowing_time.desc": "§9A watch that speeds up time around it",
   "item.itemalchemy.watch_of_flowing_time.desc_shift": "§9Speeds up tile entities|||§9Higher charge = faster|||§fPlace on DM Pedestal|||Speeds up furnaces, farms, machines",
 
-  "item.itemalchemy.repair_talisman": "Repair Talisman",
+  "item.itemalchemy.repair_talisman": "Talisman of Repair",
   "item.itemalchemy.repair_talisman.desc": "§7A talisman that repairs items in inventory",
   "item.itemalchemy.repair_talisman.desc_shift": "§9Auto-repairs inventory items|||§9Uses EMC for repair|||§fWorks on all repairable items|||Can be disabled for specific items",
 
