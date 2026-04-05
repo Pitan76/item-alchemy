@@ -108,7 +108,7 @@ public class DiviningRod extends CompatItem  {
             }
         }
 
-        e.getPlayer().sendMessage(TextUtil.translatable("message.itemalchemy.diving_rod_average_emc", "Average EMC for " + blockCount + " blocks: " + (blockCount > 0 ? totalEMC / blockCount : 0)));
+        e.getPlayer().sendMessage(TextUtil.translatable("message.itemalchemy.diving_rod_average_emc",  blockCount, blockCount > 0 ? totalEMC / blockCount : 0));
         e.getPlayer().sendMessage(TextUtil.translatable("message.itemalchemy.diving_rod_max_emc", maxEMC));
 
         return super.onRightClickOnBlock(e);
