@@ -82,6 +82,10 @@
   "key.itemalchemy.changemode": "切换模式",
 
   "message.itemalchemy.failed_to_set_team": "[Item Alchemy] 无法设置队伍",
+  "message.itemalchemy.diving_rod_switch_mode": "%s模式切换",
+  "message.itemalchemy.diving_rod_average_emc": "平均EMC: %d (每%d个方块)",
+  "message.itemalchemy.diving_rod_total_emc": "总EMC: %d",
+  "message.itemalchemy.diving_rod_max_emc": "最大EMC: %d",
 
   "item.itemalchemy.tome_of_knowledge.desc": "§7一本蕴含所有物品知识的神秘书籍",
   "item.itemalchemy.tome_of_knowledge.desc_shift": "§9学习附近物品的EMC值|||§9永久保存知识|||§6手持 §7- 学习附近物品|||§f用于转化配方",
