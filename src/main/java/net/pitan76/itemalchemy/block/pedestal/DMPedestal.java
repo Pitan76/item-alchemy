@@ -115,7 +115,7 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
                 if (heldStack.isEmpty()) {
                     player.setStackInHand(e.getHand(), pedestalStack.copy());
                 } else {
-                    player.offerOrDrop(pedestalStack.copy().toMinecraft());
+                    player.offerOrDrop(pedestalStack.copy());
                 }
                 pedestal.setStack(ItemStack.empty());
                 return e.success();

@@ -6,6 +6,7 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.api.EMCStorageUtil;
+import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.block.EMCCollector;
 import net.pitan76.itemalchemy.gui.screen.EMCCollectorScreenHandler;
 import net.pitan76.itemalchemy.item.Items;
@@ -248,6 +249,6 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
 //        args.writeVar(nbt);
         PacketByteUtil.writeBlockPos(args.buf, callGetPos());
         PacketByteUtil.writeLong(args.buf, storedEMC);
-        PacketByteUtil.writeLong(args.buf, ((EMCCollector) BlockStateUtil.getBlock(callGetCachedState())).maxEMC);
+        PacketByteUtil.writeLong(args.buf, ((EMCCollector) getMidohraCachedState().getBlock().gerOrDefault(Blocks.EMC_COLLECTOR_MK1.get())).maxEMC);
     }
 }
