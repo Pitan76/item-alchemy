@@ -7,7 +7,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.gui.slot.CondenserStorageSlot;
 import net.pitan76.itemalchemy.gui.slot.TargetSlot;
@@ -180,17 +179,17 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
 
         if (e.slot == 36) { // Target Slot
             // カーソルでアイテムを持ってない場合
-            if (getCursorStack().isEmpty()) {
+            if (getCursorStackM().isEmpty()) {
                 setTargetStack(ItemStackUtil.empty());
                 SlotUtil.setStack(targetSlot, ItemStackUtil.empty());
 
                 return;
             }
 
-            ItemStack oldStack = ItemStackUtil.create(getCursorStack().getItem());
+            ItemStack oldStack = ItemStackUtil.create(ItemStackUtil.getItem(callGetCursorStack()));
 
             if(EMCManager.get(oldStack.getItem()) == 0) {
-                callSetCursorStack(getCursorStack());
+                callSetCursorStack(callGetCursorStack());
 
                 super.onSlotClick(e);
 
@@ -200,7 +199,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
             setTargetStack(oldStack);
             SlotUtil.setStack(targetSlot, oldStack);
 
-            callSetCursorStack(getCursorStack());
+            callSetCursorStack(callGetCursorStack());
 
             return;
         }

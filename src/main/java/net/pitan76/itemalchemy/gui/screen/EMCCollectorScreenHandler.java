@@ -101,7 +101,7 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
     @Override
     public void onSlotClick(SlotClickEvent e) {
         if (e.slot == 37) { // Target Slot
-            ItemStack oldStack = getCursorStack().copy();
+            ItemStack oldStack = ItemStackUtil.copy(callGetCursorStack());
             super.onSlotClick(e);
             if (!ItemStackUtil.isEmpty(oldStack)) {
                 callSetCursorStack(oldStack);

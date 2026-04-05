@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
 import net.pitan76.itemalchemy.gui.slot.FilterSlot;
 import net.pitan76.itemalchemy.tile.EMCImporterTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
@@ -108,7 +107,7 @@ public class EMCImporterScreenHandler extends ExtendedScreenHandler {
     @Override
     public void onSlotClick(SlotClickEvent e) {
         if (e.slot >= 37 && e.slot <= 46) { // Target Slot
-            ItemStack oldStack = getCursorStack().copy();
+            ItemStack oldStack = ItemStackUtil.copy(callGetCursorStack());
             super.onSlotClick(e);
             if (!ItemStackUtil.isEmpty(oldStack))
                 callSetCursorStack(oldStack);
