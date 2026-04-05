@@ -1,12 +1,12 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
 import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
+import net.pitan76.mcpitanlib.api.util.client.LanguageUtil;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 
 import java.util.ArrayList;
@@ -33,8 +33,8 @@ public class AlchemicalItem extends CompatItem {
         if (TooltipUtil.hasShiftDown()) {
             // Show detailed description with multi-line support
             String shiftKey = translationKey + ".desc_shift";
-            if (I18n.hasTranslation(shiftKey)) {
-                String shiftText = I18n.translate(shiftKey);
+            if (LanguageUtil.hasTranslation(shiftKey)) {
+                String shiftText = LanguageUtil.translate(shiftKey);
                 List<String> lines = splitTooltipText(shiftText);
                 for (String line : lines) {
                     e.addTooltip(TextUtil.literal(line));
@@ -43,8 +43,8 @@ public class AlchemicalItem extends CompatItem {
         } else {
             // Show basic description with multi-line support (only when shift is NOT held)
             String descKey = translationKey + ".desc";
-            if (I18n.hasTranslation(descKey)) {
-                String descText = I18n.translate(descKey);
+            if (LanguageUtil.hasTranslation(descKey)) {
+                String descText = LanguageUtil.translate(descKey);
                 List<String> descLines = splitTooltipText(descText);
                 for (String line : descLines) {
                     e.addTooltip(TextUtil.literal(line));

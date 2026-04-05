@@ -1,15 +1,14 @@
 package net.pitan76.itemalchemy.manager;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
 import net.pitan76.itemalchemy.config.RechargeConfig;
 import net.pitan76.itemalchemy.item.KleinStar;
 import net.pitan76.itemalchemy.util.IRechargeableFromKlein;
 import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.sound.CompatSoundEvents;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -108,7 +107,7 @@ public class KleinStarRechargeManager {
                     
                     if (chargeLevels > 0) {
                         // Refund unused EMC
-                        long unusedEmc = extracted - (chargeLevels * chargeableItem.emcPerChargeLevel);
+                        long unusedEmc = extracted - ((long) chargeLevels * chargeableItem.emcPerChargeLevel);
                         if (unusedEmc > 0) {
                             KleinStar.addEmc(starStack, unusedEmc);
                         }
@@ -212,12 +211,9 @@ public class KleinStarRechargeManager {
         double z = player.getZ();
         
         for (int i = 0; i < 10; i++) {
-            WorldUtil.addParticle(
-                player.getWorld(),
-                ParticleTypes.ENCHANT,
-                x + (Math.random() - 0.5),
-                y + (Math.random() - 0.5) * 0.5,
-                z + (Math.random() - 0.5),
+            // TODO: MCPitanLibのMidohraWorldにaddParticleの引数で、CompatParticleTypes.ENCHANTを直接渡せるようにする
+            WorldUtil.addParticle(player.getWorld(), CompatParticleTypes.ENCHANT,
+                x + (Math.random() - 0.5), y + (Math.random() - 0.5) * 0.5, z + (Math.random() - 0.5),
                 0, 0.01, 0
             );
         }
@@ -225,7 +221,7 @@ public class KleinStarRechargeManager {
     
     private static void playChargeSound(Player player) {
         // Use player.playSound instead of world.playSound for correct method signature
-        player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 1.2f);
+        player.playSound(CompatSoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 1.2f);
     }
     
     /**

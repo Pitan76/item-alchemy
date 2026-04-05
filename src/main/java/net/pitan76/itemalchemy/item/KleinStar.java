@@ -1,9 +1,6 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.ItemStack;
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.nbt.NbtCompound;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.util.TooltipUtil;
@@ -12,7 +9,6 @@ import net.pitan76.mcpitanlib.api.event.item.ItemBarColorArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarStepArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseEvent;
-import net.pitan76.mcpitanlib.api.item.ExtendItemProvider;
 import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.StackActionResult;
@@ -20,7 +16,6 @@ import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
-import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 
 public class KleinStar extends CompatItem {
 
@@ -138,29 +133,7 @@ public class KleinStar extends CompatItem {
     @Override
     public void appendTooltip(ItemAppendTooltipEvent e) {
         ItemStack stack = e.getStack();
-        String translationKey = ItemUtil.getTranslationKey(stack.getItem());
-        
-        if (TooltipUtil.hasShiftDown()) {
-            String shiftKey = translationKey + ".desc_shift";
-            if (I18n.hasTranslation(shiftKey)) {
-                String shiftText = I18n.translate(shiftKey);
-                List<String> lines = splitTooltipText(shiftText);
-                for (String line : lines) {
-                    e.addTooltip(TextUtil.literal(line));
-                }
-            }
-        } else {
-            // Show basic description with multi-line support (only when shift is NOT held)
-            String descKey = translationKey + ".desc";
-            if (I18n.hasTranslation(descKey)) {
-                String descText = I18n.translate(descKey);
-                List<String> descLines = splitTooltipText(descText);
-                for (String line : descLines) {
-                    e.addTooltip(TextUtil.literal(line));
-                }
-            }
-            e.addTooltip(TextUtil.withColor(TextUtil.translatable("text.itemalchemy.shift_info"), 0x555555));
-        }
+        e.addTooltip(TooltipUtil.generateTooltipLines(ItemStackUtil.getItem(e.getStack())));
         
         long stored = getStoredEmc(stack);
         long max = getMaxEmc();
@@ -187,35 +160,6 @@ public class KleinStar extends CompatItem {
         }
         
         return super.onRightClick(e);
-    }
-    
-    private List<String> splitTooltipText(String text) {
-        List<String> lines = new ArrayList<>();
-        if (text == null || text.isEmpty()) {
-            return lines;
-        }
-        
-        int start = 0;
-        int delimiterIndex;
-        boolean foundDelimiter = false;
-        
-        while ((delimiterIndex = text.indexOf("|||", start)) != -1) {
-            foundDelimiter = true;
-            String line = text.substring(start, delimiterIndex);
-            if (!line.trim().isEmpty()) {
-                lines.add(line);
-            }
-            start = delimiterIndex + 3;
-        }
-        
-        if (start < text.length()) {
-            String remaining = text.substring(start);
-            if (!remaining.trim().isEmpty()) {
-                lines.add(remaining);
-            }
-        }
-        
-        return lines;
     }
 
     @Override

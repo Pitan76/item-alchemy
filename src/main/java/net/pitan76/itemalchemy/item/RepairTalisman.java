@@ -2,6 +2,7 @@ package net.pitan76.itemalchemy.item;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.item.InventoryTickEvent;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
@@ -21,7 +22,7 @@ public class RepairTalisman extends AlchemicalItem {
         if (e.isClient()) return;
         if (!(e.entity instanceof PlayerEntity)) return;
 
-        PlayerEntity player = (PlayerEntity) e.entity;
+        Player player = new Player((PlayerEntity) e.entity);
 
         // Only repair every REPAIR_INTERVAL ticks (use entity age via MCPitanLib)
         if (WorldUtil.getTime(e.world) % REPAIR_INTERVAL != 0) return;

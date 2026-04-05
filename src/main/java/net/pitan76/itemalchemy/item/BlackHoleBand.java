@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.pitan76.itemalchemy.block.pedestal.IPedestalItem;
+import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.item.InventoryTickEvent;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.EntityUtil;
@@ -34,7 +35,7 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
         if (e.isClient()) return;
         if (!(e.entity instanceof PlayerEntity)) return;
 
-        PlayerEntity player = (PlayerEntity) e.entity;
+        Player player = new Player((PlayerEntity) e.entity);
         Vector3d playerPos = EntityUtil.getPosM(player);
 
         List<ItemEntity> items = WorldUtil.getEntitiesByClass(
