@@ -103,15 +103,15 @@
 
   "item.itemalchemy.divining_rod_lv1": "Искательная лоза (Ур.1)",
   "item.itemalchemy.divining_rod_lv1.desc": "§7Простая лоза для обнаружения EMC",
-  "item.itemalchemy.divining_rod_lv1.desc_shift": "§9Режим 1: Среднее EMC|||§9Режим 2: Общее EMC|||§9Режим 3: Наивысшее EMC блока|||§6ПКМ §7- Сканировать|||§fОграниченный радиус",
+  "item.itemalchemy.divining_rod_lv1.desc_shift": "§6ПКМ §7- Сканировать",
 
   "item.itemalchemy.divining_rod_lv2": "Искательная лоза (Ур.2)",
   "item.itemalchemy.divining_rod_lv2.desc": "§7Улучшенная лоза с лучшим обнаружением EMC",
-  "item.itemalchemy.divining_rod_lv2.desc_shift": "§9Больший радиус чем у Ур.1|||§9Более точные показания|||§6ПКМ §7- Сканировать|||§6Зарядка §7- Увеличить радиус",
+  "item.itemalchemy.divining_rod_lv2.desc_shift": "§6ПКМ §7- Сканировать|||§6Присядьте+ПКМ §7- Переключение режима для диапазона",
 
   "item.itemalchemy.divining_rod_lv3": "Искательная лоза (Ур.3)",
   "item.itemalchemy.divining_rod_lv3.desc": "§9Предельная лоза для обнаружения EMC",
-  "item.itemalchemy.divining_rod_lv3.desc_shift": "§9Максимальный радиус и точность|||§9Обнаруживает определённые типы руд|||§6ПКМ §7- Сканировать|||§fПолная зарядка показывает все блоки с высоким EMC",
+  "item.itemalchemy.divining_rod_lv3.desc_shift": "§6ПКМ §7- Сканировать|||§6Присядьте+ПКМ §7- Переключение режима для диапазона",
 
   "block.itemalchemy.alchemy_table": "Алхимический стол",
   "block.itemalchemy.alchemy_table.desc": "§7Базовая станция для крафта алхимических предметов",

@@ -103,15 +103,15 @@
 
   "item.itemalchemy.divining_rod_lv1": "Divining Rod (Lv1)",
   "item.itemalchemy.divining_rod_lv1.desc": "§7Basic rod for EMC detection",
-  "item.itemalchemy.divining_rod_lv1.desc_shift": "§9Mode 1: Average EMC|||§9Mode 2: Total EMC|||§9Mode 3: Highest EMC block|||§6Right-Click §7- Scan|||§fLimited range",
+  "item.itemalchemy.divining_rod_lv1.desc_shift": "§6Right-Click §7- Scan",
 
   "item.itemalchemy.divining_rod_lv2": "Divining Rod (Lv2)",
   "item.itemalchemy.divining_rod_lv2.desc": "§7Improved rod with better EMC detection",
-  "item.itemalchemy.divining_rod_lv2.desc_shift": "§9Greater range than Lv1|||§9More precise readings|||§6Right-Click §7- Scan|||§6Charge §7- Increase radius",
+  "item.itemalchemy.divining_rod_lv2.desc_shift": "§6Right-Click §7- Scan|||§6Sneak+Right-Click §7- Switch range mode",
 
   "item.itemalchemy.divining_rod_lv3": "Divining Rod (Lv3)",
   "item.itemalchemy.divining_rod_lv3.desc": "§9The ultimate rod for EMC detection",
-  "item.itemalchemy.divining_rod_lv3.desc_shift": "§9Maximum range and precision|||§9Detects specific ore types|||§6Right-Click §7- Scan|||§fFull charge reveals all high-EMC blocks",
+  "item.itemalchemy.divining_rod_lv3.desc_shift": "§6Right-Click §7- Scan|||§6Sneak+Right-Click §7- Switch range mode",
 
   "block.itemalchemy.alchemy_table": "Alchemy Table",
   "block.itemalchemy.alchemy_table.desc": "§7The basic crafting station for alchemy",

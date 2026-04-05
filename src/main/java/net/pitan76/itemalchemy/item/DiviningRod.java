@@ -33,6 +33,8 @@ public class DiviningRod extends CompatItem  {
         BlockPos center = e.getMidohraPos();
         World world = e.getMidohraWorld();
 
+        if (e.isClient()) return super.onRightClickOnBlock(e);
+
         // スニークしている場合、レベルを変更する、最大をこえるとレベル1に戻る
         if (e.isSneaking()) {
             ItemStack stack = e.getStack();
@@ -114,6 +116,8 @@ public class DiviningRod extends CompatItem  {
 
     @Override
     public StackActionResult onRightClick(ItemUseEvent e) {
+        if (e.isClient()) return super.onRightClick(e);
+
         if (e.isSneaking()) {
             ItemStack stack = e.getStack();
             int level = 1;
