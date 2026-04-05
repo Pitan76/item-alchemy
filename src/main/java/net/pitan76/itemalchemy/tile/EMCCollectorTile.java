@@ -89,9 +89,9 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
 
         if (coolDown == 0) {
             if (isFull()) return;
-            float skyAngle = WorldUtil.getSkyAngle(world.getRaw(), 0);
+            float skyAngle = world.getSkyAngle();
             // TODO: MidohraのWorldにこれらのメソッドを追加する
-            if ((!WorldUtil.isRaining(world.getRaw()) && !WorldUtil.isThundering(world.getRaw()) && (WorldUtil.hasSkyLight(world.getRaw()) && skyAngle <= 0.25 || skyAngle >= 0.75) && WorldUtil.isSkyVisible(world.getRaw(), pos.up().toRaw()))
+            if ((!world.isRaining() && !world.isThundering() && (world.hasSkyLight() && skyAngle <= 0.25 || skyAngle >= 0.75) && WorldUtil.isSkyVisible(world.getRaw(), pos.up().toRaw()))
                     || world.getBlockState(pos.up()).getLuminance() > 10
                     || world.getBlockState(pos.down()).getLuminance() > 10
                     || world.getBlockState(pos.north()).getLuminance() > 10

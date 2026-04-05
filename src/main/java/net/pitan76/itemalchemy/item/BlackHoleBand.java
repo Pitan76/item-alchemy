@@ -11,8 +11,10 @@ import net.pitan76.mcpitanlib.api.event.item.InventoryTickEvent;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.EntityUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.entity.ItemEntityUtil;
 import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
+import net.pitan76.mcpitanlib.midohra.util.math.Box;
 import net.pitan76.mcpitanlib.midohra.util.math.Vector3d;
 import net.pitan76.mcpitanlib.midohra.world.World;
 
@@ -36,11 +38,13 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
         if (!(e.entity instanceof PlayerEntity)) return;
 
         Player player = new Player((PlayerEntity) e.entity);
-        Vector3d playerPos = EntityUtil.getPosM(player);
 
-        List<ItemEntity> items = WorldUtil.getEntitiesByClass(
-                e.world, ItemEntity.class, playerPos, PLAYER_RANGE
-        );
+        // TODO: PlayerのgetPosを直接Vector3dとして返すようにする
+        Vector3d playerPos = Vector3d.of(player.getPos());
+
+        Box box = new Box(playerPos);
+        box.expand(PLAYER_RANGE);
+        List<ItemEntity> items = ItemEntityUtil.getEntities(e.world, box.toMinecraft());
 
         for (ItemEntity itemEntity : items) {
             Vector3d itemPos = EntityUtil.getPosM(itemEntity);
@@ -59,7 +63,7 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
             } else {
                 EntityUtil.setVelocity(itemEntity, 0, 0, 0);
                 EntityUtil.setPos(itemEntity, playerPos.getX(), playerPos.getY(), playerPos.getZ());
-                itemEntity.onPlayerCollision(player);
+                itemEntity.onPlayerCollision(player.getEntity());
             }
         }
     }
@@ -93,7 +97,7 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
                 EntityUtil.setVelocityModified(itemEntity, true);
             } else {
                 if (addToInventory(stack, itemEntity.getStack())) {
-                    itemEntity.discard();
+                    EntityUtil.discard(itemEntity);
                 }
             }
         }
