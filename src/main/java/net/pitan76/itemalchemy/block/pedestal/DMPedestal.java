@@ -90,9 +90,37 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
             return e.success();
         }
 
+        // Check if pedestal contains a Black Hole Band
+        boolean isBlackHoleBand = !pedestalStack.isEmpty() && pedestalStack.getRawItem() instanceof net.pitan76.itemalchemy.item.BlackHoleBand;
+
         if (e.isSneaking()) {
-            // Sneak + right-click: toggle active state
+            // Sneak + right-click: toggle active state OR extract all items from Black Hole Band
             if (!pedestalStack.isEmpty()) {
+                if (isBlackHoleBand) {
+                    // Extract all items from Black Hole Band inventory
+                    net.pitan76.itemalchemy.item.BlackHoleBand band = (net.pitan76.itemalchemy.item.BlackHoleBand) pedestalStack.getRawItem();
+                    net.minecraft.item.ItemStack pedestalVanilla = pedestalStack.toMinecraft();
+                    int extractedCount = 0;
+                    
+                    while (true) {
+                        net.minecraft.item.ItemStack extracted = band.removeFirstItem(pedestalVanilla);
+                        if (extracted.isEmpty()) break;
+                        
+                        if (heldStack.isEmpty()) {
+                            player.setStackInHand(e.getHand(), net.pitan76.mcpitanlib.midohra.item.ItemStack.of(extracted));
+                            heldStack = e.getStackM();
+                        } else {
+                            player.offerOrDrop(extracted);
+                        }
+                        extractedCount++;
+                    }
+                    
+                    BlockPos pos = e.getMidohraPos();
+                    World world = e.getMidohraWorld();
+                    world.playSound(null, pos, CompatSoundEvents.ENTITY_ITEM_PICKUP, CompatSoundCategory.BLOCKS, 0.5F, 1.5F);
+                    return e.success();
+                }
+                
                 boolean newActive = !pedestal.getActive();
                 if (newActive && !(pedestalStack.getRawItem() instanceof IPedestalItem)) {
                     return e.pass();
@@ -108,8 +136,27 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
                 return e.success();
             }
         } else {
-            // Right-click (not sneaking): place/remove items
+            // Right-click (not sneaking): place/remove items OR extract single item from Black Hole Band
             if (!pedestalStack.isEmpty()) {
+                if (isBlackHoleBand) {
+                    // Extract single item from Black Hole Band inventory
+                    net.pitan76.itemalchemy.item.BlackHoleBand band = (net.pitan76.itemalchemy.item.BlackHoleBand) pedestalStack.getRawItem();
+                    net.minecraft.item.ItemStack pedestalVanilla = pedestalStack.toMinecraft();
+                    net.minecraft.item.ItemStack extracted = band.removeFirstItem(pedestalVanilla);
+                    
+                    if (!extracted.isEmpty()) {
+                        if (heldStack.isEmpty()) {
+                            player.setStackInHand(e.getHand(), net.pitan76.mcpitanlib.midohra.item.ItemStack.of(extracted));
+                        } else {
+                            player.offerOrDrop(extracted);
+                        }
+                        BlockPos pos = e.getMidohraPos();
+                        World world = e.getMidohraWorld();
+                        world.playSound(null, pos, CompatSoundEvents.ENTITY_ITEM_PICKUP, CompatSoundCategory.BLOCKS, 0.5F, 1.0F);
+                        return e.success();
+                    }
+                }
+                
                 // Remove item from pedestal
                 pedestal.setActive(false);
                 if (heldStack.isEmpty()) {

@@ -1,5 +1,6 @@
 package net.pitan76.itemalchemy;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.pitan76.itemalchemy.api.EMCUtil;
 import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.command.ItemAlchemyCommand;
@@ -10,12 +11,12 @@ import net.pitan76.itemalchemy.emc.vanilla.VanillaEMCDef;
 import net.pitan76.itemalchemy.gui.screen.ScreenHandlers;
 import net.pitan76.itemalchemy.item.ItemGroups;
 import net.pitan76.itemalchemy.item.Items;
+import net.pitan76.itemalchemy.manager.KleinStarRechargeManager;
 import net.pitan76.itemalchemy.network.ServerNetworks;
 import net.pitan76.itemalchemy.recipe.AlchemicalRecipeManager;
 import net.pitan76.itemalchemy.sound.Sounds;
 import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.itemalchemy.util.ItemCharge;
-import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.mcpitanlib.api.CommonModInitializer;
 import net.pitan76.mcpitanlib.api.command.CommandRegistry;
 import net.pitan76.mcpitanlib.api.entity.Player;
@@ -70,10 +71,13 @@ public class ItemAlchemy extends CommonModInitializer {
             EMCManager.syncS2C(player);
         });
 
+        // Register player tick for Klein Star recharging via InventoryTickEvent
+        // Only process when the selected item is ticked to avoid multiple calls per player tick
         ItemEventRegistry.INVENTORY_TICK.register((e) -> {
             if (e.isClient()) return;
-            if (e.isSelected() && ItemUtils.isItemChargeable(e.getStack())) {
-                ItemUtils.handleItemChargeInventoryTick(e.getStack());
+            // Only process recharge when entity is a player and this is the selected item
+            if (e.entity instanceof PlayerEntity && e.isSelected()) {
+                KleinStarRechargeManager.tryRechargeItems(new Player((PlayerEntity) e.entity));
             }
         });
 

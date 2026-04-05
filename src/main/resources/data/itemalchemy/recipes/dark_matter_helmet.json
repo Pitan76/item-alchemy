@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    "M M"
+  ],
+  "key": {
+    "M": {
+      "item": "itemalchemy:dark_matter"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:dark_matter_helmet",
+    "count": 1
+  }
+}

@@ -3,6 +3,7 @@ package net.pitan76.itemalchemy.item;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.EMCManager;
+import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseEvent;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseOnBlockEvent;
@@ -131,13 +132,14 @@ public class DiviningRod extends CompatItem  {
 
     @Override
     public void appendTooltip(ItemAppendTooltipEvent e) {
-        super.appendTooltip(e);
         ItemStack stack = e.getStack();
+        e.addTooltip(TooltipUtil.generateTooltipLines(ItemStackUtil.getItem(stack)));
+        
         if (CustomDataUtil.contains(stack, "divining_rod_level")) {
             int level = CustomDataUtil.get(stack, "divining_rod_level", Integer.class);
-            e.addTooltip("Mode: §b3x3x" + (3 + getAdditionalDepth(level)));
+            e.addTooltip(TextUtil.literal("Mode: §b3x3x" + (3 + getAdditionalDepth(level))));
         } else {
-            e.addTooltip("Mode: §b3x3x3");
+            e.addTooltip(TextUtil.literal("Mode: §b3x3x3"));
         }
     }
 

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MDM",
+    "MMM",
+    "MMM"
+  ],
+  "key": {
+    "M": {
+      "item": "itemalchemy:red_matter"
+    },
+    "D": {
+      "item": "itemalchemy:dark_matter_chestplate"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:red_matter_chestplate",
+    "count": 1
+  }
+}

@@ -1,14 +1,19 @@
 package net.pitan76.itemalchemy.item;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.resource.language.I18n;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.pitan76.itemalchemy.sound.Sounds;
 import net.pitan76.itemalchemy.util.ItemCharge;
 import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.itemalchemy.util.WorldUtils;
+import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.item.EnchantableArgs;
+import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseOnBlockEvent;
 import net.pitan76.mcpitanlib.api.item.FixedRecipeRemainderItem;
@@ -18,6 +23,7 @@ import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
 import net.pitan76.mcpitanlib.api.state.property.CompatProperties;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.block.BlockUtil;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 import net.pitan76.mcpitanlib.core.Dummy;
 import net.pitan76.mcpitanlib.midohra.block.BlockState;
 import net.pitan76.mcpitanlib.midohra.block.BlockWrapper;
@@ -230,5 +236,62 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
     @Override
     public boolean isEnchantable(EnchantableArgs args) {
         return false;
+    }
+
+    @Override
+    public void appendTooltip(ItemAppendTooltipEvent e) {
+        ItemStack stack = e.getStack();
+        String translationKey = ItemUtil.getTranslationKey(stack.getItem());
+        
+        if (TooltipUtil.hasShiftDown()) {
+            String shiftKey = translationKey + ".desc_shift";
+            if (I18n.hasTranslation(shiftKey)) {
+                String shiftText = I18n.translate(shiftKey);
+                List<String> lines = splitTooltipText(shiftText);
+                for (String line : lines) {
+                    e.addTooltip(TextUtil.literal(line));
+                }
+            }
+        } else {
+            // Show basic description with multi-line support (only when shift is NOT held)
+            String descKey = translationKey + ".desc";
+            if (I18n.hasTranslation(descKey)) {
+                String descText = I18n.translate(descKey);
+                List<String> descLines = splitTooltipText(descText);
+                for (String line : descLines) {
+                    e.addTooltip(TextUtil.literal(line));
+                }
+            }
+            e.addTooltip(TextUtil.withColor(TextUtil.translatable("text.itemalchemy.shift_info"), 0x555555));
+        }
+    }
+    
+    private List<String> splitTooltipText(String text) {
+        List<String> lines = new ArrayList<>();
+        if (text == null || text.isEmpty()) {
+            return lines;
+        }
+        
+        int start = 0;
+        int delimiterIndex;
+        boolean foundDelimiter = false;
+        
+        while ((delimiterIndex = text.indexOf("|||", start)) != -1) {
+            foundDelimiter = true;
+            String line = text.substring(start, delimiterIndex);
+            if (!line.trim().isEmpty()) {
+                lines.add(line);
+            }
+            start = delimiterIndex + 3;
+        }
+        
+        if (start < text.length()) {
+            String remaining = text.substring(start);
+            if (!remaining.trim().isEmpty()) {
+                lines.add(remaining);
+            }
+        }
+        
+        return lines;
     }
 }

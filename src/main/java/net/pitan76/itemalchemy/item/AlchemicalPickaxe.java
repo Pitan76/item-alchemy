@@ -2,26 +2,35 @@ package net.pitan76.itemalchemy.item;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
+import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.pitan76.itemalchemy.util.ItemCharge;
+import net.pitan76.itemalchemy.util.IRechargeableFromKlein;
 import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
 import net.pitan76.mcpitanlib.api.event.item.PostMineEvent;
 import net.pitan76.mcpitanlib.api.item.tool.CompatiblePickaxeItem;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import net.pitan76.mcpitanlib.midohra.util.math.Direction;
 
 import java.util.List;
 
-public class AlchemicalPickaxe extends CompatiblePickaxeItem implements ItemCharge, AlchemicalToolMode {
+public class AlchemicalPickaxe extends CompatiblePickaxeItem implements IRechargeableFromKlein, AlchemicalToolMode {
     public AlchemicalPickaxe(CompatibleToolMaterial toolMaterial, int attackDamage, float attackSpeed, CompatibleItemSettings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
+    }
+
+    @Override
+    public void appendTooltip(ItemAppendTooltipEvent e, Options options) {
+        ItemStack stack = e.getStack();
+        e.addTooltip(TooltipUtil.generateTooltipLines(ItemStackUtil.getItem(stack)));
     }
 
     @Override
@@ -49,29 +58,49 @@ public class AlchemicalPickaxe extends CompatiblePickaxeItem implements ItemChar
 
         int mode = getMode(stack);
         Direction forward = Direction.of(e.getPlayer().getHorizontalFacing());
+        int charge = ItemUtils.getCharge(stack);
 
-        switch (mode) {
-            case 0:
-                // Normal mode
-                break;
-            case 1:
-                // Vertical 3 mode
-                mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), Direction.UP, 1);
-                mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), Direction.DOWN, 1);
-                break;
-            case 2:
-                // Horizontal 3 mode
-                Direction left = forward.rotateYCounterclockwise();
-                Direction right = forward.rotateYClockwise();
-                mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), left, 1);
-                mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), right, 1);
-                break;
-            case 3:
-                // Depth 3 mode
-                mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), forward, 2);
-                break;
-            default:
-                break;
+        // Expand mining area based on charge level when in normal mode (mode 0)
+        if (mode == 0 && charge > 0) {
+            // Mine additional blocks based on charge level
+            // Charge 1: +1 block each direction (3x3 area)
+            // Charge 2+: same as charge 1
+            mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), Direction.UP, 1);
+            mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), Direction.DOWN, 1);
+            Direction left = forward.rotateYCounterclockwise();
+            Direction right = forward.rotateYClockwise();
+            mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), left, 1);
+            mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), right, 1);
+        } else {
+            // Use existing mode system
+            switch (mode) {
+                case 0:
+                    // Normal mode
+                    break;
+                case 1:
+                    // Vertical 3 mode
+                    mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), Direction.UP, 1);
+                    mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), Direction.DOWN, 1);
+                    break;
+                case 2:
+                    // Horizontal 3 mode
+                    Direction left = forward.rotateYCounterclockwise();
+                    Direction right = forward.rotateYClockwise();
+                    mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), left, 1);
+                    mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), right, 1);
+                    break;
+                case 3:
+                    // Depth 3 mode
+                    mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), forward, 2);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // Consume 1 charge per block mined if charge > 0
+        if (charge > 0) {
+            ItemUtils.setCharge(stack, charge - 1);
         }
 
         return super.postMine(e);
@@ -121,5 +150,10 @@ public class AlchemicalPickaxe extends CompatiblePickaxeItem implements ItemChar
                 targetBlocks.add(targetPos);
             }
         }
+    }
+
+    @Override
+    public int getEmcCostPerCharge() {
+        return 1200;
     }
 }

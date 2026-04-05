@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    "MDM",
+    "MMM"
+  ],
+  "key": {
+    "M": {
+      "item": "itemalchemy:mobius_fuel"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:klein_star_ein",
+    "count": 1
+  }
+}

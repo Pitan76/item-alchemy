@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    "MDM",
+    "M M"
+  ],
+  "key": {
+    "M": {
+      "item": "itemalchemy:red_matter"
+    },
+    "D": {
+      "item": "itemalchemy:dark_matter_leggings"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:red_matter_leggings",
+    "count": 1
+  }
+}

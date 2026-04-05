@@ -4,7 +4,6 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.block.pedestal.IPedestalItem;
 import net.pitan76.itemalchemy.tile.DMPedestalTile;
-import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.world.TickerUtil;
@@ -20,7 +19,7 @@ import net.pitan76.mcpitanlib.midohra.world.World;
 import java.util.List;
 import java.util.Optional;
 
-public class WatchOfFlowingTime extends CompatItem implements IPedestalItem {
+public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem {
 
     private static final int BONUS_TICKS = 8;
     private static final double MOB_SLOWDOWN = 0.25;

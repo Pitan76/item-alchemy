@@ -4,7 +4,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
-import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +15,9 @@ import static com.google.common.primitives.Ints.constrainToRange;
  */
 public class ItemUtils {
 
+  // DEBUG flag - set to true to enable diagnostic logging
+  private static final boolean DEBUG_CHARGE = false;
+
   // Key for getting back charge value of an item.
   public static final String CHARGE_COMPONENT_KEY = "charge";
 
@@ -23,18 +25,6 @@ public class ItemUtils {
   public static final int MIN_CHARGE_VALUE = 0;
   // Maximum charge value allowed.
   public static final int MAX_CHARGE_VALUE = 4;
-
-  /**
-   * Handles {@link ItemAlchemy#init()} ItemEventRegistry.INVENTORY_TICK
-   * if the selected inventory item is of {@link ItemCharge}.
-   *
-   * @param stack that is selected and of {@link ItemCharge}.
-   */
-  public static void handleItemChargeInventoryTick(ItemStack stack) {
-    int charge = getCharge(stack);
-    int damage = ItemStackUtil.getMaxDamage(stack) - (charge * 4);
-    ItemStackUtil.setDamage(stack, damage);
-  }
 
   /**
    * Checks if the given {@link ItemStack} is chargeable via {@link ItemCharge}.
@@ -65,10 +55,17 @@ public class ItemUtils {
 
     if (!NbtUtil.has(nbt, CHARGE_COMPONENT_KEY)) {
       setCharge(stack, MIN_CHARGE_VALUE);
+      if (DEBUG_CHARGE) {
+        System.out.println("[DEBUG-CHARGE] getCharge: initialized charge to 0 for " + stack.getItem().getClass().getSimpleName());
+      }
       return MIN_CHARGE_VALUE;
     }
 
-    return NbtUtil.getInt(nbt, CHARGE_COMPONENT_KEY);
+    int charge = NbtUtil.getInt(nbt, CHARGE_COMPONENT_KEY);
+    if (DEBUG_CHARGE && charge > 0) {
+      System.out.println("[DEBUG-CHARGE] getCharge: read charge=" + charge + " for " + stack.getItem().getClass().getSimpleName());
+    }
+    return charge;
   }
 
   /**
@@ -85,7 +82,13 @@ public class ItemUtils {
 
     NbtCompound nbt = CustomDataUtil.get(stack, ItemAlchemy.MOD_ID);
 
+    int oldCharge = NbtUtil.has(nbt, CHARGE_COMPONENT_KEY) ? NbtUtil.getInt(nbt, CHARGE_COMPONENT_KEY) : -1;
     NbtUtil.set(nbt, CHARGE_COMPONENT_KEY, charge);
     CustomDataUtil.set(stack, ItemAlchemy.MOD_ID, nbt);
+    
+    if (DEBUG_CHARGE && oldCharge != charge) {
+      System.out.println("[DEBUG-CHARGE] setCharge: changed from " + oldCharge + " to " + charge + " for " + stack.getItem().getClass().getSimpleName());
+    }
   }
+  
 }

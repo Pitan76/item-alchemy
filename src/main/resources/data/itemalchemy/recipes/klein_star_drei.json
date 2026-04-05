@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {"item": "itemalchemy:klein_star_zwei"},
+    {"item": "itemalchemy:klein_star_zwei"},
+    {"item": "itemalchemy:klein_star_zwei"},
+    {"item": "itemalchemy:klein_star_zwei"}
+  ],
+  "result": {
+    "item": "itemalchemy:klein_star_drei",
+    "count": 1
+  }
+}

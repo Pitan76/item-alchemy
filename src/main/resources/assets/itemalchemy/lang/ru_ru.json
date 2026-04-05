@@ -2,73 +2,285 @@
   "itemGroup.itemalchemy.item_alchemy": "Item Alchemy",
 
   "item.itemalchemy.tome_of_knowledge": "Том Знаний",
+  "item.itemalchemy.tome_of_knowledge.desc": "§7Мистическая книга, хранящая знания обо всех предметах",
+  "item.itemalchemy.tome_of_knowledge.desc_shift": "§9Изучает EMC-ценность предметов|||§9Хранит знания навсегда|||§6Держать в руке §7- Изучать предметы вокруг|||§fИспользуется для рецептов трансмутации",
+
   "item.itemalchemy.philosopher_stone": "Философский камень",
-  "item.itemalchemy.alchemy_pad": "Алхимическая панель",
+  "item.itemalchemy.philosopher_stone.desc": "§6Легендарный камень эквивалентного обмена",
+  "item.itemalchemy.philosopher_stone.desc_shift": "§9Основа всей алхимии|||§9Преобразует блоки|||§6ПКМ §7- Трансформация блока|||§6Присядьте+ПКМ §7- Альтернативный рецепт|||§fЗарядка увеличивает радиус",
+
+  "item.itemalchemy.alchemy_pad": "Алхимическая подложка",
+  "item.itemalchemy.alchemy_pad.desc": "§7Круглая платформа для алхимических ритуалов",
+  "item.itemalchemy.alchemy_pad.desc_shift": "§9Проводит базовые трансмутации|||§9Компонент для крафта|||§fРазместите предметы и активируйте Философским камнем",
+
   "item.itemalchemy.alchemical_fuel": "Алхимическое топливо",
+  "item.itemalchemy.alchemical_fuel.desc": "§7Базовое горючее, созданное алхимией",
+  "item.itemalchemy.alchemical_fuel.desc_shift": "§9Время горения: 4000 тиков (200с)|||§fСоздаётся из угля с помощью Философского камня",
+
   "item.itemalchemy.mobius_fuel": "Топливо Мёбиуса",
+  "item.itemalchemy.mobius_fuel.desc": "§7Улучшенное топливо с невероятной энергией",
+  "item.itemalchemy.mobius_fuel.desc_shift": "§9Время горения: 12800 тиков (640с)|||§fСоздаётся прессованием Алхимического топлива",
+
   "item.itemalchemy.aeternalis_fuel": "Топливо Этерналиса",
+  "item.itemalchemy.aeternalis_fuel.desc": "§7Высшее топливо, пылающее вечным огнём",
+  "item.itemalchemy.aeternalis_fuel.desc_shift": "§9Время горения: 25600 тиков (1280с)|||§fНаиболее концентрированное топливо",
+
   "item.itemalchemy.dark_matter": "Тёмная материя",
+  "item.itemalchemy.dark_matter.desc": "§5Загадочный материал из спрессованного топлива",
+  "item.itemalchemy.dark_matter.desc_shift": "§9Глубокий фиолетовый цвет|||§9Странные свойства|||§fСоздаётся прессованием Топлива Мёбиуса с использованием EMC",
+
   "item.itemalchemy.red_matter": "Красная материя",
+  "item.itemalchemy.red_matter.desc": "§cПредельный алхимический материал",
+  "item.itemalchemy.red_matter.desc_shift": "§9Сильнейший материал в алхимии|||§9Светится красной энергией|||§fСоздаётся из Топлива Этерналиса и Тёмной материи",
+
   "item.itemalchemy.low_covalence_dust": "Пыль низкой ковалентности",
+  "item.itemalchemy.low_covalence_dust.desc": "§7Пыль со слабыми связующими свойствами",
+  "item.itemalchemy.low_covalence_dust.desc_shift": "§9Базовый алхимический компонент|||§fОбразуется при сжигании предметов с низкой EMC-ценностью",
+
   "item.itemalchemy.middle_covalence_dust": "Пыль средней ковалентности",
+  "item.itemalchemy.middle_covalence_dust.desc": "§7Пыль с умеренными связующими свойствами",
+  "item.itemalchemy.middle_covalence_dust.desc_shift": "§9Продвинутый компонент|||§fОбразуется из предметов со средней EMC-ценностью",
+
   "item.itemalchemy.high_covalence_dust": "Пыль высокой ковалентности",
-  "item.itemalchemy.dark_matter_sword": "Меч из тёмной материи",
-  "item.itemalchemy.dark_matter_axe": "Топор из тёмной материи",
-  "item.itemalchemy.dark_matter_pickaxe": "Кирка из тёмной материи",
-  "item.itemalchemy.dark_matter_shovel": "Лопата из тёмной материи",
-  "item.itemalchemy.dark_matter_hoe": "Мотыга из тёмной материи",
-  "item.itemalchemy.red_matter_sword": "Меч из красной материи",
-  "item.itemalchemy.red_matter_axe": "Топор из красной материи",
-  "item.itemalchemy.red_matter_pickaxe": "Кирка из красной материи",
-  "item.itemalchemy.red_matter_shovel": "Лопата из красной материи",
-  "item.itemalchemy.red_matter_hoe": "Мотыга из красной материи",
+  "item.itemalchemy.high_covalence_dust.desc": "§7Пыль с мощными связующими свойствами",
+  "item.itemalchemy.high_covalence_dust.desc_shift": "§9Компонент для сложных рецептов|||§fОбразуется из предметов с высокой EMC-ценностью",
+
+  "item.itemalchemy.dark_matter_sword": "Меч из Тёмной материи",
+  "item.itemalchemy.dark_matter_sword.desc": "§5Меч из Тёмной материи",
+  "item.itemalchemy.dark_matter_sword.desc_shift": "§9Быстрая скорость атаки|||§9Бонусный урон при заряде|||§6Отпускание §7- Атака рывком|||§5Прочность восстанавливается через EMC",
+
+  "item.itemalchemy.dark_matter_axe": "Топор из Тёмной материи",
+  "item.itemalchemy.dark_matter_axe.desc": "§5Топор из Тёмной материи",
+  "item.itemalchemy.dark_matter_axe.desc_shift": "§9Эффективно рубит древесину|||§9Быстрее при заряде|||§fПолная зарядка сваливает целые деревья",
+
+  "item.itemalchemy.dark_matter_pickaxe": "Кирка из Тёмной материи",
+  "item.itemalchemy.dark_matter_pickaxe.desc": "§5Кирка из Тёмной материи",
+  "item.itemalchemy.dark_matter_pickaxe.desc_shift": "§9Добывает каменные блоки|||§9Быстрее алмазной|||§9Заряд расширяет область добычи|||§fПолная зарядка добывает 3x3",
+
+  "item.itemalchemy.dark_matter_shovel": "Лопата из Тёмной материи",
+  "item.itemalchemy.dark_matter_shovel.desc": "§5Лопата из Тёмной материи",
+  "item.itemalchemy.dark_matter_shovel.desc_shift": "§9Копает землю, песок, гравий|||§9Заряд расширяет область копания|||§fПолная зарядка очищает 3x3",
+
+  "item.itemalchemy.dark_matter_hoe": "Мотыга из Тёмной материи",
+  "item.itemalchemy.dark_matter_hoe.desc": "§5Мотыга из Тёмной материи",
+  "item.itemalchemy.dark_matter_hoe.desc_shift": "§9Мгновенно вспахивает землю|||§9Собирает созревшие культуры|||§9Заряд расширяет область вспашки|||§fПолная зарядка вспахивает 9x9",
+
+  "item.itemalchemy.red_matter_sword": "Меч из Красной материи",
+  "item.itemalchemy.red_matter_sword.desc": "§cПредельный меч",
+  "item.itemalchemy.red_matter_sword.desc_shift": "§9Очень быстрая скорость атаки|||§9Бонусный урон при заряде|||§fМакс. заряд создаёт ударную волну|||§cНеразрушим с EMC",
+
+  "item.itemalchemy.red_matter_axe": "Топор из Красной материи",
+  "item.itemalchemy.red_matter_axe.desc": "§cПредельный топор",
+  "item.itemalchemy.red_matter_axe.desc_shift": "§9Рубит любую древесину мгновенно|||§9Быстрее при заряде|||§fПолная зарядка сваливает огромные массивы",
+
+  "item.itemalchemy.red_matter_pickaxe": "Кирка из Красной материи",
+  "item.itemalchemy.red_matter_pickaxe.desc": "§cПредельная кирка",
+  "item.itemalchemy.red_matter_pickaxe.desc_shift": "§9Добывает любые блоки мгновенно|||§9Добывает обсидиан без зачарований|||§9Заряд расширяет область добычи|||§fПолная зарядка добывает 5x5",
+
+  "item.itemalchemy.red_matter_shovel": "Лопата из Красной материи",
+  "item.itemalchemy.red_matter_shovel.desc": "§cПредельная лопата",
+  "item.itemalchemy.red_matter_shovel.desc_shift": "§9Копает любые блоки мгновенно|||§9Заряд расширяет область копания|||§fПолная зарядка очищает 5x5",
+
+  "item.itemalchemy.red_matter_hoe": "Мотыга из Красной материи",
+  "item.itemalchemy.red_matter_hoe.desc": "§cПредельная мотыга",
+  "item.itemalchemy.red_matter_hoe.desc_shift": "§9Вспахивает огромные участки|||§9Авто-высадка семян из инвентаря|||§9Заряд расширяет область вспашки|||§fПолная зарядка вспахивает 11x11",
+
   "item.itemalchemy.wrench": "Гаечный ключ IA",
+  "item.itemalchemy.wrench.desc": "§7Инструмент для настройки алхимических механизмов",
+  "item.itemalchemy.wrench.desc_shift": "§9Меняет направление механизмов|||§9Поднимает механизмы без потери|||§6ПКМ §7- Изменить направление|||§6Присядьте+ПКМ §7- Поднять механизм",
+
   "item.itemalchemy.ring": "Кольцо",
-  "item.itemalchemy.pickup_ring": "Кольцо притяжения",
-  "item.itemalchemy.void_ring": "Кольцо пустоты",
-  "item.itemalchemy.divining_rod_lv1": "Лоза рудоискателя (Ур.1)",
-  "item.itemalchemy.divining_rod_lv2": "Лоза рудоискателя (Ур.2)",
-  "item.itemalchemy.divining_rod_lv3": "Лоза рудоискателя (Ур.3)",
+  "item.itemalchemy.ring.desc": "§7Простое кольцо с малыми магическими свойствами",
+  "item.itemalchemy.ring.desc_shift": "§9Носится в слоте кольца или во второй руке|||§9Компонент для улучшения|||§fМожет быть улучшено до специализированных колец, таких как Лента Чёрной Дыры",
 
-  "block.itemalchemy.alchemy_table": "Стол трансмутации",
-  "block.itemalchemy.emc_collector_mk1": "Сборщик антиматерии MK-1",
-  "block.itemalchemy.emc_collector_mk2": "Сборщик антиматерии MK-2",
-  "block.itemalchemy.emc_collector_mk3": "Сборщик антиматерии MK-3",
-  "block.itemalchemy.emc_collector_mk4": "Сборщик антиматерии MK-4",
-  "block.itemalchemy.emc_collector_mk5": "Сборщик антиматерии MK-5",
+  "item.itemalchemy.black_hole_band": "Лента Чёрной Дыры",
+  "item.itemalchemy.black_hole_band.desc": "§9Кольцо, притягивающее близлежащие предметы",
+  "item.itemalchemy.black_hole_band.desc_shift": "§9Притягивает предметы с 7 блоков|||§9Авто-сбор в инвентарь|||§6В руке/броня §7- Сбор к игроку|||§9Режим пьедестала:|||§9Радиус 16 блоков|||§916 слотов внутреннего хранения|||§9Извлечение через воронку|||§6ПКМ §7- Извлечь один предмет|||§6Shift+ПКМ §7- Извлечь всё",
+
+  "item.itemalchemy.void_ring": "Кольцо Пустоты",
+  "item.itemalchemy.void_ring.desc": "§5Кольцо, конвертирующее предметы в EMC",
+  "item.itemalchemy.void_ring.desc_shift": "§9Конвертация предметов в EMC|||§9Настраиваемый фильтр|||§6Присядьте+ПКМ §7- Настроить фильтр|||§fНосите для активации",
+
+  "item.itemalchemy.divining_rod_lv1": "Искательная лоза (Ур.1)",
+  "item.itemalchemy.divining_rod_lv1.desc": "§7Простая лоза для обнаружения EMC",
+  "item.itemalchemy.divining_rod_lv1.desc_shift": "§9Режим 1: Среднее EMC|||§9Режим 2: Общее EMC|||§9Режим 3: Наивысшее EMC блока|||§6ПКМ §7- Сканировать|||§fОграниченный радиус",
+
+  "item.itemalchemy.divining_rod_lv2": "Искательная лоза (Ур.2)",
+  "item.itemalchemy.divining_rod_lv2.desc": "§7Улучшенная лоза с лучшим обнаружением EMC",
+  "item.itemalchemy.divining_rod_lv2.desc_shift": "§9Больший радиус чем у Ур.1|||§9Более точные показания|||§6ПКМ §7- Сканировать|||§6Зарядка §7- Увеличить радиус",
+
+  "item.itemalchemy.divining_rod_lv3": "Искательная лоза (Ур.3)",
+  "item.itemalchemy.divining_rod_lv3.desc": "§9Предельная лоза для обнаружения EMC",
+  "item.itemalchemy.divining_rod_lv3.desc_shift": "§9Максимальный радиус и точность|||§9Обнаруживает определённые типы руд|||§6ПКМ §7- Сканировать|||§fПолная зарядка показывает все блоки с высоким EMC",
+
+  "block.itemalchemy.alchemy_table": "Алхимический стол",
+  "block.itemalchemy.alchemy_table.desc": "§7Базовая станция для крафта алхимических предметов",
+  "block.itemalchemy.alchemy_table.desc_shift": "§9Создаёт алхимические предметы|||§9Показывает EMC-стоимость в интерфейсе|||§fПоместите Философский камень в центр и окружите материалами",
+
+  "block.itemalchemy.emc_collector_mk1": "EMC-коллектор MK-1",
+  "block.itemalchemy.emc_collector_mk1.desc": "§7Генерирует EMC из солнечного света",
+  "block.itemalchemy.emc_collector_mk1.desc_shift": "§9Генерация: Медленная|||§9Требует: Прямой солнечный свет|||§fРазместите на солнце для генерации EMC|||Выводит EMC в смежные механизмы",
+
+  "block.itemalchemy.emc_collector_mk2": "EMC-коллектор MK-2",
+  "block.itemalchemy.emc_collector_mk2.desc": "§7Улучшенный генератор EMC",
+  "block.itemalchemy.emc_collector_mk2.desc_shift": "§9Генерация: Средняя|||§9Требует: Меньше света|||§fБыстрее чем MK-1|||Может объединяться в массивы",
+
+  "block.itemalchemy.emc_collector_mk3": "EMC-коллектор MK-3",
+  "block.itemalchemy.emc_collector_mk3.desc": "§7Продвинутый генератор EMC",
+  "block.itemalchemy.emc_collector_mk3.desc_shift": "§9Генерация: Быстрая|||§9Требует: Частичная тень ОК|||§fТребуется для средних операций",
+
+  "block.itemalchemy.emc_collector_mk4": "EMC-коллектор MK-4",
+  "block.itemalchemy.emc_collector_mk4.desc": "§7Высокоуровневый генератор EMC",
+  "block.itemalchemy.emc_collector_mk4.desc_shift": "§9Генерация: Очень быстрая|||§9Требует: Минимум света|||§fМожет питать несколько механизмов",
+
+  "block.itemalchemy.emc_collector_mk5": "EMC-коллектор MK-5",
+  "block.itemalchemy.emc_collector_mk5.desc": "§9Предельный генератор EMC",
+  "block.itemalchemy.emc_collector_mk5.desc_shift": "§9Генерация: Максимальная|||§9Требует: Работает в темноте|||§fОдин коллектор может питать всю алхимическую базу",
+
   "block.itemalchemy.alchemy_chest": "Алхимический сундук",
-  "block.itemalchemy.emc_condenser": "Конденсатор антиматерии",
-  "block.itemalchemy.emc_condenser_mk2": "Конденсатор антиматерии MK-2",
-  "block.itemalchemy.emc_repeater": "Ретранслятор антиматерии",
-  "block.itemalchemy.aegu": "Генератор алхимической энергии",
-  "block.itemalchemy.advanced_aegu": "Продвинутый генератор АЭ",
-  "block.itemalchemy.ultimate_aegu": "Ультимативный генератор АЭ",
-  "block.itemalchemy.dark_matter_block": "Блок тёмной материи",
-  "block.itemalchemy.red_matter_block": "Блок красной материи",
-  "block.itemalchemy.emc_importer": "Импортёр EMC",
-  "block.itemalchemy.emc_exporter": "Экспортёр EMC",
-  "block.itemalchemy.emc_cable": "EMC кабель",
-  "block.itemalchemy.emc_battery": "EMC батарея",
-  "block.itemalchemy.interdiction_torch": "Факел запрета",
-  "block.itemalchemy.dm_pedestal": "Пьедестал тёмной материи",
-  "item.itemalchemy.watch_of_flowing_time": "Часы текущего времени",
+  "block.itemalchemy.alchemy_chest.desc": "§7Сундук для хранения, питаемый EMC",
+  "block.itemalchemy.alchemy_chest.desc_shift": "§9Хранит предметы как EMC|||§9Авто-забор из смежных|||§fДоступ к хранению EMC из подключённых механизмов",
 
-  "container.itemalchemy.alchemy_table": "Стол трансмутации",
-  "container.itemalchemy.emc_condenser": "Конденсатор антиматерии",
-  "container.itemalchemy.emc_collector": "Сборщик антиматерии",
-  "container.itemalchemy.emc_importer": "Импортёр EMC",
-  "container.itemalchemy.emc_exporter": "Экспортёр EMC",
-  "container.itemalchemy.emc_battery": "EMC батарея",
+  "block.itemalchemy.emc_condenser": "EMC-конденсатор",
+  "block.itemalchemy.emc_condenser.desc": "§7Преобразует EMC в физические предметы",
+  "block.itemalchemy.emc_condenser.desc_shift": "§9Создаёт предметы из EMC|||§9Авто-крафт при готовности|||§fПоместите целевой предмет в центр|||Незаменим для массового производства",
+
+  "block.itemalchemy.emc_condenser_mk2": "EMC-конденсатор MK-2",
+  "block.itemalchemy.emc_condenser_mk2.desc": "§7Продвинутый конденсатор с извлечением",
+  "block.itemalchemy.emc_condenser_mk2.desc_shift": "§9Авто-извлечение предметов|||§9Система фильтрации|||§fВыводит в смежные инвентари|||Увеличена скорость конденсации",
+
+  "block.itemalchemy.emc_repeater": "EMC-ретранслятор",
+  "block.itemalchemy.emc_repeater.desc": "§7Усиливает и расширяет EMC-сети",
+  "block.itemalchemy.emc_repeater.desc_shift": "§9Усиливает EMC-сигналы|||§9Небольшой буфер|||§fРазместите между кабелями для расширения радиуса сети",
+
+  "block.itemalchemy.aegu": "Алхимический энергогенератор",
+  "block.itemalchemy.aegu.desc": "§7Преобразует EMC в Forge Energy (FE)",
+  "block.itemalchemy.aegu.desc_shift": "§9Конвертация EMC в FE|||§9Настраиваемая мощность|||§fПодключите EMC с одной стороны|||Вывод FE с других сторон",
+
+  "block.itemalchemy.advanced_aegu": "Продвинутый АЭГ",
+  "block.itemalchemy.advanced_aegu.desc": "§7Улучшенный конвертер энергии",
+  "block.itemalchemy.advanced_aegu.desc_shift": "§9Выше эффективность|||§9Несколько подключений|||§fЛучший коэффициент конверсии EMC в FE",
+
+  "block.itemalchemy.ultimate_aegu": "Предельный АЭГ",
+  "block.itemalchemy.ultimate_aegu.desc": "§9Предельный конвертер энергии",
+  "block.itemalchemy.ultimate_aegu.desc_shift": "§9Максимальная эффективность|||§9Питает целые фабрики|||§fМинимальные потери EMC|||Вывод в несколько систем",
+
+  "block.itemalchemy.dark_matter_block": "Блок Тёмной материи",
+  "block.itemalchemy.dark_matter_block.desc": "§5Твёрдый блок из Тёмной материи",
+  "block.itemalchemy.dark_matter_block.desc_shift": "§9Декоративный блок|||§9Компактное хранение (9 шт.)|||§fРазбирается обратно на 9 Тёмной материи|||Уникальный фиолетово-чёрный вид",
+
+  "block.itemalchemy.red_matter_block": "Блок Красной материи",
+  "block.itemalchemy.red_matter_block.desc": "§cТвёрдый блок из Красной материи",
+  "block.itemalchemy.red_matter_block.desc_shift": "§9Престижный строительный блок|||§9Компактное хранение (9 шт.)|||§fРазбирается обратно на 9 Красной материи|||Слабо светится красной энергией",
+
+  "block.itemalchemy.emc_importer": "EMC-импортёр",
+  "block.itemalchemy.emc_importer.desc": "§7Автоматически импортирует предметы, используя EMC",
+  "block.itemalchemy.emc_importer.desc_shift": "§9Забирает из инвентарей|||§9Конвертирует в EMC|||§9Настраиваемый фильтр|||§fНезаменим для автоматической генерации EMC",
+
+  "block.itemalchemy.emc_exporter": "EMC-экспортёр",
+  "block.itemalchemy.emc_exporter.desc": "§7Автоматически экспортирует предметы из EMC",
+  "block.itemalchemy.emc_exporter.desc_shift": "§9Создаёт предметы из EMC|||§9Выводит в инвентари|||§fУстановите предмет и количество|||Идеально для линий производства",
+
+  "block.itemalchemy.emc_cable": "EMC-кабель",
+  "block.itemalchemy.emc_cable.desc": "§7Передаёт EMC между механизмами",
+  "block.itemalchemy.emc_cable.desc_shift": "§9Низкие потери при передаче|||§9Прозрачный дизайн|||§6ПКМ ключом §7- Настроить|||§fМожет быть скрыт в стенах",
+
+  "block.itemalchemy.emc_battery": "EMC-батарея",
+  "block.itemalchemy.emc_battery.desc": "§7Хранит большое количество EMC",
+  "block.itemalchemy.emc_battery.desc_shift": "§9Огромная ёмкость|||§9Авто-заряд/разряд|||§fЗаряжается от любого источника EMC|||Питает механизмы когда нужно",
+
+  "block.itemalchemy.interdiction_torch": "Факел запрета",
+  "block.itemalchemy.interdiction_torch.desc": "§7Факел, отталкивающий враждебных мобов",
+  "block.itemalchemy.interdiction_torch.desc_shift": "§9Отталкивает враждебных мобов|||§9Настраиваемые типы мобов|||§fРадиус увеличивается с подачей EMC|||Идеально для защиты базы",
+
+  "block.itemalchemy.dm_pedestal": "Пьедестал Тёмной материи",
+  "block.itemalchemy.dm_pedestal.desc": "§5Пьедестал для демонстрации алхимических предметов",
+  "block.itemalchemy.dm_pedestal.desc_shift": "§9Эффект луча|||§9Заряжает предметы со временем|||§6ПКМ §7- Положить предмет|||§6Присядьте+ПКМ §7- Забрать",
+
+  "item.itemalchemy.watch_of_flowing_time": "Часы Текущего Времени",
+  "item.itemalchemy.watch_of_flowing_time.desc": "§9Часы, ускоряющие время вокруг себя",
+  "item.itemalchemy.watch_of_flowing_time.desc_shift": "§9Ускоряет тайловые сущности|||§9Выше заряд = быстрее|||§fРазместите на Пьедестале ТМ|||Ускоряет печи, фермы, механизмы",
+
+  "item.itemalchemy.repair_talisman": "Талисман Починки",
+  "item.itemalchemy.repair_talisman.desc": "§7Талисман, чинящий предметы в инвентаре",
+  "item.itemalchemy.repair_talisman.desc_shift": "§9Авто-починка инвентаря|||§9Использует EMC для ремонта|||§fРаботает на всех ремонтируемых предметах|||Может быть отключён для конкретных",
+
+  "item.itemalchemy.dark_matter_helmet": "Шлем из Тёмной материи",
+  "item.itemalchemy.dark_matter_helmet.desc": "§5Шлем из Тёмной материи",
+  "item.itemalchemy.dark_matter_helmet.desc_shift": "§9Особенность: Ночное зрение|||§6Зарядка §7- Активировать способности|||§5Саморемонт через EMC",
+
+  "item.itemalchemy.dark_matter_chestplate": "Нагрудник из Тёмной материи",
+  "item.itemalchemy.dark_matter_chestplate.desc": "§5Нагрудник из Тёмной материи",
+  "item.itemalchemy.dark_matter_chestplate.desc_shift": "§9Особенность: Сопротивление урону|||§6Зарядка §7- Активировать способности|||§5Саморемонт через EMC",
+
+  "item.itemalchemy.dark_matter_leggings": "Поножи из Тёмной материи",
+  "item.itemalchemy.dark_matter_leggings.desc": "§5Поножи из Тёмной материи",
+  "item.itemalchemy.dark_matter_leggings.desc_shift": "§9Особенность: Ускорение|||§6Зарядка §7- Активировать способности|||§5Саморемонт через EMC",
+
+  "item.itemalchemy.dark_matter_boots": "Ботинки из Тёмной материи",
+  "item.itemalchemy.dark_matter_boots.desc": "§5Ботинки из Тёмной материи",
+  "item.itemalchemy.dark_matter_boots.desc_shift": "§9Особенность: Прыжок, шаг вверх|||§6Зарядка §7- Активировать способности|||§5Саморемонт через EMC",
+
+  "item.itemalchemy.red_matter_helmet": "Шлем из Красной материи",
+  "item.itemalchemy.red_matter_helmet.desc": "§cПредельный шлем",
+  "item.itemalchemy.red_matter_helmet.desc_shift": "§9Особенность: Ночное зрение, HUD|||§fПолный набор даёт специальные способности|||§cМаксимальная защита",
+
+  "item.itemalchemy.red_matter_chestplate": "Нагрудник из Красной материи",
+  "item.itemalchemy.red_matter_chestplate.desc": "§cПредельный нагрудник",
+  "item.itemalchemy.red_matter_chestplate.desc_shift": "§9Особенность: Временная неуязвимость|||§6Зарядка §7- Способность полёта|||§cСильнейшая защита груди",
+
+  "item.itemalchemy.red_matter_leggings": "Поножи из Красной материи",
+  "item.itemalchemy.red_matter_leggings.desc": "§cПредельные поножи",
+  "item.itemalchemy.red_matter_leggings.desc_shift": "§9Особенность: Проход сквозь блоки|||§fУскорение всегда активно|||§cНепревзойдённая защита ног",
+
+  "item.itemalchemy.red_matter_boots": "Ботинки из Красной материи",
+  "item.itemalchemy.red_matter_boots.desc": "§cПредельные ботинки",
+  "item.itemalchemy.red_matter_boots.desc_shift": "§9Особенность: Полёт, ходьба по воде|||§6Зарядка §7- Ходьба по воздуху|||§cИдеальная обувь",
+
+  "item.itemalchemy.klein_star_ein": "Звезда Кляйна «Ein»",
+  "item.itemalchemy.klein_star_ein.desc": "§7Первая ступень Звёзд Кляйна",
+  "item.itemalchemy.klein_star_ein.desc_shift": "§9Скорость: Базовая|||§6ПКМ §7- Зарядка из инвентаря|||§cПрисядьте+ПКМ §7- Разрядка|||§6Путь: Ein → Zwei → Drei → Vier → Sphere → Omega",
+
+  "item.itemalchemy.klein_star_zwei": "Звезда Кляйна «Zwei»",
+  "item.itemalchemy.klein_star_zwei.desc": "§7Вторая ступень Звёзд Кляйна",
+  "item.itemalchemy.klein_star_zwei.desc_shift": "§9Скорость: Улучшенная|||§6ПКМ §7- Зарядка из инвентаря|||§cПрисядьте+ПКМ §7- Разрядка|||§6Путь: Ein → Zwei → Drei → Vier → Sphere → Omega",
+
+  "item.itemalchemy.klein_star_drei": "Звезда Кляйна «Drei»",
+  "item.itemalchemy.klein_star_drei.desc": "§7Третья ступень Звёзд Кляйна",
+  "item.itemalchemy.klein_star_drei.desc_shift": "§9Скорость: Быстрая|||§6ПКМ §7- Зарядка из инвентаря|||§cПрисядьте+ПКМ §7- Разрядка|||§6Путь: Ein → Zwei → Drei → Vier → Sphere → Omega",
+
+  "item.itemalchemy.klein_star_vier": "Звезда Кляйна «Vier»",
+  "item.itemalchemy.klein_star_vier.desc": "§7Четвёртая ступень Звёзд Кляйна",
+  "item.itemalchemy.klein_star_vier.desc_shift": "§9Скорость: Очень быстрая|||§6ПКМ §7- Зарядка из инвентаря|||§cПрисядьте+ПКМ §7- Разрядка|||§6Путь: Ein → Zwei → Drei → Vier → Sphere → Omega",
+
+  "item.itemalchemy.klein_star_sphere": "Звезда Кляйна «Sphere»",
+  "item.itemalchemy.klein_star_sphere.desc": "§7Пятая ступень Звёзд Кляйна",
+  "item.itemalchemy.klein_star_sphere.desc_shift": "§9Скорость: Стремительная|||§9Можно разместить как блок|||§6ПКМ §7- Зарядка из инвентаря|||§cПрисядьте+ПКМ §7- Разрядка|||§6Путь: Ein → Zwei → Drei → Vier → Sphere → Omega",
+
+  "item.itemalchemy.klein_star_omega": "Звезда Кляйна «Omega»",
+  "item.itemalchemy.klein_star_omega.desc": "§9Предельная Звезда Кляйна",
+  "item.itemalchemy.klein_star_omega.desc_shift": "§9Скорость: Бесконечная|||§9Может питать что угодно|||§6ПКМ §7- Зарядка из инвентаря|||§cПрисядьте+ПКМ §7- Разрядка|||§6Путь: Ein → Zwei → Drei → Vier → Sphere → Omega|||§9Финальная ступень",
+
+  "container.itemalchemy.alchemy_table": "Алхимический стол",
+  "container.itemalchemy.emc_condenser": "EMC-конденсатор",
+  "container.itemalchemy.emc_collector": "EMC-коллектор",
+  "container.itemalchemy.emc_importer": "EMC-импортёр",
+  "container.itemalchemy.emc_exporter": "EMC-экспортёр",
+  "container.itemalchemy.emc_battery": "EMC-батарея",
 
   "text.itemalchemy.owner": "Владелец: %s",
+  "text.itemalchemy.shift_info": "§7Нажмите [Shift] для подробностей",
+  "text.itemalchemy.charge": "Заряд: %d%%",
+  "text.itemalchemy.emc_stored": "EMC сохранено: %d",
+  "text.itemalchemy.max_emc": "Макс. EMC: %d",
 
   "key.category.itemalchemy.main": "Item Alchemy",
   "key.itemalchemy.charge": "Зарядить",
-  "key.itemalchemy.changemode": "Изменить режим",
+  "key.itemalchemy.changemode": "Сменить режим",
 
   "message.itemalchemy.failed_to_set_team": "[Item Alchemy] Не удалось назначить команду",
   "message.itemalchemy.diving_rod_switch_mode": "Переключено в режим %s",
-  "message.itemalchemy.diving_rod_average_emc": "Среднее количество EMC для %d блоков: %d",
-  "message.itemalchemy.diving_rod_total_emc": "Общее количество EMC: %d",
-  "message.itemalchemy.diving_rod_max_emc": "Максимальное количество EMC: %d"
+  "message.itemalchemy.diving_rod_average_emc": "Среднее EMC для %d блоков: %d",
+  "message.itemalchemy.diving_rod_total_emc": "Общее EMC: %d",
+  "message.itemalchemy.diving_rod_max_emc": "Максимальное EMC: %d"
 }

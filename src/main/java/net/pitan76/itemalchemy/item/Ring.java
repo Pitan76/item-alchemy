@@ -1,9 +1,8 @@
 package net.pitan76.itemalchemy.item;
 
-import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 
-public class Ring extends CompatItem  {
+public class Ring extends AlchemicalItem {
 
     public Ring(CompatibleItemSettings settings) {
         super(settings);

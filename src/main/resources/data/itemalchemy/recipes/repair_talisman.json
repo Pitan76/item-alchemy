@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LMH",
+    "SPS",
+    "HML"
+  ],
+  "key": {
+    "L": {
+      "item": "itemalchemy:low_covalence_dust"
+    },
+    "M": {
+      "item": "itemalchemy:middle_covalence_dust"
+    },
+    "H": {
+      "item": "itemalchemy:high_covalence_dust"
+    },
+    "S": {
+      "item": "minecraft:string"
+    },
+    "P": {
+      "item": "minecraft:paper"
+    }
+  },
+  "result": {
+    "item": "itemalchemy:repair_talisman",
+    "count": 1
+  }
+}
