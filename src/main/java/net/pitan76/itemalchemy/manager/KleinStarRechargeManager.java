@@ -7,7 +7,9 @@ import net.pitan76.itemalchemy.util.IRechargeableFromKlein;
 import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundEvents;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.inventory.CompatPlayerInventory;
 import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
 
 import java.util.ArrayList;
@@ -151,17 +153,17 @@ public class KleinStarRechargeManager {
         ItemStack mainHand = player.getMainHandStack();
         ItemStack offHand = player.getOffHandStack();
         
-        if (mainHand.getItem() instanceof KleinStar && KleinStar.getStoredEmc(mainHand) > 0) {
+        if (ItemStackUtil.getItem(mainHand) instanceof KleinStar && KleinStar.getStoredEmc(mainHand) > 0) {
             stars.add(mainHand);
         }
-        if (offHand.getItem() instanceof KleinStar && KleinStar.getStoredEmc(offHand) > 0) {
+        if (ItemStackUtil.getItem(offHand) instanceof KleinStar && KleinStar.getStoredEmc(offHand) > 0) {
             stars.add(offHand);
         }
         
         // Check inventory
         for (int i = 0; i < player.getInventory().size(); i++) {
             ItemStack stack = player.getInventory().getStack(i);
-            if (stack.getItem() instanceof KleinStar && KleinStar.getStoredEmc(stack) > 0) {
+            if (ItemStackUtil.getItem(stack) instanceof KleinStar && KleinStar.getStoredEmc(stack) > 0) {
                 stars.add(stack);
             }
         }
@@ -178,19 +180,21 @@ public class KleinStarRechargeManager {
         List<ChargeableItem> items = new ArrayList<>();
         
         // Check all inventory slots
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
+        CompatPlayerInventory inventory = new CompatPlayerInventory(player.getInventory());
+        for (int i = 0; i < inventory.callSize(); i++) {
+            ItemStack stack = inventory.callGetStack(i);
             
-            if (stack.getItem() instanceof IRechargeableFromKlein) {
+            if (ItemStackUtil.getItem(stack) instanceof IRechargeableFromKlein) {
+                IRechargeableFromKlein rechargeableItem = (IRechargeableFromKlein) ItemStackUtil.getItem(stack);
+
                 int charge = ItemUtils.getCharge(stack);
-                IRechargeableFromKlein rechargeableItem = (IRechargeableFromKlein) stack.getItem();
                 int maxCharge = rechargeableItem.getMaxCharge();
                 
                 // Skip if max charge
                 if (charge >= maxCharge) continue;
                 
                 // Skip selected item if config requires inactive-only charging
-                if (RechargeConfig.ONLY_WHEN_INACTIVE && i == player.getInventory().selectedSlot) {
+                if (RechargeConfig.ONLY_WHEN_INACTIVE && i == inventory.getSelectedSlot()) {
                     continue;
                 }
                 
@@ -211,8 +215,7 @@ public class KleinStarRechargeManager {
         double z = player.getZ();
         
         for (int i = 0; i < 10; i++) {
-            // TODO: MCPitanLibのMidohraWorldにaddParticleの引数で、CompatParticleTypes.ENCHANTを直接渡せるようにする
-            WorldUtil.addParticle(player.getWorld(), CompatParticleTypes.ENCHANT,
+            player.getMidohraWorld().addParticle(CompatParticleTypes.ENCHANT,
                 x + (Math.random() - 0.5), y + (Math.random() - 0.5) * 0.5, z + (Math.random() - 0.5),
                 0, 0.01, 0
             );

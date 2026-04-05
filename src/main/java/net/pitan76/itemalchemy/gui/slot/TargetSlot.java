@@ -36,7 +36,7 @@ public class TargetSlot extends CompatibleSlot {
         }
 
         net.minecraft.item.ItemStack newStack = stack.copy();
-        newStack.setCount(1);
+        ItemStackUtil.setCount(newStack, 1);
 
         super.callSetStack(newStack);
     }

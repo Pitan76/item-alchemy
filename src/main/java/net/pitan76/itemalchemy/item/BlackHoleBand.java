@@ -1,24 +1,26 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
 import net.pitan76.itemalchemy.block.pedestal.IPedestalItem;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.item.InventoryTickEvent;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.registry.CompatRegistryLookup;
 import net.pitan76.mcpitanlib.api.util.EntityUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.entity.ItemEntityUtil;
 import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
+import net.pitan76.mcpitanlib.midohra.entity.ItemEntityWrapper;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtElement;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtList;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.util.math.Box;
 import net.pitan76.mcpitanlib.midohra.util.math.Vector3d;
 import net.pitan76.mcpitanlib.midohra.world.World;
 
 import java.util.List;
+import java.util.Optional;
 
 public class BlackHoleBand extends Ring implements IPedestalItem {
 
@@ -35,19 +37,18 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
     public void inventoryTick(InventoryTickEvent e) {
         super.inventoryTick(e);
         if (e.isClient()) return;
-        if (!(e.entity instanceof PlayerEntity)) return;
+        if (!e.isPlayer()) return;
 
-        Player player = new Player((PlayerEntity) e.entity);
+        Player player = e.getPlayer();
+        World world = e.getMidohraWorld();
 
-        // TODO: PlayerのgetPosを直接Vector3dとして返すようにする
-        Vector3d playerPos = Vector3d.of(player.getPos());
+        Vector3d playerPos = player.getPosM();
 
-        Box box = new Box(playerPos);
-        box.expand(PLAYER_RANGE);
-        List<ItemEntity> items = ItemEntityUtil.getEntities(e.world, box.toMinecraft());
+        List<ItemEntityWrapper> items = ItemEntityUtil.getEntityWrappers(world,
+                new Box(playerPos).expand(PLAYER_RANGE));
 
-        for (ItemEntity itemEntity : items) {
-            Vector3d itemPos = EntityUtil.getPosM(itemEntity);
+        for (ItemEntityWrapper itemEntity : items) {
+            Vector3d itemPos = itemEntity.getPos();
             double dx = playerPos.getX() - itemPos.getX();
             double dy = playerPos.getY() - itemPos.getY();
             double dz = playerPos.getZ() - itemPos.getZ();
@@ -58,31 +59,29 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
                 double nx = dx / distance * speed;
                 double ny = dy / distance * speed;
                 double nz = dz / distance * speed;
-                EntityUtil.setVelocity(itemEntity, nx, ny, nz);
-                EntityUtil.setVelocityModified(itemEntity, true);
+                itemEntity.setVelocity(nx, ny, nz);
+                EntityUtil.setVelocityModified(itemEntity.get(), true);
             } else {
-                EntityUtil.setVelocity(itemEntity, 0, 0, 0);
-                EntityUtil.setPos(itemEntity, playerPos.getX(), playerPos.getY(), playerPos.getZ());
-                itemEntity.onPlayerCollision(player.getEntity());
+                itemEntity.setVelocity(0, 0, 0);
+                itemEntity.setPos(playerPos);
+                itemEntity.onPlayerCollision(player);
             }
         }
     }
 
     @Override
-    public boolean updateInPedestal(ItemStack stack, World world, BlockPos pos) {
+    public boolean updateInPedestal(ItemStack stack, World world, BlockPos pos, CompatRegistryLookup registryLookup) {
         if (world.isClient()) {
             spawnPedestalParticles(world, pos);
             return false;
         }
 
-        Vector3d pedestalPos = new Vector3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+        Vector3d pedestalPos = pos.toCenterVector3d();
+        List<ItemEntityWrapper> items = ItemEntityUtil.getEntityWrappers(world,
+                new Box(pos).expand(PEDESTAL_RANGE));
 
-        List<ItemEntity> items = WorldUtil.getEntitiesByClass(
-                world.toMinecraft(), ItemEntity.class, pedestalPos, PEDESTAL_RANGE
-        );
-
-        for (ItemEntity itemEntity : items) {
-            Vector3d itemPos = EntityUtil.getPosM(itemEntity);
+        for (ItemEntityWrapper itemEntity : items) {
+            Vector3d itemPos = itemEntity.getPos();
             double dx = pedestalPos.getX() - itemPos.getX();
             double dy = pedestalPos.getY() - itemPos.getY();
             double dz = pedestalPos.getZ() - itemPos.getZ();
@@ -93,11 +92,11 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
                 double nx = dx / distance * speed;
                 double ny = dy / distance * speed;
                 double nz = dz / distance * speed;
-                EntityUtil.setVelocity(itemEntity, nx, ny, nz);
-                EntityUtil.setVelocityModified(itemEntity, true);
+                itemEntity.setVelocity(nx, ny, nz);
+                EntityUtil.setVelocityModified(itemEntity.get(), true);
             } else {
-                if (addToInventory(stack, itemEntity.getStack())) {
-                    EntityUtil.discard(itemEntity);
+                if (addToInventory(stack, itemEntity.getStack(), registryLookup)) {
+                    itemEntity.discard();
                 }
             }
         }
@@ -114,41 +113,46 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
             double offsetX = (Math.random() - 0.5) * 0.8;
             double offsetZ = (Math.random() - 0.5) * 0.8;
             double offsetY = 0.3 + Math.random() * 0.5;
-            
-            WorldUtil.addParticle(world.toMinecraft(), CompatParticleTypes.ENCHANT, x + offsetX, y + offsetY, z + offsetZ, 0.0, 0.08, 0.0);
+
+            world.addParticle(CompatParticleTypes.ENCHANT, x + offsetX, y + offsetY, z + offsetZ, 0.0, 0.08, 0.0);
         }
 
         for (int i = 0; i < 2; i++) {
             double offsetX = (Math.random() - 0.5) * 0.6;
             double offsetZ = (Math.random() - 0.5) * 0.6;
             double offsetY = 0.5 + Math.random() * 1.5;
-            
-            WorldUtil.addParticle(world.toMinecraft(), CompatParticleTypes.PORTAL, x + offsetX, y + offsetY, z + offsetZ, 0.0, 0.05, 0.0);
+
+            world.addParticle(CompatParticleTypes.PORTAL, x + offsetX, y + offsetY, z + offsetZ, 0.0, 0.05, 0.0);
         }
     }
 
     private NbtList getInventoryNbt(ItemStack stack) {
-        NbtCompound nbt = stack.getNbt();
-        if (nbt == null) {
-            nbt = new NbtCompound();
-            stack.setNbt(nbt);
-        }
-        if (!nbt.contains(INVENTORY_NBT_KEY)) {
-            nbt.put(INVENTORY_NBT_KEY, new NbtList());
-        }
-        return nbt.getList(INVENTORY_NBT_KEY, 10);
+        NbtCompound nbt = stack.getCustomNbtM();
+        if (!nbt.has(INVENTORY_NBT_KEY))
+            nbt.put(INVENTORY_NBT_KEY, NbtList.of(NbtUtil.createNbtList()));
+
+        Optional<NbtList> optionalNbtList = NbtList.ofOptional(nbt.get(INVENTORY_NBT_KEY));
+        return optionalNbtList.orElseGet(() -> {
+            NbtList newList = NbtList.of(NbtUtil.createNbtList());
+            nbt.put(INVENTORY_NBT_KEY, newList);
+            return newList;
+        });
     }
 
-    private boolean addToInventory(ItemStack stack, ItemStack itemStack) {
+    private boolean addToInventory(ItemStack stack, ItemStack itemStack, CompatRegistryLookup registryLookup) {
         NbtList inventory = getInventoryNbt(stack);
         
         if (inventory.size() >= INVENTORY_SIZE) {
             return false;
         }
 
-        NbtCompound itemNbt = new NbtCompound();
-        itemStack.writeNbt(itemNbt);
-        inventory.add(itemNbt);
+        NbtCompound itemNbt = NbtCompound.of();
+        if (registryLookup != null)
+            itemNbt.putItemStack("item", itemStack, registryLookup);
+        else
+            itemNbt.putSimpleItemStack("item", itemStack);
+
+        inventory.add(itemNbt.toElement());
         
         return true;
     }
@@ -158,23 +162,28 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
         return inventory.size();
     }
 
-    public ItemStack removeFirstItem(ItemStack stack) {
+    public ItemStack removeFirstItem(ItemStack stack, CompatRegistryLookup registryLookup) {
         NbtList inventory = getInventoryNbt(stack);
         if (inventory.isEmpty()) {
             return ItemStack.EMPTY;
         }
 
-        NbtCompound itemNbt = inventory.getCompound(0);
+        NbtElement itemNbtElement = inventory.get(0);
         inventory.remove(0);
-        
-        return ItemStack.fromNbt(itemNbt);
+
+        NbtCompound itemNbt = NbtCompound.of((net.minecraft.nbt.NbtCompound) itemNbtElement.toMinecraft());
+
+        if (registryLookup != null)
+            return itemNbt.getItemStack("item", registryLookup);
+        else
+            return itemNbt.getSimpleItemStack("item").orElse(ItemStack.EMPTY);
     }
 
     public void clearInventory(ItemStack stack) {
-        NbtCompound nbt = stack.getNbt();
+        NbtCompound nbt = stack.getCustomNbtM();
         if (nbt != null) {
-            nbt.put(INVENTORY_NBT_KEY, new NbtList());
-            stack.setNbt(nbt);
+            nbt.put(INVENTORY_NBT_KEY, NbtList.of(NbtUtil.createNbtList()));
+            stack.setCustomNbt(nbt);
         }
     }
 }

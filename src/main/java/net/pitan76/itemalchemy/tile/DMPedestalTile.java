@@ -1,14 +1,9 @@
 package net.pitan76.itemalchemy.tile;
 
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.World;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
-import net.pitan76.mcpitanlib.api.util.math.BoxUtil;
+import net.pitan76.mcpitanlib.api.util.RegistryLookupUtil;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.block.pedestal.IPedestalItem;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
@@ -23,8 +18,12 @@ import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
-import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
+import net.pitan76.mcpitanlib.midohra.util.math.Box;
+import net.pitan76.mcpitanlib.midohra.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,23 +39,19 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
     private static final ConcurrentHashMap<Long, ItemStack> PENDING_DROPS = new ConcurrentHashMap<>();
 
     public static ItemStack takePendingDrop(BlockPos pos) {
-        return PENDING_DROPS.remove(PosUtil.asLong(pos));
-    }
-
-    public static net.pitan76.mcpitanlib.midohra.item.ItemStack takePendingDropM(net.pitan76.mcpitanlib.midohra.util.math.BlockPos pos) {
-        return net.pitan76.mcpitanlib.midohra.item.ItemStack.of(takePendingDrop(pos.toRaw()));
+        return PENDING_DROPS.remove(pos.asLong());
     }
 
     @Override
     public void markRemovedOverride() {
-        World world = callGetWorld();
-        if (world != null && !world.isClient() && !ItemStackUtil.isEmpty(storedStack)) {
-            PENDING_DROPS.put(PosUtil.asLong(callGetPos()), ItemStackUtil.copy(storedStack));
+        World world = getMidohraWorld();
+        if (world != null && !world.isClient() && !storedStack.isEmpty()) {
+            PENDING_DROPS.put(getMidohraPos().asLong(), storedStack.copy());
         }
         super.markRemovedOverride();
     }
 
-    private ItemStack storedStack = ItemStackUtil.empty();
+    private ItemStack storedStack = ItemStack.EMPTY;
     private boolean isActive = false;
     private long tickCount = 0;
     // Counts down on server ticks; when it hits 0, forces a client sync.
@@ -73,13 +68,13 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
 
     @Override
     public void tick(TileTickEvent<DMPedestalTile> e) {
-        World world = e.world;
-        BlockPos blockPos = callGetPos();
+        World world = e.getMidohraWorld();
+        BlockPos blockPos = getMidohraPos();
 
         if (!e.isClient()) {
             syncCountdown--;
             if (syncCountdown <= 0) {
-                sendSyncPacket();
+                sendSyncPacket(RegistryLookupUtil.getRegistryLookup(e.getWorld()));
                 syncCountdown = 40;
             }
         }
@@ -88,37 +83,35 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
 
         if (e.isClient()) {
             // Don't deactivate from client side — server is authoritative
-            if (!ItemStackUtil.isEmpty(storedStack) && ItemStackUtil.getItem(storedStack) instanceof IPedestalItem) {
+            if (!storedStack.isEmpty() && storedStack.getRawItem() instanceof IPedestalItem) {
                 tickCount++;
                 spawnActiveParticles(world, blockPos);
             }
             return;
         }
 
-        if (ItemStackUtil.isEmpty(storedStack)
-                || !(ItemStackUtil.getItem(storedStack) instanceof IPedestalItem)) {
-            setActive(false);
+        if (storedStack.isEmpty()
+                || !(storedStack.getRawItem() instanceof IPedestalItem)) {
+            setActive(false, RegistryLookupUtil.getRegistryLookup(e.getWorld()));
             return;
         }
 
-        IPedestalItem pedestalItem = (IPedestalItem) ItemStackUtil.getItem(storedStack);
-        pedestalItem.updateInPedestal(storedStack, world, blockPos);
+        IPedestalItem pedestalItem = (IPedestalItem) storedStack.getRawItem();
+        pedestalItem.updateInPedestal(storedStack, world, blockPos, RegistryLookupUtil.getRegistryLookup(e.world));
     }
 
     private void spawnActiveParticles(World world, BlockPos pos) {
         if (tickCount % 10 == 0) {
-            net.pitan76.mcpitanlib.midohra.util.math.BlockPos pos2 = net.pitan76.mcpitanlib.midohra.util.math.BlockPos.of(pos);
-
-            WorldUtil.addParticle(world, CompatParticleTypes.FLAME, pos2.getX() + 0.2, pos2.getY() + 0.3, pos2.getZ() + 0.2, 0, 0.01, 0);
-            WorldUtil.addParticle(world, CompatParticleTypes.FLAME, pos2.getX() + 0.8, pos2.getY() + 0.3, pos2.getZ() + 0.2, 0, 0.01, 0);
-            WorldUtil.addParticle(world, CompatParticleTypes.FLAME, pos2.getX() + 0.2, pos2.getY() + 0.3, pos2.getZ() + 0.8, 0, 0.01, 0);
-            WorldUtil.addParticle(world, CompatParticleTypes.FLAME, pos2.getX() + 0.8, pos2.getY() + 0.3, pos2.getZ() + 0.8, 0, 0.01, 0);
+            world.addParticle(CompatParticleTypes.FLAME, pos.getX() + 0.2, pos.getY() + 0.3, pos.getZ() + 0.2, 0, 0.01, 0);
+            world.addParticle(CompatParticleTypes.FLAME, pos.getX() + 0.8, pos.getY() + 0.3, pos.getZ() + 0.2, 0, 0.01, 0);
+            world.addParticle(CompatParticleTypes.FLAME, pos.getX() + 0.2, pos.getY() + 0.3, pos.getZ() + 0.8, 0, 0.01, 0);
+            world.addParticle(CompatParticleTypes.FLAME, pos.getX() + 0.8, pos.getY() + 0.3, pos.getZ() + 0.8, 0, 0.01, 0);
         }
     }
 
     public Box getEffectBounds() {
-        net.pitan76.mcpitanlib.midohra.util.math.BlockPos pos = net.pitan76.mcpitanlib.midohra.util.math.BlockPos.of(callGetPos());
-        return BoxUtil.createBox(
+        BlockPos pos = getMidohraPos();
+        return new Box(
                 pos.getX() - RANGE, pos.getY() - RANGE, pos.getZ() - RANGE,
                 pos.getX() + RANGE + 1, pos.getY() + RANGE + 1, pos.getZ() + RANGE + 1
         );
@@ -128,41 +121,33 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
         return storedStack;
     }
 
-    public net.pitan76.mcpitanlib.midohra.item.ItemStack getStackM() {
-        return net.pitan76.mcpitanlib.midohra.item.ItemStack.of(storedStack);
-    }
-
     public void setStackFromPacket(ItemStack stack) {
         this.storedStack = stack;
     }
 
-    public void setStackFromPacket(net.pitan76.mcpitanlib.midohra.item.ItemStack stack) {
-        setStackFromPacket(stack.toMinecraft());
+    public void setStackFromPacket(net.minecraft.item.ItemStack stack) {
+        this.storedStack = ItemStack.of(stack);
     }
 
     public void setActiveFromPacket(boolean active) {
         this.isActive = active;
     }
 
-    public void setStack(ItemStack stack) {
+    public void setStack(ItemStack stack, @Nullable CompatRegistryLookup registryLookup) {
         this.storedStack = stack;
         callMarkDirty();
-        sendSyncPacket();
-    }
-
-    public void setStack(net.pitan76.mcpitanlib.midohra.item.ItemStack stack) {
-        setStack(stack.toMinecraft());
+        sendSyncPacket(registryLookup);
     }
 
     public boolean getActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(boolean active, @Nullable CompatRegistryLookup registryLookup) {
         if (this.isActive != active) {
             this.isActive = active;
             callMarkDirty();
-            sendSyncPacket();
+            sendSyncPacket(registryLookup);
         }
     }
 
@@ -174,14 +159,14 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
     @Override
     public NbtCompound toInitialChunkDataNbt(CompatRegistryLookup registryLookup) {
         NbtCompound nbt = NbtUtil.create();
-        writeNbtData(nbt);
+        writeNbtData(nbt, registryLookup);
         return nbt;
     }
 
     @Override
     public void writeNbt(WriteNbtArgs args) {
         super.writeNbt(args);
-        writeNbtData(args.getNbt());
+        writeNbtData(args.getNbt(), args.registryLookup);
     }
 
     @Override
@@ -189,27 +174,30 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
         super.readNbt(args);
         NbtCompound nbt = args.getNbt();
         if (NbtUtil.has(nbt, "PedestalItem")) {
-            Optional<ItemStack> opt = NbtUtil.getSimpleItemStack(nbt, "PedestalItem");
-            storedStack = opt.orElse(ItemStackUtil.empty());
+            Optional<net.minecraft.item.ItemStack> opt = NbtUtil.getItemStack(nbt, "PedestalItem", args.registryLookup);
+            storedStack = ItemStack.of(opt.orElse(ItemStackUtil.empty()));
         }
         isActive = NbtUtil.getBoolean(nbt, "Active");
     }
 
-    private void writeNbtData(NbtCompound nbt) {
-        if (!ItemStackUtil.isEmpty(storedStack)) {
-            NbtUtil.putSimpleItemStack(nbt, "PedestalItem", storedStack);
+    private void writeNbtData(NbtCompound nbt, @Nullable CompatRegistryLookup registryLookup) {
+        if (!storedStack.isEmpty()) {
+            if (registryLookup != null)
+                NbtUtil.putItemStack(nbt, "PedestalItem", storedStack.toMinecraft(), registryLookup);
+            else
+                NbtUtil.putSimpleItemStack(nbt, "PedestalItem", storedStack.toMinecraft());
         }
         NbtUtil.putBoolean(nbt, "Active", isActive);
     }
 
-    public void sendSyncPacket() {
-        World world = callGetWorld();
+    public void sendSyncPacket(@Nullable CompatRegistryLookup registryLookup) {
+        World world = getMidohraWorld();
         if (world == null || world.isClient()) return;
         PacketByteBuf buf = PacketByteUtil.create();
         PacketByteUtil.writeBlockPos(buf, callGetPos());
         NbtCompound nbt = NbtUtil.create();
-        writeNbtData(nbt);
+        writeNbtData(nbt, registryLookup);
         PacketByteUtil.writeNbt(buf, nbt);
-        ServerNetworking.sendAll(world, ItemAlchemy._id("pedestal_sync"), buf);
+        ServerNetworking.sendAll(world.getRaw(), ItemAlchemy._id("pedestal_sync"), buf);
     }
 }

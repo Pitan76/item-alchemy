@@ -1,15 +1,15 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.block.pedestal.IPedestalItem;
 import net.pitan76.itemalchemy.tile.DMPedestalTile;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.registry.CompatRegistryLookup;
 import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.world.TickerUtil;
 import net.pitan76.mcpitanlib.midohra.block.BlockState;
 import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityWrapper;
 import net.pitan76.mcpitanlib.midohra.entity.EntityWrapper;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.util.math.Box;
 import net.pitan76.mcpitanlib.midohra.util.math.Vector3d;
@@ -29,7 +29,7 @@ public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem 
     }
 
     @Override
-    public boolean updateInPedestal(ItemStack stack, World world, BlockPos pos) {
+    public boolean updateInPedestal(ItemStack stack, World world, BlockPos pos, CompatRegistryLookup registryLookup) {
         if (world.isClient()) return false;
 
         Box effectBox = new Box(
@@ -80,10 +80,10 @@ public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem 
     }
 
     private void slowMobs(World world, Box box) {
-        List<EntityWrapper> mobs = world.getEntitiesByClassM(MobEntity.class, box);
+        List<EntityWrapper> mobs = world.getMobs(box);
         for (EntityWrapper mob : mobs) {
             Vector3d velocity = mob.getVelocity();
-            mob.setVelocity( velocity.mul(MOB_SLOWDOWN, 1.0, MOB_SLOWDOWN));
+            mob.setVelocity(velocity.mul(MOB_SLOWDOWN, 1.0, MOB_SLOWDOWN));
         }
     }
 }

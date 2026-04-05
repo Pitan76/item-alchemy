@@ -6,6 +6,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.client.renderer.BlockRenderer;
 import net.pitan76.itemalchemy.client.renderer.blockentity.DMPedestalBlockEntityRenderer;
@@ -24,13 +25,12 @@ import net.pitan76.mcpitanlib.api.client.registry.v3.KeybindingRegistry;
 import net.pitan76.itemalchemy.tile.DMPedestalTile;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ClientNetworking;
-import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
-import net.pitan76.mcpitanlib.api.util.NbtUtil;
-import net.pitan76.mcpitanlib.api.util.TextUtil;
+import net.pitan76.mcpitanlib.api.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static net.pitan76.itemalchemy.ItemAlchemy._id;
 
@@ -63,16 +63,16 @@ public class ItemAlchemyClient {
         ClientNetworking.registerReceiver(_id("pedestal_sync"), (e) -> {
             BlockPos pos = PacketByteUtil.readBlockPos(e.buf);
             NbtCompound nbt = PacketByteUtil.readNbt(e.buf);
-            net.minecraft.world.World world = e.getWorld();
+            World world = e.getWorld();
             if (world == null) return;
-            BlockEntity be = world.getBlockEntity(pos);
+            BlockEntity be = WorldUtil.getBlockEntity(world, pos);
             if (!(be instanceof DMPedestalTile)) return;
             DMPedestalTile tile = (DMPedestalTile) be;
             if (NbtUtil.has(nbt, "PedestalItem")) {
-                java.util.Optional<ItemStack> opt = NbtUtil.getSimpleItemStack(nbt, "PedestalItem");
+                Optional<ItemStack> opt = NbtUtil.getItemStack(nbt, "PedestalItem", RegistryLookupUtil.getRegistryLookup(world));
                 tile.setStackFromPacket(opt.orElse(ItemStackUtil.empty()));
             } else {
-                tile.setStackFromPacket(ItemStack.EMPTY);
+                tile.setStackFromPacket(ItemStackUtil.empty());
             }
             tile.setActiveFromPacket(NbtUtil.getBoolean(nbt, "Active"));
         });

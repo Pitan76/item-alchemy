@@ -1,15 +1,13 @@
 package net.pitan76.itemalchemy.tile;
 
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.LivingEntity;
 import net.pitan76.itemalchemy.block.InterdictionTorch;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
 import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
-import net.pitan76.mcpitanlib.api.util.EntityUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
+import net.pitan76.mcpitanlib.midohra.entity.EntityWrapper;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.util.math.Box;
 import net.pitan76.mcpitanlib.midohra.util.math.Direction;
@@ -56,21 +54,19 @@ public class InterdictionTorchTile extends CompatBlockEntity implements ExtendBl
             particleTick++;
 
             if (particleTick % 3 == 0) {
-                WorldUtil.addParticle(world.getRaw(), CompatParticleTypes.SMOKE, x, y, z, 0.0, 0.0, 0.0);
-                WorldUtil.addParticle(world.getRaw(), CompatParticleTypes.SOUL_FIRE_FLAME, x, y, z, 0.0, 0.0, 0.0);
-//                world.addParticle(CompatParticleTypes.SMOKE, x, y, z, 0.0, 0.0, 0.0);
-//                world.addParticle(CompatParticleTypes.SOUL_FIRE_FLAME, x, y, z, 0.0, 0.0, 0.0);
+                world.addParticle(CompatParticleTypes.SMOKE, x, y, z, 0.0, 0.0, 0.0);
+                world.addParticle(CompatParticleTypes.SOUL_FIRE_FLAME, x, y, z, 0.0, 0.0, 0.0);
             }
             return;
         }
 
         Box box = new Box(blockPos).expand(RADIUS);
-        List<LivingEntity> entities = WorldUtil.getMonsters(world.getRaw(), box);
+        List<EntityWrapper> entities = world.getMonsters(box);
 
         Vector3d torchPos = blockPos.toCenterVector3d();
 
-        for (LivingEntity entity : entities) {
-            Vector3d entityPos = EntityUtil.getPosM(entity);
+        for (EntityWrapper entity : entities) {
+            Vector3d entityPos = entity.getPos();
             double dx = entityPos.x - torchPos.x;
             double dy = entityPos.y - torchPos.y;
             double dz = entityPos.z - torchPos.z;
@@ -82,7 +78,7 @@ public class InterdictionTorchTile extends CompatBlockEntity implements ExtendBl
             double ny = dy / distance;
             double nz = dz / distance;
 
-            EntityUtil.addVelocity(entity,
+            entity.addVelocity(
                     nx * strength * PUSH_STRENGTH,
                     ny * strength * PUSH_STRENGTH * 0.5,
                     nz * strength * PUSH_STRENGTH

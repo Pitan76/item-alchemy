@@ -90,14 +90,13 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
         if (coolDown == 0) {
             if (isFull()) return;
             float skyAngle = world.getSkyAngle();
-            // TODO: MidohraのWorldにこれらのメソッドを追加する
             if ((!world.isRaining() && !world.isThundering() && (world.hasSkyLight() && skyAngle <= 0.25 || skyAngle >= 0.75) && WorldUtil.isSkyVisible(world.getRaw(), pos.up().toRaw()))
-                    || world.getBlockState(pos.up()).getLuminance() > 10
-                    || world.getBlockState(pos.down()).getLuminance() > 10
-                    || world.getBlockState(pos.north()).getLuminance() > 10
-                    || world.getBlockState(pos.south()).getLuminance() > 10
-                    || world.getBlockState(pos.east()).getLuminance() > 10
-                    || world.getBlockState(pos.west()).getLuminance() > 10) {
+                    || world.getLuminance(pos.up()) > 10
+                    || world.getLuminance(pos.down()) > 10
+                    || world.getLuminance(pos.north()) > 10
+                    || world.getLuminance(pos.south()) > 10
+                    || world.getLuminance(pos.east()) > 10
+                    || world.getLuminance(pos.west()) > 10) {
                 storedEMC++;
                 if (maxEMC >= 100000) {
                     storedEMC += Math.round((float) maxEMC / 100000) + 2;
@@ -132,7 +131,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
                         if (nextStack.isEmpty()) {
                             inventory.getAsMidohra(index).decrement(1);
                             stack.setCount(1);
-                            inventory.set(nextIndex, stack.toMinecraft());
+                            inventory.set(nextIndex, stack);
                         } else if (nextStack.getItem() == stack.getItem() && nextStack.getCount() < nextStack.getMaxCount()) {
                             inventory.getAsMidohra(index).decrement(1);
                             nextStack.increment(1);
@@ -141,23 +140,23 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
                 }
             }
 
-            if (!inventory.getAsMidohra(2).isEmpty()) {
+            if (!inventory.isEmpty(2)) {
                 setActive(true);
 
                 EMCStorageUtil.transferAllEMC(this);
 
-                if (inventory.getAsMidohra(0).isEmpty()) {
+                if (inventory.isEmpty(0)) {
                     ItemStack stack = convertStack(inventory.getAsMidohra(2).copy());
                     if (!stack.isEmpty()) {
-                        inventory.set(0, stack.toMinecraft());
+                        inventory.set(0, stack);
                         inventory.getAsMidohra(2).decrement(1);
                     }
                 }
             }
-            if (!inventory.getAsMidohra(0).isEmpty()) {
+            if (!inventory.isEmpty(0)) {
                 for (int i = 0; i < 16; i++) {
-                    if (inventory.getAsMidohra(3 + 15 - i).isEmpty()) {
-                        inventory.set(3 + 15 - i, inventory.getAsMidohra(0).copy().toMinecraft());
+                    if (inventory.isEmpty(3 + 15 - i)) {
+                        inventory.set(3 + 15 - i, inventory.getAsMidohra(0).copy());
                         inventory.set(0, ItemStackUtil.empty());
                         break;
                     }
@@ -249,6 +248,6 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
 //        args.writeVar(nbt);
         PacketByteUtil.writeBlockPos(args.buf, callGetPos());
         PacketByteUtil.writeLong(args.buf, storedEMC);
-        PacketByteUtil.writeLong(args.buf, ((EMCCollector) getMidohraCachedState().getBlock().gerOrDefault(Blocks.EMC_COLLECTOR_MK1.get())).maxEMC);
+        PacketByteUtil.writeLong(args.buf, ((EMCCollector) getMidohraCachedState().getBlock().getOrDefault(Blocks.EMC_COLLECTOR_MK1.get())).maxEMC);
     }
 }

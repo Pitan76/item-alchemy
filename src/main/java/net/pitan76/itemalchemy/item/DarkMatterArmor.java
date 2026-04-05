@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.entity.effect.CompatStatusEffect;
@@ -14,7 +13,6 @@ import net.pitan76.mcpitanlib.api.util.EntityUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.StatusEffectUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
-import net.pitan76.mcpitanlib.api.util.entity.LivingEntityUtil;
 
 public class DarkMatterArmor extends CompatibleArmorItem {
 
@@ -37,8 +35,8 @@ public class DarkMatterArmor extends CompatibleArmorItem {
     @Override
     public void inventoryTick(InventoryTickEvent e, Options options) {
         if (e.isClient()) return;
-        if (!(e.entity instanceof PlayerEntity)) return;
-        Player player = new Player((PlayerEntity) e.entity);
+        if (!e.isPlayer()) return;
+        Player player = e.getPlayer();
 
         if (!isWornByPlayer(player)) return;
 
@@ -61,13 +59,7 @@ public class DarkMatterArmor extends CompatibleArmorItem {
         }
     }
 
-    @SuppressWarnings("deprecation")
-    private boolean isWornByPlayer(PlayerEntity player) {
-        // TODO: 修正getSlot
-        return ItemStackUtil.getItem(LivingEntityUtil.getEquippedStack(player, type.getSlot())) == this;
-    }
-
     private boolean isWornByPlayer(Player player) {
-        return isWornByPlayer(player.getEntity());
+        return ItemStackUtil.getItem(player.getEquippedStack(type)) == this;
     }
 }

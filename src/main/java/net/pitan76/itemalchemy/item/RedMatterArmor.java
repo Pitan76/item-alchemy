@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.pitan76.mcpitanlib.api.entity.Player;
@@ -14,8 +13,7 @@ import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.EntityUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.StatusEffectUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
-import net.pitan76.mcpitanlib.api.util.entity.LivingEntityUtil;
+import net.pitan76.mcpitanlib.midohra.world.World;
 
 public class RedMatterArmor extends CompatibleArmorItem {
 
@@ -41,16 +39,17 @@ public class RedMatterArmor extends CompatibleArmorItem {
     @Override
     public void inventoryTick(InventoryTickEvent e, Options options) {
         if (e.isClient()) return;
-        if (!(e.entity instanceof PlayerEntity)) return;
-        Player player = new Player((PlayerEntity) e.entity);
+        if (!e.isPlayer()) return;
+        Player player = e.getPlayer();
+        World world = e.getMidohraWorld();
 
-        if (!isWornByPlayer(player.getEntity())) return;
+        if (!isWornByPlayer(player)) return;
 
         if (type == ArmorEquipmentType.FEET) {
             EntityUtil.setFallDistance(player.getEntity(), 0);
         }
 
-        if (WorldUtil.getTime(e.world) % EFFECT_INTERVAL != 0) return;
+        if (world.getTime() % EFFECT_INTERVAL != 0) return;
 
         if (type == ArmorEquipmentType.HEAD) {
             player.addStatusEffect(
@@ -67,24 +66,21 @@ public class RedMatterArmor extends CompatibleArmorItem {
                     new CompatStatusEffectInstance(JUMP_BOOST, EFFECT_DURATION, 0, true, false));
         }
 
-        if (hasFullSet(player.getEntity())) {
+        if (hasFullSet(player)) {
             player.addStatusEffect(
                     new CompatStatusEffectInstance(REGENERATION, EFFECT_DURATION, 0, true, false));
         }
     }
 
-    // TODO: 修正
-    @SuppressWarnings("deprecation")
-    private boolean isWornByPlayer(PlayerEntity player) {
-        return ItemStackUtil.getItem(LivingEntityUtil.getEquippedStack(player, type.getSlot())) == this;
+    private boolean isWornByPlayer(Player player) {
+        return ItemStackUtil.getItem(player.getEquippedStack(type)) == this;
     }
 
-    @SuppressWarnings("deprecation")
-    private boolean hasFullSet(PlayerEntity player) {
-        ItemStack head = LivingEntityUtil.getEquippedStack(player, ArmorEquipmentType.HEAD.getSlot());
-        ItemStack chest = LivingEntityUtil.getEquippedStack(player, ArmorEquipmentType.CHEST.getSlot());
-        ItemStack legs = LivingEntityUtil.getEquippedStack(player, ArmorEquipmentType.LEGS.getSlot());
-        ItemStack feet = LivingEntityUtil.getEquippedStack(player, ArmorEquipmentType.FEET.getSlot());
+    private boolean hasFullSet(Player player) {
+        ItemStack head = player.getEquippedStack(ArmorEquipmentType.HEAD);
+        ItemStack chest = player.getEquippedStack(ArmorEquipmentType.CHEST);
+        ItemStack legs = player.getEquippedStack(ArmorEquipmentType.LEGS);
+        ItemStack feet = player.getEquippedStack(ArmorEquipmentType.FEET);
         return ItemStackUtil.getItem(head) instanceof RedMatterArmor
                 && ItemStackUtil.getItem(chest) instanceof RedMatterArmor
                 && ItemStackUtil.getItem(legs) instanceof RedMatterArmor

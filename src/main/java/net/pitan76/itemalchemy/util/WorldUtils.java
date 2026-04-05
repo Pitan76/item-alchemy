@@ -1,19 +1,17 @@
 package net.pitan76.itemalchemy.util;
 
 import com.google.common.collect.Lists;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
-import net.pitan76.mcpitanlib.api.util.block.BlockUtil;
+import net.pitan76.mcpitanlib.midohra.block.BlockState;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
+import net.pitan76.mcpitanlib.midohra.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WorldUtils {
     public static List<BlockPos> getTargetBlocks(World world, BlockPos pos, int range, boolean isHeightScan, boolean isSameBlock) {
-        BlockState baseBlock = WorldUtil.getBlockState(world, pos);
+        BlockState baseBlockState = world.getBlockState(pos);
 
         if (range <= 0)
             return Lists.newArrayList(pos);
@@ -28,11 +26,11 @@ public class WorldUtils {
                     int offsetZ = range - z;
 
                     BlockPos targetPos = pos.add(offsetX, offsetY, offsetZ);
-                    BlockState block = WorldUtil.getBlockState(world, targetPos);
+                    BlockState state = world.getBlockState(targetPos);
 
-                    if (BlockStateUtil.isAir(block)) continue;
+                    if (state.isAir()) continue;
 
-                    if (!BlockUtil.isEqual(BlockStateUtil.getBlock(block), BlockStateUtil.getBlock(baseBlock)) && isSameBlock) continue;
+                    if (!state.getBlock().rawEquals(baseBlockState.getBlock()) && isSameBlock) continue;
 
                     blocks.add(targetPos);
                 }
@@ -42,13 +40,7 @@ public class WorldUtils {
         return blocks;
     }
 
-    public static List<net.pitan76.mcpitanlib.midohra.util.math.BlockPos> getTargetBlocks(net.pitan76.mcpitanlib.midohra.world.World world, net.pitan76.mcpitanlib.midohra.util.math.BlockPos pos, int range, boolean isHeightScan, boolean isSameBlock) {
-        List<net.pitan76.mcpitanlib.midohra.util.math.BlockPos> blocks = new ArrayList<>();
-
-        for (BlockPos p : getTargetBlocks(world.getRaw(), pos.toMinecraft(), range, isHeightScan, isSameBlock)) {
-            blocks.add(net.pitan76.mcpitanlib.midohra.util.math.BlockPos.of(p));
-        }
-
-        return blocks;
+    public static List<net.minecraft.util.math.BlockPos> getTargetBlocks(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, int range, boolean isHeightScan, boolean isSameBlock) {
+        return getTargetBlocks(World.of(world), BlockPos.of(pos), range, isHeightScan, isSameBlock).stream().map(BlockPos::toMinecraft).collect(Collectors.toList());
     }
 }

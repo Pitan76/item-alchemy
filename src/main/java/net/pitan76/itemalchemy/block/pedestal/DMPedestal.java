@@ -65,7 +65,7 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
 
         Player player = e.player;
         ItemStack heldStack = e.getStackM();
-        ItemStack pedestalStack = pedestal.getStackM();
+        ItemStack pedestalStack = pedestal.getStack();
 
         if (e.isClient()) {
             if (e.isSneaking()) {
@@ -90,6 +90,9 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
             return e.success();
         }
 
+        BlockPos pos = e.getMidohraPos();
+        World world = e.getMidohraWorld();
+
         // Check if pedestal contains a Black Hole Band
         boolean isBlackHoleBand = !pedestalStack.isEmpty() && pedestalStack.getRawItem() instanceof net.pitan76.itemalchemy.item.BlackHoleBand;
 
@@ -99,15 +102,14 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
                 if (isBlackHoleBand) {
                     // Extract all items from Black Hole Band inventory
                     net.pitan76.itemalchemy.item.BlackHoleBand band = (net.pitan76.itemalchemy.item.BlackHoleBand) pedestalStack.getRawItem();
-                    net.minecraft.item.ItemStack pedestalVanilla = pedestalStack.toMinecraft();
                     int extractedCount = 0;
                     
                     while (true) {
-                        net.minecraft.item.ItemStack extracted = band.removeFirstItem(pedestalVanilla);
+                        ItemStack extracted = band.removeFirstItem(pedestalStack, RegistryLookupUtil.getRegistryLookup(e.world));
                         if (extracted.isEmpty()) break;
                         
                         if (heldStack.isEmpty()) {
-                            player.setStackInHand(e.getHand(), net.pitan76.mcpitanlib.midohra.item.ItemStack.of(extracted));
+                            player.setStackInHand(e.getHand(), extracted);
                             heldStack = e.getStackM();
                         } else {
                             player.offerOrDrop(extracted);
@@ -115,8 +117,6 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
                         extractedCount++;
                     }
                     
-                    BlockPos pos = e.getMidohraPos();
-                    World world = e.getMidohraWorld();
                     world.playSound(null, pos, CompatSoundEvents.ENTITY_ITEM_PICKUP, CompatSoundCategory.BLOCKS, 0.5F, 1.5F);
                     return e.success();
                 }
@@ -125,9 +125,8 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
                 if (newActive && !(pedestalStack.getRawItem() instanceof IPedestalItem)) {
                     return e.pass();
                 }
-                pedestal.setActive(newActive);
-                BlockPos pos = e.getMidohraPos();
-                World world = e.getMidohraWorld();
+
+                pedestal.setActive(newActive, world.getRegistryLookup());
                 if (newActive) {
                     world.playSound(null, pos, CompatSoundEvents.BLOCK_BEACON_ACTIVATE, CompatSoundCategory.BLOCKS, 1.0F, 1.0F);
                 } else {
@@ -141,36 +140,34 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
                 if (isBlackHoleBand) {
                     // Extract single item from Black Hole Band inventory
                     net.pitan76.itemalchemy.item.BlackHoleBand band = (net.pitan76.itemalchemy.item.BlackHoleBand) pedestalStack.getRawItem();
-                    net.minecraft.item.ItemStack pedestalVanilla = pedestalStack.toMinecraft();
-                    net.minecraft.item.ItemStack extracted = band.removeFirstItem(pedestalVanilla);
+                    ItemStack extracted = band.removeFirstItem(pedestalStack, RegistryLookupUtil.getRegistryLookup(e.world));
                     
                     if (!extracted.isEmpty()) {
                         if (heldStack.isEmpty()) {
-                            player.setStackInHand(e.getHand(), net.pitan76.mcpitanlib.midohra.item.ItemStack.of(extracted));
+                            player.setStackInHand(e.getHand(), extracted);
                         } else {
                             player.offerOrDrop(extracted);
                         }
-                        BlockPos pos = e.getMidohraPos();
-                        World world = e.getMidohraWorld();
+
                         world.playSound(null, pos, CompatSoundEvents.ENTITY_ITEM_PICKUP, CompatSoundCategory.BLOCKS, 0.5F, 1.0F);
                         return e.success();
                     }
                 }
                 
                 // Remove item from pedestal
-                pedestal.setActive(false);
+                pedestal.setActive(false, world.getRegistryLookup());
                 if (heldStack.isEmpty()) {
                     player.setStackInHand(e.getHand(), pedestalStack.copy());
                 } else {
                     player.offerOrDrop(pedestalStack.copy());
                 }
-                pedestal.setStack(ItemStack.empty());
+                pedestal.setStack(ItemStack.empty(), world.getRegistryLookup());
                 return e.success();
             } else if (!heldStack.isEmpty()) {
                 // Place item on pedestal
                 ItemStack toPlace = heldStack.copy();
                 toPlace.setCount(1);
-                pedestal.setStack(toPlace);
+                pedestal.setStack(toPlace, world.getRegistryLookup());
                 heldStack.decrement();
                 return e.success();
             }
@@ -192,21 +189,21 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
         // Direct lookup — works in older MC versions where BE is still accessible here.
         BlockEntity be = e.getBlockEntity();
         if (be instanceof DMPedestalTile) {
-            toDrop = ((DMPedestalTile) be).getStackM();
+            toDrop = ((DMPedestalTile) be).getStack();
         }
 
         // Fallback for MC 1.21.x: the BE is removed from the world before onStateReplaced
         // fires, so the direct lookup returns null. markRemoved() caches the item for us.
         if (toDrop.isEmpty()) {
-            ItemStack pending = DMPedestalTile.takePendingDropM(pos);
+            ItemStack pending = DMPedestalTile.takePendingDrop(pos);
             if (pending != null) toDrop = pending;
         } else {
             // Consume the pending entry so it doesn't accumulate.
-            DMPedestalTile.takePendingDropM(pos);
+            DMPedestalTile.takePendingDrop(pos);
         }
 
         if (!toDrop.isEmpty()) {
-            e.getMidohraWorld().spawnStack(toDrop.toMinecraft(), pos);
+            e.getMidohraWorld().spawnStack(toDrop, pos);
         }
 
         super.onStateReplaced(e);
