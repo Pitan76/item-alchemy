@@ -3,17 +3,16 @@ package net.pitan76.itemalchemy.gui.screen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
 import net.pitan76.itemalchemy.tile.EMCBatteryTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.*;
-import net.pitan76.mcpitanlib.api.util.math.PosUtil;
+import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityWrapper;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCBatteryScreenHandler extends ExtendedScreenHandler {
@@ -26,19 +25,16 @@ public class EMCBatteryScreenHandler extends ExtendedScreenHandler {
 
     public EMCBatteryScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
         this(syncId, playerInventory, null, InventoryUtil.createSimpleInventory(2));
-        NbtCompound data = PacketByteUtil.readNbt(buf);
-        if (data == null) return;
-        int x, y, z;
-        if (NbtUtil.has(data, "x") && NbtUtil.has(data, "y") && NbtUtil.has(data, "z")) {
-            x = NbtUtil.getInt(data, "x");
-            y = NbtUtil.getInt(data, "y");
-            z = NbtUtil.getInt(data, "z");
 
-            Player player = new Player(playerInventory.player);
+        Player player = new Player(playerInventory.player);
 
-            tile = (EMCBatteryTile) WorldUtil.getBlockEntity(player.getWorld(), PosUtil.flooredBlockPos(x, y, z));
-            storedEMC = NbtUtil.getLong(data, "stored_emc") - tile.storedEMC;
-            maxEMC = NbtUtil.getLong(data, "max_emc");
+        BlockPos pos = BlockPos.of(PacketByteUtil.readBlockPos(buf));
+        BlockEntityWrapper blockEntity = player.getMidohraWorld().getBlockEntity(pos);
+
+        if (blockEntity.isPresent()) {
+            tile = (EMCBatteryTile) blockEntity.get();
+            storedEMC = PacketByteUtil.readLong(buf) - tile.storedEMC;
+            maxEMC = PacketByteUtil.readLong(buf);
         }
     }
 

@@ -65,7 +65,7 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
         if (!getItems().isEmpty()) {
             ItemStack targetStack = getItems().get(0);
             if (!ItemStackUtil.isEmpty(targetStack)) {
-                maxEMC = EMCManager.get(targetStack.getItem());
+                maxEMC = EMCManager.get(ItemStackUtil.getItem(targetStack));
             } else {
                 maxEMC = 0;
             }

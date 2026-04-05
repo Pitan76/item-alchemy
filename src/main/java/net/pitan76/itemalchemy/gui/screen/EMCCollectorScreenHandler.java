@@ -28,10 +28,12 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
         this(syncId, playerInventory, null, InventoryUtil.createSimpleInventory(16 + 3));
 
         Player player = new Player(playerInventory.player);
-        BlockEntityWrapper blockEntity = player.getMidohraWorld().getBlockEntity(BlockPos.of(PacketByteUtil.readBlockPos(buf)));
+
+        BlockPos pos = BlockPos.of(PacketByteUtil.readBlockPos(buf));
+        BlockEntityWrapper blockEntity = player.getMidohraWorld().getBlockEntity(pos);
+
         if (blockEntity.isPresent()) {
             tile = (EMCCollectorTile) blockEntity.get();
-
             storedEMC = PacketByteUtil.readLong(buf) - tile.storedEMC;
             maxEMC = PacketByteUtil.readLong(buf);
         }
