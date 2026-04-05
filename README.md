@@ -9,6 +9,9 @@ This MOD adds philosopher's stone etc. which can be equivalently exchanged with 
 ## Wiki
 - https://wikichree.com/pitan76/?Item+Alchemy/en
 
+## Addons
+- [More Matter Alchemy - CurseForge](https://www.curseforge.com/minecraft/mc-mods/more-matter-alchemy)
+
 ## Contributor (Thanks!)
 - [Developer & Designer] OffsetMonkey538 Improved the textures, bug fix
 - [Developer] mymai1208 Implemented team function and charge function, bug fix
@@ -25,8 +28,8 @@ Check the latest version on the above link.
 - gradle.properties
 ```properties
 # check these on https://maven.pitan76.net/v/#net/pitan76/
-mcpitanlib_version=1.18.2:3.3.7
-itemalchemy_version=1.1.3
+mcpitanlib_version=1.18.2:3.6.3
+itemalchemy_version=1.2.3
 ```
 
 ----
@@ -47,6 +50,9 @@ dependencies {
 ## License
 - MIT License
 
+Some assets temporarily use textures from ProjectE, but they will be replaced with original textures in the future. <br />
+They are under MIT License.
+
 ----
 
 # Item Alchemy (日本語)
@@ -60,6 +66,9 @@ dependencies {
 ## ウィキ
 - https://wikichree.com/pitan76/?Item+Alchemy
 
+## アドオン
+- [More Matter Alchemy - CurseForge](https://www.curseforge.com/minecraft/mc-mods/more-matter-alchemy)
+
 ## 協力者 (Thanks!)
 - [開発者＆デザイン] OffsetMonkey538 テクスチャ改良とバグ修正
 - [開発者] mymai1208 チーム機能、チャージ機能の実装とバグ修正
@@ -67,7 +76,7 @@ dependencies {
 - [デザイン] Murderman25 テクスチャ提供
 - [翻訳者] 54sda 中国語への翻訳 (zh_cn.json)
 - [開発者] alexandrelefourner バグ修正
-- [開発者＆翻訳者] mikkelchokolate 
+- [開発者＆翻訳者] mikkelchokolate
 
 ## アドオン開発
 
@@ -78,8 +87,8 @@ https://maven.pitan76.net/v/#net/pitan76/itemalchemy/ <br />
 - gradle.properties
 ```properties
 # check these on https://maven.pitan76.net/v/#net/pitan76/
-mcpitanlib_version=1.18.2:3.3.7
-itemalchemy_version=1.1.3
+mcpitanlib_version=1.18.2:3.6.3
+itemalchemy_version=1.2.3
 ```
 
 ----
@@ -99,3 +108,6 @@ dependencies {
 
 ## ライセンス
 - MIT License
+
+一部のアセットにProjectEのテクスチャが一時的に使われていますが、今後はオリジナルのテクスチャに置き換える予定です。<br />
+なお、それらはMIT Licenseです。
