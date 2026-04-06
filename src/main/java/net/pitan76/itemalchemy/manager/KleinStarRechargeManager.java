@@ -9,7 +9,6 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundEvents;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.PlatformUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatPlayerInventory;
 import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
 
@@ -162,8 +161,9 @@ public class KleinStarRechargeManager {
         }
         
         // Check inventory
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
+        CompatPlayerInventory inventory = new CompatPlayerInventory(player.getInventory());
+        for (int i = 0; i < inventory.callSize(); i++) {
+            ItemStack stack = inventory.callGetStack(i);
             if (ItemStackUtil.getItem(stack) instanceof KleinStar && KleinStar.getStoredEmc(stack) > 0) {
                 stars.add(stack);
             }
