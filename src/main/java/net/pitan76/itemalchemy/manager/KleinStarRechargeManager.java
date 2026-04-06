@@ -8,6 +8,7 @@ import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundEvents;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
+import net.pitan76.mcpitanlib.api.util.PlatformUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatPlayerInventory;
 import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
@@ -24,7 +25,7 @@ import java.util.WeakHashMap;
 public class KleinStarRechargeManager {
 
     // DEBUG flag
-    private static final boolean DEBUG_RECHARGE = true;
+    private static final boolean DEBUG_RECHARGE = PlatformUtil.isDevelopmentEnvironment();
     
     // Track last recharge tick per player to avoid multiple recharges per tick
     // Use WeakHashMap to allow garbage collection of player entries
