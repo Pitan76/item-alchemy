@@ -1,16 +1,14 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.mcpitanlib.api.item.ArmorEquipmentType;
-import net.pitan76.mcpitanlib.api.item.CompatibleArmorMaterial;
+import net.pitan76.mcpitanlib.api.item.v3.CompatArmorMaterial;
+import net.pitan76.mcpitanlib.api.sound.CompatSoundEvent;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundEvents;
+import net.pitan76.mcpitanlib.api.tag.item.RepairIngredientTag;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
-import net.pitan76.mcpitanlib.api.util.IngredientUtil;
 
-public enum AlchemicalArmorMaterials implements CompatibleArmorMaterial {
+public enum AlchemicalArmorMaterials implements CompatArmorMaterial {
 
     DARK_MATTER(
             "dark_matter",
@@ -65,21 +63,21 @@ public enum AlchemicalArmorMaterials implements CompatibleArmorMaterial {
     }
 
     @Override
-    public SoundEvent getEquipSound() {
-        return CompatSoundEvents.ITEM_ARMOR_EQUIP_NETHERITE.get();
+    public CompatSoundEvent getEquipCompatSound() {
+        return CompatSoundEvents.ITEM_ARMOR_EQUIP_NETHERITE;
     }
 
     @Override
-    public Ingredient getRepairIngredient() {
+    public RepairIngredientTag getRepairIngredientTag() {
         if (this == DARK_MATTER) {
-            return IngredientUtil.ofItems(Items.DARK_MATTER.getOrNull());
+            return new RepairIngredientTag(ItemAlchemy._id("dark_matter"));
         }
-        return IngredientUtil.ofItems(Items.RED_MATTER.getOrNull());
+        return new RepairIngredientTag(ItemAlchemy._id("red_matter"));
     }
 
     @Override
-    public Identifier getId() {
-        return CompatIdentifier.of(ItemAlchemy.MOD_ID, name + "_armor").toMinecraft();
+    public CompatIdentifier getCompatId() {
+        return ItemAlchemy._id(name + "_armor");
     }
 
     @Override
