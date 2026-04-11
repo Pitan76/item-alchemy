@@ -1,7 +1,6 @@
 package net.pitan76.itemalchemy.tile;
 
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.pitan76.mcpitanlib.api.util.RegistryLookupUtil;
 import net.pitan76.itemalchemy.ItemAlchemy;
@@ -16,16 +15,14 @@ import net.pitan76.mcpitanlib.api.packet.UpdatePacketType;
 import net.pitan76.mcpitanlib.api.registry.CompatRegistryLookup;
 import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
-import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
-import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.util.math.Box;
 import net.pitan76.mcpitanlib.midohra.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEntityTicker<DMPedestalTile> {
@@ -157,37 +154,36 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(CompatRegistryLookup registryLookup) {
-        NbtCompound nbt = NbtUtil.create();
+    public net.minecraft.nbt.NbtCompound toInitialChunkDataNbt(CompatRegistryLookup registryLookup) {
+        NbtCompound nbt = NbtCompound.of();
         writeNbtData(nbt, registryLookup);
-        return nbt;
+        return nbt.toMinecraft();
     }
 
     @Override
     public void writeNbt(WriteNbtArgs args) {
         super.writeNbt(args);
-        writeNbtData(args.getNbt(), args.registryLookup);
+        writeNbtData(args.getNbtM(), args.registryLookup);
     }
 
     @Override
     public void readNbt(ReadNbtArgs args) {
         super.readNbt(args);
-        NbtCompound nbt = args.getNbt();
-        if (NbtUtil.has(nbt, "PedestalItem")) {
-            Optional<net.minecraft.item.ItemStack> opt = NbtUtil.getItemStack(nbt, "PedestalItem", args.registryLookup);
-            storedStack = ItemStack.of(opt.orElse(ItemStackUtil.empty()));
+        NbtCompound nbt = args.getNbtM();
+        if (nbt.has("PedestalItem")) {
+            storedStack = nbt.getItemStack("PedestalItem", args.registryLookup);
         }
-        isActive = NbtUtil.getBoolean(nbt, "Active");
+        isActive = nbt.getBoolean("Active");
     }
 
     private void writeNbtData(NbtCompound nbt, @Nullable CompatRegistryLookup registryLookup) {
         if (!storedStack.isEmpty()) {
             if (registryLookup != null)
-                NbtUtil.putItemStack(nbt, "PedestalItem", storedStack.toMinecraft(), registryLookup);
+                nbt.putItemStack("PedestalItem", storedStack, registryLookup);
             else
-                NbtUtil.putSimpleItemStack(nbt, "PedestalItem", storedStack.toMinecraft());
+                nbt.putSimpleItemStack("PedestalItem", storedStack);
         }
-        NbtUtil.putBoolean(nbt, "Active", isActive);
+        nbt.putBoolean("Active", isActive);
     }
 
     public void sendSyncPacket(@Nullable CompatRegistryLookup registryLookup) {
@@ -195,9 +191,9 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
         if (world == null || world.isClient()) return;
         PacketByteBuf buf = PacketByteUtil.create();
         PacketByteUtil.writeBlockPos(buf, callGetPos());
-        NbtCompound nbt = NbtUtil.create();
+        NbtCompound nbt = NbtCompound.of();
         writeNbtData(nbt, registryLookup);
-        PacketByteUtil.writeNbt(buf, nbt);
+        PacketByteUtil.writeNbt(buf, nbt.toMinecraft());
         ServerNetworking.sendAll(world.getRaw(), ItemAlchemy._id("pedestal_sync"), buf);
     }
 }

@@ -37,7 +37,7 @@ public class Wrench extends AlchemicalItem  {
         Optional<CompatBlockEntity> optionalCompatBlockEntity = e.getBlockEntityWrapper().toCompatBlockEntity();
         if (optionalCompatBlockEntity.isPresent()) {
             ItemStack dropStack = block.asItem().createStack();
-            BlockEntityDataUtil.writeCompatBlockEntityNbtToStack(dropStack.toMinecraft(), optionalCompatBlockEntity.get());
+            BlockEntityDataUtil.writeCompatBlockEntityNbtToStack(dropStack, optionalCompatBlockEntity.get());
 
             world.removeBlockEntity(pos);
             world.removeBlock(pos, false);
