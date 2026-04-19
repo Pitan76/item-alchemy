@@ -45,7 +45,7 @@ public class DMPedestalBlockEntityRenderer extends CompatBlockEntityRenderer<DMP
 
         e.scale(0.5f, 0.5f, 0.5f);
 
-        CompatItemRenderUtil.renderItemFixed(stack.toMinecraft(), e, entity.callGetWorld());
+        CompatItemRenderUtil.renderItemFixed(stack, e, entity.getMidohraWorld());
 
         e.pop();
     }

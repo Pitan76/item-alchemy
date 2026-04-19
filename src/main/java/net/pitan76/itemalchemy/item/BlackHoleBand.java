@@ -171,7 +171,8 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
         NbtElement itemNbtElement = inventory.get(0);
         inventory.remove(0);
 
-        NbtCompound itemNbt = NbtCompound.of((net.minecraft.nbt.NbtCompound) itemNbtElement.toMinecraft());
+        NbtCompound itemNbt = itemNbtElement.asNbtCompound();
+        if (itemNbt == null) return ItemStack.EMPTY;
 
         if (registryLookup != null)
             return itemNbt.getItemStack("item", registryLookup);

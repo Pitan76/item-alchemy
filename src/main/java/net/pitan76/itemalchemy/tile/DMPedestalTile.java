@@ -1,7 +1,6 @@
 package net.pitan76.itemalchemy.tile;
 
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.network.PacketByteBuf;
 import net.pitan76.mcpitanlib.api.util.RegistryLookupUtil;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.block.pedestal.IPedestalItem;
@@ -9,7 +8,6 @@ import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
-import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.packet.UpdatePacketType;
 import net.pitan76.mcpitanlib.api.registry.CompatRegistryLookup;
@@ -18,6 +16,7 @@ import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
+import net.pitan76.mcpitanlib.midohra.network.CompatPacketByteBuf;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.util.math.Box;
 import net.pitan76.mcpitanlib.midohra.world.World;
@@ -189,11 +188,14 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
     public void sendSyncPacket(@Nullable CompatRegistryLookup registryLookup) {
         World world = getMidohraWorld();
         if (world == null || world.isClient()) return;
-        PacketByteBuf buf = PacketByteUtil.create();
-        PacketByteUtil.writeBlockPos(buf, callGetPos());
+
         NbtCompound nbt = NbtCompound.of();
         writeNbtData(nbt, registryLookup);
-        PacketByteUtil.writeNbt(buf, nbt.toMinecraft());
-        ServerNetworking.sendAll(world.getRaw(), ItemAlchemy._id("pedestal_sync"), buf);
+
+        CompatPacketByteBuf buf = CompatPacketByteBuf.create();
+        buf.writeBlockPos(getMidohraPos());
+        buf.writeNbt(nbt);
+
+        ServerNetworking.sendAll(world, ItemAlchemy._id("pedestal_sync"), buf);
     }
 }

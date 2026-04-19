@@ -1,7 +1,6 @@
 package net.pitan76.itemalchemy.tile;
 
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.ItemAlchemy;
@@ -29,6 +28,8 @@ import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+import net.pitan76.mcpitanlib.midohra.item.MCItems;
+import net.pitan76.mcpitanlib.midohra.network.CompatPacketByteBuf;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -167,7 +168,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
                 oldStoredEMC = storedEMC;
                 for (Player player : world.getPlayers()) {
                     if (player.hasNetworkHandler() && player.getCurrentScreenHandler() instanceof EMCCollectorScreenHandler && ((EMCCollectorScreenHandler) player.getCurrentScreenHandler()).tile == this) {
-                        PacketByteBuf buf = PacketByteUtil.create();
+                        CompatPacketByteBuf buf = CompatPacketByteBuf.create();
                         PacketByteUtil.writeLong(buf, storedEMC);
                         ServerNetworking.send(player, ItemAlchemy._id("itemalchemy_emc_collector"), buf);
                     }
@@ -187,31 +188,31 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
 
         if (!inventory.getAsMidohra(1).isEmpty() && inputStack.getItem() == stack.getItem()) return ItemStack.EMPTY;
 
-        if (net.pitan76.mcpitanlib.midohra.item.Items.COAL == stack.getItem()) {
+        if (stack.getItem().equals(MCItems.COAL)) {
             if (storedEMC >= 16 || test) {
                 if (!test) storedEMC -= 16;
-                return net.pitan76.mcpitanlib.midohra.item.Items.REDSTONE.createStack(1);
+                return MCItems.REDSTONE.createStack(1);
             }
         }
-        if (net.pitan76.mcpitanlib.midohra.item.Items.REDSTONE == stack.getItem()) {
+        if (stack.getItem().equals(MCItems.REDSTONE)) {
             if (storedEMC >= 32 || test) {
                 if (!test) storedEMC -= 32;
-                return net.pitan76.mcpitanlib.midohra.item.Items.GUNPOWDER.createStack(1);
+                return MCItems.GUNPOWDER.createStack(1);
             }
         }
-        if (net.pitan76.mcpitanlib.midohra.item.Items.GUNPOWDER == stack.getItem()) {
+        if (stack.getItem().equals(MCItems.GUNPOWDER)) {
             if (storedEMC >= 256 || test) {
                 if (!test) storedEMC -= 256;
                 return ItemStack.of(Items.ALCHEMICAL_FUEL.getOrNull(), 1);
             }
         }
-        if (Items.ALCHEMICAL_FUEL.getOrNull() == stack.getRawItem()) {
+        if (stack.getRawItem().equals(Items.ALCHEMICAL_FUEL.getOrNull())) {
             if (storedEMC >= 1024 || test) {
                 if (!test) storedEMC -= 1024;
                 return ItemStack.of(Items.MOBIUS_FUEL.getOrNull(), 1);
             }
         }
-        if (Items.MOBIUS_FUEL.getOrNull() == stack.getRawItem()) {
+        if (stack.getRawItem().equals(Items.MOBIUS_FUEL.getOrNull())) {
             if (storedEMC >= 4096 || test) {
                 if (!test) storedEMC -= 4096;
                 return ItemStack.of(Items.AETERNALIS_FUEL.getOrNull(), 1);

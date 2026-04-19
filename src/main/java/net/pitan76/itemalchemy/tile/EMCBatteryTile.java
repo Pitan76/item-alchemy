@@ -139,7 +139,7 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
         NbtCompound data = NbtUtil.create();
         BlockPos pos = getMidohraPos();
 
-        PacketByteUtil.writeBlockPos(args.buf, pos.toRaw());
+        PacketByteUtil.writeBlockPos(args.buf, pos);
         PacketByteUtil.writeLong(args.buf, storedEMC);
         PacketByteUtil.writeLong(args.buf, getMaxEMC());
         args.writeVar(data);
