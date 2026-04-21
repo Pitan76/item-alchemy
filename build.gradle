@@ -15,10 +15,6 @@ subprojects {
     apply plugin: "com.modrinth.minotaur"
     apply plugin: "com.matthewprenger.cursegradle"
 
-    loom {
-        silentMojangMappingsLicense()
-    }
-
     repositories {
         maven { url "https://maven.shedaniel.me/" }
         maven { url "https://maven.pitan76.net/" }

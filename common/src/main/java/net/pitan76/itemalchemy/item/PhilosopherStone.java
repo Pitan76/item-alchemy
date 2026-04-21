@@ -182,10 +182,10 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
         exchangeBlock(World.of(world), BlockPos.of(blockPos), BlockState.of(newBlockState), BlockState.of(blockState));
     }
 
-    @Override
-    public ItemStack getRecipeRemainder(ItemStack stack) {
-        return getFixedRecipeRemainder(stack);
-    }
+//    @Override
+//    public ItemStack getRecipeRemainder(ItemStack stack) {
+//        return getFixedRecipeRemainder(stack);
+//    }
 
     @Override
     public boolean hasRecipeRemainder(Dummy dummy) {

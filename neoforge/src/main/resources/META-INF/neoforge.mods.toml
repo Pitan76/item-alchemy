@@ -8,7 +8,7 @@ modId = "itemalchemy"
 version = "${version}"
 displayName="Item Alchemy"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/item-alchemy-fabric"
-logoFile = "assets/itemalchemy/icon.png"
+logoFile = "assets/itemalchemy/logo.png"
 authors = "Pitan"
 description = '''
 A developing port of Equivalent Exchange (like Project E)
