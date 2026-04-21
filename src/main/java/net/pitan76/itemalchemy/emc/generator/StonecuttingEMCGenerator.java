@@ -30,7 +30,7 @@ public class StonecuttingEMCGenerator implements IEMCGenerator {
                         .map(Ingredient::of)
                         .collect(Collectors.toList());
 
-                CompatInventory inventory = new CompatInventory(2);
+                CompatInventory inventory = new CompatInventory(ingredients.size());
                 for (int i = 0; i < ingredients.size(); i++) {
                     ItemStack stack = ingredients.get(i).getMatchingStacksAsMidohra()[0];
                     inventory.callSetStack(i, stack);
