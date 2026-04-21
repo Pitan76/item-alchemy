@@ -14,5 +14,7 @@ public class ItemAlchemyEMCDef extends EMCDef {
         add(Items.EMC_COLLECTOR_MK4, 1384520);
         add(Items.EMC_COLLECTOR_MK5, 11543104);
         add(Items.ALCHEMY_PAD, 10248);
+        add(Items.EMC_REPEATER, 10395);
+        add(Items.EMC_CABLE, 2598);
     }
 }

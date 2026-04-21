@@ -220,6 +220,9 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.EMERALD_ORE, 1024);
         add(Items.GOLD_ORE, 2048);
         add(Items.DIAMOND_ORE, 8192);
+        addExist("copper_ingot", 128);
+        add(Items.IRON_INGOT, 256);
+        add(Items.GOLD_INGOT, 2048);
         add(Items.NETHERITE_INGOT, 57344);
         add(Items.DIAMOND, 8192);
         add(Items.EMERALD, 1024);
