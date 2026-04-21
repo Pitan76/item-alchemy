@@ -105,7 +105,7 @@ public class EMCCondenser extends CompatBlock implements ExtendBlockEntityProvid
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityType<T> getBlockEntityType() {
-        return (BlockEntityType<T>) Tiles.EMC_CONDENSER.getOrNull();
+        return (BlockEntityType<T>) Tiles.EMC_CONDENSER.get();
     }
 
     @Override

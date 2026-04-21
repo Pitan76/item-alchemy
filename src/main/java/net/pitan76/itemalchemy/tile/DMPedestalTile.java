@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.minecraft.block.entity.BlockEntityType;
 import net.pitan76.mcpitanlib.api.util.RegistryLookupUtil;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.block.pedestal.IPedestalItem;
@@ -14,6 +13,7 @@ import net.pitan76.mcpitanlib.api.registry.CompatRegistryLookup;
 import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
+import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityTypeWrapper;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
 import net.pitan76.mcpitanlib.midohra.network.CompatPacketByteBuf;
@@ -54,12 +54,12 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
     // After the initial sync, resets to 40 to periodically re-sync (every 2 s) as a safety net.
     private int syncCountdown = 5;
 
-    public DMPedestalTile(BlockEntityType<?> type, TileCreateEvent e) {
+    public DMPedestalTile(BlockEntityTypeWrapper type, TileCreateEvent e) {
         super(type, e);
     }
 
     public DMPedestalTile(TileCreateEvent e) {
-        this(Tiles.DM_PEDESTAL.getOrNull(), e);
+        this(Tiles.DM_PEDESTAL, e);
     }
 
     @Override

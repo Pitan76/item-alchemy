@@ -1,8 +1,6 @@
 package net.pitan76.itemalchemy.gui.screen;
 
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.slot.Slot;
 import net.pitan76.itemalchemy.gui.slot.TargetSlot;
@@ -12,12 +10,15 @@ import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
 import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
+import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
 import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityWrapper;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
-    public Inventory inventory;
+    public ICompatInventory inventory;
     public PlayerInventory playerInventory;
     public EMCCollectorTile tile = null;
 
@@ -25,7 +26,7 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
     public long maxEMC = 0;
 
     public EMCCollectorScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, null, InventoryUtil.createSimpleInventory(16 + 3));
+        this(syncId, playerInventory, null, new CompatInventory(16 + 3));
 
         Player player = new Player(playerInventory.player);
 
@@ -39,7 +40,7 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
         }
     }
 
-    public EMCCollectorScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCCollectorTile tile, Inventory inventory) {
+    public EMCCollectorScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCCollectorTile tile, ICompatInventory inventory) {
         super(ScreenHandlers.EMC_COLLECTOR, syncId);
 
         this.inventory = inventory;
@@ -53,16 +54,16 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
         addSlots(inventory, 3, 14, 8, -1, 4, 4);
     }
 
-    protected Slot addTargetSlot(Inventory inventory, int index, int x, int y) {
+    protected Slot addTargetSlot(ICompatInventory inventory, int index, int x, int y) {
         Slot slot = new TargetSlot(inventory, index, x, y, this);
         return this.callAddSlot(slot);
     }
 
     @Override
-    public ItemStack quickMoveOverride(Player player, int index) {
+    public net.minecraft.item.ItemStack quickMoveOverride(Player player, int index) {
         Slot slot = ScreenHandlerUtil.getSlot(this, index);
         if (SlotUtil.hasStack(slot)) {
-            ItemStack originalStack = SlotUtil.getStack(slot);
+            ItemStack originalStack = ItemStack.of(SlotUtil.getStack(slot));
             // TargetSlot
             if (index == 37) {
                 Slot targetSlot = ScreenHandlerUtil.getSlot(this, 37);
@@ -71,8 +72,8 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
             }
 
             if (index < 36) {
-                if (!this.callInsertItem(originalStack, 36 + 3, 36 + 16 + 3, false)) {
-                    if (!this.callInsertItem(originalStack, 36, 36 + 3, false)) {
+                if (!this.callInsertItem(originalStack.toMinecraft(), 36 + 3, 36 + 16 + 3, false)) {
+                    if (!this.callInsertItem(originalStack.toMinecraft(), 36, 36 + 3, false)) {
                         return ItemStackUtil.empty();
                     }
                 }
@@ -82,14 +83,14 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
                 if (SlotUtil.getStack(targetSlot).isEmpty()) {
                     ItemStack newTargetStack = originalStack.copy();
                     newTargetStack.setCount(1);
-                    SlotUtil.setStack(targetSlot, newTargetStack);
+                    SlotUtil.setStack(targetSlot, newTargetStack.toMinecraft());
                     return ItemStackUtil.empty();
                 }
-            } else if (!this.callInsertItem(originalStack, 0, 36, false)) {
+            } else if (!this.callInsertItem(originalStack.toMinecraft(), 0, 36, false)) {
                 return ItemStackUtil.empty();
             }
 
-            if (ItemStackUtil.isEmpty(originalStack)) {
+            if (originalStack.isEmpty()) {
                 SlotUtil.setStack(slot, ItemStackUtil.empty());
             } else {
                 SlotUtil.markDirty(slot);
@@ -101,10 +102,10 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
     @Override
     public void onSlotClick(SlotClickEvent e) {
         if (e.slot == 37) { // Target Slot
-            ItemStack oldStack = ItemStackUtil.copy(callGetCursorStack());
+            ItemStack oldStack = getCursorStackM().copy();
             super.onSlotClick(e);
-            if (!ItemStackUtil.isEmpty(oldStack)) {
-                callSetCursorStack(oldStack);
+            if (!oldStack.isEmpty()) {
+                setCursorStack(oldStack);
             }
             return;
         }

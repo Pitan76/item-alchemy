@@ -1,12 +1,6 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.api.EMCStorageUtil;
@@ -15,17 +9,21 @@ import net.pitan76.itemalchemy.gui.screen.EMCCondenserMK2ScreenHandler;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
+import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.CanExtractArgs;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
+import net.pitan76.mcpitanlib.api.util.inventory.InventoryWrapper;
+import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityTypeWrapper;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+import net.pitan76.mcpitanlib.midohra.network.CompatPacketByteBuf;
 import net.pitan76.mcpitanlib.midohra.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static net.pitan76.mcpitanlib.api.util.InventoryUtil.canMergeItems;
 
@@ -33,12 +31,12 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
 
     public ItemStackList inventory = ItemStackList.ofSize(1 + 84, ItemStackUtil.empty());
 
-    public EMCCondenserMK2Tile(BlockEntityType<?> type, TileCreateEvent e) {
+    public EMCCondenserMK2Tile(BlockEntityTypeWrapper type, TileCreateEvent e) {
         super(type, e);
     }
 
     public EMCCondenserMK2Tile(TileCreateEvent e) {
-        this(Tiles.EMC_CONDENSER_MK2.getOrNull(), e);
+        this(Tiles.EMC_CONDENSER_MK2, e);
     }
 
     @Override
@@ -53,8 +51,8 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
 
     @Override
     @Nullable
-    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-        return new EMCCondenserMK2ScreenHandler(syncId, inv, this, this, getTargetStack());
+    public ScreenHandler createMenu(CreateMenuEvent e) {
+        return new EMCCondenserMK2ScreenHandler(e.syncId, e.playerInventory, this, InventoryWrapper.of(this), getTargetStack());
     }
 
     @Override
@@ -63,9 +61,9 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
 
         World world = e.getMidohraWorld();
         if (!getItems().isEmpty()) {
-            ItemStack targetStack = getItems().get(0);
-            if (!ItemStackUtil.isEmpty(targetStack)) {
-                maxEMC = EMCManager.get(ItemStackUtil.getItem(targetStack));
+            ItemStack targetStack = getItems().getAsMidohra(0);
+            if (!targetStack.isEmpty()) {
+                maxEMC = EMCManager.get(targetStack.getItem());
             } else {
                 maxEMC = 0;
             }
@@ -74,23 +72,23 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
         EMCStorageUtil.transferAllEMC(this);
 
         if (!getItems().isEmpty()) {
-            ItemStack targetStack = getItems().get(0);
-            if (!ItemStackUtil.isEmpty(targetStack)) {
+            ItemStack targetStack = getItems().getAsMidohra(0);
+            if (!targetStack.isEmpty()) {
                 if (coolDown == 0) {
-                    List<ItemStack> storageInventory = new ArrayList<>(getItems());
+                    List<ItemStack> storageInventory = new ArrayList<>(getItems().toMidohra());
 
                     if (!storageInventory.isEmpty()) {
                         for (int i = 1; i < 43; i++) {
                             ItemStack stack = storageInventory.get(i);
 
-                            if (ItemStackUtil.isEmpty(stack)) continue;
-                            if (stack.getItem() == targetStack.getItem()) continue;
+                            if (stack.isEmpty()) continue;
+                            if (stack.getItem().equals(targetStack.getItem())) continue;
 
                             long emc = EMCManager.get(stack.getItem());
                             if (emc == 0) continue;
                             //if (emc + storedEMC <= maxEMC) {
                             storedEMC += emc;
-                            ItemStackUtil.decrementCount(stack, 1);
+                            stack.decrement(1);
                             break;
                             //}
                         }
@@ -102,14 +100,14 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
                         ItemStack newStack;
                         if (ItemAlchemyConfig.isRemoveDataFromCopyStack()) {
                             // Remove Data
-                            newStack = new ItemStack(targetStack.getItem());
+                            newStack = targetStack.getItem().createStack();
                         } else {
                             newStack = targetStack.copy();
                         }
 
-                        ItemStackUtil.setCount(newStack, 1);
+                        newStack.setCount(1);
 
-                        CustomDataUtil.setNbt(newStack, NbtUtil.create());
+                        newStack.setCustomNbt(NbtUtil.create());
                         //newStack.setNbt(new NbtCompound());
                         if (insertItem(newStack, getItems(), true)) {
                             insertItem(newStack, getItems());
@@ -132,15 +130,14 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
             oldMaxEMC = maxEMC;
 
             for (Player player : world.getPlayers()) {
-                if (player.hasNetworkHandler() && player.getCurrentScreenHandler() instanceof EMCCondenserMK2ScreenHandler && ((EMCCondenserMK2ScreenHandler) player.getCurrentScreenHandler()).tile == this ) {
-                    PacketByteBuf buf = PacketByteUtil.create();
+                if (player.hasNetworkHandler() && player.getCurrentScreenHandler() instanceof EMCCondenserMK2ScreenHandler && ((EMCCondenserMK2ScreenHandler) player.getCurrentScreenHandler()).tile == this) {
+                    CompatPacketByteBuf buf = CompatPacketByteBuf.create();
                     PacketByteUtil.writeLong(buf, storedEMC);
                     PacketByteUtil.writeLong(buf, maxEMC);
                     //if (!getTargetStack().isEmpty())
                     //    PacketByteUtil.writeItemStack(buf, getTargetStack());
 
-                    Optional<ServerPlayerEntity> serverPlayerEntity = player.getServerPlayer();
-                    serverPlayerEntity.ifPresent(playerEntity -> ServerNetworking.send(playerEntity, ItemAlchemy._id("itemalchemy_emc_condenser"), buf));
+                    ServerNetworking.send(player, ItemAlchemy._id("itemalchemy_emc_condenser"), buf);
                 }
             }
         }
@@ -153,14 +150,15 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
     public static boolean insertItem(ItemStack insertStack, ItemStackList inventory, boolean test) {
         boolean isInserted = false;
         for (int i = 43; i < inventory.size(); i++) {
-            ItemStack stack = inventory.get(i);
-            if (ItemStackUtil.isEmpty(stack)) {
+            ItemStack stack = inventory.getAsMidohra(i);
+            if (stack.isEmpty()) {
                 if (!test) inventory.set(i, insertStack);
                 isInserted = true;
                 break;
-            } else if (canMergeItems(stack, insertStack)) {
-                int j = ItemStackUtil.getCount(insertStack);
-                if (!test) ItemStackUtil.incrementCount(stack, j);
+                // TODO: canMergeItemsでMidohraのItemStackを対応させる
+            } else if (canMergeItems(stack.toMinecraft(), insertStack.toMinecraft())) {
+                int j = insertStack.getCount();
+                if (!test) stack.increment(j);
                 isInserted = j > 0;
                 break;
             }

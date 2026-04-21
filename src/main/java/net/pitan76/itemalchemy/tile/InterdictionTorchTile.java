@@ -1,12 +1,12 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.minecraft.block.entity.BlockEntityType;
 import net.pitan76.itemalchemy.block.InterdictionTorch;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
 import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
+import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityTypeWrapper;
 import net.pitan76.mcpitanlib.midohra.entity.EntityWrapper;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.util.math.Box;
@@ -21,12 +21,12 @@ public class InterdictionTorchTile extends CompatBlockEntity implements ExtendBl
     public static final double RADIUS = 8.0;
     public static final double PUSH_STRENGTH = 0.15;
 
-    public InterdictionTorchTile(BlockEntityType<?> type, TileCreateEvent e) {
+    public InterdictionTorchTile(BlockEntityTypeWrapper type, TileCreateEvent e) {
         super(type, e);
     }
 
     public InterdictionTorchTile(TileCreateEvent e) {
-        this(Tiles.INTERDICTION_TORCH.getOrNull(), e);
+        this(Tiles.INTERDICTION_TORCH, e);
     }
 
     private int particleTick = 0;

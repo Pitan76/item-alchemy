@@ -20,6 +20,7 @@ import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 import net.pitan76.mcpitanlib.midohra.block.BlockState;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider, IUseableWrench {
@@ -78,8 +79,8 @@ public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider,
         if (e.getItem() instanceof Wrench)
             return e.pass();
 
-        net.minecraft.util.math.BlockPos rawPos = AEGUTile.getNearEMCCondenserPos(e.world, e.pos);
-        if (rawPos == null) return e.fail();
+        BlockPos pos = AEGUTile.getNearEMCCondenserPos(e.getMidohraWorld(), e.getMidohraPos());
+        if (pos == null) return e.fail();
 
         BlockEntity blockEntity = e.getBlockEntity();
         if (blockEntity instanceof EMCCondenserTile) {
@@ -93,7 +94,7 @@ public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider,
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityType<T> getBlockEntityType() {
-        return (BlockEntityType<T>) Tiles.AEGU.getOrNull();
+        return (BlockEntityType<T>) Tiles.AEGU.get();
     }
 
     @Override

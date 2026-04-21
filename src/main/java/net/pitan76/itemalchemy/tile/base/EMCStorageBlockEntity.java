@@ -1,23 +1,21 @@
 package net.pitan76.itemalchemy.tile.base;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.util.math.BlockPos;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
+import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityTypeWrapper;
 
 public abstract class EMCStorageBlockEntity extends CompatBlockEntity {
     public long storedEMC = 0;
     public boolean isActive = false;
 
-    public EMCStorageBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+    public EMCStorageBlockEntity(BlockEntityTypeWrapper type, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state) {
+        super(type.get(), pos, state);
     }
 
-    public EMCStorageBlockEntity(BlockEntityType<?> type, TileCreateEvent event) {
+    public EMCStorageBlockEntity(BlockEntityTypeWrapper type, TileCreateEvent event) {
         super(type, event);
     }
 

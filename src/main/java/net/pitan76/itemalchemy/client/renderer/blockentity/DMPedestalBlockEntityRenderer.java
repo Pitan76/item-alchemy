@@ -39,7 +39,7 @@ public class DMPedestalBlockEntityRenderer extends CompatBlockEntityRenderer<DMP
         e.translate(0, bobbing, 0);
 
         // Rotating
-        boolean fastSpin = entity.getActive() && ItemUtil.isOf(stack.toMinecraft(), Items.WATCH_OF_FLOWING_TIME.getOrNull());
+        boolean fastSpin = entity.getActive() && stack.getItem().equals(Items.WATCH_OF_FLOWING_TIME);
         float rotation = time * (fastSpin ? 6.0F : 2.0F);
         e.multiply(MathUtil.RotationAxisType.POSITIVE_Y, rotation);
 

@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.gui.screen.AlchemyChestScreenHandler;
@@ -13,23 +12,24 @@ import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.VanillaStyleSidedInventory;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.AvailableSlotsArgs;
 import net.pitan76.mcpitanlib.api.gui.v2.SimpleScreenHandlerFactory;
-import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntity;
+import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.util.InventoryUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
+import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityTypeWrapper;
 import org.jetbrains.annotations.Nullable;
 
-public class AlchemyChestTile extends ExtendBlockEntity implements VanillaStyleSidedInventory, IInventory, SimpleScreenHandlerFactory {
+public class AlchemyChestTile extends CompatBlockEntity implements VanillaStyleSidedInventory, IInventory, SimpleScreenHandlerFactory {
 
     public ItemStackList inventory = ItemStackList.ofSize(104, ItemStackUtil.empty());
 
-    public AlchemyChestTile(BlockEntityType<?> type, TileCreateEvent e) {
+    public AlchemyChestTile(BlockEntityTypeWrapper type, TileCreateEvent e) {
         super(type, e);
     }
 
     public AlchemyChestTile(TileCreateEvent e) {
-        this(Tiles.ALCHEMY_CHEST.getOrNull(), e);
+        this(Tiles.ALCHEMY_CHEST, e);
     }
 
     @Override

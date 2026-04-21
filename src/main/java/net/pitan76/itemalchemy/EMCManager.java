@@ -107,6 +107,11 @@ public class EMCManager {
     public static boolean contains(Item item) {
         return contains(itemToId(item));
     }
+
+    public static boolean contains(ItemWrapper item) {
+        return contains(item.get());
+    }
+
     public static boolean contains(String item) {
         return map.containsKey(item);
     }

@@ -1,8 +1,5 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.ItemAlchemy;
@@ -28,8 +25,10 @@ import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
-import net.pitan76.mcpitanlib.api.util.math.PosUtil;
+import net.pitan76.mcpitanlib.midohra.block.BlockState;
 import net.pitan76.mcpitanlib.midohra.block.BlockWrapper;
+import net.pitan76.mcpitanlib.midohra.block.entity.TypedBlockEntityTypeWrapper;
+import net.pitan76.mcpitanlib.midohra.network.CompatPacketByteBuf;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -46,12 +45,12 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
 
     public ItemStackList inventory = ItemStackList.ofSize(2, ItemStackUtil.empty());
 
-    public EMCBatteryTile(BlockEntityType<?> type, TileCreateEvent e) {
+    public EMCBatteryTile(TypedBlockEntityTypeWrapper<?> type, TileCreateEvent e) {
         super(type, e);
     }
 
     public EMCBatteryTile(TileCreateEvent e) {
-        this(Tiles.EMC_BATTERY.getOrNull(), e);
+        this(Tiles.EMC_BATTERY, e);
     }
 
     @Override
@@ -85,9 +84,10 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
     public void tick(TileTickEvent<EMCBatteryTile> e) {
         if (e.isClient()) return;
         World world = e.getMidohraWorld();
+        BlockState state = e.getMidohraState();
 
         if (maxEMC == -1)
-            maxEMC = ((EMCBattery) BlockStateUtil.getBlock(e.state)).getMaxEMC();
+            maxEMC = state.getBlock().getCompatBlock(EMCBattery.class).getMaxEMC();
 
         //if (maxEMC <= storedEMC) return;
 
@@ -105,9 +105,8 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
             oldStoredEMC = storedEMC;
             for (Player player : world.getPlayers()) {
                 if (player.hasNetworkHandler() && player.getCurrentScreenHandler() instanceof EMCBatteryScreenHandler && ((EMCBatteryScreenHandler) player.getCurrentScreenHandler()).tile == this) {
-                    PacketByteBuf buf = PacketByteUtil.create();
+                    CompatPacketByteBuf buf = CompatPacketByteBuf.create();
                     PacketByteUtil.writeLong(buf, storedEMC);
-//                    Optional<ServerPlayerEntity> serverPlayerEntity = player.getServerPlayer();
                     ServerNetworking.send(player, ItemAlchemy._id("itemalchemy_emc_battery"), buf);
                 }
             }
@@ -136,12 +135,10 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
 
     @Override
     public void writeExtraData(ExtraDataArgs args) {
-        NbtCompound data = NbtUtil.create();
         BlockPos pos = getMidohraPos();
 
         PacketByteUtil.writeBlockPos(args.buf, pos);
         PacketByteUtil.writeLong(args.buf, storedEMC);
         PacketByteUtil.writeLong(args.buf, getMaxEMC());
-        args.writeVar(data);
     }
 }

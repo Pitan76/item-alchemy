@@ -15,6 +15,6 @@ public class Sounds {
     }
 
     private static CompatSoundEvent register(String id) {
-        return registry.registerCompatSoundEvent(_id(id));
+        return registry.getCompatRegistry().registerCompatSoundEvent(_id(id));
     }
 }

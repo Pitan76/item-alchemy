@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.ItemAlchemy;
@@ -27,6 +26,8 @@ import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
+import net.pitan76.mcpitanlib.api.util.inventory.InventoryWrapper;
+import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityTypeWrapper;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 import net.pitan76.mcpitanlib.midohra.item.MCItems;
 import net.pitan76.mcpitanlib.midohra.network.CompatPacketByteBuf;
@@ -45,12 +46,12 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
 
     public ItemStackList inventory = ItemStackList.ofSize(16 + 3, ItemStackUtil.empty());
 
-    public EMCCollectorTile(BlockEntityType<?> type, TileCreateEvent e) {
+    public EMCCollectorTile(BlockEntityTypeWrapper type, TileCreateEvent e) {
         super(type, e);
     }
 
     public EMCCollectorTile(TileCreateEvent e) {
-        this(Tiles.EMC_COLLECTOR.getOrNull(), e);
+        this(Tiles.EMC_COLLECTOR, e);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
 
     @Nullable
     public ScreenHandler createMenu(CreateMenuEvent e) {
-        return new EMCCollectorScreenHandler(e.syncId, e.playerInventory, this, this);
+        return new EMCCollectorScreenHandler(e.syncId, e.playerInventory, this, InventoryWrapper.of(this));
     }
 
     @Override
@@ -203,19 +204,19 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
         if (stack.getItem().equals(MCItems.GUNPOWDER)) {
             if (storedEMC >= 256 || test) {
                 if (!test) storedEMC -= 256;
-                return ItemStack.of(Items.ALCHEMICAL_FUEL.getOrNull(), 1);
+                return Items.ALCHEMICAL_FUEL.createStack(1);
             }
         }
-        if (stack.getRawItem().equals(Items.ALCHEMICAL_FUEL.getOrNull())) {
+        if (stack.getItem().equals(Items.ALCHEMICAL_FUEL)) {
             if (storedEMC >= 1024 || test) {
                 if (!test) storedEMC -= 1024;
-                return ItemStack.of(Items.MOBIUS_FUEL.getOrNull(), 1);
+                return Items.MOBIUS_FUEL.createStack(1);
             }
         }
-        if (stack.getRawItem().equals(Items.MOBIUS_FUEL.getOrNull())) {
+        if (stack.getItem().equals(Items.MOBIUS_FUEL)) {
             if (storedEMC >= 4096 || test) {
                 if (!test) storedEMC -= 4096;
-                return ItemStack.of(Items.AETERNALIS_FUEL.getOrNull(), 1);
+                return Items.AETERNALIS_FUEL.createStack(1);
             }
         }
         return ItemStack.EMPTY;

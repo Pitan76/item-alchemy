@@ -55,6 +55,6 @@ public class EMCCondenserMK2 extends EMCCondenser {
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityType<T> getBlockEntityType() {
-        return (BlockEntityType<T>) Tiles.EMC_CONDENSER_MK2.getOrNull();
+        return (BlockEntityType<T>) Tiles.EMC_CONDENSER_MK2.get();
     }
 }

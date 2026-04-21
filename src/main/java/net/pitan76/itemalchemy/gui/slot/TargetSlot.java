@@ -1,18 +1,18 @@
 package net.pitan76.itemalchemy.gui.slot;
 
-import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.ScreenHandler;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.mcpitanlib.api.gui.slot.CompatibleSlot;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
+import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 
 public class TargetSlot extends CompatibleSlot {
 
     private final ScreenHandler screenHandler;
 
-    public TargetSlot(Inventory inventory, int index, int x, int y, ScreenHandler screenHandler) {
+    public TargetSlot(ICompatInventory inventory, int index, int x, int y, ScreenHandler screenHandler) {
         super(inventory, index, x, y);
         this.screenHandler = screenHandler;
     }
@@ -22,7 +22,7 @@ public class TargetSlot extends CompatibleSlot {
         if (screenHandler instanceof EMCCondenserScreenHandler) {
             EMCCondenserScreenHandler handler = (EMCCondenserScreenHandler) screenHandler;
 
-            return EMCManager.get(stack) != 0 && !stack.isEmpty() && ItemStackUtil.isEmpty(handler.targetStack);
+            return EMCManager.get(stack) != 0 && !stack.isEmpty() && handler.targetStack.isEmpty();
         }
 
         return EMCManager.get(stack) != 0 && !stack.isEmpty();

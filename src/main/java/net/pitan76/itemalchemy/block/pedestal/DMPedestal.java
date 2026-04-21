@@ -211,7 +211,7 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityType<T> getBlockEntityType() {
-        return (BlockEntityType<T>) Tiles.DM_PEDESTAL.getOrNull();
+        return (BlockEntityType<T>) Tiles.DM_PEDESTAL.get();
     }
 
     @Override

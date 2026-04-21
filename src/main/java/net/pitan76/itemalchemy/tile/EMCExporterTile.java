@@ -1,11 +1,8 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.screen.EMCExporterScreenHandler;
@@ -22,12 +19,19 @@ import net.pitan76.mcpitanlib.api.gui.inventory.IInventory;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.VanillaStyleSidedInventory;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.AvailableSlotsArgs;
 import net.pitan76.mcpitanlib.api.gui.v2.ExtendedScreenHandlerFactory;
+import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.registry.CompatRegistryLookup;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
+import net.pitan76.mcpitanlib.api.util.inventory.InventoryWrapper;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
+import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityTypeWrapper;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEntityTicker<EMCExporterTile>, VanillaStyleSidedInventory, IInventory, ExtendedScreenHandlerFactory {
 
@@ -38,66 +42,69 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     public long oldStoredEMC = -1;
 
-    public EMCExporterTile(BlockEntityType<?> type, TileCreateEvent e) {
+    public EMCExporterTile(BlockEntityTypeWrapper type, TileCreateEvent e) {
         super(type, e);
     }
 
     public EMCExporterTile(TileCreateEvent e) {
-        this(Tiles.EMC_EXPORTER.getOrNull(), e);
+        this(Tiles.EMC_EXPORTER, e);
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(CompatRegistryLookup registryLookup) {
-        NbtCompound nbt = NbtUtil.create();
+    public net.minecraft.nbt.NbtCompound toInitialChunkDataNbt(CompatRegistryLookup registryLookup) {
+        NbtCompound nbt = NbtCompound.of();
+        NbtCompound filterNbt = NbtCompound.of();
 
-        NbtCompound filterNbt = NbtUtil.create();
-        InventoryUtil.writeNbt(registryLookup, filterNbt, filter);
-        NbtUtil.put(nbt, "filter", filterNbt);
+        InventoryUtil.writeNbt(registryLookup, filterNbt.toMinecraft(), filter);
+        nbt.put("filter", filterNbt);
 
         if (teamUUID != null)
-            NbtUtil.putUuid(nbt, "team", teamUUID);
+            nbt.putUuid("team", teamUUID);
 
         if (ownerName != null && !ownerName.isEmpty())
-            NbtUtil.putString(nbt, "ownerName", ownerName);
+            nbt.putString("ownerName", ownerName);
 
-        return nbt;
+        return nbt.toMinecraft();
     }
 
     @Override
     public void writeNbt(WriteNbtArgs args) {
         super.writeNbt(args);
 
-        NbtCompound filterNbt = NbtUtil.create();
-        InventoryUtil.writeNbt(args.registryLookup, filterNbt, filter);
-        NbtUtil.put(args.nbt, "filter", filterNbt);
+        NbtCompound nbt = args.getNbtM();
+        NbtCompound filterNbt = NbtCompound.of();
+
+        InventoryUtil.writeNbt(args.registryLookup, filterNbt.toMinecraft(), filter);
+        nbt.put("filter", filterNbt);
 
         if (teamUUID != null)
-            NbtUtil.putUuid(args.nbt, "team", teamUUID);
+            nbt.putUuid("team", teamUUID);
 
         if (ownerName != null && !ownerName.isEmpty())
-            NbtUtil.putString(args.nbt, "ownerName", ownerName);
+            nbt.putString("ownerName", ownerName);
     }
 
     @Override
     public void readNbt(ReadNbtArgs args) {
         super.readNbt(args);
 
-        if (NbtUtil.has(args.nbt, "filter")) {
-            NbtCompound filterNbt = NbtUtil.get(args.nbt, "filter");
-            InventoryUtil.readNbt(args.registryLookup, filterNbt, filter);
+        NbtCompound nbt = args.getNbtM();
+        if (nbt.has("filter")) {
+            NbtCompound filterNbt = nbt.getCompound("filter");
+            InventoryUtil.readNbt(args.registryLookup, filterNbt.toMinecraft(), filter);
         }
 
-        if (NbtUtil.has(args.nbt, "team"))
-            teamUUID = NbtUtil.getUuid(args.nbt, "team");
+        if (nbt.has("team"))
+            teamUUID = nbt.getUuid("team");
 
-        if (NbtUtil.has(args.nbt, "ownerName"))
-            ownerName = NbtUtil.getString(args.nbt, "ownerName");
+        if (nbt.has("ownerName"))
+            ownerName = nbt.getString("ownerName");
     }
 
     @Nullable
     public ScreenHandler createMenu(CreateMenuEvent e) {
         IInventory filterInventory = () -> this.filter;
-        return new EMCExporterScreenHandler(e.syncId, e.playerInventory, this, filterInventory);
+        return new EMCExporterScreenHandler(e.syncId, e.playerInventory, this, InventoryWrapper.of(filterInventory));
     }
 
     @Override
@@ -193,17 +200,21 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
     @Override
     public void writeExtraData(ExtraDataArgs args) {
-        NbtCompound data = NbtUtil.create();
-        BlockPos pos = callGetPos();
+        BlockPos pos = getMidohraPos();
 
-        NbtUtil.putInt(data, "x", pos.getX());
-        NbtUtil.putInt(data, "y", pos.getY());
-        NbtUtil.putInt(data, "z", pos.getZ());
-        if (teamUUID != null) {
-            NbtUtil.putUuid(data, "team", teamUUID);
+        PacketByteUtil.writeInt(args.buf, pos.getX());
+        PacketByteUtil.writeInt(args.buf, pos.getY());
+        PacketByteUtil.writeInt(args.buf, pos.getZ());
+
+        boolean hasTeam = teamUUID != null;
+        PacketByteUtil.writeBoolean(args.buf, hasTeam);
+
+        if (hasTeam) {
+            PacketByteUtil.writeUuid(args.buf, teamUUID);
+
+            AtomicBoolean isWrittenOwnerName = new AtomicBoolean(false);
 
             getTeamState().ifPresent(teamState -> {
-
                 if (ownerName == null || ownerName.isEmpty()) {
                     if (callGetWorld() == null) return;
 
@@ -212,11 +223,14 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
                     ownerName = player.getName();
                 }
-                NbtUtil.putString(data, "ownerName", ownerName);
-            });
-        }
 
-        args.writeVar(data);
+                isWrittenOwnerName.set(true);
+                PacketByteUtil.writeBoolean(args.buf, isWrittenOwnerName.get());
+                PacketByteUtil.writeString(args.buf, ownerName);
+            });
+
+            if (!isWrittenOwnerName.get()) PacketByteUtil.writeBoolean(args.buf, false);
+        }
     }
 
     @Override

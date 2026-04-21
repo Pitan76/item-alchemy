@@ -77,7 +77,7 @@ public class EMCExporter extends CompatBlock implements ExtendBlockEntityProvide
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityType<T> getBlockEntityType() {
-        return (BlockEntityType<T>) Tiles.EMC_EXPORTER.getOrNull();
+        return (BlockEntityType<T>) Tiles.EMC_EXPORTER.get();
     }
 
     @Override

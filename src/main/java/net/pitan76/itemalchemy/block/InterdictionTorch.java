@@ -136,7 +136,7 @@ public class InterdictionTorch extends CompatBlock implements ExtendBlockEntityP
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityType<T> getBlockEntityType() {
-        return (BlockEntityType<T>) Tiles.INTERDICTION_TORCH.getOrNull();
+        return (BlockEntityType<T>) Tiles.INTERDICTION_TORCH.get();
     }
 
     @Override

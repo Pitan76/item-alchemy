@@ -1,15 +1,15 @@
 package net.pitan76.itemalchemy.gui.slot;
 
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.mcpitanlib.api.gui.slot.CompatibleSlot;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
+import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
 
 public class FilterSlot extends CompatibleSlot {
 
-    public FilterSlot(Inventory inventory, int index, int x, int y, ScreenHandler screenHandler) {
+    public FilterSlot(ICompatInventory inventory, int index, int x, int y, ScreenHandler screenHandler) {
         super(inventory, index, x, y);
     }
 
@@ -25,7 +25,7 @@ public class FilterSlot extends CompatibleSlot {
             return;
         }
 
-        ItemStack newStack = stack.copy();
+        ItemStack newStack = ItemStackUtil.copy(stack);
         newStack.setCount(1);
 
         super.callSetStack(newStack);

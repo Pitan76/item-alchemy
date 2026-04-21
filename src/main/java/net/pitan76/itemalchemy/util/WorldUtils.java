@@ -30,7 +30,7 @@ public class WorldUtils {
 
                     if (state.isAir()) continue;
 
-                    if (!state.getBlock().rawEquals(baseBlockState.getBlock()) && isSameBlock) continue;
+                    if (!state.getBlock().equals(baseBlockState.getBlock()) && isSameBlock) continue;
 
                     blocks.add(targetPos);
                 }

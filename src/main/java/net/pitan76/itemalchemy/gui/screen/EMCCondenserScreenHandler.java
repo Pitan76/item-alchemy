@@ -1,9 +1,6 @@
 package net.pitan76.itemalchemy.gui.screen;
 
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
@@ -16,50 +13,49 @@ import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
 import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
+import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
-    public Inventory inventory;
+    public ICompatInventory inventory;
     public PlayerInventory playerInventory;
-    public EMCCondenserTile tile = null;
+    public EMCCondenserTile tile;
 
     public long storedEMC = 0;
     public long maxEMC = 0;
-    public ItemStack targetStack = ItemStackUtil.empty();
+    public ItemStack targetStack;
 
     public EMCCondenserScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(ScreenHandlers.EMC_CONDENSER, syncId, playerInventory, InventoryUtil.createSimpleInventory(92), buf);
+        this(ScreenHandlers.EMC_CONDENSER, syncId, playerInventory, new CompatInventory(92), buf);
     }
 
-    public EMCCondenserScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, Inventory inventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, null, inventory, ItemStackUtil.empty());
-        NbtCompound data = PacketByteUtil.readNbt(buf);
-        if (data == null) return;
+    public EMCCondenserScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ICompatInventory inventory, PacketByteBuf buf) {
+        this(type, syncId, playerInventory, null, inventory, ItemStack.EMPTY);
         int x, y, z;
-        if (NbtUtil.has(data, "x") && NbtUtil.has(data, "y") && NbtUtil.has(data, "z")) {
-            x = NbtUtil.getInt(data, "x");
-            y = NbtUtil.getInt(data, "y");
-            z = NbtUtil.getInt(data, "z");
+        x = PacketByteUtil.readInt(buf);
+        y = PacketByteUtil.readInt(buf);
+        z = PacketByteUtil.readInt(buf);
 
-            Player player = new Player(playerInventory.player);
+        Player player = new Player(playerInventory.player);
 
-            tile = (EMCCondenserTile) WorldUtil.getBlockEntity(player.getWorld(), PosUtil.flooredBlockPos(x, y, z));
-            storedEMC = NbtUtil.getLong(data, "stored_emc") - tile.storedEMC;
-            maxEMC = NbtUtil.getLong(data, "max_emc");
+        tile = (EMCCondenserTile) WorldUtil.getBlockEntity(player.getWorld(), PosUtil.flooredBlockPos(x, y, z));
+        storedEMC = PacketByteUtil.readLong(buf) - tile.storedEMC;
+        maxEMC = PacketByteUtil.readLong(buf);
 
-            targetStack = ItemStackUtil.fromNbt(player.getWorld(), NbtUtil.get(data, "target_item"));
-        }
+        targetStack = ItemStack.of(PacketByteUtil.readItemStack(buf));
     }
 
-    public EMCCondenserScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCCondenserTile tile, Inventory inventory, ItemStack targetStack) {
+    public EMCCondenserScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCCondenserTile tile, ICompatInventory inventory, ItemStack targetStack) {
         this(ScreenHandlers.EMC_CONDENSER, syncId, playerInventory, tile, inventory, targetStack);
     }
 
-    public EMCCondenserScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, @Nullable EMCCondenserTile tile, Inventory inventory, ItemStack targetStack) {
+    public EMCCondenserScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, @Nullable EMCCondenserTile tile, ICompatInventory inventory, ItemStack targetStack) {
         super(type, syncId);
 
         this.inventory = inventory;
@@ -77,19 +73,19 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
         addStorageSlots(inventory, 1, 12, 26, -1, 13, 7);
     }
 
-    protected Slot addTargetSlot(Inventory inventory, int index, int x, int y) {
+    protected Slot addTargetSlot(ICompatInventory inventory, int index, int x, int y) {
         Slot slot = new TargetSlot(inventory, index, x, y, this);
 
         return this.callAddSlot(slot);
     }
 
-    protected Slot addStorageSlot(Inventory inventory, int index, int x, int y) {
+    protected Slot addStorageSlot(ICompatInventory inventory, int index, int x, int y) {
         Slot slot = new CondenserStorageSlot(inventory, index, x, y);
 
         return this.callAddSlot(slot);
     }
 
-    protected List<Slot> addStorageSlots(Inventory inventory, int firstIndex, int firstX, int firstY, int size, int maxAmountX, int maxAmountY) {
+    protected List<Slot> addStorageSlots(ICompatInventory inventory, int firstIndex, int firstX, int firstY, int size, int maxAmountX, int maxAmountY) {
         if (size < 0) size = DEFAULT_SLOT_SIZE;
         List<Slot> slots = new ArrayList<>();
 
@@ -100,7 +96,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
         return slots;
     }
 
-    protected List<Slot> addStorageSlotsX(Inventory inventory, int firstIndex, int firstX, int y, int size, int amount) {
+    protected List<Slot> addStorageSlotsX(ICompatInventory inventory, int firstIndex, int firstX, int y, int size, int amount) {
         if (size < 0) size = DEFAULT_SLOT_SIZE;
         List<Slot> slots = new ArrayList<>();
 
@@ -112,59 +108,59 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     }
 
     @Override
-    public ItemStack quickMoveOverride(Player player, int index) {
+    public net.minecraft.item.ItemStack quickMoveOverride(Player player, int index) {
         Slot slot = callGetSlot(index);
         Slot targetSlot = callGetSlot(36);
 
         if (SlotUtil.hasStack(slot)) {
-            ItemStack originalStack = SlotUtil.getStack(slot);
+            ItemStack originalStack = ItemStack.of(SlotUtil.getStack(slot));
 
             // TargetSlot
             if(index == 36) {
                 //増殖スロットが空だった場合
-                if(ItemStackUtil.isEmpty(targetStack)) {
+                if(targetStack.isEmpty()) {
                     if (EMCManager.get(originalStack.getItem()) == 0) {
                         SlotUtil.setStack(targetSlot, ItemStackUtil.empty());
-                        return originalStack;
+                        return originalStack.toMinecraft();
                     }
 
-                    ItemStack newStack = ItemStackUtil.create(originalStack.getItem());
+                    ItemStack newStack = originalStack.getItem().createStack();
                     newStack.setCount(1);
 
-                    SlotUtil.setStack(targetSlot, newStack);
+                    SlotUtil.setStack(targetSlot, newStack.toMinecraft());
                     setTargetStack(newStack);
 
                     return ItemStackUtil.empty();
                 }
 
                 SlotUtil.setStack(targetSlot, ItemStackUtil.empty());
-                setTargetStack(ItemStackUtil.empty());
+                setTargetStack(ItemStack.EMPTY);
 
                 return ItemStackUtil.empty();
             }
 
             if (index < 36) {
                 // TargetSlot
-                if (ItemStackUtil.isEmpty(targetStack)) {
+                if (targetStack.isEmpty()) {
                     if (EMCManager.get(originalStack.getItem()) != 0) {
-                        ItemStack newStack = ItemStackUtil.create(originalStack.getItem());
+                        ItemStack newStack = originalStack.getItem().createStack();
                         newStack.setCount(1);
 
-                        SlotUtil.setStack(targetSlot, newStack);
+                        SlotUtil.setStack(targetSlot, newStack.toMinecraft());
                         setTargetStack(newStack);
                     }
 
                     return ItemStackUtil.empty();
                 }
 
-                if (!this.callInsertItem(originalStack, 36 + 1, 36 + 92, false)) {
+                if (!this.callInsertItem(originalStack.toMinecraft(), 36 + 1, 36 + 92, false)) {
                     return ItemStackUtil.empty();
                 }
-            } else if (!this.callInsertItem(originalStack, 0, 36, true)) {
+            } else if (!this.callInsertItem(originalStack.toMinecraft(), 0, 36, true)) {
                 return ItemStackUtil.empty();
             }
 
-            if (ItemStackUtil.isEmpty(originalStack)) {
+            if (originalStack.isEmpty()) {
                 SlotUtil.setStack(slot, ItemStackUtil.empty());
             } else {
                 SlotUtil.markDirty(slot);
@@ -180,13 +176,13 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
         if (e.slot == 36) { // Target Slot
             // カーソルでアイテムを持ってない場合
             if (getCursorStackM().isEmpty()) {
-                setTargetStack(ItemStackUtil.empty());
+                setTargetStack(ItemStack.EMPTY);
                 SlotUtil.setStack(targetSlot, ItemStackUtil.empty());
 
                 return;
             }
 
-            ItemStack oldStack = ItemStackUtil.create(ItemStackUtil.getItem(callGetCursorStack()));
+            ItemStack oldStack = getCursorStackM().getItem().createStack();
 
             if(EMCManager.get(oldStack.getItem()) == 0) {
                 callSetCursorStack(callGetCursorStack());
@@ -197,7 +193,7 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
             }
 
             setTargetStack(oldStack);
-            SlotUtil.setStack(targetSlot, oldStack);
+            SlotUtil.setStack(targetSlot, oldStack.toMinecraft());
 
             callSetCursorStack(callGetCursorStack());
 

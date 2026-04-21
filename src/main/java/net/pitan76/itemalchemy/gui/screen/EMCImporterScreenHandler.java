@@ -1,9 +1,7 @@
 package net.pitan76.itemalchemy.gui.screen;
 
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.slot.Slot;
 import net.pitan76.itemalchemy.gui.slot.FilterSlot;
@@ -13,39 +11,39 @@ import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
 import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.*;
-import net.pitan76.mcpitanlib.api.util.math.PosUtil;
+import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
+import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCImporterScreenHandler extends ExtendedScreenHandler {
-    public Inventory inventory;
-    public Inventory filter;
+    public ICompatInventory inventory;
+    public ICompatInventory filter;
     public PlayerInventory playerInventory;
-    public EMCImporterTile tile = null;
+    public EMCImporterTile tile;
     public String ownerName = "";
 
     public EMCImporterScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, null, InventoryUtil.createSimpleInventory(1), InventoryUtil.createSimpleInventory(9));
-        NbtCompound data = PacketByteUtil.readNbt(buf);
-        if (data == null) return;
+        this(syncId, playerInventory, null, new CompatInventory(1), new CompatInventory(9));
+
         int x, y, z;
-        if (NbtUtil.has(data, "x") && NbtUtil.has(data, "y") && NbtUtil.has(data, "z")) {
-            x = NbtUtil.getInt(data, "x");
-            y = NbtUtil.getInt(data, "y");
-            z = NbtUtil.getInt(data, "z");
+        x = PacketByteUtil.readInt(buf);
+        y = PacketByteUtil.readInt(buf);
+        z = PacketByteUtil.readInt(buf);
 
-            Player player = new Player(playerInventory.player);
-            tile = (EMCImporterTile) WorldUtil.getBlockEntity(player.getWorld(), PosUtil.flooredBlockPos(x, y, z));
+        Player player = new Player(playerInventory.player);
+        tile = player.getMidohraWorld().getBlockEntity(BlockPos.of(x, y, z)).getCompatBlockEntity(EMCImporterTile.class);
 
-            if (NbtUtil.has(data, "team"))
-                tile.teamUUID = NbtUtil.getUuid(data, "team");
+        if (PacketByteUtil.readBoolean(buf)) {
+            tile.teamUUID = PacketByteUtil.readUuid(buf);
 
-            if (NbtUtil.has(data, "ownerName"))
-                ownerName = NbtUtil.getString(data, "ownerName");
-
+            if (PacketByteUtil.readBoolean(buf)) {
+                ownerName = PacketByteUtil.readString(buf);
+            }
         }
     }
 
-    public EMCImporterScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCImporterTile tile, Inventory inventory, Inventory filter) {
+    public EMCImporterScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCImporterTile tile, ICompatInventory inventory, ICompatInventory filter) {
         super(ScreenHandlers.EMC_IMPORTER, syncId);
 
         this.inventory = inventory;
@@ -63,7 +61,7 @@ public class EMCImporterScreenHandler extends ExtendedScreenHandler {
         }
     }
 
-    protected Slot addFilterSlot(Inventory inventory, int index, int x, int y) {
+    protected Slot addFilterSlot(ICompatInventory inventory, int index, int x, int y) {
         Slot slot = new FilterSlot(inventory, index, x, y, this);
         return this.callAddSlot(slot);
     }

@@ -101,7 +101,7 @@ public class EMCBattery extends EMCRepeater implements ExtendBlockEntityProvider
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityType<T> getBlockEntityType() {
-        return (BlockEntityType<T>) Tiles.EMC_BATTERY.getOrNull();
+        return (BlockEntityType<T>) Tiles.EMC_BATTERY.get();
     }
 
     @Override

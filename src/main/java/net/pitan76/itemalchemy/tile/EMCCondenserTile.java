@@ -1,13 +1,7 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.api.EMCStorageUtil;
@@ -31,12 +25,16 @@ import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
+import net.pitan76.mcpitanlib.api.util.inventory.InventoryWrapper;
+import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityTypeWrapper;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+import net.pitan76.mcpitanlib.midohra.network.CompatPacketByteBuf;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static net.pitan76.mcpitanlib.api.util.InventoryUtil.canMergeItems;
 
@@ -48,12 +46,12 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
 
     public ItemStackList inventory = ItemStackList.ofSize(1 + 91, ItemStackUtil.empty());
 
-    public EMCCondenserTile(BlockEntityType<?> type, TileCreateEvent e) {
+    public EMCCondenserTile(BlockEntityTypeWrapper type, TileCreateEvent e) {
         super(type, e);
     }
 
     public EMCCondenserTile(TileCreateEvent e) {
-        this(Tiles.EMC_CONDENSER.getOrNull(), e);
+        this(Tiles.EMC_CONDENSER, e);
     }
 
     public int getMaxCoolDown() {
@@ -82,8 +80,8 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
         if (e.isClient()) return;
         World world = e.getMidohraWorld();
         if (!getItems().isEmpty()) {
-            ItemStack targetStack = getItems().get(0);
-            if (!ItemStackUtil.isEmpty(targetStack)) {
+            ItemStack targetStack = getItems().getAsMidohra(0);
+            if (!targetStack.isEmpty()) {
                 maxEMC = EMCManager.get(targetStack.getItem());
             } else {
                 maxEMC = 0;
@@ -95,20 +93,20 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
         if (!getItems().isEmpty()) {
             setActive(true);
 
-            ItemStack targetStack = getItems().get(0);
-            if (!ItemStackUtil.isEmpty(targetStack)) {
+            ItemStack targetStack = getItems().getAsMidohra(0);
+            if (!targetStack.isEmpty()) {
                 if (coolDown == 0) {
-                    List<ItemStack> storageInventory = new ArrayList<>(getItems());
+                    List<ItemStack> storageInventory = new ArrayList<>(getItems().toMidohra());
 
                     if (!storageInventory.isEmpty()) {
-                        for (ItemStack stack : getItems()) {
-                            if (ItemStackUtil.isEmpty(stack)) continue;
-                            if (stack.getItem() == targetStack.getItem()) continue;
+                        for (ItemStack stack : getItems().toMidohra()) {
+                            if (stack.isEmpty()) continue;
+                            if (stack.getItem().equals(targetStack.getItem())) continue;
 
                             long emc = EMCManager.get(stack.getItem());
                             if (emc == 0) continue;
                             storedEMC += emc;
-                            ItemStackUtil.decrementCount(stack, 1);
+                            stack.decrement(1);
                             break;
                         }
                     }
@@ -120,12 +118,12 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
                     ItemStack newStack;
                     if (ItemAlchemyConfig.isRemoveDataFromCopyStack()) {
                         // Remove Data
-                        newStack = new ItemStack(targetStack.getItem());
+                        newStack = targetStack.getItem().createStack();
                     } else {
                         newStack = targetStack.copy();
                     }
 
-                    ItemStackUtil.setCount(newStack, 1);
+                    newStack.setCount(1);
 
                     if (insertItem(newStack, getItems(), true)) {
                         insertItem(newStack, getItems());
@@ -150,15 +148,14 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
             oldMaxEMC = maxEMC;
 
             for (Player player : world.getPlayers()) {
-                if (player.hasNetworkHandler() && player.getCurrentScreenHandler() instanceof EMCCondenserScreenHandler && ((EMCCondenserScreenHandler) player.getCurrentScreenHandler()).tile == this ) {
-                    PacketByteBuf buf = PacketByteUtil.create();
+                if (player.hasNetworkHandler() && player.getCurrentScreenHandler() instanceof EMCCondenserScreenHandler && ((EMCCondenserScreenHandler) player.getCurrentScreenHandler()).tile == this) {
+                    CompatPacketByteBuf buf = CompatPacketByteBuf.create();
                     PacketByteUtil.writeLong(buf, storedEMC);
                     PacketByteUtil.writeLong(buf, maxEMC);
                     //if (!getTargetStack().isEmpty())
                     //    PacketByteUtil.writeItemStack(buf, getTargetStack());
 
-                    Optional<ServerPlayerEntity> serverPlayerEntity = player.getServerPlayer();
-                    serverPlayerEntity.ifPresent(playerEntity -> ServerNetworking.send(playerEntity, ItemAlchemy._id("itemalchemy_emc_condenser"), buf));
+                    ServerNetworking.send(player, ItemAlchemy._id("itemalchemy_emc_condenser"), buf);
                 }
             }
         }
@@ -174,14 +171,14 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
             // EMC Condenser Target slot
             if (i == 0) continue;
             //
-            ItemStack stack = inventory.get(i);
-            if (ItemStackUtil.isEmpty(stack)) {
+            ItemStack stack = inventory.getAsMidohra(i);
+            if (stack.isEmpty()) {
                 if (!test) inventory.set(i, insertStack);
                 isInserted = true;
                 break;
-            } else if (canMergeItems(stack, insertStack) && stack.getCount() < stack.getMaxCount()) {
+            } else if (canMergeItems(stack.toMinecraft(), insertStack.toMinecraft()) && stack.getCount() < stack.getMaxCount()) {
                 int j = insertStack.getCount();
-                if (!test) ItemStackUtil.incrementCount(stack, j);
+                if (!test) stack.increment(j);
                 isInserted = j > 0;
                 break;
             }
@@ -190,9 +187,10 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
     }
 
     public ItemStack getTargetStack() {
-        return getItems().get(0);
+        return getItems().getAsMidohra(0);
     }
 
+    // TODO: List<ItemStack> getItemsM の実装
     @Override
     public ItemStackList getItems() {
         return inventory;
@@ -210,7 +208,7 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
     @Override
     @Nullable
     public ScreenHandler createMenu(CreateMenuEvent e) {
-        return new EMCCondenserScreenHandler(e.syncId, e.playerInventory, this, this, getTargetStack());
+        return new EMCCondenserScreenHandler(e.syncId, e.playerInventory, this, InventoryWrapper.of(this), getTargetStack());
     }
 
     @Override
@@ -220,15 +218,14 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
 
     @Override
     public void writeExtraData(ExtraDataArgs args) {
-        NbtCompound data = NbtUtil.create();
-        BlockPos pos = callGetPos();
+        BlockPos pos = getMidohraPos();
 
-        NbtUtil.putInt(data, "x", pos.getX());
-        NbtUtil.putInt(data, "y", pos.getY());
-        NbtUtil.putInt(data, "z", pos.getZ());
-        NbtUtil.putLong(data, "stored_emc", storedEMC);
-        NbtUtil.putLong(data, "max_emc", maxEMC);
-        args.writeVar(data);
+        PacketByteUtil.writeInt(args.buf, pos.getX());
+        PacketByteUtil.writeInt(args.buf, pos.getY());
+        PacketByteUtil.writeInt(args.buf, pos.getZ());
+        PacketByteUtil.writeLong(args.buf, storedEMC);
+        PacketByteUtil.writeLong(args.buf, maxEMC);
+        PacketByteUtil.writeItemStack(args.buf, getTargetStack().toMinecraft());
     }
 
     public void setTargetStack(ItemStack stack) {

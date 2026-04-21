@@ -1,11 +1,7 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.pitan76.itemalchemy.block.AEGUBlock;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
@@ -15,7 +11,10 @@ import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.CanExtractArgs;
 import net.pitan76.mcpitanlib.api.gui.inventory.sided.args.CanInsertArgs;
 import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
 import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.midohra.block.BlockState;
+import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityTypeWrapper;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
+import net.pitan76.mcpitanlib.midohra.world.World;
 
 import java.util.Optional;
 
@@ -26,33 +25,34 @@ public class AEGUTile extends CompatBlockEntity implements ExtendBlockEntityTick
         return 5 * 1; // tick
     }
 
-    public AEGUTile(BlockEntityType<?> type, TileCreateEvent e) {
+    public AEGUTile(BlockEntityTypeWrapper type, TileCreateEvent e) {
         super(type, e);
     }
 
     public AEGUTile(TileCreateEvent e) {
-        this(Tiles.AEGU.getOrNull(), e);
+        this(Tiles.AEGU, e);
     }
 
     // TODO: Cache Target Condenser Tile
 
     @Override
     public void tick(TileTickEvent<AEGUTile> e) {
-        World world = e.world;
-        BlockState state = e.state;
+        World world = e.getMidohraWorld();
+        BlockState state = e.getMidohraState();
+        BlockPos pos = e.getMidohraPos();
 
         if (coolDown == 0) {
             BlockPos targetPos = getNearEMCCondenserPos(world, pos);
             if (targetPos != null) {
-                WorldUtil.setBlockState(world, pos, AEGUBlock.setConnected(state, true));
+                world.setBlockState(pos, AEGUBlock.setConnected(state, true));
                 Optional<EMCCondenserTile> optional = getNearEMCCondenserByTargetPos(world, targetPos);
                 if (!optional.isPresent()) return;
                 EMCCondenserTile tile = optional.get();
 
                 if (tile.storedEMC < tile.maxEMC)
-                    tile.storedEMC += ((AEGUBlock) state.getBlock()).emc;
+                    tile.storedEMC += state.getBlock().getCompatBlock(AEGUBlock.class).emc;
             } else {
-                WorldUtil.setBlockState(world, pos, AEGUBlock.setConnected(state, false));
+                world.setBlockState(pos, AEGUBlock.setConnected(state, false));
             }
         }
 
@@ -62,7 +62,7 @@ public class AEGUTile extends CompatBlockEntity implements ExtendBlockEntityTick
     }
 
     public Optional<EMCCondenserTile> getNearEMCCondenser() {
-        return getNearEMCCondenser(world, pos);
+        return getNearEMCCondenser(getMidohraWorld(), getMidohraPos());
     }
 
     public static Optional<EMCCondenserTile> getNearEMCCondenser(World world, BlockPos pos) {
@@ -76,7 +76,7 @@ public class AEGUTile extends CompatBlockEntity implements ExtendBlockEntityTick
 
     public static Optional<EMCCondenserTile> getNearEMCCondenserByTargetPos(World world, BlockPos targetPos) {
         if (world == null || targetPos == null) return Optional.empty();
-        return Optional.ofNullable((EMCCondenserTile) WorldUtil.getBlockEntity(world, targetPos));
+        return Optional.ofNullable(world.getBlockEntity(targetPos).getCompatBlockEntity(EMCCondenserTile.class));
     }
 
     public static BlockPos getNearEMCCondenserPos(World world, BlockPos pos) {
@@ -87,7 +87,7 @@ public class AEGUTile extends CompatBlockEntity implements ExtendBlockEntityTick
                 pos.north().west(), pos.north().east(), pos.south().west(), pos.south().east()
         };
         for (BlockPos nearPos : nearPoses) {
-            if (WorldUtil.getBlockEntity(world, nearPos) instanceof EMCCondenserTile) {
+            if (world.getBlockEntity(nearPos).instanceOf(EMCCondenserTile.class)) {
                 blockPos = nearPos;
                 break;
             }

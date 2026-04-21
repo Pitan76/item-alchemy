@@ -114,7 +114,7 @@ public class EMCCollector extends CompatBlock implements ExtendBlockEntityProvid
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityType<T> getBlockEntityType() {
-        return (BlockEntityType<T>) Tiles.EMC_COLLECTOR.getOrNull();
+        return (BlockEntityType<T>) Tiles.EMC_COLLECTOR.get();
     }
 
     @Override

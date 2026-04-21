@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.pitan76.itemalchemy.api.EMCUtil;
 import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.command.ItemAlchemyCommand;
@@ -27,13 +26,15 @@ import net.pitan76.mcpitanlib.api.event.v2.ItemEventRegistry;
 import net.pitan76.mcpitanlib.api.registry.v2.CompatRegistryV2;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.Logger;
+import net.pitan76.mcpitanlib.midohra.registry.MidohraRegistry;
 
 public class ItemAlchemy extends CommonModInitializer {
 
     public static final String MOD_ID = "itemalchemy";
     public static final String MOD_NAME = "ItemAlchemy";
 
-    public static CompatRegistryV2 registry;
+    public static MidohraRegistry registry;
+    public static CompatRegistryV2 registry2;
 
     public static ItemAlchemy INSTANCE;
 
@@ -41,7 +42,8 @@ public class ItemAlchemy extends CommonModInitializer {
 
     public void init() {
         INSTANCE = this;
-        registry = super.registry;
+        registry2 = super.registry;
+        registry = MidohraRegistry.of(super.registry);
         logger = super.logger;
 
         ItemAlchemyConfig.initOnce();
@@ -76,8 +78,8 @@ public class ItemAlchemy extends CommonModInitializer {
         ItemEventRegistry.INVENTORY_TICK.register((e) -> {
             if (e.isClient()) return;
             // Only process recharge when entity is a player and this is the selected item
-            if (e.entity instanceof PlayerEntity && e.isSelected()) {
-                KleinStarRechargeManager.tryRechargeItems(new Player((PlayerEntity) e.entity));
+            if (e.isPlayer() && e.isSelected()) {
+                KleinStarRechargeManager.tryRechargeItems(e.getPlayer());
             }
         });
 
@@ -94,9 +96,9 @@ public class ItemAlchemy extends CommonModInitializer {
         // Registry commands
         CommandRegistry.register("itemalchemy", new ItemAlchemyCommand());
 
-        registry.registerFuel(() -> Items.ALCHEMICAL_FUEL.getOrNull(), 200 * 16);
-        registry.registerFuel(() -> Items.MOBIUS_FUEL.getOrNull(), 200 * 64);
-        registry.registerFuel(() -> Items.AETERNALIS_FUEL.getOrNull(), 200 * 128);
+        registry2.registerFuel(() -> Items.ALCHEMICAL_FUEL.get(), 200 * 16);
+        registry2.registerFuel(() -> Items.MOBIUS_FUEL.get(), 200 * 64);
+        registry2.registerFuel(() -> Items.AETERNALIS_FUEL.get(), 200 * 128);
     }
 
     @Override

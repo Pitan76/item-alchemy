@@ -91,7 +91,7 @@ public class AlchemyChest extends CompatBlock implements ExtendBlockEntityProvid
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityType<T> getBlockEntityType() {
-        return (BlockEntityType<T>) Tiles.ALCHEMY_CHEST.getOrNull();
+        return (BlockEntityType<T>) Tiles.ALCHEMY_CHEST.get();
     }
 
     @Override

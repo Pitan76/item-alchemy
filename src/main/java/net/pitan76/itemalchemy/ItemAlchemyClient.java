@@ -53,10 +53,10 @@ public class ItemAlchemyClient {
         CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.EMC_EXPORTER, EMCExporterScreen::new);
         CompatRegistryClient.registerScreen(ItemAlchemy.MOD_ID, ScreenHandlers.EMC_BATTERY, EMCBatteryScreen::new);
 
-        CompatRegistryClient.registerCutoutBlock(Blocks.EMC_CABLE.getOrNull());
-        CompatRegistryClient.registerCutoutBlock(Blocks.INTERDICTION_TORCH.getOrNull());
+        CompatRegistryClient.registerCutoutBlock(Blocks.EMC_CABLE.get());
+        CompatRegistryClient.registerCutoutBlock(Blocks.INTERDICTION_TORCH.get());
 
-        CompatRegistryClient.registerCompatBlockEntityRenderer(Tiles.DM_PEDESTAL.getOrNull(), DMPedestalBlockEntityRenderer::new);
+        CompatRegistryClient.registerCompatBlockEntityRenderer(Tiles.DM_PEDESTAL.get(), DMPedestalBlockEntityRenderer::new);
 
         WorldRenderRegistry.registerWorldRenderBeforeBlockOutline(new BlockRenderer());
 
