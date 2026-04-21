@@ -58,7 +58,7 @@ public class ItemAlchemy extends CommonModInitializer {
         RecipeManagerRegistry.register(AlchemicalRecipeManager::new);
 
         EMCManager.registerEMCDef(new VanillaEMCDef(), new ItemAlchemyEMCDef());
-        EMCManager.registerEMCGenerator(EMCGenerators.CRAFTING, EMCGenerators.STONECUTTING);
+        EMCManager.registerEMCGenerator(EMCGenerators.CRAFTING, EMCGenerators.STONECUTTING, EMCGenerators.SMELTING);
 
         EventRegistry.ServerLifecycle.serverStarted(EMCManager::init);
 

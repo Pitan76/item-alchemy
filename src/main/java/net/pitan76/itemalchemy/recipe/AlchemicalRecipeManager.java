@@ -68,6 +68,16 @@ public class AlchemicalRecipeManager {
         Item input = ItemUtil.fromId(inputId);
         Item output = ItemUtil.fromId(outputId);
 
+        if (input == null) {
+            ItemAlchemy.INSTANCE.error("Failed to find input item: " + inputId.toString());
+            return;
+        }
+
+        if (output == null) {
+            ItemAlchemy.INSTANCE.error("Failed to find output item: " + outputId.toString());
+            return;
+        }
+
         int amount = jsonObject.get("amount").getAsInt();
 
         addAlchemicalRecipe(output, input, amount);

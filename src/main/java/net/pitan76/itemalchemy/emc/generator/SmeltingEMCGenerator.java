@@ -12,13 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class StonecuttingEMCGenerator implements IEMCGenerator {
+public class SmeltingEMCGenerator implements IEMCGenerator {
     @Override
     public void generate(ServerWorld world) {
         List<Recipe> unsetRecipes = new ArrayList<>();
 
         Stream<RecipeEntry> recipeEntryStream = world.getRecipeManager().getRecipeEntries().stream()
-                .filter(entry -> entry.getRecipeType().equals(RecipeType.STONECUTTING));
+                .filter(entry -> entry.getRecipeType().equals(RecipeType.SMELTING));
 
         recipeEntryStream.forEach(entry -> {
             try {
@@ -29,6 +29,6 @@ public class StonecuttingEMCGenerator implements IEMCGenerator {
 
     @Override
     public CompatIdentifier getId() {
-        return CompatIdentifier.of("stonecutting");
+        return CompatIdentifier.of("smelting");
     }
 }
