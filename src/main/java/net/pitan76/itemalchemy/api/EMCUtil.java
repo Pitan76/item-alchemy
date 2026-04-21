@@ -3,6 +3,7 @@ package net.pitan76.itemalchemy.api;
 import net.minecraft.item.Item;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.emc.EMCDef;
+import net.pitan76.itemalchemy.emc.generator.IEMCGenerator;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.tag.TagKey;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
@@ -51,12 +52,22 @@ public class EMCUtil {
     }
 
     public static void addDef(EMCDef def) {
-        EMCManager.addDef(def);
+        EMCManager.registerEMCDef(def);
     }
 
     public static void addDef(EMCDef... defs) {
         for (EMCDef def : defs) {
-            EMCManager.addDef(def);
+            EMCManager.registerEMCDef(def);
+        }
+    }
+
+    public static void addEMCGenerator(IEMCGenerator generator) {
+        EMCManager.registerEMCGenerator(generator);
+    }
+
+    public static void addEMCGenerator(IEMCGenerator... generators) {
+        for (IEMCGenerator generator : generators) {
+            EMCManager.registerEMCGenerator(generator);
         }
     }
 }

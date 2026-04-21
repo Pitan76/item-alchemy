@@ -13,6 +13,7 @@ import net.pitan76.itemalchemy.data.PlayerState;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.emc.EMCDef;
+import net.pitan76.itemalchemy.emc.generator.IEMCGenerator;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
@@ -22,9 +23,6 @@ import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 import net.pitan76.mcpitanlib.midohra.item.ItemWrapper;
 import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
 import net.pitan76.mcpitanlib.midohra.recipe.*;
-import net.pitan76.mcpitanlib.midohra.recipe.entry.RecipeEntry;
-import net.pitan76.mcpitanlib.midohra.recipe.entry.ShapedRecipeEntry;
-import net.pitan76.mcpitanlib.midohra.recipe.entry.ShapelessRecipeEntry;
 import net.pitan76.mcpitanlib.midohra.resource.Resource;
 import net.pitan76.mcpitanlib.midohra.resource.ResourceManager;
 import net.pitan76.mcpitanlib.midohra.server.MCServer;
@@ -192,41 +190,11 @@ public class EMCManager {
         }
     }
 
+    private static final List<IEMCGenerator> emcGenerators = new ArrayList<>();
+
     public static void setEmcFromRecipes(ServerWorld world) {
-        List<Recipe> unsetRecipes = new ArrayList<>();
-
-        ServerRecipeManager recipeManager = world.getRecipeManager();
-
-        Collection<RecipeEntry> recipes = recipeManager.getNormalRecipeEntries();
-
-        for (RecipeEntry recipeEntry : recipes) {
-            try {
-                ItemStack outStack;
-                if (recipeEntry instanceof ShapedRecipeEntry) {
-                    outStack = ((ShapedRecipeEntry) recipeEntry).getRecipe().craft(world);
-                } else if (recipeEntry instanceof ShapelessRecipeEntry) {
-                    outStack = ((ShapelessRecipeEntry) recipeEntry).getRecipe().craft(world);
-                } else {
-                    continue;
-                }
-
-                addEmcFromRecipe(outStack, recipeEntry.getRecipe(), unsetRecipes, false);
-            } catch (NoClassDefFoundError | Exception ignore) {}
-        }
-        List<Recipe> dummy = new ArrayList<>();
-        for (Recipe recipe : unsetRecipes) {
-            try {
-                ItemStack outStack;
-                if (recipe instanceof ShapedRecipe) {
-                    outStack = ((ShapedRecipe) recipe).craft(world);
-                } else if (recipe instanceof ShapelessRecipe) {
-                    outStack = ((ShapelessRecipe) recipe).craft(world);
-                } else {
-                    continue;
-                }
-                addEmcFromRecipe(outStack, recipe, dummy, true);
-
-            } catch (NoClassDefFoundError | Exception ignore) {}
+        for (IEMCGenerator generator : emcGenerators) {
+            generator.generate(world);
         }
     }
 
@@ -257,6 +225,7 @@ public class EMCManager {
             if (totalEmc <= 0) return false;
             add(outStack.getItem(), totalEmc);
         }
+
         return true;
     }
 
@@ -393,7 +362,23 @@ public class EMCManager {
         return defs;
     }
 
-    public static void addDef(EMCDef def) {
+    public static void registerEMCDef(EMCDef def) {
         defs.add(def);
+    }
+
+    public static void registerEMCDef(EMCDef... defs) {
+        for (EMCDef def : defs) {
+            registerEMCDef(def);
+        }
+    }
+
+    public static void registerEMCGenerator(IEMCGenerator generator) {
+        emcGenerators.add(generator);
+    }
+
+    public static void registerEMCGenerator(IEMCGenerator... generators) {
+        for (IEMCGenerator generator : generators) {
+            registerEMCGenerator(generator);
+        }
     }
 }

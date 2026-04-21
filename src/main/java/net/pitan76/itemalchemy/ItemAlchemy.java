@@ -1,10 +1,10 @@
 package net.pitan76.itemalchemy;
 
-import net.pitan76.itemalchemy.api.EMCUtil;
 import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.command.ItemAlchemyCommand;
 import net.pitan76.itemalchemy.config.ItemAlchemyConfig;
 import net.pitan76.itemalchemy.data.ServerState;
+import net.pitan76.itemalchemy.emc.generator.EMCGenerators;
 import net.pitan76.itemalchemy.emc.itemalchemy.ItemAlchemyEMCDef;
 import net.pitan76.itemalchemy.emc.vanilla.VanillaEMCDef;
 import net.pitan76.itemalchemy.gui.screen.ScreenHandlers;
@@ -57,7 +57,8 @@ public class ItemAlchemy extends CommonModInitializer {
 
         RecipeManagerRegistry.register(AlchemicalRecipeManager::new);
 
-        EMCUtil.addDef(new VanillaEMCDef(), new ItemAlchemyEMCDef());
+        EMCManager.registerEMCDef(new VanillaEMCDef(), new ItemAlchemyEMCDef());
+        EMCManager.registerEMCGenerator(EMCGenerators.CRAFTING, EMCGenerators.STONECUTTING);
 
         EventRegistry.ServerLifecycle.serverStarted(EMCManager::init);
 
