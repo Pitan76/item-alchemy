@@ -25,10 +25,9 @@ public class EMCExporterScreenHandler extends ExtendedScreenHandler {
     public EMCExporterScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
         this(syncId, playerInventory, null, new CompatInventory(9));
 
-        int x, y, z;
-        x = PacketByteUtil.readInt(buf);
-        y = PacketByteUtil.readInt(buf);
-        z = PacketByteUtil.readInt(buf);
+        int x = PacketByteUtil.readInt(buf);
+        int y = PacketByteUtil.readInt(buf);
+        int z = PacketByteUtil.readInt(buf);
 
         Player player = new Player(playerInventory.player);
         tile = player.getMidohraWorld().getBlockEntity(BlockPos.of(x, y, z)).getCompatBlockEntity(EMCExporterTile.class);
