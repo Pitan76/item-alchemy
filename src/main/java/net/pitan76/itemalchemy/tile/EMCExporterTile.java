@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.tile;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.EMCManager;
@@ -25,8 +24,8 @@ import net.pitan76.mcpitanlib.api.tile.ExtendBlockEntityTicker;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.collection.ItemStackList;
 import net.pitan76.mcpitanlib.api.util.inventory.InventoryWrapper;
-import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityTypeWrapper;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
@@ -125,7 +124,7 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     }
 
     @Override
-    public ItemStack removeStack(int slot, int count) {
+    public net.minecraft.item.ItemStack removeStack(int slot, int count) {
         long consumeEmc = EMCManager.get(CACHE.get(slot).getItem()) * count;
 
         getTeamState().ifPresent(teamState -> {
@@ -156,17 +155,17 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         long aveEMC = emc / filterCount;
 
         for (int i = 0; i < filter.size(); i++) {
-            ItemStack filterStack = filter.get(i);
+            ItemStack filterStack = filter.getAsMidohra(i);
             if (filterStack.isEmpty()) continue;
 
             long neededEMC = EMCManager.get(filterStack);
 
             if (neededEMC <= 0) continue;
             if (aveEMC < neededEMC) continue;
-            if (!teamState.registeredItems.contains(ItemUtil.toIdAsString(filterStack.getItem()))) continue;
+            if (!teamState.registeredItems.contains(filterStack.getItem().getId().toString())) continue;
 
-            ItemStack stack = ItemStackUtil.copy(filterStack);
-            ItemStackUtil.setCount(stack, Math.min((int) Math.floorDiv(aveEMC, neededEMC), MAX_STACK_COUNT));
+            ItemStack stack = filterStack.copy();
+            stack.setCount(Math.min((int) Math.floorDiv(aveEMC, neededEMC), MAX_STACK_COUNT));
 
             result.set(i, stack);
         }
