@@ -1,0 +1,8 @@
+{
+  "pack": {
+    "description": "itemalchemy resources",
+    "pack_format": 9,
+    "neoforge:resource_pack_format": 9,
+    "neoforge:data_pack_format": 10
+  }
+}

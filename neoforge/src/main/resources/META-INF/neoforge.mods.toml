@@ -1,0 +1,36 @@
+modLoader = "javafml"
+loaderVersion = "[0,)"
+license = "MIT"
+issueTrackerURL = "https://github.com/Pitan76/item-alchemy/issues"
+
+[[mods]]
+modId = "itemalchemy"
+version = "${version}"
+displayName="Item Alchemy"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/item-alchemy-fabric"
+logoFile = "assets/itemalchemy/icon.png"
+authors = "Pitan"
+description = '''
+A developing port of Equivalent Exchange (like Project E)
+'''
+
+[[dependencies.itemalchemy]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.itemalchemy]]
+modId = "minecraft"
+type = "required"
+versionRange = "[0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.itemalchemy]]
+modId = "mcpitanlib"
+type = "required"
+versionRange = "[3.6.5,)"
+ordering = "BEFORE"
+side = "BOTH"

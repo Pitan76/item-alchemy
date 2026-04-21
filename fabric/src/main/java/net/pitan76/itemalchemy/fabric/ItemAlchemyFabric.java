@@ -1,10 +1,10 @@
-package net.pitan76.itemalchemy;
+package net.pitan76.itemalchemy.fabric;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 
-public class FabricMain implements ModInitializer {
+public class ItemAlchemyFabric implements ModInitializer {
     /**
      * Runs the mod initializer.
      */

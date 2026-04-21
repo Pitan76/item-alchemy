@@ -27,16 +27,12 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.pitan76.itemalchemy.FabricMain"
+      "net.pitan76.itemalchemy.ItemAlchemyFabric"
     ]
   },
-  "mixins": [
-    "itemalchemy.mixins.json"
-  ],
-
   "depends": {
     "fabricloader": "*",
     "minecraft": "*",
-    "mcpitanlib": ">3.6.2"
+    "mcpitanlib": ">3.6.5"
   }
 }
