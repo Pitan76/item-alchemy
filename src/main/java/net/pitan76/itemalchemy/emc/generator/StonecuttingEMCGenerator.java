@@ -25,6 +25,7 @@ public class StonecuttingEMCGenerator implements IEMCGenerator {
 
         for (RecipeEntry entry : entries) {
             try {
+                // TODO: RecipeにgetOutputを作成する
                 List<Ingredient> ingredients = entry.getRecipe().getInputs().stream()
                         .map(Ingredient::of)
                         .collect(Collectors.toList());
