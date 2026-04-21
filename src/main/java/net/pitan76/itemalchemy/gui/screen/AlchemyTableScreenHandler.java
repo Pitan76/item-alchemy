@@ -178,7 +178,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             return;
         }
 
-        List<String> ids = new ArrayList<>(ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID()).get().registeredItems);
+        List<String> ids = new ArrayList<>(ModState.getModState(player.getMidohraWorld().getMCServer()).getTeamByPlayer(player.getUUID()).get().registeredItems);
         List<String> sortedIds = new ArrayList<>();
 
         // Extract namespace from searchText [@(NAMESPACE)]

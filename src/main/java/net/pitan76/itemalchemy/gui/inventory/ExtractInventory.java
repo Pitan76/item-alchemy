@@ -35,7 +35,7 @@ public class ExtractInventory extends SimpleInventory {
 
     public void placeExtractSlots() {
         TeamState teamState = ModState
-                .getModState(player.getWorld().getServer())
+                .getModState(player.getMidohraWorld().getMCServer()) // TODO: player.getMCServer()
                 .getTeamByPlayer(player.getUUID())
                 .get();
 

@@ -1,11 +1,10 @@
 package net.pitan76.itemalchemy.api;
 
-import net.minecraft.server.MinecraftServer;
 import net.pitan76.itemalchemy.data.PlayerState;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.midohra.server.MCServer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public class TeamUtil {
         if (player.isClient())
             return false;
 
-        ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
+        ServerState serverState = ServerState.getServerState(player.getMidohraWorld().getMCServer());
 
         Optional<PlayerState> playerState = serverState.getPlayer(player.getUUID());
 
@@ -37,7 +36,7 @@ public class TeamUtil {
     public static boolean joinTeam(Player player, String teamName) {
         if (player.isClient()) return false;
 
-        ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
+        ServerState serverState = ServerState.getServerState(player.getMidohraWorld().getMCServer());
 
         Optional<TeamState> teamState = serverState.getTeamByName(teamName);
 
@@ -48,7 +47,7 @@ public class TeamUtil {
     public static boolean joinTeam(Player player, UUID teamUUID) {
         if (player.isClient()) return false;
 
-        ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
+        ServerState serverState = ServerState.getServerState(player.getMidohraWorld().getMCServer());
 
         Optional<PlayerState> playerState = serverState.getPlayer(player.getUUID());
 
@@ -67,7 +66,7 @@ public class TeamUtil {
         return true;
     }
 
-    public static boolean removeTeam(MinecraftServer server, UUID teamUUID) {
+    public static boolean removeTeam(MCServer server, UUID teamUUID) {
         ServerState serverState = ServerState.getServerState(server);
         Optional<TeamState> teamState = serverState.getTeam(teamUUID);
 
@@ -86,7 +85,7 @@ public class TeamUtil {
         return true;
     }
 
-    public static boolean leaveTeam(MinecraftServer server, UUID playerUUID) {
+    public static boolean leaveTeam(MCServer server, UUID playerUUID) {
         ServerState serverState = ServerState.getServerState(server);
 
         Optional<PlayerState> playerState = serverState.getPlayer(playerUUID);
@@ -113,7 +112,7 @@ public class TeamUtil {
         return true;
     }
 
-    public static boolean kickTeam(MinecraftServer server, UUID teamUUID, UUID playerUUID) {
+    public static boolean kickTeam(MCServer server, UUID teamUUID, UUID playerUUID) {
         ServerState serverState = ServerState.getServerState(server);
 
         Optional<TeamState> teamState = serverState.getTeam(teamUUID);
@@ -126,10 +125,9 @@ public class TeamUtil {
 
     public static boolean leaveTeam(Player player) {
         if (player.isClient()) return false;
-        Optional<MinecraftServer> optionalServer = WorldUtil.getServer(player.getWorld());
+        MCServer server = player.getMidohraWorld().getMCServer();
 
-        return optionalServer.filter(server ->
-                leaveTeam(server, player.getUUID())).isPresent();
+        return leaveTeam(server, player.getUUID());
 
     }
 }

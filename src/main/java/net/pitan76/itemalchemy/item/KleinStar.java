@@ -1,7 +1,5 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
@@ -12,10 +10,10 @@ import net.pitan76.mcpitanlib.api.event.item.ItemUseEvent;
 import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.StackActionResult;
-import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
-import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
 
 public class KleinStar extends CompatItem {
 
@@ -57,25 +55,29 @@ public class KleinStar extends CompatItem {
     }
 
     public static long getStoredEmc(ItemStack stack) {
-        NbtCompound nbt = CustomDataUtil.get(stack, ItemAlchemy.MOD_ID);
-        if (!NbtUtil.has(nbt, EMC_KEY)) {
+        NbtCompound nbt = stack.getCustomNbtM().getCompound(ItemAlchemy.MOD_ID);
+        if (!nbt.has(EMC_KEY)) {
             return 0;
         }
-        return NbtUtil.getLong(nbt, EMC_KEY);
+        return nbt.getLong(EMC_KEY);
     }
 
     public static void setStoredEmc(ItemStack stack, long emc) {
-        NbtCompound nbt = CustomDataUtil.get(stack, ItemAlchemy.MOD_ID);
-        NbtUtil.set(nbt, EMC_KEY, emc);
-        CustomDataUtil.set(stack, ItemAlchemy.MOD_ID, nbt);
+        NbtCompound nbt = stack.getCustomNbtM();
+        NbtCompound customNbt = nbt.getCompound(ItemAlchemy.MOD_ID);
+
+        customNbt.putLong(EMC_KEY, emc);
+
+        nbt.put(ItemAlchemy.MOD_ID, customNbt);
+        stack.setCustomNbt(nbt);
     }
 
     /**
      * Adds EMC to the Klein Star. Returns the amount actually added.
      */
     public static long addEmc(ItemStack stack, long amount) {
-        if (!(ItemStackUtil.getItem(stack) instanceof KleinStar)) return 0;
-        KleinStar star = (KleinStar) ItemStackUtil.getItem(stack);
+        if (!stack.getItem().instanceOf(KleinStar.class)) return 0;
+        KleinStar star = stack.getItem().getCompatItem(KleinStar.class);
 
         long stored = getStoredEmc(stack);
         long max = star.getMaxEmc();
@@ -105,20 +107,25 @@ public class KleinStar extends CompatItem {
      * Get whether auto-charge is enabled for this Klein Star
      */
     public static boolean isAutoChargeEnabled(ItemStack stack) {
-        NbtCompound nbt = CustomDataUtil.get(stack, ItemAlchemy.MOD_ID);
-        if (!NbtUtil.has(nbt, AUTO_CHARGE_KEY)) {
+        NbtCompound nbt = stack.getCustomNbtM();
+        NbtCompound customNbt = nbt.getCompound(ItemAlchemy.MOD_ID);
+        if (!customNbt.has(AUTO_CHARGE_KEY)) {
             return true; // Default to enabled
         }
-        return NbtUtil.getBoolean(nbt, AUTO_CHARGE_KEY);
+        return customNbt.getBoolean(AUTO_CHARGE_KEY);
     }
 
     /**
      * Set whether auto-charge is enabled for this Klein Star
      */
     public static void setAutoChargeEnabled(ItemStack stack, boolean enabled) {
-        NbtCompound nbt = CustomDataUtil.get(stack, ItemAlchemy.MOD_ID);
-        NbtUtil.set(nbt, AUTO_CHARGE_KEY, enabled);
-        CustomDataUtil.set(stack, ItemAlchemy.MOD_ID, nbt);
+        NbtCompound nbt = stack.getCustomNbtM();
+        NbtCompound customNbt = nbt.getCompound(ItemAlchemy.MOD_ID);
+
+        customNbt.putBoolean(AUTO_CHARGE_KEY, enabled);
+
+        nbt.put(ItemAlchemy.MOD_ID, customNbt);
+        stack.setCustomNbt(nbt);
     }
 
     /**
@@ -132,7 +139,7 @@ public class KleinStar extends CompatItem {
 
     @Override
     public void appendTooltip(ItemAppendTooltipEvent e) {
-        ItemStack stack = e.getStack();
+        ItemStack stack = ItemStack.of(e.getStack()); // TODO: 直接MidohraのItemStackを取得できるようにする
         e.addTooltip(TooltipUtil.generateTooltipLines(ItemStackUtil.getItem(e.getStack())));
         
         long stored = getStoredEmc(stack);
@@ -149,7 +156,7 @@ public class KleinStar extends CompatItem {
     public StackActionResult onRightClick(ItemUseEvent e) {
         if (e.isClient()) return e.consume();
         
-        ItemStack stack = e.getStack();
+        ItemStack stack = e.getStackM();
         
         if (e.isSneaking()) {
             // Toggle auto-charge
@@ -169,7 +176,7 @@ public class KleinStar extends CompatItem {
 
     @Override
     public int getItemBarStep(ItemBarStepArgs args) {
-        long stored = getStoredEmc(args.getStack());
+        long stored = getStoredEmc(ItemStack.of(args.getStack())); // TODO: 直接MidohraのItemStackを取得できるようにする
         long max = getMaxEmc();
         if (max == 0) return 0;
         return (int) (13L * stored / max);

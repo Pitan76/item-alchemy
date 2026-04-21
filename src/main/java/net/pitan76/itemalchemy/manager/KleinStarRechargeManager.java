@@ -1,16 +1,15 @@
 package net.pitan76.itemalchemy.manager;
 
-import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.config.RechargeConfig;
 import net.pitan76.itemalchemy.item.KleinStar;
 import net.pitan76.itemalchemy.util.IRechargeableFromKlein;
 import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundEvents;
-import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.PlatformUtil;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatPlayerInventory;
 import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -150,21 +149,21 @@ public class KleinStarRechargeManager {
         List<ItemStack> stars = new ArrayList<>();
         
         // Check main hand and offhand
-        ItemStack mainHand = player.getMainHandStack();
-        ItemStack offHand = player.getOffHandStack();
+        ItemStack mainHand = player.getMainHandStackAsM();
+        ItemStack offHand = player.getOffHandStackAsM();
         
-        if (ItemStackUtil.getItem(mainHand) instanceof KleinStar && KleinStar.getStoredEmc(mainHand) > 0) {
+        if (mainHand.getItem().instanceOf(KleinStar.class) && KleinStar.getStoredEmc(mainHand) > 0) {
             stars.add(mainHand);
         }
-        if (ItemStackUtil.getItem(offHand) instanceof KleinStar && KleinStar.getStoredEmc(offHand) > 0) {
+        if (offHand.getItem().instanceOf(KleinStar.class) && KleinStar.getStoredEmc(offHand) > 0) {
             stars.add(offHand);
         }
         
         // Check inventory
         CompatPlayerInventory inventory = new CompatPlayerInventory(player.getInventory());
         for (int i = 0; i < inventory.callSize(); i++) {
-            ItemStack stack = inventory.callGetStack(i);
-            if (ItemStackUtil.getItem(stack) instanceof KleinStar && KleinStar.getStoredEmc(stack) > 0) {
+            ItemStack stack = inventory.callGetStackAsMidohra(i);
+            if (stack.getItem().instanceOf(KleinStar.class) && KleinStar.getStoredEmc(stack) > 0) {
                 stars.add(stack);
             }
         }
@@ -183,10 +182,10 @@ public class KleinStarRechargeManager {
         // Check all inventory slots
         CompatPlayerInventory inventory = new CompatPlayerInventory(player.getInventory());
         for (int i = 0; i < inventory.callSize(); i++) {
-            ItemStack stack = inventory.callGetStack(i);
+            ItemStack stack = inventory.callGetStackAsMidohra(i);
             
-            if (ItemStackUtil.getItem(stack) instanceof IRechargeableFromKlein) {
-                IRechargeableFromKlein rechargeableItem = (IRechargeableFromKlein) ItemStackUtil.getItem(stack);
+            if (stack.getItem().instanceOf(IRechargeableFromKlein.class)) {
+                IRechargeableFromKlein rechargeableItem = (IRechargeableFromKlein) stack.getItem().get();
 
                 int charge = ItemUtils.getCharge(stack);
                 int maxCharge = rechargeableItem.getMaxCharge();
@@ -195,9 +194,7 @@ public class KleinStarRechargeManager {
                 if (charge >= maxCharge) continue;
                 
                 // Skip selected item if config requires inactive-only charging
-                if (RechargeConfig.ONLY_WHEN_INACTIVE && i == inventory.getSelectedSlot()) {
-                    continue;
-                }
+                if (RechargeConfig.ONLY_WHEN_INACTIVE && i == inventory.getSelectedSlot()) continue;
                 
                 // Get item-specific EMC cost
                 int emcPerLevel = rechargeableItem.getEmcCostPerCharge();

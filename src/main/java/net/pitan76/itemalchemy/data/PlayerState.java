@@ -1,12 +1,9 @@
 package net.pitan76.itemalchemy.data;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
 import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.util.NbtUtil;
-import net.pitan76.mcpitanlib.api.util.PlayerManagerUtil;
-import net.pitan76.mcpitanlib.api.util.ServerUtil;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
+import net.pitan76.mcpitanlib.midohra.server.MCServer;
+import net.pitan76.mcpitanlib.midohra.world.World;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -16,24 +13,24 @@ public class PlayerState {
     public UUID teamID;
 
     public void readNbt(NbtCompound nbt) {
-        playerUUID = NbtUtil.getUuid(nbt, "uuid");
-        teamID = NbtUtil.getUuid(nbt, "team");
+        playerUUID = nbt.getUuid("uuid");
+        teamID = nbt.getUuid("team");
     }
 
     public void writeNBT(NbtCompound nbt) {
-        NbtUtil.putUuid(nbt, "uuid", playerUUID);
-        NbtUtil.putUuid(nbt, "team", teamID);
+        nbt.putUuid("uuid", playerUUID);
+        nbt.putUuid("team", teamID);
     }
 
     public Player getPlayer(World world) {
-        return PlayerManagerUtil.getPlayerByUUID(world, playerUUID);
+        return world.getPlayerByUUID(playerUUID);
     }
 
     public Optional<TeamState> getTeamState(World world) {
-        return getTeamState(ServerUtil.getServer(world));
+        return getTeamState(world.getMCServer());
     }
 
-    public Optional<TeamState> getTeamState(MinecraftServer server) {
+    public Optional<TeamState> getTeamState(MCServer server) {
         ServerState serverState = ServerState.of(server);
         if (serverState == null)
             return Optional.empty();

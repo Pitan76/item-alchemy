@@ -2,8 +2,6 @@ package net.pitan76.itemalchemy.command;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
 import net.pitan76.itemalchemy.api.TeamUtil;
 import net.pitan76.itemalchemy.data.PlayerState;
 import net.pitan76.itemalchemy.data.ServerState;
@@ -19,9 +17,9 @@ import net.pitan76.mcpitanlib.api.event.StringCommandEvent;
 import net.pitan76.mcpitanlib.api.offlineplayer.OfflinePlayer;
 import net.pitan76.mcpitanlib.api.offlineplayer.OfflinePlayerManager;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.midohra.server.MCServer;
 import net.pitan76.mcpitanlib.midohra.server.PlayerManager;
+import net.pitan76.mcpitanlib.midohra.world.World;
 
 import java.util.List;
 import java.util.Optional;
@@ -133,9 +131,9 @@ public class TeamCommand extends LiteralCommand {
 
                         try {
                             Player player = e.getPlayer();
-                            Player targetPlayer = new Player((PlayerEntity) e.getValue());
+                            Player targetPlayer = new Player((PlayerEntity) e.getValue()); // TODO: e.getValueAsPlayer()
 
-                            ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
+                            ServerState serverState = ServerState.getServerState(player.getMidohraWorld().getMCServer());
 
                             Optional<TeamState> senderTeam = serverState.getTeamByPlayer(player.getUUID());
                             Optional<TeamState> targetTeam = serverState.getTeamByPlayer(targetPlayer.getUUID());
@@ -155,7 +153,7 @@ public class TeamCommand extends LiteralCommand {
                                 return;
                             }
 
-                            if (TeamUtil.kickTeam(player.getWorld().getServer(), targetTeam.get().teamID, targetPlayer.getUUID())) {
+                            if (TeamUtil.kickTeam(player.getMidohraWorld().getMCServer(), targetTeam.get().teamID, targetPlayer.getUUID())) {
                                 e.sendSuccess("[ItemAlchemy] Kicked " + targetPlayer.getName());
                                 return;
                             }
@@ -187,7 +185,7 @@ public class TeamCommand extends LiteralCommand {
                                 return;
                             }
 
-                            ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
+                            ServerState serverState = ServerState.getServerState(player.getMidohraWorld().getMCServer());
 
                             Optional<TeamState> senderTeam = serverState.getTeamByPlayer(player.getUUID());
                             Optional<TeamState> targetTeam = serverState.getTeamByPlayer(targetPlayer.getUUID());
@@ -207,7 +205,7 @@ public class TeamCommand extends LiteralCommand {
                                 return;
                             }
 
-                            if (TeamUtil.kickTeam(player.getWorld().getServer(), targetTeam.get().teamID, targetPlayer.getUUID())) {
+                            if (TeamUtil.kickTeam(player.getMidohraWorld().getMCServer(), targetTeam.get().teamID, targetPlayer.getUUID())) {
                                 e.sendSuccess("[ItemAlchemy] Kicked " + targetPlayer.getName());
                                 return;
                             }
@@ -236,15 +234,13 @@ public class TeamCommand extends LiteralCommand {
 
             @Override
             public void execute(ServerCommandEvent e) {
-                World world = e.getWorld();
-                if (WorldUtil.isClient(world)) return;
-                ServerState serverState = ServerState.getServerState(world.getServer());
+                World world = World.of(e.getWorld());
+                if (e.isClient()) return;
+
+                ServerState serverState = ServerState.getServerState(world.getMCServer());
                 e.sendSuccess("[ItemAlchemy] Team List");
                 for (TeamState state : serverState.teams) {
-                    Optional<MinecraftServer> optionalServer = WorldUtil.getServer(world);
-                    if (!optionalServer.isPresent()) continue;
-
-                    MCServer server = MCServer.of(optionalServer.get());
+                    MCServer server = world.getMCServer();
                     PlayerManager playerManager = server.getPlayerManager();
 
                     if (playerManager.hasPlayerByUUID(state.owner)) {
@@ -269,10 +265,10 @@ public class TeamCommand extends LiteralCommand {
 
                     @Override
                     public void execute(StringCommandEvent e) {
-                        World world = e.getWorld();
+                        World world = World.of(e.getWorld());
                         if (e.isClient()) return;
 
-                        ServerState serverState = ServerState.getServerState(world.getServer());
+                        ServerState serverState = ServerState.getServerState(world.getMCServer());
                         Optional<TeamState> teamState = serverState.getTeamByName(e.getValue());
                         if (!teamState.isPresent()) {
                             e.sendSuccess("[ItemAlchemy]§c Not found the team named \"" + e.getValue() + "\"");

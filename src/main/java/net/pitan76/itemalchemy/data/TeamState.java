@@ -1,11 +1,12 @@
 package net.pitan76.itemalchemy.data;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtString;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtElement;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtList;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,40 +23,41 @@ public class TeamState {
     public List<String> registeredItems = new ArrayList<>();
 
     public void readNbt(NbtCompound nbt) {
-        name = NbtUtil.getString(nbt, "name");
-        createdAt = NbtUtil.getLong(nbt, "created_at");
-        teamID = NbtUtil.getUuid(nbt, "id");
-        owner = NbtUtil.getUuid(nbt, "owner");
-        storedEMC = NbtUtil.getLong(nbt, "emc");
-        isDefault = NbtUtil.getBoolean(nbt, "is_default");
+        name = nbt.getString("name");
+        createdAt = nbt.getLong("created_at");
+        teamID = nbt.getUuid("id");
+        owner = nbt.getUuid("owner");
+        storedEMC = nbt.getLong("emc");
+        isDefault = nbt.getBoolean("is_default");
 
         ItemAlchemy.logger.infoIfDev("TeamState.readNbt(): nbt: " + nbt);
 
-        List<String> registeredItems = (NbtUtil.getList(nbt, "registered_items")).stream()
-                .filter(nbtElement -> nbtElement instanceof NbtString)
-                .map(NbtUtil::asString)
+        List<String> registeredItems = (nbt.get("registered_items").asNbtList()).stream()
+                .filter(NbtElement::isNbtString)
+                .map(NbtElement::asNbtString)
+                .map(NbtString::getValue)
                 .collect(Collectors.toList());
 
         this.registeredItems.addAll(registeredItems);
     }
 
     public void writeNbt(NbtCompound nbt) {
-        NbtUtil.putString(nbt, "name", name);
-        NbtUtil.putLong(nbt, "created_at", createdAt);
-        NbtUtil.putUuid(nbt, "id", teamID);
-        NbtUtil.putUuid(nbt, "owner", owner);
-        NbtUtil.putLong(nbt, "emc", storedEMC);
-        NbtUtil.putBoolean(nbt, "is_default", isDefault);
+        nbt.putString("name", name);
+        nbt.putLong("created_at", createdAt);
+        nbt.putUuid("id", teamID);
+        nbt.putUuid("owner", owner);
+        nbt.putLong("emc", storedEMC);
+        nbt.putBoolean("is_default", isDefault);
 
         ItemAlchemy.logger.infoIfDev("TeamState.writeNbt(): nbt: " + nbt);
 
-        NbtList registeredItems = NbtUtil.createNbtList();
+        NbtList registeredItems = NbtList.of(NbtUtil.createNbtList());
 
         for (String registeredItem : this.registeredItems) {
-            registeredItems.add(NbtUtil.createString(registeredItem));
+            registeredItems.add(NbtString.of(registeredItem).toElement()); // TODO: NbtListにそのままElementConvertibleを追加できるようにする
         }
 
-        NbtUtil.put(nbt, "registered_items", registeredItems);
+        nbt.put("registered_items", registeredItems);
     }
 
     public boolean isOwner(UUID player) {

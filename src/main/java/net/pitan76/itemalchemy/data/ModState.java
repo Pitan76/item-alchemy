@@ -1,6 +1,6 @@
 package net.pitan76.itemalchemy.data;
 
-import net.minecraft.server.MinecraftServer;
+import net.pitan76.mcpitanlib.midohra.server.MCServer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public interface ModState {
 
     List<TeamState> getTeamsByOwner(UUID playerUUID);
 
-    static ModState getModState(@Nullable MinecraftServer server) {
+    static ModState getModState(@Nullable MCServer server) {
         if (server != null)
             return ServerState.getServerState(server);
 

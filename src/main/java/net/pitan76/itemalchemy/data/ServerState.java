@@ -1,19 +1,18 @@
 package net.pitan76.itemalchemy.data;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.PersistentStateManager;
-import net.minecraft.world.World;
+
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
-import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
-import net.pitan76.mcpitanlib.api.util.ServerUtil;
-import net.pitan76.mcpitanlib.api.world.CompatiblePersistentState;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtElement;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtList;
+import net.pitan76.mcpitanlib.midohra.server.MCServer;
+import net.pitan76.mcpitanlib.midohra.world.CompatPersistentState;
+import net.pitan76.mcpitanlib.midohra.world.PersistentStateManager;
+import net.pitan76.mcpitanlib.midohra.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -22,12 +21,13 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class ServerState extends CompatiblePersistentState implements ModState {
+public class ServerState extends CompatPersistentState implements ModState {
     public List<TeamState> teams = new ArrayList<>();
     public List<PlayerState> players = new ArrayList<>();
 
     public ServerState() {
-        super("itemalchemy");
+//        TODO: super("itemalchemy");
+        super();
     }
 
     public static ServerState create(NbtCompound nbt) {
@@ -57,28 +57,29 @@ public class ServerState extends CompatiblePersistentState implements ModState {
      */
 
     @Override
-    public NbtCompound writeNbt(WriteNbtArgs args) {
-        NbtCompound nbt = args.getNbt();
+    public NbtCompound writeNbtM(WriteNbtArgs args) {
+        NbtCompound nbt = args.getNbtM();
 
-        NbtCompound modNBT = NbtUtil.create();
-        NbtList teamNBTList = NbtUtil.createNbtList();
-        NbtList playerNBTList = NbtUtil.createNbtList();
+        NbtCompound modNBT = NbtCompound.of();
+        NbtList teamNBTList = NbtList.of(NbtUtil.createNbtList()); // TODO: impl NbtList.of();
+        NbtList playerNBTList = NbtList.of(NbtUtil.createNbtList());
 
         for (TeamState teamState : teams) {
-            NbtCompound teamNBT = NbtUtil.create();
+            NbtCompound teamNBT = NbtCompound.of();
             teamState.writeNbt(teamNBT);
-            teamNBTList.add(teamNBT);
+            teamNBTList.add(teamNBT.toElement());
         }
 
         for (PlayerState playerState : players) {
-            NbtCompound playerNBT = NbtUtil.create();
+            NbtCompound playerNBT = NbtCompound.of();
             playerState.writeNBT(playerNBT);
-            playerNBTList.add(playerNBT);
+
+            playerNBTList.add(playerNBT.toElement()); // TODO: impl NbtList.add(ElementConvertible);
         }
 
-        NbtUtil.put(modNBT, "teams", teamNBTList);
-        NbtUtil.put(modNBT, "players", playerNBTList);
-        NbtUtil.put(nbt, "itemalchemy", modNBT);
+        modNBT.put("teams", teamNBTList);
+        modNBT.put("players", playerNBTList);
+        nbt.put("itemalchemy", modNBT);
 
         ItemAlchemy.logger.infoIfDev("ServerState.writeNbt: " + args.getNbt().toString());
 
@@ -89,42 +90,44 @@ public class ServerState extends CompatiblePersistentState implements ModState {
     public void readNbt(ReadNbtArgs args) {
         ItemAlchemy.logger.infoIfDev("ServerState.readNbt: " + args.getNbt().toString());
 
-        NbtCompound nbt = args.getNbt();
-        NbtCompound modNBT = NbtUtil.get(nbt, "itemalchemy");
+        NbtCompound nbt = args.getNbtM();
+        NbtCompound modNBT = nbt.getCompound("itemalchemy");
 
-        for (NbtElement teamNbt : NbtUtil.getNbtCompoundList(modNBT, "teams")) {
+        NbtList teamNBTList = NbtList.of(NbtUtil.getNbtCompoundList(modNBT.toMinecraft(), "teams")); // TODO: impl nbt.getList;
+        for (NbtElement teamNbt : teamNBTList) {
             TeamState teamState = new TeamState();
-            teamState.readNbt((NbtCompound) teamNbt);
+            teamState.readNbt(teamNbt.asNbtCompound());
 
             teams.add(teamState);
         }
 
-        for (NbtElement playerNbt : NbtUtil.getNbtCompoundList(modNBT, "players")) {
+        NbtList playerNBTList = NbtList.of(NbtUtil.getNbtCompoundList(modNBT.toMinecraft(), "players")); // TODO: impl nbt.getList;
+        for (NbtElement playerNbt : playerNBTList) {
             PlayerState playerState = new PlayerState();
-            playerState.readNbt((NbtCompound) playerNbt);
+            playerState.readNbt(playerNbt.asNbtCompound());
 
             players.add(playerState);
         }
     }
 
-    public static ServerState getServerState(MinecraftServer server) {
-        PersistentStateManager manager = PersistentStateUtil.getManagerFromServer(server);
+    public static ServerState getServerState(MCServer server) {
+        PersistentStateManager manager = server.getPersistentStateManager();
 
-        return PersistentStateUtil.getOrCreate(manager, "itemalchemy", ServerState::new, ServerState::create);
+        return manager.getOrCreateCompatiblePersistentState("itemalchemy", ServerState::new, ServerState::create);
     }
 
-    public static ServerState of(MinecraftServer server) {
+    public static ServerState of(MCServer server) {
         if (server == null) return null;
 
         return getServerState(server);
     }
 
     public static ServerState of(World world) {
-        return of(ServerUtil.getServer(world));
+        return of(world.getMCServer());
     }
 
     public static ServerState of(Player player) {
-        return of(player.getWorld());
+        return of(player.getMidohraWorld());
     }
 
     public TeamState createTeam(Player owner, @Nullable String name) {

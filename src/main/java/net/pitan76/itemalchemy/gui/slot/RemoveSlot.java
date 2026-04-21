@@ -2,7 +2,6 @@ package net.pitan76.itemalchemy.gui.slot;
 
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.pitan76.itemalchemy.data.ModState;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
@@ -12,8 +11,8 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.slot.CompatibleSlot;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
+import net.pitan76.mcpitanlib.midohra.server.MCServer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +28,7 @@ public class RemoveSlot extends CompatibleSlot {
 
     @Override
     public void callSetStack(ItemStack stack) {
-        Optional<MinecraftServer> serverOptional = WorldUtil.getServer(player.getWorld());
-        if (!serverOptional.isPresent()) return;
-        MinecraftServer server = serverOptional.get();
+        MCServer server = player.getMidohraWorld().getMCServer();
         
         Optional<TeamState> teamState = ModState.getModState(server).getTeamByPlayer(player.getUUID());
         if (!teamState.isPresent()) return;

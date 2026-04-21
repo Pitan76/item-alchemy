@@ -66,7 +66,7 @@ public class ItemAlchemy extends CommonModInitializer {
             Player player = new Player(p);
 
             EMCManager.syncS2C_emc_map(player);
-            ServerState serverState = ServerState.getServerState(player.getWorld().getServer());
+            ServerState serverState = ServerState.getServerState(player.getMidohraWorld().getMCServer());
 
             serverState.createPlayer(player);
 

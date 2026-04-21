@@ -28,7 +28,7 @@ public abstract class OwnedBlockEntity extends EMCStorageBlockEntity {
     public Optional<TeamState> getTeamState() {
         if (callGetWorld() == null) return Optional.empty();
 
-        ServerState serverState = ServerState.of(callGetWorld());
+        ServerState serverState = ServerState.of(getMidohraWorld());
         if (serverState == null || teamUUID == null)
             return Optional.empty();
 
@@ -63,7 +63,7 @@ public abstract class OwnedBlockEntity extends EMCStorageBlockEntity {
      * @return boolean success or fail
      */
     public boolean setTeam(Player player) {
-        ServerState serverState = ServerState.of(callGetWorld());
+        ServerState serverState = ServerState.of(getMidohraWorld());
         if (serverState == null) return false;
 
         Optional<PlayerState> optionalPlayerState = serverState.getPlayer(player.getUUID());

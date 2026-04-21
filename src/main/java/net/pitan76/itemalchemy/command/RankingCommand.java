@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.command;
 
-import net.minecraft.world.World;
 import net.pitan76.itemalchemy.data.PlayerState;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
@@ -11,6 +10,7 @@ import net.pitan76.mcpitanlib.api.event.ServerCommandEvent;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.midohra.server.MCServer;
 import net.pitan76.mcpitanlib.midohra.server.PlayerManager;
+import net.pitan76.mcpitanlib.midohra.world.World;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,8 +28,8 @@ public class RankingCommand extends LiteralCommand {
             @Override
             public void execute(ServerCommandEvent e) {
                 if (e.isClient()) return;
-                World world = e.getWorld();
-                ServerState serverState = ServerState.getServerState(world.getServer());
+                World world = World.of(e.getWorld()); // TODO: impl e.getMidohraWorld()
+                ServerState serverState = ServerState.getServerState(world.getMCServer());
                 List<PlayerState> playerStates = serverState.players.stream().sorted((o1, o2) -> Long.compare(o2.getTeamState(world).get().storedEMC, o1.getTeamState(world).get().storedEMC)).collect(Collectors.toList());
 
                 e.sendSuccess("[ItemAlchemy] EMC Ranking");
@@ -67,8 +67,8 @@ public class RankingCommand extends LiteralCommand {
     @Override
     public void execute(ServerCommandEvent e) {
         if (e.isClient()) return;
-        World world = e.getWorld();
-        ServerState serverState = ServerState.getServerState(world.getServer());
+        World world = World.of(e.getWorld()); // TODO: impl e.getMidohraWorld()
+        ServerState serverState = ServerState.getServerState(world.getMCServer());
         List<PlayerState> playerStates = serverState.players.stream().sorted((o1, o2) -> Long.compare(o2.getTeamState(world).get().storedEMC, o1.getTeamState(world).get().storedEMC)).collect(Collectors.toList());
 
         e.sendSuccess("[ItemAlchemy] EMC Ranking");

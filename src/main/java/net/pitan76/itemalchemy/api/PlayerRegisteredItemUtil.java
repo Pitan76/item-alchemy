@@ -1,16 +1,14 @@
 package net.pitan76.itemalchemy.api;
 
 import net.minecraft.item.Item;
-import net.minecraft.server.MinecraftServer;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.data.ModState;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
-import net.pitan76.mcpitanlib.api.util.PersistentStateUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
+import net.pitan76.mcpitanlib.midohra.server.MCServer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +16,7 @@ import java.util.Optional;
 
 public class PlayerRegisteredItemUtil {
     public static List<String> getItemsAsString(Player player) {
-        Optional<TeamState> teamState = ModState.getModState(player.getWorld().getServer()).getTeamByPlayer(player.getUUID());
+        Optional<TeamState> teamState = ModState.getModState(player.getMidohraWorld().getMCServer()).getTeamByPlayer(player.getUUID());
 
         return teamState.<List<String>>map(state -> new ArrayList<>(state.registeredItems)).orElseGet(ArrayList::new);
 
@@ -42,16 +40,14 @@ public class PlayerRegisteredItemUtil {
     }
 
     public static void setItemsForString(Player player, List<String> list) {
-        Optional<MinecraftServer> server = WorldUtil.getServer(player.getWorld());
-        if (!server.isPresent()) return;
-
-        Optional<TeamState> teamState = ModState.getModState(server.get()).getTeamByPlayer(player.getUUID());
+        MCServer server = player.getMidohraWorld().getMCServer();
+        Optional<TeamState> teamState = ModState.getModState(server).getTeamByPlayer(player.getUUID());
         if (!teamState.isPresent()) return;
 
         teamState.get().registeredItems = list;
 
         if (!player.isClient()) {
-            ServerState.getServerState(server.get()).callMarkDirty();
+            ServerState.getServerState(server).callMarkDirty();
         }
     }
 

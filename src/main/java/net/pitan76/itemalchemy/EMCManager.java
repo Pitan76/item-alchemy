@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.pitan76.easyapi.config.Config;
@@ -21,6 +20,7 @@ import net.pitan76.mcpitanlib.api.tag.TagKey;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 import net.pitan76.mcpitanlib.midohra.item.ItemWrapper;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
 import net.pitan76.mcpitanlib.midohra.recipe.*;
 import net.pitan76.mcpitanlib.midohra.recipe.entry.RecipeEntry;
 import net.pitan76.mcpitanlib.midohra.recipe.entry.ShapedRecipeEntry;
@@ -264,6 +264,10 @@ public class EMCManager {
         incrementEmc(player, EMCManager.get(stack));
     }
 
+    public static void writeEmcToPlayer(Player player, net.pitan76.mcpitanlib.midohra.item.ItemStack stack) {
+        incrementEmc(player, EMCManager.get(stack));
+    }
+
     public static void decrementEmc(Player player, long amount) {
         ServerState state = ServerState.of(player);
 
@@ -308,7 +312,7 @@ public class EMCManager {
     }
 
     public static long getEmcFromPlayer(Player player) {
-        Optional<TeamState> teamState = ModState.getModState(ServerUtil.getServer(player.getWorld())).getTeamByPlayer(player.getUUID());
+        Optional<TeamState> teamState = ModState.getModState(player.getMidohraWorld().getMCServer()).getTeamByPlayer(player.getUUID());
 
         return teamState.map(state -> state.storedEMC).orElse(0L);
     }
@@ -323,12 +327,12 @@ public class EMCManager {
         if (!serverState.getTeamByPlayer(player.getUUID()).isPresent()) return;
         TeamState teamState = serverState.getTeamByPlayer(player.getUUID()).get();
 
-        NbtCompound nbt = NbtUtil.create();
-        NbtCompound teamNBT = NbtUtil.create();
+        NbtCompound nbt = NbtCompound.of();
+        NbtCompound teamNBT = NbtCompound.of();
 
         teamState.writeNbt(teamNBT);
 
-        NbtUtil.put(nbt, "team", teamNBT);
+        nbt.put("team", teamNBT);
 
         PacketByteUtil.writeNbt(buf, nbt);
 
