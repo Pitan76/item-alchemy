@@ -2,7 +2,6 @@ package net.pitan76.itemalchemy.data;
 
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
 import net.pitan76.mcpitanlib.midohra.nbt.NbtElement;
 import net.pitan76.mcpitanlib.midohra.nbt.NbtList;
@@ -51,7 +50,7 @@ public class TeamState {
 
         ItemAlchemy.logger.infoIfDev("TeamState.writeNbt(): nbt: " + nbt);
 
-        NbtList registeredItems = NbtList.of(NbtUtil.createNbtList());
+        NbtList registeredItems = NbtList.of();
 
         for (String registeredItem : this.registeredItems) {
             registeredItems.add(NbtString.of(registeredItem));

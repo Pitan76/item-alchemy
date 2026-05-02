@@ -1,7 +1,5 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.util.IRechargeableFromKlein;
 import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.itemalchemy.util.TooltipUtil;
@@ -9,24 +7,27 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
 import net.pitan76.mcpitanlib.api.event.item.PostMineEvent;
-import net.pitan76.mcpitanlib.api.item.tool.CompatibleShovelItem;
+import net.pitan76.mcpitanlib.api.item.args.tool.MiningSpeedMultiplierArgs;
+import net.pitan76.mcpitanlib.api.item.args.tool.SuitableForArgs;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.item.v3.tool.CompatShovelItem;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.midohra.block.BlockState;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.util.math.Direction;
-import net.pitan76.mcpitanlib.api.util.math.PosUtil;
-import net.minecraft.util.math.BlockPos;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.midohra.world.World;
 
-public class AlchemicalShovel extends CompatibleShovelItem implements IRechargeableFromKlein {
+public class AlchemicalShovel extends CompatShovelItem implements IRechargeableFromKlein {
     public AlchemicalShovel(CompatibleToolMaterial toolMaterial, float attackDamage, float attackSpeed, CompatibleItemSettings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
     }
 
     @Override
     public void appendTooltip(ItemAppendTooltipEvent e, Options options) {
-        ItemStack stack = e.getStack();
-        e.addTooltip(TooltipUtil.generateTooltipLines(ItemStackUtil.getItem(stack)));
+        ItemStack stack = e.getStackM();
+        e.addTooltip(TooltipUtil.generateTooltipLines(stack.getItem()));
     }
 
     @Override
@@ -40,32 +41,35 @@ public class AlchemicalShovel extends CompatibleShovelItem implements IRechargea
     }
 
     @Override
-    public float overrideGetMiningSpeedMultiplier(ItemStack stack, BlockState state) {
-        if (!overrideIsSuitableFor(state))
-            return super.overrideGetMiningSpeedMultiplier(stack, state);
+    public float getMiningSpeedMultiplier(MiningSpeedMultiplierArgs args) {
+        if (!isSuitableFor(new SuitableForArgs(args.getState())))
+            return super.getMiningSpeedMultiplier(args);
 
-        return super.overrideGetMiningSpeedMultiplier(stack, state) * (ItemUtils.getCharge(stack) + 1);
+        return super.getMiningSpeedMultiplier(args) * (ItemUtils.getCharge(args.getStack()) + 1);
     }
 
     @Override
     public boolean postMine(PostMineEvent e) {
-        ItemStack stack = e.getStack();
-        if (!overrideIsSuitableFor(e.getState())) return super.postMine(e);
+        ItemStack stack = e.getStackM();
+        if (!isSuitableFor(new SuitableForArgs(e.getStateM()))) return super.postMine(e);
 
         int charge = ItemUtils.getCharge(stack);
 
         // Expand digging area based on charge level
         if (charge > 0) {
+            World world = e.getWorldM();
+            BlockPos originPos = e.getPosM();
+
             // Mine adjacent blocks in horizontal plane (3x3 area)
             Player player = e.getPlayer();
             Direction facing = Direction.of(player.getHorizontalFacing());
             Direction left = facing.rotateYCounterclockwise();
             Direction right = facing.rotateYClockwise();
             
-            mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), left, 1);
-            mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), right, 1);
-            mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), facing.rotateYCounterclockwise().rotateYCounterclockwise(), 1);
-            mineAdjacentBlocks(e.getPlayer(), e.getWorld(), e.getPos(), facing.rotateYClockwise().rotateYClockwise(), 1);
+            mineAdjacentBlocks(e.getPlayer(), world, originPos, left, 1);
+            mineAdjacentBlocks(e.getPlayer(), world, originPos, right, 1);
+            mineAdjacentBlocks(e.getPlayer(), world, originPos, facing.rotateYCounterclockwise().rotateYCounterclockwise(), 1);
+            mineAdjacentBlocks(e.getPlayer(), world, originPos, facing.rotateYClockwise().rotateYClockwise(), 1);
         }
 
         // Consume 1 charge per block mined if charge > 0
@@ -76,12 +80,12 @@ public class AlchemicalShovel extends CompatibleShovelItem implements IRechargea
         return super.postMine(e);
     }
 
-    protected void mineAdjacentBlocks(Player player, net.minecraft.world.World world, BlockPos originPos, Direction direction, int distance) {
+    protected void mineAdjacentBlocks(Player player, World world, BlockPos originPos, Direction direction, int distance) {
         for (int i = 1; i <= distance; i++) {
-            BlockPos targetPos = PosUtil.offset(originPos, direction, i);
-            BlockState targetState = WorldUtil.getBlockState(world, targetPos);
-            if (overrideIsSuitableFor(targetState)) {
-                WorldUtil.breakBlock(world, targetPos, true, player);
+            BlockPos targetPos = originPos.offset(direction, i);
+            BlockState targetState = world.getBlockState(targetPos);
+            if (isSuitableFor(new SuitableForArgs(targetState))) {
+                world.breakBlock(targetPos, true, player);
             }
         }
     }

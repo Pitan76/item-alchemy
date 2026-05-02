@@ -5,8 +5,6 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.item.InventoryTickEvent;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.registry.CompatRegistryLookup;
-import net.pitan76.mcpitanlib.api.util.EntityUtil;
-import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.entity.ItemEntityUtil;
 import net.pitan76.mcpitanlib.api.util.particle.CompatParticleTypes;
 import net.pitan76.mcpitanlib.midohra.entity.ItemEntityWrapper;
@@ -60,7 +58,7 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
                 double ny = dy / distance * speed;
                 double nz = dz / distance * speed;
                 itemEntity.setVelocity(nx, ny, nz);
-                EntityUtil.setVelocityModified(itemEntity.get(), true);
+                itemEntity.setVelocityModified(true);
             } else {
                 itemEntity.setVelocity(0, 0, 0);
                 itemEntity.setPos(playerPos);
@@ -93,7 +91,7 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
                 double ny = dy / distance * speed;
                 double nz = dz / distance * speed;
                 itemEntity.setVelocity(nx, ny, nz);
-                EntityUtil.setVelocityModified(itemEntity.get(), true);
+                itemEntity.setVelocityModified(true);
             } else {
                 if (addToInventory(stack, itemEntity.getStack(), registryLookup)) {
                     itemEntity.discard();
@@ -129,11 +127,11 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
     private NbtList getInventoryNbt(ItemStack stack) {
         NbtCompound nbt = stack.getCustomNbtM();
         if (!nbt.has(INVENTORY_NBT_KEY))
-            nbt.put(INVENTORY_NBT_KEY, NbtList.of(NbtUtil.createNbtList()));
+            nbt.put(INVENTORY_NBT_KEY, NbtList.of());
 
         Optional<NbtList> optionalNbtList = NbtList.ofOptional(nbt.get(INVENTORY_NBT_KEY));
         return optionalNbtList.orElseGet(() -> {
-            NbtList newList = NbtList.of(NbtUtil.createNbtList());
+            NbtList newList = NbtList.of();
             nbt.put(INVENTORY_NBT_KEY, newList);
             return newList;
         });
@@ -183,7 +181,7 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
     public void clearInventory(ItemStack stack) {
         NbtCompound nbt = stack.getCustomNbtM();
         if (nbt != null) {
-            nbt.put(INVENTORY_NBT_KEY, NbtList.of(NbtUtil.createNbtList()));
+            nbt.put(INVENTORY_NBT_KEY, NbtList.of());
             stack.setCustomNbt(nbt);
         }
     }

@@ -1,9 +1,9 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
 
 public interface AlchemicalToolMode {
 
@@ -15,26 +15,38 @@ public interface AlchemicalToolMode {
         return "modechange";
     }
 
+    default int getMode(net.minecraft.item.ItemStack stack) {
+        return getMode(ItemStack.of(stack));
+    }
+
     /**
      * Get the current mode of the pickaxe
      */
     default int getMode(ItemStack stack) {
-        NbtCompound nbt = CustomDataUtil.get(stack, "itemalchemy");
+        NbtCompound nbt = stack.getCustomNbt("itemalchemy");
         String modeKey = getModeKey();
-        if (!NbtUtil.has(nbt, modeKey)) {
+        if (!nbt.has(modeKey)) {
             setMode(stack, 0);
             return 0;
         }
-        return NbtUtil.getInt(nbt, modeKey);
+        return nbt.getInt(modeKey);
+    }
+
+    default void setMode(net.minecraft.item.ItemStack stack, int mode) {
+        setMode(ItemStack.of(stack), mode);
     }
 
     /**
      * Set the mode of the pickaxe
      */
     default void setMode(ItemStack stack, int mode) {
-        NbtCompound nbt = CustomDataUtil.get(stack, "itemalchemy");
-        NbtUtil.set(nbt, getModeKey(), mode);
-        CustomDataUtil.put(stack, "itemalchemy", nbt);
+        NbtCompound nbt = stack.getCustomNbt("itemalchemy");
+        nbt.putInt(getModeKey(), mode);
+        stack.putCustomNbt("itemalchemy", nbt);
+    }
+
+    default void incrementMode(net.minecraft.item.ItemStack stack) {
+        incrementMode(ItemStack.of(stack));
     }
 
     /**

@@ -1,10 +1,5 @@
 package net.pitan76.itemalchemy.client.renderer;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.pitan76.itemalchemy.item.AlchemicalPickaxe;
 import net.pitan76.itemalchemy.item.PhilosopherStone;
 import net.pitan76.itemalchemy.util.ItemUtils;
@@ -13,12 +8,15 @@ import net.pitan76.mcpitanlib.api.client.event.listener.BeforeBlockOutlineEvent;
 import net.pitan76.mcpitanlib.api.client.event.listener.BeforeBlockOutlineListener;
 import net.pitan76.mcpitanlib.api.client.event.listener.WorldRenderContext;
 import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.client.ClientUtil;
-import net.pitan76.mcpitanlib.api.util.math.PosUtil;
+import net.pitan76.mcpitanlib.midohra.block.BlockState;
 import net.pitan76.mcpitanlib.midohra.client.render.CameraWrapper;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+import net.pitan76.mcpitanlib.midohra.util.hit.HitResult;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.util.math.Direction;
 import net.pitan76.mcpitanlib.midohra.util.math.Vector3d;
+import net.pitan76.mcpitanlib.midohra.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,17 +29,17 @@ public class BlockRenderer implements BeforeBlockOutlineListener {
         if (ClientUtil.getClientPlayer() == null) return true;
         Player player = ClientUtil.getPlayer();
 
-        HitResult hitResult = e.getHitResult();
+        HitResult hitResult = e.getHitResultM();
 
-        if (hitResult == null) return true;
+        if (hitResult.getRaw() == null) return true;
         if (!e.isBlockType()) return true;
 
-        Optional<ItemStack> optionalStack = player.getCurrentHandItem();
+        Optional<ItemStack> optionalStack = player.getCurrentHandItem().map(ItemStack::of); // TODO: Midohra getCurrentHandItem()
         if (!optionalStack.isPresent()) return true;
         ItemStack stack = optionalStack.get();
 
-        if (stack.getItem() instanceof PhilosopherStone) return philosopherStone(e, stack);
-        if (stack.getItem() instanceof AlchemicalPickaxe) return alchemicalPickaxe(e, stack);
+        if (stack.getItem().instanceOf(PhilosopherStone.class)) return philosopherStone(e, stack);
+        if (stack.getItem().instanceOf(AlchemicalPickaxe.class)) return alchemicalPickaxe(e, stack);
 
 
         return true;
@@ -51,28 +49,28 @@ public class BlockRenderer implements BeforeBlockOutlineListener {
         WorldRenderContext context = e.getContext();
 
         CameraWrapper camera = context.getCameraWrapper();
-        World world = e.getWorld();
+        World world = World.of(e.getWorld());
 
-        Optional<BlockPos> optionalBlockPos = e.getBlockPos();
+        Optional<BlockPos> optionalBlockPos = e.getBlockPos().map(BlockPos::of);
         if (!optionalBlockPos.isPresent()) return true;
 
         BlockPos blockPos = optionalBlockPos.get();
 
-        Optional<BlockState> optionalBlockState = e.getBlockState();
+        Optional<BlockState> optionalBlockState = e.getBlockState().map(BlockState::of);
         if (!optionalBlockState.isPresent()) return true;
 
         BlockState blockState = optionalBlockState.get();
 
-        if (BlockStateUtil.isAir(blockState)) return true;
-        if (!PhilosopherStone.isExchange(BlockStateUtil.getBlock(blockState))) return true;
+        if (blockState.isAir()) return true;
+        if (!PhilosopherStone.isExchange(blockState.getBlock())) return true;
 
         List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, blockPos, ItemUtils.getCharge(stack), true, true);
 
         for (BlockPos pos : blocks) {
             Vector3d cameraPos = camera.getCameraPos();
-            double x = PosUtil.x(pos) - cameraPos.x;
-            double y = PosUtil.y(pos) - cameraPos.y;
-            double z = PosUtil.z(pos) - cameraPos.z;
+            double x = pos.getX() - cameraPos.x;
+            double y = pos.getY() - cameraPos.y;
+            double z = pos.getZ() - cameraPos.z;
 
             e.push();
             e.translate(x, y, z);
@@ -87,21 +85,21 @@ public class BlockRenderer implements BeforeBlockOutlineListener {
         WorldRenderContext context = e.getContext();
 
         CameraWrapper camera = context.getCameraWrapper();
-        World world = e.getWorld();
+        World world = World.of(e.getWorld());
 
-        Optional<BlockPos> optionalBlockPos = e.getBlockPos();
+        Optional<BlockPos> optionalBlockPos = e.getBlockPos().map(BlockPos::of);
         if (!optionalBlockPos.isPresent()) return true;
 
         BlockPos blockPos = optionalBlockPos.get();
 
-        Optional<BlockState> optionalBlockState = e.getBlockState();
+        Optional<BlockState> optionalBlockState = e.getBlockState().map(BlockState::of);
         if (!optionalBlockState.isPresent()) return true;
 
         BlockState blockState = optionalBlockState.get();
 
-        if (BlockStateUtil.isAir(blockState)) return true;
+        if (blockState.isAir()) return true;
 
-        AlchemicalPickaxe pickaxe = (AlchemicalPickaxe) stack.getItem();
+        AlchemicalPickaxe pickaxe = stack.getItem().getICompatItem(AlchemicalPickaxe.class);
         int mode = pickaxe.getMode(stack);
 
         if (mode < 1) return true;
@@ -115,9 +113,9 @@ public class BlockRenderer implements BeforeBlockOutlineListener {
 
         for (BlockPos pos : blocks) {
             Vector3d cameraPos = camera.getCameraPos();
-            double x = PosUtil.x(pos) - cameraPos.x;
-            double y = PosUtil.y(pos) - cameraPos.y;
-            double z = PosUtil.z(pos) - cameraPos.z;
+            double x = pos.getX() - cameraPos.x;
+            double y = pos.getY() - cameraPos.y;
+            double z = pos.getZ() - cameraPos.z;
 
             e.push();
             e.translate(x, y, z);

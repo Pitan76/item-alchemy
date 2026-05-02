@@ -1,19 +1,19 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.util.IRechargeableFromKlein;
 import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
-import net.pitan76.mcpitanlib.api.item.tool.CompatibleSwordItem;
+import net.pitan76.mcpitanlib.api.item.args.tool.MiningSpeedMultiplierArgs;
+import net.pitan76.mcpitanlib.api.item.args.tool.SuitableForArgs;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.item.v3.tool.CompatSwordItem;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
-import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 
-public class AlchemicalSword extends CompatibleSwordItem implements IRechargeableFromKlein {
+public class AlchemicalSword extends CompatSwordItem implements IRechargeableFromKlein {
     public AlchemicalSword(CompatibleToolMaterial toolMaterial, int attackDamage, float attackSpeed, CompatibleItemSettings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
 
@@ -28,8 +28,8 @@ public class AlchemicalSword extends CompatibleSwordItem implements IRechargeabl
 
     @Override
     public void appendTooltip(ItemAppendTooltipEvent e, Options options) {
-        ItemStack stack = e.getStack();
-        e.addTooltip(TooltipUtil.generateTooltipLines(ItemStackUtil.getItem(stack)));
+        ItemStack stack = e.getStackM();
+        e.addTooltip(TooltipUtil.generateTooltipLines(stack.getItem()));
     }
 
     @Override
@@ -43,11 +43,11 @@ public class AlchemicalSword extends CompatibleSwordItem implements IRechargeabl
     }
 
     @Override
-    public float overrideGetMiningSpeedMultiplier(ItemStack stack, BlockState state) {
-        if (!overrideIsSuitableFor(state))
-            return super.overrideGetMiningSpeedMultiplier(stack, state);
+    public float getMiningSpeedMultiplier(MiningSpeedMultiplierArgs args) {
+        if (!isSuitableFor(new SuitableForArgs(args.getState())))
+            return super.getMiningSpeedMultiplier(args);
 
-        return super.overrideGetMiningSpeedMultiplier(stack, state) * (ItemUtils.getCharge(stack) + 1);
+        return super.getMiningSpeedMultiplier(args) * (ItemUtils.getCharge(args.getStack()) + 1);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class AlchemicalSword extends CompatibleSwordItem implements IRechargeabl
      * Called from ItemAlchemy via AttackEntityEventRegistry.
      */
     public static void onAttack(ItemStack stack) {
-        if (stack.getItem() instanceof AlchemicalSword) {
+        if (stack.getItem().instanceOf(AlchemicalSword.class)) {
             int charge = ItemUtils.getCharge(stack);
             if (charge > 0) {
                 ItemUtils.setCharge(stack, charge - 1);
@@ -74,7 +74,7 @@ public class AlchemicalSword extends CompatibleSwordItem implements IRechargeabl
      * @return bonus damage (+1 per charge level)
      */
     public static float getBonusDamage(ItemStack stack) {
-        if (stack.getItem() instanceof AlchemicalSword) {
+        if (stack.getItem().instanceOf(AlchemicalSword.class)) {
             int charge = ItemUtils.getCharge(stack);
             return charge * 1.0f;
         }

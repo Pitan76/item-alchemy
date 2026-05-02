@@ -34,7 +34,7 @@ public class RankingCommand extends LiteralCommand {
 
                 e.sendSuccess("[ItemAlchemy] EMC Ranking");
 
-                MCServer server = MCServer.of(world.getServer());
+                MCServer server = world.getMCServer();
                 PlayerManager playerManager = server.getPlayerManager();
 
                 for (int i = 0; i < 10; i++) {
@@ -73,7 +73,7 @@ public class RankingCommand extends LiteralCommand {
 
         e.sendSuccess("[ItemAlchemy] EMC Ranking");
 
-        MCServer server = MCServer.of(world.getServer());
+        MCServer server = world.getMCServer();
         PlayerManager playerManager = server.getPlayerManager();
 
         for (int i = 0; i < 10; i++) {

@@ -11,6 +11,7 @@ import net.pitan76.mcpitanlib.midohra.world.ServerWorld;
 import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ReloadCommand extends LiteralCommand {
 
@@ -52,10 +53,8 @@ public class ReloadCommand extends LiteralCommand {
                 EMCManager.config.save(file);
             }
 
-            if (e.getWorld() instanceof net.minecraft.server.world.ServerWorld) {
-                ServerWorld serverWorld = ServerWorld.of((net.minecraft.server.world.ServerWorld) e.getWorld());
-                EMCManager.setEmcFromRecipes(serverWorld);
-            }
+            Optional<ServerWorld> serverWorld = e.getMidohraWorld().toServerWorld();
+            serverWorld.ifPresent(EMCManager::setEmcFromRecipes);
 
             e.sendSuccess("[ItemAlchemy] Reloaded emc_config.json");
         }

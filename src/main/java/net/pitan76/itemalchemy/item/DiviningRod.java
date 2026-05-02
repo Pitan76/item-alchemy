@@ -67,7 +67,7 @@ public class DiviningRod extends CompatItem  {
                 int level = CustomDataUtil.get(stack, "divining_rod_level", Integer.class);
                 int depth = getAdditionalDepth(level);
 
-                Direction dir = Direction.of(e.getSide());
+                Direction dir = Direction.of(e.getSide()); // TODO: Midohra Direction getSideM
                 if (dir.equals(Direction.UP)) {
                     y2 += depth;
                 } else if (dir.equals(Direction.DOWN)) {

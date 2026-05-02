@@ -1,7 +1,6 @@
 package net.pitan76.itemalchemy.command;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.entity.player.PlayerEntity;
 import net.pitan76.itemalchemy.api.TeamUtil;
 import net.pitan76.itemalchemy.data.PlayerState;
 import net.pitan76.itemalchemy.data.ServerState;
@@ -234,7 +233,7 @@ public class TeamCommand extends LiteralCommand {
 
             @Override
             public void execute(ServerCommandEvent e) {
-                World world = World.of(e.getWorld());
+                World world = e.getMidohraWorld();
                 if (e.isClient()) return;
 
                 ServerState serverState = ServerState.getServerState(world.getMCServer());

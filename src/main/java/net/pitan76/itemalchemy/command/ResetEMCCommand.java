@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ResetEMCCommand extends LiteralCommand {
     @Override
@@ -62,10 +63,8 @@ public class ResetEMCCommand extends LiteralCommand {
                 EMCManager.config.save(file);
             }
 
-            if (e.getWorld() instanceof net.minecraft.server.world.ServerWorld) {
-                ServerWorld serverWorld = ServerWorld.of((net.minecraft.server.world.ServerWorld) e.getWorld());
-                EMCManager.setEmcFromRecipes(serverWorld);
-            }
+            Optional<ServerWorld> serverWorld = e.getMidohraWorld().toServerWorld();
+            serverWorld.ifPresent(EMCManager::setEmcFromRecipes);
 
             e.sendSuccess("[ItemAlchemy] Set all emc to default emc");
         }
