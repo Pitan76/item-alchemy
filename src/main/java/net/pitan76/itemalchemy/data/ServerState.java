@@ -5,7 +5,6 @@ import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
-import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
 import net.pitan76.mcpitanlib.midohra.nbt.NbtElement;
 import net.pitan76.mcpitanlib.midohra.nbt.NbtList;
@@ -26,8 +25,7 @@ public class ServerState extends CompatPersistentState implements ModState {
     public List<PlayerState> players = new ArrayList<>();
 
     public ServerState() {
-//        TODO: super("itemalchemy");
-        super();
+        super("itemalchemy");
     }
 
     public static ServerState create(NbtCompound nbt) {
@@ -61,20 +59,19 @@ public class ServerState extends CompatPersistentState implements ModState {
         NbtCompound nbt = args.getNbtM();
 
         NbtCompound modNBT = NbtCompound.of();
-        NbtList teamNBTList = NbtList.of(NbtUtil.createNbtList()); // TODO: impl NbtList.of();
-        NbtList playerNBTList = NbtList.of(NbtUtil.createNbtList());
+        NbtList teamNBTList = NbtList.of();
+        NbtList playerNBTList = NbtList.of();
 
         for (TeamState teamState : teams) {
             NbtCompound teamNBT = NbtCompound.of();
             teamState.writeNbt(teamNBT);
-            teamNBTList.add(teamNBT.toElement());
+            teamNBTList.add(teamNBT);
         }
 
         for (PlayerState playerState : players) {
             NbtCompound playerNBT = NbtCompound.of();
             playerState.writeNBT(playerNBT);
-
-            playerNBTList.add(playerNBT.toElement()); // TODO: impl NbtList.add(ElementConvertible);
+            playerNBTList.add(playerNBT);
         }
 
         modNBT.put("teams", teamNBTList);
@@ -93,7 +90,7 @@ public class ServerState extends CompatPersistentState implements ModState {
         NbtCompound nbt = args.getNbtM();
         NbtCompound modNBT = nbt.getCompound("itemalchemy");
 
-        NbtList teamNBTList = NbtList.of(NbtUtil.getNbtCompoundList(modNBT.toMinecraft(), "teams")); // TODO: impl nbt.getList;
+        NbtList teamNBTList = modNBT.getNbtCompoundList("teams");
         for (NbtElement teamNbt : teamNBTList) {
             TeamState teamState = new TeamState();
             teamState.readNbt(teamNbt.asNbtCompound());
@@ -101,7 +98,7 @@ public class ServerState extends CompatPersistentState implements ModState {
             teams.add(teamState);
         }
 
-        NbtList playerNBTList = NbtList.of(NbtUtil.getNbtCompoundList(modNBT.toMinecraft(), "players")); // TODO: impl nbt.getList;
+        NbtList playerNBTList = modNBT.getNbtCompoundList("players");
         for (NbtElement playerNbt : playerNBTList) {
             PlayerState playerState = new PlayerState();
             playerState.readNbt(playerNbt.asNbtCompound());

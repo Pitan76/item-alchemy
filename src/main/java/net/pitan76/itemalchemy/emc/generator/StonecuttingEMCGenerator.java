@@ -25,18 +25,7 @@ public class StonecuttingEMCGenerator implements IEMCGenerator {
 
         for (RecipeEntry entry : entries) {
             try {
-                // TODO: RecipeにgetOutputを作成する
-                List<Ingredient> ingredients = entry.getRecipe().getInputs().stream()
-                        .map(Ingredient::of)
-                        .collect(Collectors.toList());
-
-                CompatInventory inventory = new CompatInventory(ingredients.size());
-                for (int i = 0; i < ingredients.size(); i++) {
-                    ItemStack stack = ingredients.get(i).getMatchingStacksAsMidohra()[0];
-                    inventory.callSetStack(i, stack);
-                }
-
-                ItemStack output = entry.getRecipe().craftMidohra(RecipeInputOrInventory.of(inventory), world);
+                ItemStack output = entry.getRecipe().getOutput(world);
                 EMCManager.addEmcFromRecipe(output.toMinecraft(), entry.getRecipe(), unsetRecipes, true);
             } catch (NoClassDefFoundError | Exception ignore) {}
         }

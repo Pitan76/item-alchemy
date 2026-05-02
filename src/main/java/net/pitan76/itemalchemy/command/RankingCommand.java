@@ -28,7 +28,7 @@ public class RankingCommand extends LiteralCommand {
             @Override
             public void execute(ServerCommandEvent e) {
                 if (e.isClient()) return;
-                World world = World.of(e.getWorld()); // TODO: impl e.getMidohraWorld()
+                World world = e.getMidohraWorld();
                 ServerState serverState = ServerState.getServerState(world.getMCServer());
                 List<PlayerState> playerStates = serverState.players.stream().sorted((o1, o2) -> Long.compare(o2.getTeamState(world).get().storedEMC, o1.getTeamState(world).get().storedEMC)).collect(Collectors.toList());
 
@@ -67,7 +67,7 @@ public class RankingCommand extends LiteralCommand {
     @Override
     public void execute(ServerCommandEvent e) {
         if (e.isClient()) return;
-        World world = World.of(e.getWorld()); // TODO: impl e.getMidohraWorld()
+        World world = e.getMidohraWorld();
         ServerState serverState = ServerState.getServerState(world.getMCServer());
         List<PlayerState> playerStates = serverState.players.stream().sorted((o1, o2) -> Long.compare(o2.getTeamState(world).get().storedEMC, o1.getTeamState(world).get().storedEMC)).collect(Collectors.toList());
 

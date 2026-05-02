@@ -176,7 +176,7 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
                 if (!test) inventory.set(i, insertStack);
                 isInserted = true;
                 break;
-            } else if (canMergeItems(stack.toMinecraft(), insertStack.toMinecraft()) && stack.getCount() < stack.getMaxCount()) {
+            } else if (canMergeItems(stack, insertStack) && stack.getCount() < stack.getMaxCount()) {
                 int j = insertStack.getCount();
                 if (!test) stack.increment(j);
                 isInserted = j > 0;
@@ -190,7 +190,6 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
         return getItems().getAsMidohra(0);
     }
 
-    // TODO: List<ItemStack> getItemsM の実装
     @Override
     public ItemStackList getItems() {
         return inventory;
@@ -218,19 +217,20 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
 
     @Override
     public void writeExtraData(ExtraDataArgs args) {
+        CompatPacketByteBuf buf = args.getCompatBuf();
         BlockPos pos = getMidohraPos();
 
-        PacketByteUtil.writeInt(args.buf, pos.getX());
-        PacketByteUtil.writeInt(args.buf, pos.getY());
-        PacketByteUtil.writeInt(args.buf, pos.getZ());
-        PacketByteUtil.writeLong(args.buf, storedEMC);
-        PacketByteUtil.writeLong(args.buf, maxEMC);
-        PacketByteUtil.writeItemStack(args.buf, getTargetStack().toMinecraft());
+        buf.writeInt( pos.getX());
+        buf.writeInt(pos.getY());
+        buf.writeInt(pos.getZ());
+        buf.writeLong(storedEMC);
+        buf.writeLong(maxEMC);
+        buf.writeItemStack(getTargetStack().toMinecraft()); // TODO: MidohraのItemStackを対応させる
     }
 
     public void setTargetStack(ItemStack stack) {
         getItems().set(0, stack);
-        BlockEntityUtil.markDirty(this);
+        callMarkDirty();
     }
 
     @Override

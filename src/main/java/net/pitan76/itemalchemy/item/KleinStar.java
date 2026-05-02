@@ -10,7 +10,6 @@ import net.pitan76.mcpitanlib.api.event.item.ItemUseEvent;
 import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.StackActionResult;
-import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
@@ -139,8 +138,8 @@ public class KleinStar extends CompatItem {
 
     @Override
     public void appendTooltip(ItemAppendTooltipEvent e) {
-        ItemStack stack = ItemStack.of(e.getStack()); // TODO: 直接MidohraのItemStackを取得できるようにする
-        e.addTooltip(TooltipUtil.generateTooltipLines(ItemStackUtil.getItem(e.getStack())));
+        ItemStack stack = e.getStackM();
+        e.addTooltip(TooltipUtil.generateTooltipLines(stack.getItem()));
         
         long stored = getStoredEmc(stack);
         long max = getMaxEmc();
@@ -176,7 +175,7 @@ public class KleinStar extends CompatItem {
 
     @Override
     public int getItemBarStep(ItemBarStepArgs args) {
-        long stored = getStoredEmc(ItemStack.of(args.getStack())); // TODO: 直接MidohraのItemStackを取得できるようにする
+        long stored = getStoredEmc(args.getStackM());
         long max = getMaxEmc();
         if (max == 0) return 0;
         return (int) (13L * stored / max);

@@ -44,7 +44,7 @@ public class ItemUtils {
         if (stack == null)
             return false;
 
-        return stack.toMinecraft().getItem() instanceof ItemCharge;
+        return stack.getItem().instanceOf(ItemCharge.class);
     }
 
     /**

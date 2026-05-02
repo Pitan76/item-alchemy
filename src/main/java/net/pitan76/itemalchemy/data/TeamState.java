@@ -54,7 +54,7 @@ public class TeamState {
         NbtList registeredItems = NbtList.of(NbtUtil.createNbtList());
 
         for (String registeredItem : this.registeredItems) {
-            registeredItems.add(NbtString.of(registeredItem).toElement()); // TODO: NbtListにそのままElementConvertibleを追加できるようにする
+            registeredItems.add(NbtString.of(registeredItem));
         }
 
         nbt.put("registered_items", registeredItems);

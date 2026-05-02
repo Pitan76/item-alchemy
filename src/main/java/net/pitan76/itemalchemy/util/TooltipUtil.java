@@ -6,6 +6,7 @@ import net.pitan76.mcpitanlib.api.util.PlatformUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.client.LanguageUtil;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
+import net.pitan76.mcpitanlib.midohra.item.ItemWrapper;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -70,6 +71,11 @@ public class TooltipUtil {
 
     public static List<Text> generateTooltipLines(Item item) {
         String translationKey = ItemUtil.getTranslationKey(item);
+        return generateTooltipLines(translationKey);
+    }
+
+    public static List<Text> generateTooltipLines(ItemWrapper item) {
+        String translationKey = item.getTranslationKey();
         return generateTooltipLines(translationKey);
     }
                                                   /**

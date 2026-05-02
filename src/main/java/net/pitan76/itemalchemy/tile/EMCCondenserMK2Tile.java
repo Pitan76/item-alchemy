@@ -155,8 +155,7 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
                 if (!test) inventory.set(i, insertStack);
                 isInserted = true;
                 break;
-                // TODO: canMergeItemsでMidohraのItemStackを対応させる
-            } else if (canMergeItems(stack.toMinecraft(), insertStack.toMinecraft())) {
+            } else if (canMergeItems(stack, insertStack)) {
                 int j = insertStack.getCount();
                 if (!test) stack.increment(j);
                 isInserted = j > 0;

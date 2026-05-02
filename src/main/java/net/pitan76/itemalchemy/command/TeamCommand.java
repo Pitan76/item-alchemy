@@ -131,7 +131,7 @@ public class TeamCommand extends LiteralCommand {
 
                         try {
                             Player player = e.getPlayer();
-                            Player targetPlayer = new Player((PlayerEntity) e.getValue()); // TODO: e.getValueAsPlayer()
+                            Player targetPlayer = e.getValueAsPlayer();
 
                             ServerState serverState = ServerState.getServerState(player.getMidohraWorld().getMCServer());
 
