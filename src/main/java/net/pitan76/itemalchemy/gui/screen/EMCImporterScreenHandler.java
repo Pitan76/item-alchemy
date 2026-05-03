@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.gui.screen;
 
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.slot.Slot;
@@ -8,10 +7,12 @@ import net.pitan76.itemalchemy.gui.slot.FilterSlot;
 import net.pitan76.itemalchemy.tile.EMCImporterTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
+import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
 import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
+import net.pitan76.mcpitanlib.api.util.inventory.CompatPlayerInventory;
 import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
@@ -19,19 +20,18 @@ import org.jetbrains.annotations.Nullable;
 public class EMCImporterScreenHandler extends ExtendedScreenHandler {
     public ICompatInventory inventory;
     public ICompatInventory filter;
-    public PlayerInventory playerInventory;
+    public CompatPlayerInventory playerInventory;
     public EMCImporterTile tile;
     public String ownerName = "";
 
-    public EMCImporterScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, null, new CompatInventory(1), new CompatInventory(9));
+    public EMCImporterScreenHandler(CreateMenuEvent e, PacketByteBuf buf) {
+        this(e, null, new CompatInventory(1), new CompatInventory(9));
 
         int x = PacketByteUtil.readInt(buf);
         int y = PacketByteUtil.readInt(buf);
         int z = PacketByteUtil.readInt(buf);
 
-        Player player = new Player(playerInventory.player);
-        tile = player.getMidohraWorld().getBlockEntity(BlockPos.of(x, y, z)).getCompatBlockEntity(EMCImporterTile.class);
+        tile = e.getWorldM().getBlockEntity(BlockPos.of(x, y, z)).getCompatBlockEntity(EMCImporterTile.class);
 
         if (PacketByteUtil.readBoolean(buf)) {
             tile.teamUUID = PacketByteUtil.readUuid(buf);
@@ -42,16 +42,16 @@ public class EMCImporterScreenHandler extends ExtendedScreenHandler {
         }
     }
 
-    public EMCImporterScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCImporterTile tile, ICompatInventory inventory, ICompatInventory filter) {
-        super(ScreenHandlers.EMC_IMPORTER, syncId);
+    public EMCImporterScreenHandler(CreateMenuEvent e, @Nullable EMCImporterTile tile, ICompatInventory inventory, ICompatInventory filter) {
+        super(ScreenHandlers.EMC_IMPORTER, e.syncId);
 
         this.inventory = inventory;
         this.filter = filter;
 
-        this.playerInventory = playerInventory;
+        this.playerInventory = e.getCompatPlayerInventory();
         this.tile = tile;
-        addPlayerMainInventorySlots(playerInventory, 8, 102);
-        addPlayerHotbarSlots(playerInventory, 8, 160);
+        addPlayerMainInventorySlots(playerInventory.getRaw(), 8, 102);
+        addPlayerHotbarSlots(playerInventory.getRaw(), 8, 160);
         
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {

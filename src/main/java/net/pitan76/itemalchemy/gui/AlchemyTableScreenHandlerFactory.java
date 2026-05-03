@@ -13,7 +13,7 @@ public class AlchemyTableScreenHandlerFactory implements SimpleScreenHandlerFact
 
     @Override
     public ScreenHandler createMenu(CreateMenuEvent e) {
-        return new AlchemyTableScreenHandler(e.syncId, e.playerInventory);
+        return new AlchemyTableScreenHandler(e);
     }
 
     @Override

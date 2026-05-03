@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.gui.screen;
 
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
@@ -9,6 +8,7 @@ import net.pitan76.itemalchemy.gui.slot.CondenserMK2InputSlot;
 import net.pitan76.itemalchemy.gui.slot.CondenserMK2OutputSlot;
 import net.pitan76.itemalchemy.tile.EMCCondenserTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.SlotUtil;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
@@ -18,22 +18,22 @@ import org.jetbrains.annotations.Nullable;
 
 public class EMCCondenserMK2ScreenHandler extends EMCCondenserScreenHandler {
 
-    public EMCCondenserMK2ScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(ScreenHandlers.EMC_CONDENSER_MK2, syncId, playerInventory, new CompatInventory(85), buf);
+    public EMCCondenserMK2ScreenHandler(CreateMenuEvent e, PacketByteBuf buf) {
+        this(ScreenHandlers.EMC_CONDENSER_MK2, e, new CompatInventory(85), buf);
     }
 
-    public EMCCondenserMK2ScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ICompatInventory inventory, PacketByteBuf buf) {
-        super(type, syncId, playerInventory, inventory, buf);
+    public EMCCondenserMK2ScreenHandler(ScreenHandlerType<?> type, CreateMenuEvent e, ICompatInventory inventory, PacketByteBuf buf) {
+        super(type, e, inventory, buf);
     }
 
-    public EMCCondenserMK2ScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCCondenserTile tile, ICompatInventory inventory, ItemStack targetStack) {
-        super(ScreenHandlers.EMC_CONDENSER_MK2, syncId, playerInventory, tile, inventory, targetStack);
+    public EMCCondenserMK2ScreenHandler(CreateMenuEvent e, @Nullable EMCCondenserTile tile, ICompatInventory inventory, ItemStack targetStack) {
+        super(ScreenHandlers.EMC_CONDENSER_MK2, e, tile, inventory, targetStack);
     }
 
     @Override
     public void initSlots() {
-        addPlayerMainInventorySlots(playerInventory, 48, 154);
-        addPlayerHotbarSlots(playerInventory, 48, 212);
+        addPlayerMainInventorySlots(playerInventory.getRaw(), 48, 154);
+        addPlayerHotbarSlots(playerInventory.getRaw(), 48, 212);
         addTargetSlot(inventory, 0, 12, 6);
         addStorageSlots(inventory, 1, 12, 26, -1, 6, 7);
         addStorageSlots(inventory, 43, 138, 26, -1, 6, 7);

@@ -103,7 +103,7 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     @Nullable
     public ScreenHandler createMenu(CreateMenuEvent e) {
         IInventory filterInventory = () -> this.filter;
-        return new EMCExporterScreenHandler(e.syncId, e.playerInventory, this, InventoryWrapper.of(filterInventory));
+        return new EMCExporterScreenHandler(e, this, InventoryWrapper.of(filterInventory));
     }
 
     @Override

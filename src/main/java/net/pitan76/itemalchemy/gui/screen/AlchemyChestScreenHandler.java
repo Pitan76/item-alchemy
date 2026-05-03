@@ -1,30 +1,31 @@
 package net.pitan76.itemalchemy.gui.screen;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.SimpleScreenHandler;
-import net.pitan76.mcpitanlib.api.util.InventoryUtil;
+import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.ScreenHandlerUtil;
 import net.pitan76.mcpitanlib.api.util.SlotUtil;
+import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
+import net.pitan76.mcpitanlib.api.util.inventory.CompatPlayerInventory;
+import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
 
 public class AlchemyChestScreenHandler extends SimpleScreenHandler {
-    public Inventory inventory;
-    public PlayerInventory playerInventory;
-    public AlchemyChestScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, InventoryUtil.createSimpleInventory(104));
+    public ICompatInventory inventory;
+    public CompatPlayerInventory playerInventory;
+    public AlchemyChestScreenHandler(CreateMenuEvent e) {
+        this(e, new CompatInventory(104));
     }
 
-    public AlchemyChestScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
-        super(ScreenHandlers.ALCHEMY_CHEST, syncId);
+    public AlchemyChestScreenHandler(CreateMenuEvent e, ICompatInventory inventory) {
+        super(ScreenHandlers.ALCHEMY_CHEST, e);
 
         this.inventory = inventory;
-        this.playerInventory = playerInventory;
-        addPlayerMainInventorySlots(playerInventory, 48, 154);
-        addPlayerHotbarSlots(playerInventory, 48, 212);
+        this.playerInventory = e.getCompatPlayerInventory();
+        addPlayerMainInventorySlots(playerInventory.getRaw(), 48, 154);
+        addPlayerHotbarSlots(playerInventory.getRaw(), 48, 212);
         addSlots(inventory, 0, 12, 8, -1, 13, 8);
     }
 

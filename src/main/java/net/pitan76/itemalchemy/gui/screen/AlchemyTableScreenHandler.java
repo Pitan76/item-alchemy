@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.gui.screen;
 
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,10 +16,13 @@ import net.pitan76.itemalchemy.gui.slot.RegisterSlot;
 import net.pitan76.itemalchemy.gui.slot.RemoveSlot;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.SimpleScreenHandler;
+import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
 import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
 import net.pitan76.mcpitanlib.api.gui.slot.CompatSlotActionType;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
+import net.pitan76.mcpitanlib.midohra.item.ItemWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +34,10 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
     public RegisterInventory registerInventory; // contains InputSlot(0)
     public ExtractInventory extractInventory;
-    public Inventory otherInventory = InventoryUtil.createSimpleInventory(52);
+    public CompatInventory otherInventory = new CompatInventory(52);
 
-    public AlchemyTableScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new RegisterInventory(64, new Player(playerInventory.player)));
+    public AlchemyTableScreenHandler(CreateMenuEvent e) {
+        this(e, new RegisterInventory(64, e.getPlayer()));
     }
 
     public int index = 0;
@@ -58,13 +60,13 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             sortBySearch();
     }
 
-    public AlchemyTableScreenHandler(int syncId, PlayerInventory playerInventory, RegisterInventory inventory) {
-        this(ScreenHandlers.ALCHEMY_TABLE, syncId, playerInventory, inventory);
-        player = new Player(playerInventory.player);
+    public AlchemyTableScreenHandler(CreateMenuEvent e, RegisterInventory inventory) {
+        this(ScreenHandlers.ALCHEMY_TABLE, e, inventory);
+        player = e.getPlayer();
         extractInventory = new ExtractInventory(13 + 80, player, this);
         registerInventory = inventory;
-        addPlayerMainInventorySlots(playerInventory, 24, 140);
-        addPlayerHotbarSlots(playerInventory, 24, 198);
+        addPlayerMainInventorySlots(e.playerInventory, 24, 140);
+        addPlayerHotbarSlots(e.playerInventory, 24, 198);
         addRegisterSlot(registerInventory, 50, 42, 120); // Input
         callAddSlot(new RemoveSlot(otherInventory, 51, 24, 120, player)); // Remove?
         addRegisterSlot(registerInventory, 52, 41, 19);
@@ -110,8 +112,8 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
     public ScreenHandlerType<?> type = null;
     public boolean canUse = true;
 
-    public AlchemyTableScreenHandler(ScreenHandlerType type, int syncId, PlayerInventory playerInventory, Inventory inventory) {
-        super(type, syncId);
+    public AlchemyTableScreenHandler(ScreenHandlerType type, CreateMenuEvent e, Inventory inventory) {
+        super(type, e);
         this.type = type;
         this.inventory = inventory;
     }
@@ -193,8 +195,8 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             String translatedName = "";
 
             CompatIdentifier itemIdentifier = CompatIdentifier.of(id);
-            Item item = ItemUtil.fromId(itemIdentifier);
-            String itemTranslationKey = ItemUtil.getTranslationKey(item);
+            ItemWrapper item = ItemWrapper.of(itemIdentifier);
+            String itemTranslationKey = item.getTranslationKey();
 
             // If the item has a translation, we should use that instead of the identifier.
             if (NbtUtil.has(translations, itemTranslationKey)) {
@@ -219,7 +221,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
                     (searchNamespace.isEmpty() || itemNamespace.contains(searchNamespace)) &&
                             (itemId.contains(searchText) ||
                                     translatedName.contains(searchText) ||
-                                    ItemUtil.getNameAsString(item).contains(searchText))
+                                    item.getName().contains(searchText))
             ) {
                 sortedIds.add(id);
             }

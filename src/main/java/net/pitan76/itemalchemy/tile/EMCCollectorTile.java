@@ -57,7 +57,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
     @Override
     public long getMaxEMC() {
         if (maxEMC == -1)
-            return ((EMCCollector) BlockStateUtil.getBlock(callGetCachedState())).maxEMC;
+            return getMidohraCachedState().getBlock().getCompatBlock(EMCCollector.class).maxEMC;
 
         return maxEMC;
     }
@@ -76,7 +76,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
 
     @Nullable
     public ScreenHandler createMenu(CreateMenuEvent e) {
-        return new EMCCollectorScreenHandler(e.syncId, e.playerInventory, this, InventoryWrapper.of(this));
+        return new EMCCollectorScreenHandler(e, this, InventoryWrapper.of(this));
     }
 
     @Override

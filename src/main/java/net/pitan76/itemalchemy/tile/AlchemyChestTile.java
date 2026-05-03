@@ -44,7 +44,7 @@ public class AlchemyChestTile extends CompatBlockEntity implements VanillaStyleS
 
     @Nullable
     public ScreenHandler createMenu(CreateMenuEvent e) {
-        return new AlchemyChestScreenHandler(e.syncId, e.playerInventory, this);
+        return new AlchemyChestScreenHandler(e, getItems().toCompatInventory());
     }
 
     @Override

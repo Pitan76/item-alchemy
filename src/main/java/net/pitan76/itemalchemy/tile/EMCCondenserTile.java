@@ -207,7 +207,7 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
     @Override
     @Nullable
     public ScreenHandler createMenu(CreateMenuEvent e) {
-        return new EMCCondenserScreenHandler(e.syncId, e.playerInventory, this, InventoryWrapper.of(this), getTargetStack());
+        return new EMCCondenserScreenHandler(e, this, InventoryWrapper.of(this), getTargetStack());
     }
 
     @Override

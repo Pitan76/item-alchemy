@@ -1,16 +1,17 @@
 package net.pitan76.itemalchemy.gui.screen;
 
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.slot.Slot;
 import net.pitan76.itemalchemy.gui.slot.TargetSlot;
 import net.pitan76.itemalchemy.tile.EMCCollectorTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
+import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
 import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
+import net.pitan76.mcpitanlib.api.util.inventory.CompatPlayerInventory;
 import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
 import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityWrapper;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
@@ -19,35 +20,33 @@ import org.jetbrains.annotations.Nullable;
 
 public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
     public ICompatInventory inventory;
-    public PlayerInventory playerInventory;
+    public CompatPlayerInventory playerInventory;
     public EMCCollectorTile tile = null;
 
     public long storedEMC = 0;
     public long maxEMC = 0;
 
-    public EMCCollectorScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(syncId, playerInventory, null, new CompatInventory(16 + 3));
+    public EMCCollectorScreenHandler(CreateMenuEvent e, PacketByteBuf buf) {
+        this(e, null, new CompatInventory(16 + 3));
 
-        Player player = new Player(playerInventory.player);
-
-        BlockPos pos = BlockPos.of(PacketByteUtil.readBlockPos(buf));
-        BlockEntityWrapper blockEntity = player.getMidohraWorld().getBlockEntity(pos);
+        BlockPos pos = PacketByteUtil.readBlockPosM(buf);
+        BlockEntityWrapper blockEntity = e.getWorldM().getBlockEntity(pos);
 
         if (blockEntity.isPresent()) {
-            tile = (EMCCollectorTile) blockEntity.get();
+            tile = blockEntity.getCompatBlockEntity(EMCCollectorTile.class);
             storedEMC = PacketByteUtil.readLong(buf) - tile.storedEMC;
             maxEMC = PacketByteUtil.readLong(buf);
         }
     }
 
-    public EMCCollectorScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCCollectorTile tile, ICompatInventory inventory) {
-        super(ScreenHandlers.EMC_COLLECTOR, syncId);
+    public EMCCollectorScreenHandler(CreateMenuEvent e, @Nullable EMCCollectorTile tile, ICompatInventory inventory) {
+        super(ScreenHandlers.EMC_COLLECTOR, e.syncId);
 
         this.inventory = inventory;
-        this.playerInventory = playerInventory;
+        this.playerInventory = e.getCompatPlayerInventory();
         this.tile = tile;
-        addPlayerMainInventorySlots(playerInventory, 24, 84);
-        addPlayerHotbarSlots(playerInventory, 24, 142);
+        addPlayerMainInventorySlots(playerInventory.getRaw(), 24, 84);
+        addPlayerHotbarSlots(playerInventory.getRaw(), 24, 142);
         addNormalSlot(inventory, 0, 149, 12);
         addTargetSlot(inventory, 1, 177, 35);
         addNormalSlot(inventory, 2, 149, 58);

@@ -77,7 +77,7 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
 
     @Nullable
     public ScreenHandler createMenu(CreateMenuEvent e) {
-        return new EMCBatteryScreenHandler(e.syncId, e.playerInventory, this, this);
+        return new EMCBatteryScreenHandler(e, this, getItems().toCompatInventory());
     }
 
     @Override

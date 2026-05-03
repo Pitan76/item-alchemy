@@ -52,7 +52,7 @@ public class EMCCondenserMK2Tile extends EMCCondenserTile {
     @Override
     @Nullable
     public ScreenHandler createMenu(CreateMenuEvent e) {
-        return new EMCCondenserMK2ScreenHandler(e.syncId, e.playerInventory, this, InventoryWrapper.of(this), getTargetStack());
+        return new EMCCondenserMK2ScreenHandler(e, this, InventoryWrapper.of(this), getTargetStack());
     }
 
     @Override

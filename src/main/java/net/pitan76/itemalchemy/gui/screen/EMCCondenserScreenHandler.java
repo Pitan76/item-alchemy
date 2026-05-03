@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.gui.screen;
 
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
@@ -10,13 +9,15 @@ import net.pitan76.itemalchemy.gui.slot.TargetSlot;
 import net.pitan76.itemalchemy.tile.EMCCondenserTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
+import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
 import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
+import net.pitan76.mcpitanlib.api.util.inventory.CompatPlayerInventory;
 import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
-import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -24,42 +25,40 @@ import java.util.List;
 
 public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     public ICompatInventory inventory;
-    public PlayerInventory playerInventory;
+    public CompatPlayerInventory playerInventory;
     public EMCCondenserTile tile;
 
     public long storedEMC = 0;
     public long maxEMC = 0;
     public ItemStack targetStack;
 
-    public EMCCondenserScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-        this(ScreenHandlers.EMC_CONDENSER, syncId, playerInventory, new CompatInventory(92), buf);
+    public EMCCondenserScreenHandler(CreateMenuEvent e, PacketByteBuf buf) {
+        this(ScreenHandlers.EMC_CONDENSER, e, new CompatInventory(92), buf);
     }
 
-    public EMCCondenserScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ICompatInventory inventory, PacketByteBuf buf) {
-        this(type, syncId, playerInventory, null, inventory, ItemStack.EMPTY);
+    public EMCCondenserScreenHandler(ScreenHandlerType<?> type, CreateMenuEvent e, ICompatInventory inventory, PacketByteBuf buf) {
+        this(type, e, null, inventory, ItemStack.EMPTY);
         int x, y, z;
         x = PacketByteUtil.readInt(buf);
         y = PacketByteUtil.readInt(buf);
         z = PacketByteUtil.readInt(buf);
 
-        Player player = new Player(playerInventory.player);
-
-        tile = (EMCCondenserTile) WorldUtil.getBlockEntity(player.getWorld(), PosUtil.flooredBlockPos(x, y, z));
+        tile = e.getWorldM().getBlockEntity(BlockPos.of(x, y, z)).getCompatBlockEntity(EMCCondenserTile.class);
         storedEMC = PacketByteUtil.readLong(buf) - tile.storedEMC;
         maxEMC = PacketByteUtil.readLong(buf);
 
         targetStack = ItemStack.of(PacketByteUtil.readItemStack(buf));
     }
 
-    public EMCCondenserScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable EMCCondenserTile tile, ICompatInventory inventory, ItemStack targetStack) {
-        this(ScreenHandlers.EMC_CONDENSER, syncId, playerInventory, tile, inventory, targetStack);
+    public EMCCondenserScreenHandler(CreateMenuEvent e, @Nullable EMCCondenserTile tile, ICompatInventory inventory, ItemStack targetStack) {
+        this(ScreenHandlers.EMC_CONDENSER, e, tile, inventory, targetStack);
     }
 
-    public EMCCondenserScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, @Nullable EMCCondenserTile tile, ICompatInventory inventory, ItemStack targetStack) {
-        super(type, syncId);
+    public EMCCondenserScreenHandler(ScreenHandlerType<?> type, CreateMenuEvent e, @Nullable EMCCondenserTile tile, ICompatInventory inventory, ItemStack targetStack) {
+        super(type, e.syncId);
 
         this.inventory = inventory;
-        this.playerInventory = playerInventory;
+        this.playerInventory = e.getCompatPlayerInventory();
         this.tile = tile;
         this.targetStack = targetStack;
 
@@ -67,8 +66,8 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     }
 
     public void initSlots() {
-        addPlayerMainInventorySlots(playerInventory, 48, 154);
-        addPlayerHotbarSlots(playerInventory, 48, 212);
+        addPlayerMainInventorySlots(playerInventory.getRaw(), 48, 154);
+        addPlayerHotbarSlots(playerInventory.getRaw(), 48, 212);
         addTargetSlot(inventory, 0, 12, 6);
         addStorageSlots(inventory, 1, 12, 26, -1, 13, 7);
     }
