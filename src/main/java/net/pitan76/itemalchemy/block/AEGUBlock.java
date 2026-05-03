@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.pitan76.itemalchemy.item.Wrench;
@@ -20,6 +19,7 @@ import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 import net.pitan76.mcpitanlib.midohra.block.BlockState;
+import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityWrapper;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,10 +27,10 @@ public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider,
     public static BooleanProperty CONNECTED = BooleanProperty.of("connected");
     public long emc;
 
-    protected CompatMapCodec<? extends Block> CODEC = CompatBlockMapCodecUtil.createCodec(AEGUBlock::new);
+    protected CompatMapCodec<? extends CompatBlock> CODEC = CompatBlockMapCodecUtil.createCodec(AEGUBlock::new);
 
     @Override
-    public CompatMapCodec<? extends Block> getCompatCodec() {
+    public CompatMapCodec<? extends CompatBlock> getCompatCodec() {
         return CODEC;
     }
 
@@ -82,10 +82,12 @@ public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider,
         BlockPos pos = AEGUTile.getNearEMCCondenserPos(e.getMidohraWorld(), e.getMidohraPos());
         if (pos == null) return e.fail();
 
-        BlockEntity blockEntity = e.getBlockEntity();
-        if (blockEntity instanceof EMCCondenserTile) {
-            EMCCondenserTile tile = (EMCCondenserTile) blockEntity;
-            if (e.isClient()) return e.success();
+        BlockEntityWrapper blockEntity = e.getBlockEntityWrapper();
+        if (blockEntity.instanceOf(EMCCondenserTile.class)) {
+            EMCCondenserTile tile = blockEntity.getCompatBlockEntity(EMCCondenserTile.class);
+            if (e.isClient())
+                return e.success();
+
             e.player.openExtendedMenu(tile);
             return e.consume();
         }

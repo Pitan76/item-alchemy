@@ -1,9 +1,8 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.block.Block;
 import java.util.List;
+
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
 import net.pitan76.itemalchemy.sound.Sounds;
 import net.pitan76.itemalchemy.util.ItemCharge;
 import net.pitan76.itemalchemy.util.ItemUtils;
@@ -19,6 +18,7 @@ import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
 import net.pitan76.mcpitanlib.api.state.property.CompatProperties;
+import net.pitan76.mcpitanlib.api.text.TextComponent;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.block.BlockUtil;
 import net.pitan76.mcpitanlib.core.Dummy;
@@ -30,26 +30,31 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PhilosopherStone extends CompatItem implements FixedRecipeRemainderItem, ItemCharge {
-    public static Map<Block, Block> exchange_map = new HashMap<>();
-    public static Map<Block, Block> shift_exchange_map = new HashMap<>();
+    public static Map<BlockWrapper, BlockWrapper> exchange_map = new HashMap<>();
+    public static Map<BlockWrapper, BlockWrapper> shift_exchange_map = new HashMap<>();
 
-    public static void addExchangeInMap(Block target, Block replace) {
+    public static void addExchangeInMap(BlockWrapper target, BlockWrapper replace) {
         exchange_map.put(target, replace);
+    }
+
+    public static void addExchangeInMap(net.minecraft.block.Block target, net.minecraft.block.Block replace) {
+        addExchangeInMap(BlockWrapper.of(target), BlockWrapper.of(replace));
     }
 
     // 賢者の石の等価変換に追加する
     public static boolean addExchangeInMap(CompatIdentifier target, CompatIdentifier replace) {
         if (BlockUtil.isExist(target) && BlockUtil.isExist(replace)) {
-            addExchangeInMap(BlockUtil.fromId(target), BlockUtil.fromId(replace));
+            addExchangeInMap(BlockWrapper.of(target), BlockWrapper.of(replace));
             return true;
         }
 
         return false;
     }
 
-    public static boolean addExchangeInMap(Identifier target, Identifier replace) {
+    public static boolean addExchangeInMap(net.minecraft.util.Identifier target, net.minecraft.util.Identifier replace) {
         return addExchangeInMap(CompatIdentifier.fromMinecraft(target), CompatIdentifier.fromMinecraft(replace));
     }
 
@@ -57,9 +62,13 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
         return addExchangeInMap(CompatIdentifier.of(target), CompatIdentifier.of(replace));
     }
 
-    public static boolean addShiftExchangeInMap(Block target, Block replace) {
+    public static boolean addShiftExchangeInMap(BlockWrapper target, BlockWrapper replace) {
         shift_exchange_map.put(target, replace);
         return true;
+    }
+
+    public static boolean addShiftExchangeInMap(net.minecraft.block.Block target, net.minecraft.block.Block replace) {
+        return addShiftExchangeInMap(BlockWrapper.of(target), BlockWrapper.of(replace));
     }
 
     public static boolean addShiftExchangeInMap(CompatIdentifier target, CompatIdentifier replace) {
@@ -154,11 +163,10 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
 
         List<BlockPos> blocks = WorldUtils.getTargetBlocks(world, pos, ItemUtils.getCharge(e.stack), true, true);
 
-        Block replaceBlock = getExchangeBlock(state.getBlock(), player.isSneaking());
-        BlockState replaceState = BlockState.of(replaceBlock);
-
+        BlockWrapper replaceBlock = getExchangeBlock(state.getBlock(), player.isSneaking());
         if (replaceBlock == null)
             return e.success();
+        BlockState replaceState = replaceBlock.getDefaultState();
 
         blocks.forEach(pos2 -> exchangeBlock(world, pos2, replaceState, world.getBlockState(pos)));
 
@@ -198,7 +206,11 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
     }
 
     @Nullable
-    public static Block getExchangeBlock(Block target, boolean isSneaking) {
+    public static net.minecraft.block.Block getExchangeBlock(net.minecraft.block.Block target, boolean isSneaking) {
+        return getExchangeBlock(BlockWrapper.of(target), isSneaking).get();
+    }
+
+    public static BlockWrapper getExchangeBlock(BlockWrapper target, boolean isSneaking) {
         if (isSneaking) {
             if (shift_exchange_map.containsKey(target)) {
                 return shift_exchange_map.get(target);
@@ -212,16 +224,12 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
         return null;
     }
 
-    public static Block getExchangeBlock(BlockWrapper target, boolean isSneaking) {
-        return getExchangeBlock(target.get(), isSneaking);
-    }
-
-    public static boolean isExchange(Block block) {
-        return exchange_map.containsKey(block) || shift_exchange_map.containsKey(block);
+    public static boolean isExchange(net.minecraft.block.Block block) {
+        return isExchange(BlockWrapper.of(block));
     }
 
     public static boolean isExchange(BlockWrapper block) {
-        return isExchange(block.get());
+        return exchange_map.containsKey(block) || shift_exchange_map.containsKey(block);
     }
 
     @Override
@@ -236,7 +244,7 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
 
     @Override
     public void appendTooltip(ItemAppendTooltipEvent e) {
-        ItemStack stack = e.getStack();
-        e.addTooltip(TooltipUtil.generateTooltipLines(ItemStackUtil.getItem(stack)));
+        e.addTooltip(TooltipUtil.generateTooltipLines(e.getStackM().getItem())
+                .stream().map(TextComponent::getText).collect(Collectors.toList()));
     }
 }

@@ -1,11 +1,9 @@
 package net.pitan76.itemalchemy.util;
 
-import net.minecraft.item.Item;
-import net.minecraft.text.Text;
+import net.pitan76.mcpitanlib.api.text.CompatStyle;
+import net.pitan76.mcpitanlib.api.text.TextComponent;
 import net.pitan76.mcpitanlib.api.util.PlatformUtil;
-import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.client.LanguageUtil;
-import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 import net.pitan76.mcpitanlib.midohra.item.ItemWrapper;
 import org.lwjgl.glfw.GLFW;
 
@@ -37,8 +35,8 @@ public class TooltipUtil {
      * @param translationKey The base translation key for the item, used to look up both basic and shift descriptions.
      * @return A list of Text objects representing the tooltip lines to be displayed.
      */
-    public static List<Text> generateTooltipLines(String translationKey) {
-        List<Text> tooltipLines = new ArrayList<>();
+    public static List<TextComponent> generateTooltipLines(String translationKey) {
+        List<TextComponent> tooltipLines = new ArrayList<>();
 
         if (!PlatformUtil.isClient()) return tooltipLines;
 
@@ -49,7 +47,7 @@ public class TooltipUtil {
                 String shiftText = LanguageUtil.translate(shiftKey);
                 List<String> lines = splitTooltipText(shiftText);
                 for (String line : lines) {
-                    tooltipLines.add(TextUtil.literal(line));
+                    tooltipLines.add(TextComponent.literal(line));
                 }
             }
         } else {
@@ -59,22 +57,22 @@ public class TooltipUtil {
                 String descText = LanguageUtil.translate(descKey);
                 List<String> descLines = splitTooltipText(descText);
                 for (String line : descLines) {
-                    tooltipLines.add(TextUtil.literal(line));
+                    tooltipLines.add(TextComponent.literal(line));
                 }
             }
 
-            tooltipLines.add(TextUtil.withColor(TextUtil.translatable("text.itemalchemy.shift_info"), 0x555555));
+            tooltipLines.add(TextComponent.translatable("text.itemalchemy.shift_info").setStyle(CompatStyle.of().withColor(0x555555)));
         }
 
         return tooltipLines;
     }
 
-    public static List<Text> generateTooltipLines(Item item) {
-        String translationKey = ItemUtil.getTranslationKey(item);
-        return generateTooltipLines(translationKey);
-    }
+//    public static List<TextComponent> generateTooltipLines(Item item) {
+//        String translationKey = ItemUtil.getTranslationKey(item);
+//        return generateTooltipLines(translationKey);
+//    }
 
-    public static List<Text> generateTooltipLines(ItemWrapper item) {
+    public static List<TextComponent> generateTooltipLines(ItemWrapper item) {
         String translationKey = item.getTranslationKey();
         return generateTooltipLines(translationKey);
     }
@@ -91,10 +89,8 @@ public class TooltipUtil {
         // Split on custom delimiter ||| using manual parsing
         int start = 0;
         int delimiterIndex;
-        boolean foundDelimiter = false;
 
         while ((delimiterIndex = text.indexOf("|||", start)) != -1) {
-            foundDelimiter = true;
             String line = text.substring(start, delimiterIndex);
             if (!line.trim().isEmpty()) {
                 lines.add(line);

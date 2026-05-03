@@ -4,8 +4,6 @@ import net.pitan76.itemalchemy.block.pedestal.IPedestalItem;
 import net.pitan76.itemalchemy.tile.DMPedestalTile;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.registry.CompatRegistryLookup;
-import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
-import net.pitan76.mcpitanlib.api.util.world.TickerUtil;
 import net.pitan76.mcpitanlib.midohra.block.BlockState;
 import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityWrapper;
 import net.pitan76.mcpitanlib.midohra.entity.EntityWrapper;
@@ -51,11 +49,10 @@ public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem 
         BlockPos max = box.getMaxPos();
 
         for (BlockPos pos : BlockPos.iterate(min, max)) {
-            BlockEntityWrapper be = world.getBlockEntity(pos);
-            if (be.isPresent() && !be.isRemoved() && !(be.get() instanceof DMPedestalTile)) {
-                BlockState state = world.getBlockState(pos);
+            BlockEntityWrapper blockEntity = world.getBlockEntity(pos);
+            if (blockEntity.isPresent() && !blockEntity.isRemoved() && !blockEntity.instanceOf(DMPedestalTile.class)) {
                 for (int i = 0; i < BONUS_TICKS; i++) {
-                    TickerUtil.tick(be, world, pos, state);
+                    blockEntity.tick();
                 }
             }
         }
@@ -71,7 +68,7 @@ public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem 
 
         for (BlockPos pos : BlockPos.iterate(min, max)) {
             BlockState state = world.getBlockState(pos);
-            if (BlockStateUtil.hasRandomTicks(state)) {
+            if (state.hasRandomTicks()) {
                 for (int i = 0; i < BONUS_TICKS; i++) {
                     state.randomTick(serverWorld, pos);
                 }

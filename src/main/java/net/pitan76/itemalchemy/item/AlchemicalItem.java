@@ -1,13 +1,12 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
 import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.client.LanguageUtil;
-import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +25,8 @@ public class AlchemicalItem extends CompatItem {
 
     @Override
     public void appendTooltip(ItemAppendTooltipEvent e) {
-        ItemStack stack = e.getStack();
-        String translationKey = ItemUtil.getTranslationKey(stack.getItem());
+        ItemStack stack = e.getStackM();
+        String translationKey = stack.getItem().getTranslationKey();
         
         // Check if shift is being held
         if (TooltipUtil.hasShiftDown()) {

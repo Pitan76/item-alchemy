@@ -34,7 +34,7 @@ public class BlockRenderer implements BeforeBlockOutlineListener {
         if (hitResult.getRaw() == null) return true;
         if (!e.isBlockType()) return true;
 
-        Optional<ItemStack> optionalStack = player.getCurrentHandItem().map(ItemStack::of); // TODO: Midohra getCurrentHandItem()
+        Optional<ItemStack> optionalStack = player.getCurrentHandItemM();
         if (!optionalStack.isPresent()) return true;
         ItemStack stack = optionalStack.get();
 

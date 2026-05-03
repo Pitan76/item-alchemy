@@ -10,8 +10,11 @@ import net.pitan76.mcpitanlib.api.item.args.tool.SuitableForArgs;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.v3.tool.CompatSwordItem;
+import net.pitan76.mcpitanlib.api.text.TextComponent;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+
+import java.util.stream.Collectors;
 
 public class AlchemicalSword extends CompatSwordItem implements IRechargeableFromKlein {
     public AlchemicalSword(CompatibleToolMaterial toolMaterial, int attackDamage, float attackSpeed, CompatibleItemSettings settings) {
@@ -29,7 +32,8 @@ public class AlchemicalSword extends CompatSwordItem implements IRechargeableFro
     @Override
     public void appendTooltip(ItemAppendTooltipEvent e, Options options) {
         ItemStack stack = e.getStackM();
-        e.addTooltip(TooltipUtil.generateTooltipLines(stack.getItem()));
+        e.addTooltip(TooltipUtil.generateTooltipLines(stack.getItem())
+                .stream().map(TextComponent::getText).collect(Collectors.toList()));
     }
 
     @Override

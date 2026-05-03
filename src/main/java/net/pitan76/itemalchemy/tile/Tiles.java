@@ -1,11 +1,12 @@
 package net.pitan76.itemalchemy.tile;
 
+import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.mcpitanlib.api.tile.v2.BlockEntityTypeBuilder;
 import net.pitan76.mcpitanlib.midohra.block.entity.TypedBlockEntityTypeWrapper;
+import net.pitan76.mcpitanlib.midohra.registry.MidohraRegistry;
 
 import static net.pitan76.itemalchemy.ItemAlchemy._id;
-import static net.pitan76.itemalchemy.ItemAlchemy.registry;
 
 public class Tiles {
     public static TypedBlockEntityTypeWrapper<EMCCollectorTile> EMC_COLLECTOR;
@@ -20,6 +21,8 @@ public class Tiles {
     public static TypedBlockEntityTypeWrapper<DMPedestalTile> DM_PEDESTAL;
 
     public static void init() {
+        MidohraRegistry registry = ItemAlchemy.registry.getMidohraRegistryV1();
+
         EMC_COLLECTOR = registry.registerBlockEntityType(_id("emc_collector"), BlockEntityTypeBuilder.create(EMCCollectorTile::new, list -> {
             list.add(Blocks.EMC_COLLECTOR_MK1.get());
             list.add(Blocks.EMC_COLLECTOR_MK2.get());

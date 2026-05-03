@@ -1,7 +1,5 @@
 package net.pitan76.itemalchemy.item;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
@@ -9,13 +7,17 @@ import net.pitan76.mcpitanlib.api.event.item.ItemUseEvent;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseOnBlockEvent;
 import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.text.TextComponent;
 import net.pitan76.mcpitanlib.api.util.*;
-import net.pitan76.mcpitanlib.api.util.block.BlockUtil;
+import net.pitan76.mcpitanlib.midohra.block.BlockWrapper;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.util.math.Direction;
 import net.pitan76.mcpitanlib.midohra.world.World;
 
-public class DiviningRod extends CompatItem  {
+import java.util.stream.Collectors;
+
+public class DiviningRod extends CompatItem {
 
     public final int maxLevel;
 
@@ -37,13 +39,13 @@ public class DiviningRod extends CompatItem  {
 
         // スニークしている場合、レベルを変更する、最大をこえるとレベル1に戻る
         if (e.isSneaking()) {
-            ItemStack stack = e.getStack();
+            ItemStack stack = e.getStackM();
             int level = 1;
-            if (CustomDataUtil.contains(stack, "divining_rod_level")) {
-                level = CustomDataUtil.get(stack, "divining_rod_level", Integer.class) + 1;
+            if (stack.hasCustomNbt("divining_rod_level")) {
+                level = stack.getCustomNbt("divining_rod_level", Integer.class) + 1;
                 if (level > maxLevel) level = 1;
             }
-            CustomDataUtil.put(stack, "divining_rod_level", level);
+            stack.putCustomNbt("divining_rod_level", level);
             e.getPlayer().sendMessage(TextUtil.translatable("message.itemalchemy.diving_rod_switch_mode", "3x3x" + (3 + getAdditionalDepth(level))));
 
             return e.success();
@@ -62,9 +64,9 @@ public class DiviningRod extends CompatItem  {
 
         // 1より最大レベルが高い場合、プレイヤーの持っている杖のNBTにあるレベルに応じて、調査するブロックの範囲を広げる
         if (maxLevel > 1) {
-            ItemStack stack = e.getStack();
-            if (CustomDataUtil.contains(stack, "divining_rod_level")) {
-                int level = CustomDataUtil.get(stack, "divining_rod_level", Integer.class);
+            ItemStack stack = e.getStackM();
+            if (stack.hasCustomNbt("divining_rod_level")) {
+                int level = stack.getCustomNbt("divining_rod_level", Integer.class);
                 int depth = getAdditionalDepth(level);
 
                 Direction dir = Direction.of(e.getSide()); // TODO: Midohra Direction getSideM
@@ -95,8 +97,8 @@ public class DiviningRod extends CompatItem  {
                     BlockPos checkPos = center.add(dx, dy, dz);
                     if (world.isAir(checkPos)) continue;
 
-                    Block block = world.getBlock(checkPos);
-                    long emc = EMCManager.get(BlockUtil.toItem(block));
+                    BlockWrapper block = world.getBlockState(checkPos).getBlock();
+                    long emc = EMCManager.get(block.asItem());
 
                     if (emc > maxEMC)
                         maxEMC = emc;
@@ -119,13 +121,13 @@ public class DiviningRod extends CompatItem  {
         if (e.isClient()) return super.onRightClick(e);
 
         if (e.isSneaking()) {
-            ItemStack stack = e.getStack();
+            ItemStack stack = e.getStackM();
             int level = 1;
-            if (CustomDataUtil.contains(stack, "divining_rod_level")) {
-                level = CustomDataUtil.get(stack, "divining_rod_level", Integer.class) + 1;
+            if (stack.hasCustomNbt("divining_rod_level")) {
+                level = stack.getCustomNbt("divining_rod_level", Integer.class) + 1;
                 if (level > maxLevel) level = 1;
             }
-            CustomDataUtil.put(stack, "divining_rod_level", level);
+            stack.putCustomNbt("divining_rod_level", level);
             e.user.sendMessage("Divining Rod Level: " + level + " (3x3x" + (3 + getAdditionalDepth(level)) + ")");
 
             return e.success();
@@ -136,11 +138,12 @@ public class DiviningRod extends CompatItem  {
 
     @Override
     public void appendTooltip(ItemAppendTooltipEvent e) {
-        ItemStack stack = e.getStack();
-        e.addTooltip(TooltipUtil.generateTooltipLines(ItemStackUtil.getItem(stack)));
+        ItemStack stack = e.getStackM();
+        e.addTooltip(TooltipUtil.generateTooltipLines(stack.getItem())
+                .stream().map(TextComponent::getText).collect(Collectors.toList()));
         
-        if (CustomDataUtil.contains(stack, "divining_rod_level")) {
-            int level = CustomDataUtil.get(stack, "divining_rod_level", Integer.class);
+        if (stack.hasCustomNbt("divining_rod_level")) {
+            int level = stack.getCustomNbt("divining_rod_level", Integer.class);
             e.addTooltip(TextUtil.literal("Mode: §b3x3x" + (3 + getAdditionalDepth(level))));
         } else {
             e.addTooltip(TextUtil.literal("Mode: §b3x3x3"));

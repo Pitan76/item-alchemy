@@ -11,8 +11,11 @@ import net.pitan76.mcpitanlib.api.item.args.tool.SuitableForArgs;
 import net.pitan76.mcpitanlib.api.item.tool.CompatibleToolMaterial;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.v3.tool.CompatAxeItem;
+import net.pitan76.mcpitanlib.api.text.TextComponent;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+
+import java.util.stream.Collectors;
 
 public class AlchemicalAxe extends CompatAxeItem implements IRechargeableFromKlein {
     public AlchemicalAxe(CompatibleToolMaterial toolMaterial, float attackDamage, float attackSpeed, CompatibleItemSettings settings) {
@@ -22,7 +25,8 @@ public class AlchemicalAxe extends CompatAxeItem implements IRechargeableFromKle
     @Override
     public void appendTooltip(ItemAppendTooltipEvent e, Options options) {
         ItemStack stack = e.getStackM();
-        e.addTooltip(TooltipUtil.generateTooltipLines(stack.getItem()));
+        e.addTooltip(TooltipUtil.generateTooltipLines(stack.getItem())
+                .stream().map(TextComponent::getText).collect(Collectors.toList()));
     }
 
     @Override

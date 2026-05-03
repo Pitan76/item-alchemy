@@ -9,11 +9,14 @@ import net.pitan76.mcpitanlib.api.event.item.InventoryTickEvent;
 import net.pitan76.mcpitanlib.api.item.ArmorEquipmentType;
 import net.pitan76.mcpitanlib.api.item.CompatibleArmorItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.text.TextComponent;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.EntityUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.StatusEffectUtil;
 import net.pitan76.mcpitanlib.midohra.world.World;
+
+import java.util.stream.Collectors;
 
 public class RedMatterArmor extends CompatibleArmorItem {
 
@@ -33,7 +36,8 @@ public class RedMatterArmor extends CompatibleArmorItem {
 
     @Override
     public void appendTooltip(net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent e, Options options) {
-        e.addTooltip(TooltipUtil.generateTooltipLines(ItemStackUtil.getItem(e.getStack())));
+        e.addTooltip(TooltipUtil.generateTooltipLines(e.getStackM().getItem())
+                .stream().map(TextComponent::getText).collect(Collectors.toList()));
     }
 
     @Override

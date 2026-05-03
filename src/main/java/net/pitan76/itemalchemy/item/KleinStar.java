@@ -9,10 +9,13 @@ import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseEvent;
 import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.text.TextComponent;
 import net.pitan76.mcpitanlib.api.util.StackActionResult;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
+
+import java.util.stream.Collectors;
 
 public class KleinStar extends CompatItem {
 
@@ -139,7 +142,8 @@ public class KleinStar extends CompatItem {
     @Override
     public void appendTooltip(ItemAppendTooltipEvent e) {
         ItemStack stack = e.getStackM();
-        e.addTooltip(TooltipUtil.generateTooltipLines(stack.getItem()));
+        e.addTooltip(TooltipUtil.generateTooltipLines(stack.getItem())
+                .stream().map(TextComponent::getText).collect(Collectors.toList()));
         
         long stored = getStoredEmc(stack);
         long max = getMaxEmc();

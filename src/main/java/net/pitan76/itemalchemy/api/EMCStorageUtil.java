@@ -1,15 +1,14 @@
 package net.pitan76.itemalchemy.api;
 
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.pitan76.itemalchemy.block.EMCBattery;
 import net.pitan76.itemalchemy.block.EMCRepeater;
 import net.pitan76.itemalchemy.tile.base.EMCStorageBlockEntity;
-import net.pitan76.mcpitanlib.api.util.BlockEntityUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityWrapper;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
+import net.pitan76.mcpitanlib.midohra.world.World;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class EMCStorageUtil {
@@ -19,8 +18,8 @@ public class EMCStorageUtil {
         for (BlockPos pos : blockPoses) {
             if (emcRepeaterPosList.contains(pos)) continue;
 
-            if (WorldUtil.getBlockState(world, pos).getBlock() instanceof EMCRepeater) {
-                if (WorldUtil.getBlockState(world, pos).getBlock() instanceof EMCBattery && !blockPosList.contains(pos))
+            if (world.getBlockState(pos).getBlock().instanceOf(EMCRepeater.class)) {
+                if (world.getBlockState(pos).getBlock().instanceOf(EMCBattery.class) && !blockPosList.contains(pos))
                     blockPosList.add(pos);
 
                 emcRepeaterPosList.add(pos);
@@ -51,11 +50,12 @@ public class EMCStorageUtil {
 
         BlockPos[] nearPoses = {pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()};
         for (BlockPos nearPos : getNearPoses(world, nearPoses)) {
-            if (!WorldUtil.hasBlockEntity(world, nearPos)) continue;
+//            if (!world.hasBlockEntity(nearPos)) continue; // TODO: world.hasBlockEntity
+            BlockEntityWrapper nearTile = world.getBlockEntity(nearPos);
+            if (nearTile.isEmpty()) continue;
 
-            BlockEntity nearTile = WorldUtil.getBlockEntity(world, nearPos);
-            if (nearTile instanceof EMCStorageBlockEntity) {
-                emcStorageBlockEntities.add((EMCStorageBlockEntity) nearTile);
+            if (nearTile.instanceOf(EMCStorageBlockEntity.class)) {
+                emcStorageBlockEntities.add(nearTile.getCompatBlockEntity(EMCStorageBlockEntity.class));
             }
         }
 
@@ -98,8 +98,8 @@ public class EMCStorageUtil {
         if (emcStorage == null) return false;
         if (!emcStorage.canInsert()) return false;
 
-        World world = BlockEntityUtil.getWorld(emcStorage);
-        BlockPos pos = BlockEntityUtil.getPos(emcStorage);
+        World world = emcStorage.getMidohraWorld();
+        BlockPos pos = emcStorage.getMidohraPos();
 
         boolean result = false;
 
@@ -118,7 +118,7 @@ public class EMCStorageUtil {
     /**
      * Transfer all EMC from one EMCStorageBlockEntity to another EMCStorageBlockEntity
      *
-     * @param emcStorage EMCStorageBlockEntity to transfer EMC
+     * @param emcStorage   EMCStorageBlockEntity to transfer EMC
      * @param ignoreActive ignore active state
      * @return true if EMC is transferred successfully
      */
@@ -134,5 +134,14 @@ public class EMCStorageUtil {
      */
     public static boolean transferAllEMC(EMCStorageBlockEntity emcStorage) {
         return transferAllEMC(emcStorage, false);
+    }
+
+    public static List<BlockPos> getNearPoses(net.minecraft.world.World world, net.minecraft.util.math.BlockPos[] blockPoses) {
+        return getNearPoses(World.of(world),
+                Arrays.stream(blockPoses).map(BlockPos::of).toArray(BlockPos[]::new));
+    }
+
+    public static List<EMCStorageBlockEntity> getNearEMCStorages(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos) {
+        return getNearEMCStorages(World.of(world), BlockPos.of(pos));
     }
 }

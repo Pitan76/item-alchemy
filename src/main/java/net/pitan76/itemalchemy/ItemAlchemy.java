@@ -26,14 +26,14 @@ import net.pitan76.mcpitanlib.api.event.v2.ItemEventRegistry;
 import net.pitan76.mcpitanlib.api.registry.v2.CompatRegistryV2;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.Logger;
-import net.pitan76.mcpitanlib.midohra.registry.MidohraRegistry;
+import net.pitan76.mcpitanlib.midohra.registry.MidohraRegistryV2;
 
 public class ItemAlchemy extends CommonModInitializer {
 
     public static final String MOD_ID = "itemalchemy";
     public static final String MOD_NAME = "ItemAlchemy";
 
-    public static MidohraRegistry registry;
+    public static MidohraRegistryV2 registry;
     public static CompatRegistryV2 registry2;
 
     public static ItemAlchemy INSTANCE;
@@ -43,7 +43,7 @@ public class ItemAlchemy extends CommonModInitializer {
     public void init() {
         INSTANCE = this;
         registry2 = super.registry;
-        registry = MidohraRegistry.of(super.registry);
+        registry = MidohraRegistryV2.of(super.registry);
         logger = super.logger;
 
         ItemAlchemyConfig.initOnce();

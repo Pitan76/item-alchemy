@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.text.Text;
@@ -17,7 +16,6 @@ import net.pitan76.mcpitanlib.api.state.property.CompatProperties;
 import net.pitan76.mcpitanlib.api.state.property.DirectionProperty;
 import net.pitan76.mcpitanlib.api.util.CompatActionResult;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
-import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
@@ -31,10 +29,10 @@ public class EMCBattery extends EMCRepeater implements ExtendBlockEntityProvider
 
     public long maxEMC = 100_000;
 
-    protected CompatMapCodec<? extends Block> CODEC = CompatBlockMapCodecUtil.createCodec(EMCBattery::new);
+    protected CompatMapCodec<? extends EMCRepeater> CODEC = CompatBlockMapCodecUtil.createCodec(EMCBattery::new);
 
     @Override
-    public CompatMapCodec<? extends Block> getCompatCodec() {
+    public CompatMapCodec<? extends EMCRepeater> getCompatCodec() {
         return CODEC;
     }
 
