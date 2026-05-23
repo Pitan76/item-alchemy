@@ -19,6 +19,11 @@ This MOD adds philosopher's stone etc. which can be equivalently exchanged with 
 - [Designer] Murderman25 Provided the textures
 - [Translator] 54sda Translated to Chinese (zh_cn.json)
 
+- 54sda zh_cn.json
+- Pitan ja_jp.json, en_us.json
+- OffsetMonkey538 en_us.json
+- mikkelchokolate ru_ru.json
+
 ## Developing an Add-on
 
 ### Maven

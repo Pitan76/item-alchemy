@@ -2,13 +2,10 @@ package net.pitan76.itemalchemy.emc.generator;
 
 import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
-import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
-import net.pitan76.mcpitanlib.midohra.recipe.Ingredient;
 import net.pitan76.mcpitanlib.midohra.recipe.Recipe;
 import net.pitan76.mcpitanlib.midohra.recipe.RecipeType;
 import net.pitan76.mcpitanlib.midohra.recipe.entry.RecipeEntry;
-import net.pitan76.mcpitanlib.midohra.recipe.input.RecipeInputOrInventory;
 import net.pitan76.mcpitanlib.midohra.world.ServerWorld;
 
 import java.util.ArrayList;
