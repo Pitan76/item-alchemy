@@ -17,7 +17,7 @@ public class TeamUtil {
         if (player.isClient())
             return false;
 
-        ServerState serverState = ServerState.getServerState(player.getMidohraWorld().getMCServer());
+        ServerState serverState = ServerState.getServerState(player.getServer());
 
         Optional<PlayerState> playerState = serverState.getPlayer(player.getUUID());
 
@@ -36,7 +36,7 @@ public class TeamUtil {
     public static boolean joinTeam(Player player, String teamName) {
         if (player.isClient()) return false;
 
-        ServerState serverState = ServerState.getServerState(player.getMidohraWorld().getMCServer());
+        ServerState serverState = ServerState.getServerState(player.getServer());
 
         Optional<TeamState> teamState = serverState.getTeamByName(teamName);
 
@@ -47,7 +47,7 @@ public class TeamUtil {
     public static boolean joinTeam(Player player, UUID teamUUID) {
         if (player.isClient()) return false;
 
-        ServerState serverState = ServerState.getServerState(player.getMidohraWorld().getMCServer());
+        ServerState serverState = ServerState.getServerState(player.getServer());
 
         Optional<PlayerState> playerState = serverState.getPlayer(player.getUUID());
 

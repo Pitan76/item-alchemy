@@ -40,7 +40,7 @@ public class PlayerRegisteredItemUtil {
     }
 
     public static void setItemsForString(Player player, List<String> list) {
-        MCServer server = player.getMidohraWorld().getMCServer();
+        MCServer server = player.getServer();
         Optional<TeamState> teamState = ModState.getModState(server).getTeamByPlayer(player.getUUID());
         if (!teamState.isPresent()) return;
 

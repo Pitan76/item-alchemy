@@ -29,6 +29,7 @@ import net.pitan76.mcpitanlib.api.util.inventory.InventoryWrapper;
 import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityTypeWrapper;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 import net.pitan76.mcpitanlib.midohra.network.CompatPacketByteBuf;
+import net.pitan76.mcpitanlib.midohra.network.PacketByteBuf;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -217,7 +218,7 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
 
     @Override
     public void writeExtraData(ExtraDataArgs args) {
-        CompatPacketByteBuf buf = args.getCompatBuf();
+        PacketByteBuf buf = args.getCompatBuf().toMidohra();
         BlockPos pos = getMidohraPos();
 
         buf.writeInt( pos.getX());
@@ -225,7 +226,7 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
         buf.writeInt(pos.getZ());
         buf.writeLong(storedEMC);
         buf.writeLong(maxEMC);
-        buf.writeItemStack(getTargetStack().toMinecraft()); // TODO: MidohraのItemStackを対応させる
+        buf.writeItemStack(getTargetStack());
     }
 
     public void setTargetStack(ItemStack stack) {

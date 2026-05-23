@@ -24,8 +24,8 @@ public class AlchemyChestScreenHandler extends SimpleScreenHandler {
 
         this.inventory = inventory;
         this.playerInventory = e.getCompatPlayerInventory();
-        addPlayerMainInventorySlots(playerInventory.getRaw(), 48, 154);
-        addPlayerHotbarSlots(playerInventory.getRaw(), 48, 212);
+        addPlayerMainInventorySlots(playerInventory, 48, 154);
+        addPlayerHotbarSlots(playerInventory, 48, 212);
         addSlots(inventory, 0, 12, 8, -1, 13, 8);
     }
 

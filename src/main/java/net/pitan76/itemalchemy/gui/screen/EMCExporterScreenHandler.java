@@ -1,7 +1,6 @@
 package net.pitan76.itemalchemy.gui.screen;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.slot.Slot;
 import net.pitan76.itemalchemy.gui.slot.FilterSlot;
 import net.pitan76.itemalchemy.tile.EMCExporterTile;
@@ -9,11 +8,11 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
 import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
 import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
-import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatPlayerInventory;
 import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
+import net.pitan76.mcpitanlib.midohra.network.PacketByteBuf;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,17 +25,17 @@ public class EMCExporterScreenHandler extends ExtendedScreenHandler {
     public EMCExporterScreenHandler(CreateMenuEvent e, PacketByteBuf buf) {
         this(e, null, new CompatInventory(9));
 
-        int x = PacketByteUtil.readInt(buf);
-        int y = PacketByteUtil.readInt(buf);
-        int z = PacketByteUtil.readInt(buf);
+        int x = buf.readInt();
+        int y = buf.readInt();
+        int z = buf.readInt();
 
         tile = e.getWorldM().getBlockEntity(BlockPos.of(x, y, z)).getCompatBlockEntity(EMCExporterTile.class);
 
-        if (PacketByteUtil.readBoolean(buf)) {
-            tile.teamUUID = PacketByteUtil.readUuid(buf);
+        if (buf.readBool()) {
+            tile.teamUUID = buf.toCompat().readUuid();
 
-            if (PacketByteUtil.readBoolean(buf)) {
-                ownerName = PacketByteUtil.readString(buf);
+            if (buf.readBool()) {
+                ownerName = buf.readString();
             }
         }
     }
@@ -47,8 +46,8 @@ public class EMCExporterScreenHandler extends ExtendedScreenHandler {
         this.filter = filter;
         this.playerInventory = e.getCompatPlayerInventory();
         this.tile = tile;
-        addPlayerMainInventorySlots(playerInventory.getRaw(), 8, 102);
-        addPlayerHotbarSlots(playerInventory.getRaw(), 8, 160);
+        addPlayerMainInventorySlots(playerInventory, 8, 102);
+        addPlayerHotbarSlots(playerInventory, 8, 160);
         
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {

@@ -34,6 +34,7 @@ public class ExtractInventory extends CompatInventory {
     }
 
     public void placeExtractSlots() {
+        if (!player.isServerPlayerEntity()) return;
         TeamState teamState = ModState
                 .getModState(player.getServer())
                 .getTeamByPlayer(player.getUUID())

@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.gui.screen;
 
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.pitan76.itemalchemy.EMCManager;
@@ -11,12 +10,12 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
 import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
 import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
-import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatPlayerInventory;
 import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+import net.pitan76.mcpitanlib.midohra.network.PacketByteBuf;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,15 +38,15 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     public EMCCondenserScreenHandler(ScreenHandlerType<?> type, CreateMenuEvent e, ICompatInventory inventory, PacketByteBuf buf) {
         this(type, e, null, inventory, ItemStack.EMPTY);
         int x, y, z;
-        x = PacketByteUtil.readInt(buf);
-        y = PacketByteUtil.readInt(buf);
-        z = PacketByteUtil.readInt(buf);
+        x = buf.readInt();
+        y = buf.readInt();
+        z = buf.readInt();
 
         tile = e.getWorldM().getBlockEntity(BlockPos.of(x, y, z)).getCompatBlockEntity(EMCCondenserTile.class);
-        storedEMC = PacketByteUtil.readLong(buf) - tile.storedEMC;
-        maxEMC = PacketByteUtil.readLong(buf);
+        storedEMC = buf.readLong() - tile.storedEMC;
+        maxEMC = buf.readLong();
 
-        targetStack = ItemStack.of(PacketByteUtil.readItemStack(buf));
+        targetStack = buf.readItemStack();
     }
 
     public EMCCondenserScreenHandler(CreateMenuEvent e, @Nullable EMCCondenserTile tile, ICompatInventory inventory, ItemStack targetStack) {

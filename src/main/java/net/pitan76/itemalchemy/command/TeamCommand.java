@@ -132,7 +132,7 @@ public class TeamCommand extends LiteralCommand {
                             Player player = e.getPlayer();
                             Player targetPlayer = e.getValueAsPlayer();
 
-                            ServerState serverState = ServerState.getServerState(player.getMidohraWorld().getMCServer());
+                            ServerState serverState = ServerState.getServerState(player.getServer());
 
                             Optional<TeamState> senderTeam = serverState.getTeamByPlayer(player.getUUID());
                             Optional<TeamState> targetTeam = serverState.getTeamByPlayer(targetPlayer.getUUID());
@@ -184,7 +184,7 @@ public class TeamCommand extends LiteralCommand {
                                 return;
                             }
 
-                            ServerState serverState = ServerState.getServerState(player.getMidohraWorld().getMCServer());
+                            ServerState serverState = ServerState.getServerState(player.getServer());
 
                             Optional<TeamState> senderTeam = serverState.getTeamByPlayer(player.getUUID());
                             Optional<TeamState> targetTeam = serverState.getTeamByPlayer(targetPlayer.getUUID());

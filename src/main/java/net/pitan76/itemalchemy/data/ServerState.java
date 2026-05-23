@@ -124,7 +124,7 @@ public class ServerState extends CompatPersistentState implements ModState {
     }
 
     public static ServerState of(Player player) {
-        return of(player.getMidohraWorld());
+        return of(player.getServer());
     }
 
     public TeamState createTeam(Player owner, @Nullable String name) {

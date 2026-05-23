@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.gui.screen;
 
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.pitan76.itemalchemy.EMCManager;
@@ -14,6 +13,7 @@ import net.pitan76.mcpitanlib.api.util.SlotUtil;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
 import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
+import net.pitan76.mcpitanlib.midohra.network.PacketByteBuf;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCCondenserMK2ScreenHandler extends EMCCondenserScreenHandler {
@@ -32,8 +32,8 @@ public class EMCCondenserMK2ScreenHandler extends EMCCondenserScreenHandler {
 
     @Override
     public void initSlots() {
-        addPlayerMainInventorySlots(playerInventory.getRaw(), 48, 154);
-        addPlayerHotbarSlots(playerInventory.getRaw(), 48, 212);
+        addPlayerMainInventorySlots(playerInventory, 48, 154);
+        addPlayerHotbarSlots(playerInventory, 48, 212);
         addTargetSlot(inventory, 0, 12, 6);
         addStorageSlots(inventory, 1, 12, 26, -1, 6, 7);
         addStorageSlots(inventory, 43, 138, 26, -1, 6, 7);

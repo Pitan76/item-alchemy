@@ -1,19 +1,18 @@
 package net.pitan76.itemalchemy.gui.screen;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.pitan76.itemalchemy.tile.EMCBatteryTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
 import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
-import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatPlayerInventory;
 import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
 import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityWrapper;
+import net.pitan76.mcpitanlib.midohra.network.PacketByteBuf;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,13 +27,13 @@ public class EMCBatteryScreenHandler extends ExtendedScreenHandler {
     public EMCBatteryScreenHandler(CreateMenuEvent e, PacketByteBuf buf) {
         this(e, null, new CompatInventory(2));
 
-        BlockPos pos = PacketByteUtil.readBlockPosM(buf);
+        BlockPos pos = buf.readBlockPos();
         BlockEntityWrapper blockEntity = e.getWorldM().getBlockEntity(pos);
 
         if (blockEntity.isPresent()) {
             tile = blockEntity.getCompatBlockEntity(EMCBatteryTile.class);
-            storedEMC = PacketByteUtil.readLong(buf) - tile.storedEMC;
-            maxEMC = PacketByteUtil.readLong(buf);
+            storedEMC = buf.readLong() - tile.storedEMC;
+            maxEMC = buf.readLong();
         }
     }
 
