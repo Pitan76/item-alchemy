@@ -1,9 +1,6 @@
 package net.pitan76.itemalchemy.gui.screen;
 
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.pitan76.itemalchemy.EMCManager;
@@ -21,8 +18,9 @@ import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
 import net.pitan76.mcpitanlib.api.gui.slot.CompatSlotActionType;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
-import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
+import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
 import net.pitan76.mcpitanlib.midohra.item.ItemWrapper;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,20 +97,20 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
 //API
 
-    public Inventory inventory;
+    public ICompatInventory inventory;
 
-    public Inventory getInventory() {
+    public ICompatInventory getInventory() {
         return inventory;
     }
 
-    public void setInventory(Inventory inventory) {
+    public void setInventory(ICompatInventory inventory) {
         this.inventory = inventory;
     }
 
     public ScreenHandlerType<?> type = null;
     public boolean canUse = true;
 
-    public AlchemyTableScreenHandler(ScreenHandlerType type, CreateMenuEvent e, Inventory inventory) {
+    public AlchemyTableScreenHandler(ScreenHandlerType type, CreateMenuEvent e, ICompatInventory inventory) {
         super(type, e);
         this.type = type;
         this.inventory = inventory;
@@ -122,7 +120,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
         return this.canUse;
     }
 
-    public Slot addNormalSlot(Inventory inventory, int index, int x, int y) {
+    public Slot addNormalSlot(ICompatInventory inventory, int index, int x, int y) {
         Slot slot = new Slot(inventory, index, x, y);
         return this.callAddSlot(slot);
     }
@@ -169,7 +167,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
         this.searchText = searchText;
     }
 
-    public NbtCompound translations = NbtUtil.create();
+    public NbtCompound translations = NbtCompound.of();
     public void setTranslations(NbtCompound translations) {
         this.translations = translations;
     }
@@ -199,8 +197,8 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
             String itemTranslationKey = item.getTranslationKey();
 
             // If the item has a translation, we should use that instead of the identifier.
-            if (NbtUtil.has(translations, itemTranslationKey)) {
-                translatedName = NbtUtil.getString(translations, itemTranslationKey);
+            if (translations.has(itemTranslationKey)) {
+                translatedName = translations.getString(itemTranslationKey);
             }
 
             // Include only the name of the item in the id when searching
@@ -236,7 +234,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
 
         //System.out.println("index: " + slotIndex + ", action: " + actionType.name());
 
-        if (e.slot >= 50 && !e.isClient() && e.getActionType().isSwapOrPickupOrQuickMoveOrThrow()) {
+        if (e.slot >= 50 && player.isServerPlayer() && e.getActionType().isSwapOrPickupOrQuickMoveOrThrow()) {
 
             Slot slot = callGetSlot(e.slot);
             if (!(slot instanceof ExtractSlot)) return;
@@ -260,8 +258,7 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
                 }
 
                 // sync emc
-                if (player.isServerPlayerEntity())
-                    EMCManager.syncS2C(player);
+                EMCManager.syncS2C(player);
             }
         }
     }

@@ -26,8 +26,8 @@ public class BlockRenderer implements BeforeBlockOutlineListener {
 
     @Override
     public boolean beforeBlockOutline(BeforeBlockOutlineEvent e) {
-        if (ClientUtil.getClientPlayer() == null) return true;
         Player player = ClientUtil.getPlayer();
+        if (player.getEntity() == null) return true;
 
         HitResult hitResult = e.getHitResultM();
 

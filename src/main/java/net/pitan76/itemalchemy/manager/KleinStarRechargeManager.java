@@ -34,7 +34,7 @@ public class KleinStarRechargeManager {
      * @param player the player to recharge items for
      */
     public static void tryRechargeItems(Player player) {
-        if (player == null || player.getWorld() == null) return;
+        if (player == null || player.isClient() || player.getWorld() == null) return;
         
         // Get or create tick counter for this player
         String playerId = player.getUUID().toString();
