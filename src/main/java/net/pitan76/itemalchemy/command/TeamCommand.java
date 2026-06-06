@@ -5,6 +5,7 @@ import net.pitan76.itemalchemy.api.TeamUtil;
 import net.pitan76.itemalchemy.data.PlayerState;
 import net.pitan76.itemalchemy.data.ServerState;
 import net.pitan76.itemalchemy.data.TeamState;
+import net.pitan76.itemalchemy.tmp.FixedOfflinePlayerManager;
 import net.pitan76.mcpitanlib.api.command.CommandSettings;
 import net.pitan76.mcpitanlib.api.command.LiteralCommand;
 import net.pitan76.mcpitanlib.api.command.argument.PlayerCommand;
@@ -14,7 +15,6 @@ import net.pitan76.mcpitanlib.api.event.PlayerCommandEvent;
 import net.pitan76.mcpitanlib.api.event.ServerCommandEvent;
 import net.pitan76.mcpitanlib.api.event.StringCommandEvent;
 import net.pitan76.mcpitanlib.api.offlineplayer.OfflinePlayer;
-import net.pitan76.mcpitanlib.api.offlineplayer.OfflinePlayerManager;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.midohra.server.MCServer;
 import net.pitan76.mcpitanlib.midohra.server.PlayerManager;
@@ -35,8 +35,8 @@ public class TeamCommand extends LiteralCommand {
                     @Override
                     public void execute(StringCommandEvent e) {
                         try {
-                            if (OfflinePlayerManager.INSTANCE != null)
-                                OfflinePlayerManager.INSTANCE.addPlayer(e.getPlayer().getUUID().toString(), e.getPlayer().getName());
+                            if (FixedOfflinePlayerManager.INSTANCE != null)
+                                FixedOfflinePlayerManager.INSTANCE.addPlayer(e.getPlayer().getUUID().toString(), e.getPlayer().getName());
 
                             if (!e.isClient()) {
                                 if (TeamUtil.createTeam(e.getPlayer(), e.getValue(), true)) {
@@ -73,8 +73,8 @@ public class TeamCommand extends LiteralCommand {
                     @Override
                     public void execute(StringCommandEvent e) {
                         try {
-                            if (OfflinePlayerManager.INSTANCE != null)
-                                OfflinePlayerManager.INSTANCE.addPlayer(e.getPlayer().getUUID().toString(), e.getPlayer().getName());
+                            if (FixedOfflinePlayerManager.INSTANCE != null)
+                                FixedOfflinePlayerManager.INSTANCE.addPlayer(e.getPlayer().getUUID().toString(), e.getPlayer().getName());
 
                             if (!e.isClient()) {
                                 if (TeamUtil.joinTeam(e.getPlayer(), e.getValue())) {
@@ -177,7 +177,7 @@ public class TeamCommand extends LiteralCommand {
 
                         try {
                             Player player = e.getPlayer();
-                            OfflinePlayer targetPlayer = OfflinePlayerManager.INSTANCE.getPlayerByName(e.getValue());
+                            OfflinePlayer targetPlayer = FixedOfflinePlayerManager.INSTANCE.getPlayerByName(e.getValue());
 
                             if (targetPlayer == null) {
                                 e.sendFailure(TextUtil.literal("[ItemAlchemy] Not registered player in offlineplayer.json"));
