@@ -1,9 +1,7 @@
 package net.pitan76.itemalchemy.network;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
-import net.pitan76.itemalchemy.item.AlchemicalPickaxe;
 import net.pitan76.itemalchemy.item.AlchemicalToolMode;
 import net.pitan76.itemalchemy.sound.Sounds;
 import net.pitan76.itemalchemy.util.ItemCharge;
@@ -12,9 +10,9 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
-import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
 
 import java.util.Optional;
 
@@ -23,10 +21,10 @@ import static net.pitan76.itemalchemy.ItemAlchemy._id;
 public class ServerNetworks {
     public static void init() {
         ServerNetworking.registerReceiver(_id("network"), (e) -> {
-            NbtCompound nbt = PacketByteUtil.readNbt(e.buf);
-            if (NbtUtil.has(nbt, "control")) {
+            NbtCompound nbt = PacketByteUtil.readNbtM(e.buf);
+            if (nbt.has("control")) {
                 Player player = e.player;
-                int ctrl = NbtUtil.getInt(nbt, "control");
+                int ctrl = nbt.getInt("control");
                 if (ctrl == 0) {
                     if (!(player.getCurrentScreenHandler() instanceof AlchemyTableScreenHandler)) return;
                     AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
@@ -42,7 +40,7 @@ public class ServerNetworks {
 
         ServerNetworking.registerReceiver(_id("search"), (e) -> {
             String text = PacketByteUtil.readString(e.buf);
-            NbtCompound translations = PacketByteUtil.readNbt(e.buf);
+            NbtCompound translations = PacketByteUtil.readNbtM(e.buf);
             Player player = e.player;
             AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
 

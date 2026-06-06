@@ -3,7 +3,6 @@ package net.pitan76.itemalchemy.client.screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.EMCManager;
@@ -18,12 +17,12 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ClientNetworking;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
-import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.client.LanguageUtil;
 import net.pitan76.mcpitanlib.api.util.client.ScreenUtil;
 import net.pitan76.mcpitanlib.api.util.client.widget.TextFieldUtil;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
 
 import java.util.List;
 
@@ -56,13 +55,13 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
         if (!TextFieldUtil.isFocused(searchBox) || args.keyCode == 256)
             return super.keyReleased(args);
 
-        NbtCompound translations = NbtUtil.create();
+        NbtCompound translations = NbtCompound.of();
 
         List<Item> items = PlayerRegisteredItemUtil.getItems(new Player(playerInventory.player));
         for (Item item : items) {
             String itemTranslationKey = ItemUtil.getTranslationKey(item);
             if (LanguageUtil.hasTranslation(itemTranslationKey)) {
-                NbtUtil.putString(translations, itemTranslationKey, LanguageUtil.translate(itemTranslationKey));
+                translations.putString(itemTranslationKey, LanguageUtil.translate(itemTranslationKey));
             }
         }
 
@@ -107,8 +106,8 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
 
             // サーバーに送信
             PacketByteBuf buf = PacketByteUtil.create();
-            NbtCompound nbt = NbtUtil.create();
-            NbtUtil.set(nbt, "control", 0);
+            NbtCompound nbt = NbtCompound.of();
+            nbt.putInt("control", 0);
             PacketByteUtil.writeNbt(buf, nbt);
             ClientNetworking.send(_id("network"), buf);
         }));
@@ -119,8 +118,8 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
             screenHandler.nextExtractSlots();
 
             PacketByteBuf buf = PacketByteUtil.create();
-            NbtCompound nbt = NbtUtil.create();
-            NbtUtil.set(nbt, "control", 1);
+            NbtCompound nbt = NbtCompound.of();
+            nbt.putInt("control", 1);
             PacketByteUtil.writeNbt(buf, nbt);
             ClientNetworking.send(_id("network"), buf);
         }));
