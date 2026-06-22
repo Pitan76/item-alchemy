@@ -116,3 +116,10 @@ dependencies {
 
 一部のアセットにProjectEのテクスチャが一時的に使われていますが、今後はオリジナルのテクスチャに置き換える予定です。<br />
 なお、それらはMIT Licenseです。
+
+## Memo
+```bash
+git tag 1.3.3 && git push origin 1.3.3
+```
+
+今のところはgithub releasesに自動リリースするが、そのうちmodrinthやcurseforge, mavenも自動リリースするようにする予定。 <br />
