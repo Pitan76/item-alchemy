@@ -146,28 +146,28 @@ public class Items {
         RING = registry.registerItem(_id("ring"), () -> new Ring(CompatibleItemSettings.of(_id("ring")).addGroup(ItemGroups.ITEM_ALCHEMY)));
         BLACK_HOLE_BAND = registry.registerItem(_id("black_hole_band"), () -> new BlackHoleBand(CompatibleItemSettings.of(_id("black_hole_band")).addGroup(ItemGroups.ITEM_ALCHEMY)));
 
-        DARK_MATTER_SWORD = registry.registerItem(_id("dark_matter_sword"), () -> new AlchemicalSword(AlchemicalToolMaterials.DARK_MATTER, 3, -2.4f, ChargeItemSettings.of(_id("dark_matter_sword")).addGroup(ItemGroups.ITEM_ALCHEMY)));
-        DARK_MATTER_PICKAXE = registry.registerItem(_id("dark_matter_pickaxe"), () -> new AlchemicalPickaxe(AlchemicalToolMaterials.DARK_MATTER, 1, -2.8f, ChargeItemSettings.of(_id("dark_matter_pickaxe")).addGroup(ItemGroups.ITEM_ALCHEMY)));
-        DARK_MATTER_AXE = registry.registerItem(_id("dark_matter_axe"), () -> new AlchemicalAxe(AlchemicalToolMaterials.DARK_MATTER, 5.0f, -3.0f, ChargeItemSettings.of(_id("dark_matter_axe")).addGroup(ItemGroups.ITEM_ALCHEMY)));
-        DARK_MATTER_SHOVEL = registry.registerItem(_id("dark_matter_shovel"), () -> new AlchemicalShovel(AlchemicalToolMaterials.DARK_MATTER, 1.5F, -3f, ChargeItemSettings.of(_id("dark_matter_shovel")).addGroup(ItemGroups.ITEM_ALCHEMY)));
-        DARK_MATTER_HOE = registry.registerItem(_id("dark_matter_hoe"), () -> new AlchemicalHoe(AlchemicalToolMaterials.DARK_MATTER, -3, 0f, ChargeItemSettings.of(_id("dark_matter_hoe")).addGroup(ItemGroups.ITEM_ALCHEMY)));
-        RED_MATTER_SWORD = registry.registerItem(_id("red_matter_sword"), () -> new AlchemicalSword(AlchemicalToolMaterials.RED_MATTER, 3, -2.4f, ChargeItemSettings.of(_id("red_matter_sword")).addGroup(ItemGroups.ITEM_ALCHEMY)));
-        RED_MATTER_PICKAXE = registry.registerItem(_id("red_matter_pickaxe"), () -> new AlchemicalPickaxe(AlchemicalToolMaterials.RED_MATTER, 1, -2.8f, ChargeItemSettings.of(_id("red_matter_pickaxe")).addGroup(ItemGroups.ITEM_ALCHEMY)));
-        RED_MATTER_AXE = registry.registerItem(_id("red_matter_axe"), () -> new AlchemicalAxe(AlchemicalToolMaterials.RED_MATTER, 5.0f, -3.0f, ChargeItemSettings.of(_id("red_matter_axe")).addGroup(ItemGroups.ITEM_ALCHEMY)));
-        RED_MATTER_SHOVEL = registry.registerItem(_id("red_matter_shovel"), () -> new AlchemicalShovel(AlchemicalToolMaterials.RED_MATTER, 1.5F, -3f, ChargeItemSettings.of(_id("red_matter_shovel")).addGroup(ItemGroups.ITEM_ALCHEMY)));
-        RED_MATTER_HOE = registry.registerItem(_id("red_matter_hoe"), () -> new AlchemicalHoe(AlchemicalToolMaterials.RED_MATTER, -3, 0f, ChargeItemSettings.of(_id("red_matter_hoe")).addGroup(ItemGroups.ITEM_ALCHEMY)));
+        DARK_MATTER_SWORD = registry.registerItem(_id("dark_matter_sword"), () -> new AlchemicalSword(AlchemicalToolMaterials.DARK_MATTER, 3, -2.4f, ChargeItemSettings.of(_id("dark_matter_sword")).enchantable(15).addGroup(ItemGroups.ITEM_ALCHEMY)));
+        DARK_MATTER_PICKAXE = registry.registerItem(_id("dark_matter_pickaxe"), () -> new AlchemicalPickaxe(AlchemicalToolMaterials.DARK_MATTER, 1, -2.8f, ChargeItemSettings.of(_id("dark_matter_pickaxe")).enchantable(15).addGroup(ItemGroups.ITEM_ALCHEMY)));
+        DARK_MATTER_AXE = registry.registerItem(_id("dark_matter_axe"), () -> new AlchemicalAxe(AlchemicalToolMaterials.DARK_MATTER, 5.0f, -3.0f, ChargeItemSettings.of(_id("dark_matter_axe")).enchantable(15).addGroup(ItemGroups.ITEM_ALCHEMY)));
+        DARK_MATTER_SHOVEL = registry.registerItem(_id("dark_matter_shovel"), () -> new AlchemicalShovel(AlchemicalToolMaterials.DARK_MATTER, 1.5F, -3f, ChargeItemSettings.of(_id("dark_matter_shovel")).enchantable(15).addGroup(ItemGroups.ITEM_ALCHEMY)));
+        DARK_MATTER_HOE = registry.registerItem(_id("dark_matter_hoe"), () -> new AlchemicalHoe(AlchemicalToolMaterials.DARK_MATTER, -3, 0f, ChargeItemSettings.of(_id("dark_matter_hoe")).enchantable(15).addGroup(ItemGroups.ITEM_ALCHEMY)));
+        RED_MATTER_SWORD = registry.registerItem(_id("red_matter_sword"), () -> new AlchemicalSword(AlchemicalToolMaterials.RED_MATTER, 3, -2.4f, ChargeItemSettings.of(_id("red_matter_sword")).enchantable(20).addGroup(ItemGroups.ITEM_ALCHEMY)));
+        RED_MATTER_PICKAXE = registry.registerItem(_id("red_matter_pickaxe"), () -> new AlchemicalPickaxe(AlchemicalToolMaterials.RED_MATTER, 1, -2.8f, ChargeItemSettings.of(_id("red_matter_pickaxe")).enchantable(20).addGroup(ItemGroups.ITEM_ALCHEMY)));
+        RED_MATTER_AXE = registry.registerItem(_id("red_matter_axe"), () -> new AlchemicalAxe(AlchemicalToolMaterials.RED_MATTER, 5.0f, -3.0f, ChargeItemSettings.of(_id("red_matter_axe")).enchantable(20).addGroup(ItemGroups.ITEM_ALCHEMY)));
+        RED_MATTER_SHOVEL = registry.registerItem(_id("red_matter_shovel"), () -> new AlchemicalShovel(AlchemicalToolMaterials.RED_MATTER, 1.5F, -3f, ChargeItemSettings.of(_id("red_matter_shovel")).enchantable(20).addGroup(ItemGroups.ITEM_ALCHEMY)));
+        RED_MATTER_HOE = registry.registerItem(_id("red_matter_hoe"), () -> new AlchemicalHoe(AlchemicalToolMaterials.RED_MATTER, -3, 0f, ChargeItemSettings.of(_id("red_matter_hoe")).enchantable(20).addGroup(ItemGroups.ITEM_ALCHEMY)));
 
         // Dark Matter Armor
-        DARK_MATTER_HELMET = registry.registerItem(_id("dark_matter_helmet"), () -> new DarkMatterArmor(ArmorEquipmentType.HEAD, CompatibleItemSettings.of(_id("dark_matter_helmet")).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
-        DARK_MATTER_CHESTPLATE = registry.registerItem(_id("dark_matter_chestplate"), () -> new DarkMatterArmor(ArmorEquipmentType.CHEST, CompatibleItemSettings.of(_id("dark_matter_chestplate")).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
-        DARK_MATTER_LEGGINGS = registry.registerItem(_id("dark_matter_leggings"), () -> new DarkMatterArmor(ArmorEquipmentType.LEGS, CompatibleItemSettings.of(_id("dark_matter_leggings")).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
-        DARK_MATTER_BOOTS = registry.registerItem(_id("dark_matter_boots"), () -> new DarkMatterArmor(ArmorEquipmentType.FEET, CompatibleItemSettings.of(_id("dark_matter_boots")).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
+        DARK_MATTER_HELMET = registry.registerItem(_id("dark_matter_helmet"), () -> new DarkMatterArmor(ArmorEquipmentType.HEAD, CompatibleItemSettings.of(_id("dark_matter_helmet")).enchantable(15).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
+        DARK_MATTER_CHESTPLATE = registry.registerItem(_id("dark_matter_chestplate"), () -> new DarkMatterArmor(ArmorEquipmentType.CHEST, CompatibleItemSettings.of(_id("dark_matter_chestplate")).enchantable(15).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
+        DARK_MATTER_LEGGINGS = registry.registerItem(_id("dark_matter_leggings"), () -> new DarkMatterArmor(ArmorEquipmentType.LEGS, CompatibleItemSettings.of(_id("dark_matter_leggings")).enchantable(15).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
+        DARK_MATTER_BOOTS = registry.registerItem(_id("dark_matter_boots"), () -> new DarkMatterArmor(ArmorEquipmentType.FEET, CompatibleItemSettings.of(_id("dark_matter_boots")).enchantable(15).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
 
         // Red Matter Armor
-        RED_MATTER_HELMET = registry.registerItem(_id("red_matter_helmet"), () -> new RedMatterArmor(ArmorEquipmentType.HEAD, CompatibleItemSettings.of(_id("red_matter_helmet")).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
-        RED_MATTER_CHESTPLATE = registry.registerItem(_id("red_matter_chestplate"), () -> new RedMatterArmor(ArmorEquipmentType.CHEST, CompatibleItemSettings.of(_id("red_matter_chestplate")).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
-        RED_MATTER_LEGGINGS = registry.registerItem(_id("red_matter_leggings"), () -> new RedMatterArmor(ArmorEquipmentType.LEGS, CompatibleItemSettings.of(_id("red_matter_leggings")).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
-        RED_MATTER_BOOTS = registry.registerItem(_id("red_matter_boots"), () -> new RedMatterArmor(ArmorEquipmentType.FEET, CompatibleItemSettings.of(_id("red_matter_boots")).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
+        RED_MATTER_HELMET = registry.registerItem(_id("red_matter_helmet"), () -> new RedMatterArmor(ArmorEquipmentType.HEAD, CompatibleItemSettings.of(_id("red_matter_helmet")).enchantable(20).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
+        RED_MATTER_CHESTPLATE = registry.registerItem(_id("red_matter_chestplate"), () -> new RedMatterArmor(ArmorEquipmentType.CHEST, CompatibleItemSettings.of(_id("red_matter_chestplate")).enchantable(20).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
+        RED_MATTER_LEGGINGS = registry.registerItem(_id("red_matter_leggings"), () -> new RedMatterArmor(ArmorEquipmentType.LEGS, CompatibleItemSettings.of(_id("red_matter_leggings")).enchantable(20).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
+        RED_MATTER_BOOTS = registry.registerItem(_id("red_matter_boots"), () -> new RedMatterArmor(ArmorEquipmentType.FEET, CompatibleItemSettings.of(_id("red_matter_boots")).enchantable(20).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
 
         // Repair Talisman
         REPAIR_TALISMAN = registry.registerItem(_id("repair_talisman"), () -> new RepairTalisman(CompatibleItemSettings.of(_id("repair_talisman")).addGroup(ItemGroups.ITEM_ALCHEMY).maxCount(1)));
