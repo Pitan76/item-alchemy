@@ -199,8 +199,13 @@ githubRelease {
     allowUploadToExisting = false
 }
 
+tasks.named('githubRelease') {
+    // Avoid failing the task when token is absent (e.g. local builds without CI secrets)
+    onlyIf { System.getenv("GITHUB_TOKEN") != null || project.hasProperty("ghToken") }
+}
+
 tasks.register('publishToModSites') {
-//    publishToModSites.dependsOn modrinth
-//    publishToModSites.dependsOn curseforge
-    publishToModSites.dependsOn githubRelease
+//    dependsOn modrinth
+//    dependsOn curseforge
+    dependsOn 'githubRelease'
 }
