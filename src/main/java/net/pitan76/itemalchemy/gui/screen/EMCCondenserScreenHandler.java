@@ -46,7 +46,8 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
         storedEMC = buf.readLong() - tile.storedEMC;
         maxEMC = buf.readLong();
 
-        targetStack = buf.readItemStack();
+        boolean hasTarget = buf.readBool();
+        if (hasTarget) targetStack = buf.readItemStack();
     }
 
     public EMCCondenserScreenHandler(CreateMenuEvent e, @Nullable EMCCondenserTile tile, ICompatInventory inventory, ItemStack targetStack) {

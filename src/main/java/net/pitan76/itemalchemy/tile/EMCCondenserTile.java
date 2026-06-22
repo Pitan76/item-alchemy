@@ -226,7 +226,10 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
         buf.writeInt(pos.getZ());
         buf.writeLong(storedEMC);
         buf.writeLong(maxEMC);
-        buf.writeItemStack(getTargetStack());
+
+        boolean hasTarget = !getTargetStack().isEmpty();
+        buf.writeBool(hasTarget);
+        if (hasTarget) buf.writeItemStack(getTargetStack());
     }
 
     public void setTargetStack(ItemStack stack) {
