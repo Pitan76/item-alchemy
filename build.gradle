@@ -3,6 +3,7 @@ plugins {
     id 'maven-publish'
     id 'com.matthewprenger.cursegradle' version '1.5.0'
     id "com.modrinth.minotaur" version "2.+"
+    id "com.github.breadmoirai.github-release" version "2.5.2"
 }
 
 version = project.mod_version
@@ -181,7 +182,28 @@ modrinth {
     }
 }
 
+// === GitHub Releases publishing ===
+// Requires environment variable GITHUB_TOKEN (or -PghToken=... project property) with repo:write scope.
+githubRelease {
+    token System.getenv("GITHUB_TOKEN") ?: project.findProperty("ghToken") ?: ""
+    owner "Pitan76"
+    repo "item-alchemy"
+    tagName project.mod_version
+    targetCommitish System.getenv("GITHUB_SHA") ?: "main"
+    releaseName project.mod_version
+    body rootProject.changelog
+    draft false
+    prerelease false
+    releaseAssets.from(remapJar.archiveFile, remapSourcesJar.archiveFile)
+    overwrite false
+    allowUploadToExisting false
+
+    // Avoid failing the configuration phase when token is absent (e.g. local builds without CI secrets)
+    onlyIf { System.getenv("GITHUB_TOKEN") != null || project.hasProperty("ghToken") }
+}
+
 tasks.register('publishToModSites') {
-    publishToModSites.dependsOn modrinth
-    publishToModSites.dependsOn curseforge
+//    publishToModSites.dependsOn modrinth
+//    publishToModSites.dependsOn curseforge
+    publishToModSites.dependsOn githubRelease
 }
