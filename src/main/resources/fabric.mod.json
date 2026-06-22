@@ -20,20 +20,14 @@
     "sources": "https://github.com/Pitan76/item-alchemy",
     "issues": "https://github.com/Pitan76/item-alchemy/issues"
   },
-
   "license": "MIT",
   "icon": "assets/itemalchemy/logo.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
       "net.pitan76.itemalchemy.FabricMain"
     ]
   },
-  "mixins": [
-    "itemalchemy.mixins.json"
-  ],
-
   "depends": {
     "fabricloader": "*",
     "minecraft": "*",
