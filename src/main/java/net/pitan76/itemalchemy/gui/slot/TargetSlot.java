@@ -2,7 +2,6 @@ package net.pitan76.itemalchemy.gui.slot;
 
 import net.minecraft.screen.ScreenHandler;
 import net.pitan76.itemalchemy.EMCManager;
-import net.pitan76.itemalchemy.gui.screen.EMCCondenserScreenHandler;
 import net.pitan76.mcpitanlib.api.gui.slot.CompatibleSlot;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
@@ -17,15 +16,19 @@ public class TargetSlot extends CompatibleSlot {
         this.screenHandler = screenHandler;
     }
 
+    /**
+     * A target slot only ever displays a copy of the item it is filtering on, so vanilla must
+     * never move anything into it. {@code safeInsert}, {@code insertItem} and the quick craft
+     * (drag) handler all hand over as much of a stack as the slot claims to accept, and
+     * {@link #callSetStack} truncating that down to one silently destroys the remainder.
+     * <p>
+     * The screen handlers set the displayed item themselves instead, so refusing every
+     * insertion here costs nothing and closes every path at once — including the ones that
+     * bypass {@code onSlotClick}, such as the single slot shortcut in the drag handler.
+     */
     @Override
     public boolean canInsert(ItemStack stack) {
-        if (screenHandler instanceof EMCCondenserScreenHandler) {
-            EMCCondenserScreenHandler handler = (EMCCondenserScreenHandler) screenHandler;
-
-            return EMCManager.get(stack) != 0 && !stack.isEmpty() && handler.targetStack.isEmpty();
-        }
-
-        return EMCManager.get(stack) != 0 && !stack.isEmpty();
+        return false;
     }
 
     @Override

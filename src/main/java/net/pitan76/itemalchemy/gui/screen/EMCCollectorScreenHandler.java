@@ -1,6 +1,7 @@
 package net.pitan76.itemalchemy.gui.screen;
 
 import net.minecraft.screen.slot.Slot;
+import net.pitan76.itemalchemy.EMCManager;
 import net.pitan76.itemalchemy.gui.slot.TargetSlot;
 import net.pitan76.itemalchemy.tile.EMCCollectorTile;
 import net.pitan76.mcpitanlib.api.entity.Player;
@@ -71,7 +72,13 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
 
             if (index < 36) {
                 if (!this.callInsertItem(originalStack.toMinecraft(), 36 + 3, 36 + 16 + 3, false)) {
-                    if (!this.callInsertItem(originalStack.toMinecraft(), 36, 36 + 3, false)) {
+                    // Skip 37, the target slot. Its canInsert keeps the empty slot pass of
+                    // insertItem out, but the pass that merges into an already occupied slot
+                    // does not consult canInsert at all -- it writes the count straight onto
+                    // the stack in the slot, which would move a whole stack into a slot that
+                    // is only ever meant to display one item.
+                    if (!this.callInsertItem(originalStack.toMinecraft(), 36, 37, false)
+                            && !this.callInsertItem(originalStack.toMinecraft(), 38, 36 + 3, false)) {
                         return ItemStackUtil.empty();
                     }
                 }
@@ -100,11 +107,22 @@ public class EMCCollectorScreenHandler extends ExtendedScreenHandler {
     @Override
     public void onSlotClick(SlotClickEvent e) {
         if (e.slot == 37) { // Target Slot
-            ItemStack oldStack = getCursorStackM().copy();
-            super.onSlotClick(e);
-            if (!oldStack.isEmpty()) {
-                setCursorStack(oldStack);
+            // Set what is displayed directly, the same way EMCCondenserScreenHandler does.
+            // Letting vanilla move the stack in and putting the cursor back afterwards loses
+            // items whenever that restore does not run, e.g. when the drag handler goes
+            // through doClick and never reaches this method.
+            Slot targetSlot = ScreenHandlerUtil.getSlot(this, 37);
+            ItemStack cursorStack = getCursorStackM();
+
+            if (cursorStack.isEmpty()) {
+                SlotUtil.setStack(targetSlot, ItemStackUtil.empty());
+                return;
             }
+
+            ItemStack newStack = cursorStack.getItem().createStack();
+            if (EMCManager.get(newStack.getItem()) == 0) return;
+
+            SlotUtil.setStack(targetSlot, newStack.toMinecraft());
             return;
         }
         super.onSlotClick(e);
