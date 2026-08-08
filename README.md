@@ -5,6 +5,7 @@ This MOD adds philosopher's stone etc. which can be equivalently exchanged with 
 ## Download
 - https://www.curseforge.com/minecraft/mc-mods/item-alchemy-fabric
 - https://modrinth.com/mod/item-alchemy
+- https://modparks.pitan76.net/projects/item-alchemy
 
 ## Wiki
 - https://wikichree.com/pitan76/?Item+Alchemy/en
@@ -70,6 +71,7 @@ They are under MIT License.
 ## ダウンロード
 - https://www.curseforge.com/minecraft/mc-mods/item-alchemy-fabric
 - https://modrinth.com/mod/item-alchemy
+- https://modparks.pitan76.net/projects/item-alchemy
 
 ## ウィキ
 - https://wikichree.com/pitan76/?Item+Alchemy
