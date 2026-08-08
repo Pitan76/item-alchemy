@@ -18,6 +18,9 @@ This MOD adds philosopher's stone etc. which can be equivalently exchanged with 
 - [Developer] anthonymendez TBD
 - [Designer] Murderman25 Provided the textures
 - [Translator] 54sda Translated to Chinese (zh_cn.json)
+- [Developer] alexandrelefourner Bug fix
+- [Developer & Translator] mikkelchokolate
+- [Developer] XXD051030 Bug fix
 
 - 54sda zh_cn.json
 - Pitan ja_jp.json, en_us.json
@@ -82,6 +85,7 @@ They are under MIT License.
 - [翻訳者] 54sda 中国語への翻訳 (zh_cn.json)
 - [開発者] alexandrelefourner バグ修正
 - [開発者＆翻訳者] mikkelchokolate
+- [開発者] XXD051030 バグ修正
 
 ## アドオン開発
 
