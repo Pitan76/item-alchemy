@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.shape.VoxelShape;
+import net.pitan76.itemalchemy.item.BlackHoleBand;
 import net.pitan76.itemalchemy.tile.DMPedestalTile;
 import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.block.CompatibleMaterial;
@@ -94,14 +95,14 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
         World world = e.getMidohraWorld();
 
         // Check if pedestal contains a Black Hole Band
-        boolean isBlackHoleBand = !pedestalStack.isEmpty() && pedestalStack.getRawItem() instanceof net.pitan76.itemalchemy.item.BlackHoleBand;
+        boolean isBlackHoleBand = !pedestalStack.isEmpty() && pedestalStack.getRawItem() instanceof BlackHoleBand;
 
         if (e.isSneaking()) {
             // Sneak + right-click: toggle active state OR extract all items from Black Hole Band
             if (!pedestalStack.isEmpty()) {
                 if (isBlackHoleBand) {
                     // Extract all items from Black Hole Band inventory
-                    net.pitan76.itemalchemy.item.BlackHoleBand band = (net.pitan76.itemalchemy.item.BlackHoleBand) pedestalStack.getRawItem();
+                    BlackHoleBand band = (BlackHoleBand) pedestalStack.getRawItem();
                     int extractedCount = 0;
                     
                     while (true) {
@@ -139,7 +140,7 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
             if (!pedestalStack.isEmpty()) {
                 if (isBlackHoleBand) {
                     // Extract single item from Black Hole Band inventory
-                    net.pitan76.itemalchemy.item.BlackHoleBand band = (net.pitan76.itemalchemy.item.BlackHoleBand) pedestalStack.getRawItem();
+                    BlackHoleBand band = (BlackHoleBand) pedestalStack.getRawItem();
                     ItemStack extracted = band.removeFirstItem(pedestalStack, RegistryLookupUtil.getRegistryLookup(e.world));
                     
                     if (!extracted.isEmpty()) {
