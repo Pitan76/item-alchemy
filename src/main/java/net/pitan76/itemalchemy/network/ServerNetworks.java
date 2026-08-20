@@ -19,7 +19,23 @@ import java.util.Optional;
 import static net.pitan76.itemalchemy.ItemAlchemy._id;
 
 public class ServerNetworks {
+    /**
+     * サーバー -> クライアントへ送るパケットのID
+     */
+    public static final String[] S2C_PACKET_IDS = {
+            "sync_emc",
+            "sync_emc_map",
+            "pedestal_sync",
+            "itemalchemy_emc_collector",
+            "itemalchemy_emc_battery",
+            "itemalchemy_emc_condenser"
+    };
+
     public static void init() {
+        for (String id : S2C_PACKET_IDS) {
+            net.pitan76.mcpitanlib.api.network.ServerNetworking.registerS2CPayloadType(_id(id).toMinecraft());
+        }
+
         ServerNetworking.registerReceiver(_id("network"), (e) -> {
             NbtCompound nbt = PacketByteUtil.readNbtM(e.buf);
             if (nbt.has("control")) {
