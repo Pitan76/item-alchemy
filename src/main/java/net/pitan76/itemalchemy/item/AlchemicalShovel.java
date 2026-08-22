@@ -94,10 +94,6 @@ public class AlchemicalShovel extends CompatShovelItem implements IRechargeableF
             mineAdjacentBlocks(e.getPlayer(), world, originPos, facing.rotateYClockwise().rotateYClockwise(), 1);
         }
 
-        // Consume 1 charge per block mined if charge > 0
-        if (charge > 0) {
-            ItemUtils.setCharge(stack, charge - 1);
-        }
 
         return super.postMine(e);
     }

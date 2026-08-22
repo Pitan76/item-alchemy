@@ -94,10 +94,6 @@ public class AlchemicalHoe extends CompatHoeItem implements IRechargeableFromKle
             tillAdjacentBlocks(e.getPlayer(), world, originPos, facing.rotateYClockwise().rotateYClockwise(), 1);
         }
 
-        // Consume 1 charge per block tilled if charge > 0
-        if (charge > 0) {
-            ItemUtils.setCharge(stack, charge - 1);
-        }
 
         return super.postMine(e);
     }

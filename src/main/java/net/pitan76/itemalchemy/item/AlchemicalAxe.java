@@ -72,10 +72,6 @@ public class AlchemicalAxe extends CompatAxeItem implements IRechargeableFromKle
 
         int charge = ItemUtils.getCharge(stack);
         
-        // Consume 1 charge per block mined if charge > 0
-        if (charge > 0) {
-            ItemUtils.setCharge(stack, charge - 1);
-        }
 
         return super.postMine(e);
     }

@@ -121,10 +121,6 @@ public class AlchemicalPickaxe extends CompatPickaxeItem implements IRechargeabl
             }
         }
 
-        // Consume 1 charge per block mined if charge > 0
-        if (charge > 0) {
-            ItemUtils.setCharge(stack, charge - 1);
-        }
 
         return super.postMine(e);
     }
