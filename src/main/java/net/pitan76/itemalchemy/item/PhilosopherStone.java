@@ -11,6 +11,8 @@ import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.item.EnchantableArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
+import net.pitan76.mcpitanlib.api.event.item.ItemBarColorArgs;
+import net.pitan76.mcpitanlib.api.event.item.ItemBarStepArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseOnBlockEvent;
 import net.pitan76.mcpitanlib.api.item.FixedRecipeRemainderItem;
@@ -235,6 +237,16 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
     @Override
     public boolean isItemBarVisible(ItemBarVisibleArgs args) {
         return CustomDataUtil.contains(args.getStack(), "itemalchemy");
+    }
+
+    @Override
+    public int getItemBarStep(ItemBarStepArgs args) {
+        return 13 * ItemUtils.getCharge(args.stack) / ItemUtils.MAX_CHARGE_VALUE;
+    }
+
+    @Override
+    public int getItemBarColor(ItemBarColorArgs args) {
+        return 0xE01919;
     }
 
     @Override

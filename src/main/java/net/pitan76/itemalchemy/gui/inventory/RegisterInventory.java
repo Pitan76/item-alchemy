@@ -61,7 +61,7 @@ public class RegisterInventory extends CompatInventory {
 
                 List<String> items = new ArrayList<>();
                 if (learning) {
-                    items.addAll(((ILearnableItem) stack.getItem()).onLearn(player));
+                    items.addAll(((ILearnableItem) stack.getItem().get()).onLearn(player));
                 } else if (EMCManager.get(stack) != 0) {
                     items.add(stack.getItem().getId().toString());
                 }
