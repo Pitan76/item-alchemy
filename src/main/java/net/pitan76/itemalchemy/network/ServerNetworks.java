@@ -3,10 +3,12 @@ package net.pitan76.itemalchemy.network;
 import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import net.pitan76.itemalchemy.item.AlchemicalToolMode;
+import net.pitan76.itemalchemy.item.IArmorEffect;
 import net.pitan76.itemalchemy.sound.Sounds;
 import net.pitan76.itemalchemy.util.ItemCharge;
 import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.item.ArmorEquipmentType;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
@@ -29,6 +31,13 @@ public class ServerNetworks {
             "itemalchemy_emc_collector",
             "itemalchemy_emc_battery",
             "itemalchemy_emc_condenser"
+    };
+
+    private static final ArmorEquipmentType[] ARMOR_SLOTS = {
+            ArmorEquipmentType.HEAD,
+            ArmorEquipmentType.CHEST,
+            ArmorEquipmentType.LEGS,
+            ArmorEquipmentType.FEET
     };
 
     public static void init() {
@@ -86,6 +95,33 @@ public class ServerNetworks {
                     WorldUtil.playSound(player.getWorld(), null, player.getBlockPos(), player.isSneaking() ? Sounds.UNCHARGE_SOUND : Sounds.CHARGE_SOUND, CompatSoundCategory.PLAYERS, 0.15f, 0.4f + afterChargeLevel / 5f);
                 }
             }
+        });
+
+        ServerNetworking.registerReceiver(_id("armor_effect"), (e) -> {
+            Player player = e.player;
+
+            boolean enabled = false;
+            boolean found = false;
+
+            // 着用中のItem Alchemy製防具をまとめて切り替える
+            for (ArmorEquipmentType type : ARMOR_SLOTS) {
+                ItemStack stack = player.getEquippedStack(type);
+                if (!(stack.getItem() instanceof IArmorEffect)) continue;
+
+                IArmorEffect armor = (IArmorEffect) stack.getItem();
+
+                // 部位ごとにバラバラにならないよう、最初に見つけた部位の切り替え先へ揃える
+                if (!found) {
+                    enabled = !armor.isEffectEnabled(stack);
+                    found = true;
+                }
+
+                armor.setEffectEnabled(stack, enabled);
+            }
+
+            if (!found) return;
+
+            player.sendMessage(TextUtil.literal("§a[Item Alchemy] §r" + (enabled ? "Armor effects enabled" : "Armor effects disabled")));
         });
 
         ServerNetworking.registerReceiver(_id("change_mode"), (e) -> {

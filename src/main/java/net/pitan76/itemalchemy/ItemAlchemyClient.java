@@ -116,6 +116,7 @@ public class ItemAlchemyClient {
         // category: key.category.itemalchemy.main
         KeybindingRegistry.registerOnLevelWithNetwork("key.itemalchemy.charge", KeyCodes.KEY_V, _id("main"), _id("tool_charge"));
         KeybindingRegistry.registerOnLevelWithNetwork("key.itemalchemy.changemode", KeyCodes.KEY_G, _id("main"), _id("change_mode"));
+        KeybindingRegistry.registerOnLevelWithNetwork("key.itemalchemy.armoreffect", KeyCodes.KEY_B, _id("main"), _id("armor_effect"));
     }
 
     // display emc to the item's tooltip

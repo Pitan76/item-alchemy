@@ -207,19 +207,19 @@
 
   "item.itemalchemy.dark_matter_helmet": "Dark Matter Helmet",
   "item.itemalchemy.dark_matter_helmet.desc": "§5A helmet forged from Dark Matter",
-  "item.itemalchemy.dark_matter_helmet.desc_shift": "§9Special ability: Night vision|||§6Charge §7- Activate abilities|||§5Self-repair via EMC",
+  "item.itemalchemy.dark_matter_helmet.desc_shift": "§9Special ability: Night vision|||§6Armor Effect §7- Toggle abilities|||§5Self-repair via EMC",
 
   "item.itemalchemy.dark_matter_chestplate": "Dark Matter Chestplate",
   "item.itemalchemy.dark_matter_chestplate.desc": "§5A chestplate forged from Dark Matter",
-  "item.itemalchemy.dark_matter_chestplate.desc_shift": "§9Special ability: Damage resistance|||§6Charge §7- Activate abilities|||§5Self-repair via EMC",
+  "item.itemalchemy.dark_matter_chestplate.desc_shift": "§9Special ability: Damage resistance|||§6Armor Effect §7- Toggle abilities|||§5Self-repair via EMC",
 
   "item.itemalchemy.dark_matter_leggings": "Dark Matter Leggings",
   "item.itemalchemy.dark_matter_leggings.desc": "§5Leggings forged from Dark Matter",
-  "item.itemalchemy.dark_matter_leggings.desc_shift": "§9Special ability: Speed boost|||§6Charge §7- Activate abilities|||§5Self-repair via EMC",
+  "item.itemalchemy.dark_matter_leggings.desc_shift": "§9Special ability: Speed boost|||§6Armor Effect §7- Toggle abilities|||§5Self-repair via EMC",
 
   "item.itemalchemy.dark_matter_boots": "Dark Matter Boots",
   "item.itemalchemy.dark_matter_boots.desc": "§5Boots forged from Dark Matter",
-  "item.itemalchemy.dark_matter_boots.desc_shift": "§9Special ability: Jump boost, step up|||§6Charge §7- Activate abilities|||§5Self-repair via EMC",
+  "item.itemalchemy.dark_matter_boots.desc_shift": "§9Special ability: Jump boost, step up|||§6Armor Effect §7- Toggle abilities|||§5Self-repair via EMC",
 
   "item.itemalchemy.red_matter_helmet": "Red Matter Helmet",
   "item.itemalchemy.red_matter_helmet.desc": "§cThe ultimate helmet",
@@ -227,7 +227,7 @@
 
   "item.itemalchemy.red_matter_chestplate": "Red Matter Chestplate",
   "item.itemalchemy.red_matter_chestplate.desc": "§cThe ultimate chestplate",
-  "item.itemalchemy.red_matter_chestplate.desc_shift": "§9Special ability: Temporary invulnerability|||§6Charge §7- Flight ability|||§cStrongest chest protection",
+  "item.itemalchemy.red_matter_chestplate.desc_shift": "§9Special ability: Temporary invulnerability|||§6Armor Effect §7- Flight ability|||§cStrongest chest protection",
 
   "item.itemalchemy.red_matter_leggings": "Red Matter Leggings",
   "item.itemalchemy.red_matter_leggings.desc": "§cThe ultimate leggings",
@@ -235,7 +235,7 @@
 
   "item.itemalchemy.red_matter_boots": "Red Matter Boots",
   "item.itemalchemy.red_matter_boots.desc": "§cThe ultimate boots",
-  "item.itemalchemy.red_matter_boots.desc_shift": "§9Special ability: Flight, water walk|||§6Charge §7- Air walk|||§cPerfect footwear",
+  "item.itemalchemy.red_matter_boots.desc_shift": "§9Special ability: Flight, water walk|||§6Armor Effect §7- Air walk|||§cPerfect footwear",
 
   "item.itemalchemy.klein_star_ein": "Klein Star Ein",
   "item.itemalchemy.klein_star_ein.desc": "§7First tier Klein Star",
@@ -277,6 +277,7 @@
   "key.category.itemalchemy.main": "Item Alchemy",
   "key.itemalchemy.charge": "Charge",
   "key.itemalchemy.changemode": "Change Mode",
+  "key.itemalchemy.armoreffect": "Armor Effect",
 
   "message.itemalchemy.failed_to_set_team": "[Item Alchemy] Failed to set team",
   "message.itemalchemy.diving_rod_switch_mode": "Switched to mode %s",

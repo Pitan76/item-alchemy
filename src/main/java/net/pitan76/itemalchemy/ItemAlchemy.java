@@ -15,6 +15,7 @@ import net.pitan76.itemalchemy.network.ServerNetworks;
 import net.pitan76.itemalchemy.recipe.AlchemicalRecipeManager;
 import net.pitan76.itemalchemy.sound.Sounds;
 import net.pitan76.itemalchemy.tile.Tiles;
+import net.pitan76.itemalchemy.item.IArmorEffect;
 import net.pitan76.itemalchemy.util.ItemCharge;
 import net.pitan76.mcpitanlib.api.CommonModInitializer;
 import net.pitan76.mcpitanlib.api.command.CommandRegistry;
@@ -25,6 +26,7 @@ import net.pitan76.mcpitanlib.api.event.v1.RecipeManagerRegistry;
 import net.pitan76.mcpitanlib.api.event.v2.ItemEventRegistry;
 import net.pitan76.mcpitanlib.api.registry.v2.CompatRegistryV2;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.Logger;
 import net.pitan76.mcpitanlib.midohra.registry.MidohraRegistryV2;
 
@@ -87,7 +89,7 @@ public class ItemAlchemy extends CommonModInitializer {
         //EventRegistry.ServerLifecycle.serverStopped(EMCManager::exit);
 
         ItemStackActionEvent.register((stack) -> {
-            if (!(stack.getItem() instanceof ItemCharge)) return;
+            if (!(ItemStackUtil.getItem(stack) instanceof ItemCharge) && !(ItemStackUtil.getItem(stack) instanceof IArmorEffect)) return;
 
             ItemStackActionEvent.setReturnValue(false);
         });
