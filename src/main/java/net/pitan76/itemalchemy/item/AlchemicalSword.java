@@ -4,6 +4,8 @@ import net.pitan76.itemalchemy.util.IRechargeableFromKlein;
 import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
+import net.pitan76.mcpitanlib.api.event.item.ItemBarColorArgs;
+import net.pitan76.mcpitanlib.api.event.item.ItemBarStepArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
 import net.pitan76.mcpitanlib.api.item.args.tool.MiningSpeedMultiplierArgs;
 import net.pitan76.mcpitanlib.api.item.args.tool.SuitableForArgs;
@@ -44,6 +46,16 @@ public class AlchemicalSword extends CompatSwordItem implements IRechargeableFro
     @Override
     public boolean isItemBarVisible(ItemBarVisibleArgs args, Options options) {
         return CustomDataUtil.contains(args.getStack(), "itemalchemy");
+    }
+
+    @Override
+    public int getItemBarStep(ItemBarStepArgs args, Options options) {
+        return ItemUtils.getChargeBarStep(args.getStack());
+    }
+
+    @Override
+    public int getItemBarColor(ItemBarColorArgs args, Options options) {
+        return ItemUtils.CHARGE_BAR_COLOR;
     }
 
     @Override

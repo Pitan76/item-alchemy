@@ -241,12 +241,12 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
 
     @Override
     public int getItemBarStep(ItemBarStepArgs args) {
-        return 13 * ItemUtils.getCharge(args.stack) / ItemUtils.MAX_CHARGE_VALUE;
+        return ItemUtils.getChargeBarStep(args.stack);
     }
 
     @Override
     public int getItemBarColor(ItemBarColorArgs args) {
-        return 0xE01919;
+        return ItemUtils.CHARGE_BAR_COLOR;
     }
 
     @Override

@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -104,5 +105,39 @@ public class ItemUtils {
 
     public static void setCharge(net.pitan76.mcpitanlib.midohra.item.ItemStack stack, int charge) {
         setCharge(stack.toMinecraft(), charge);
+    }
+
+    // Color of the charge bar shown under chargeable items.
+    public static final int CHARGE_BAR_COLOR = 0xE01919;
+
+    // Number of segments in a vanilla item bar.
+    private static final int ITEM_BAR_SEGMENTS = 13;
+
+    /**
+     * Returns the item bar step (0-13) representing the charge level of the given {@link ItemStack}.
+     * Chargeable items are not damageable, so the vanilla damage based bar would always render full.
+     */
+    public static int getChargeBarStep(ItemStack stack) {
+        int max = getMaxCharge(stack);
+        if (max <= 0) return 0;
+
+        return ITEM_BAR_SEGMENTS * getCharge(stack) / max;
+    }
+
+    public static int getChargeBarStep(net.pitan76.mcpitanlib.midohra.item.ItemStack stack) {
+        return getChargeBarStep(stack.toMinecraft());
+    }
+
+    /**
+     * Returns the maximum charge level of the given {@link ItemStack}, honoring
+     * {@link IRechargeableFromKlein#getMaxCharge()} when the item defines its own limit.
+     */
+    public static int getMaxCharge(@Nullable ItemStack stack) {
+        if (stack == null) return MAX_CHARGE_VALUE;
+
+        if (ItemStackUtil.getItem(stack) instanceof IRechargeableFromKlein)
+            return ((IRechargeableFromKlein) ItemStackUtil.getItem(stack)).getMaxCharge();
+
+        return MAX_CHARGE_VALUE;
     }
 }
