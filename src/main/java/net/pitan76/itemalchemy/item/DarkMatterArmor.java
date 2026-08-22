@@ -1,5 +1,6 @@
 package net.pitan76.itemalchemy.item;
 
+import net.pitan76.itemalchemy.util.IRechargeableFromKlein;
 import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.entity.effect.CompatStatusEffect;
@@ -17,7 +18,7 @@ import net.pitan76.mcpitanlib.api.util.WorldUtil;
 
 import java.util.stream.Collectors;
 
-public class DarkMatterArmor extends CompatibleArmorItem {
+public class DarkMatterArmor extends CompatibleArmorItem implements IRechargeableFromKlein {
 
     private static final int EFFECT_INTERVAL = 60;
     private static final int EFFECT_DURATION = 100;
@@ -61,6 +62,11 @@ public class DarkMatterArmor extends CompatibleArmorItem {
             player.addStatusEffect(
                     new CompatStatusEffectInstance(SPEED, EFFECT_DURATION, 0, true, false));
         }
+    }
+
+    @Override
+    public int getEmcCostPerCharge() {
+        return 1500;
     }
 
     private boolean isWornByPlayer(Player player) {
