@@ -4,6 +4,7 @@ import net.pitan76.itemalchemy.util.IRechargeableFromKlein;
 import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
+import net.pitan76.mcpitanlib.api.event.item.EnchantableArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarColorArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarStepArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
@@ -41,6 +42,11 @@ public class AlchemicalSword extends CompatSwordItem implements IRechargeableFro
     @Override
     public boolean isDamageableOnDefault() {
         return false;
+    }
+
+    @Override
+    public boolean isEnchantable(EnchantableArgs args, Options options) {
+        return true;
     }
 
     @Override
