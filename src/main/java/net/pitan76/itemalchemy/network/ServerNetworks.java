@@ -58,6 +58,8 @@ public class ServerNetworks {
             String text = PacketByteUtil.readString(e.buf);
             NbtCompound translations = PacketByteUtil.readNbtM(e.buf);
             Player player = e.player;
+
+            if (!(player.getCurrentScreenHandler() instanceof AlchemyTableScreenHandler)) return;
             AlchemyTableScreenHandler screenHandler = (AlchemyTableScreenHandler) player.getCurrentScreenHandler();
 
             // Sort
