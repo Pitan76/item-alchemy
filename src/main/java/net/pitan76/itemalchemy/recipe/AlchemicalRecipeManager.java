@@ -48,14 +48,25 @@ public class AlchemicalRecipeManager {
             return;
 
         resourceIds.forEach((resourceId, resource) -> {
+            JsonArray jsonArray;
             try {
                 String json = resource.getContent();
-                JsonArray jsonArray = gson.fromJson(json, JsonArray.class);
-                jsonArray.forEach((jsonElement) -> handle(jsonElement.getAsJsonObject()));
+                jsonArray = gson.fromJson(json, JsonArray.class);
             } catch (Exception e) {
                 e.printStackTrace();
                 ItemAlchemy.INSTANCE.error("Failed to read {}: " + resourceId.toString() + " " + e.getMessage());
+                return;
             }
+
+            if (jsonArray == null) return;
+
+            jsonArray.forEach((jsonElement) -> {
+                try {
+                    handle(jsonElement.getAsJsonObject());
+                } catch (Exception e) {
+                    ItemAlchemy.INSTANCE.error("Failed to load an alchemical recipe in " + resourceId.toString() + " (" + jsonElement + "): " + e.getClass().getName() + ": " + e.getMessage());
+                }
+            });
         });
     }
 
