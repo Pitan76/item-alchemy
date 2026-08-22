@@ -207,19 +207,19 @@
 
   "item.itemalchemy.dark_matter_helmet": "Шлем из Тёмной материи",
   "item.itemalchemy.dark_matter_helmet.desc": "§5Шлем из Тёмной материи",
-  "item.itemalchemy.dark_matter_helmet.desc_shift": "§9Особенность: Ночное зрение|||§6Зарядка §7- Активировать способности|||§5Саморемонт через EMC",
+  "item.itemalchemy.dark_matter_helmet.desc_shift": "§9Особенность: Ночное зрение|||§6Эффект брони §7- Переключить способности|||§5Саморемонт через EMC",
 
   "item.itemalchemy.dark_matter_chestplate": "Нагрудник из Тёмной материи",
   "item.itemalchemy.dark_matter_chestplate.desc": "§5Нагрудник из Тёмной материи",
-  "item.itemalchemy.dark_matter_chestplate.desc_shift": "§9Особенность: Сопротивление урону|||§6Зарядка §7- Активировать способности|||§5Саморемонт через EMC",
+  "item.itemalchemy.dark_matter_chestplate.desc_shift": "§9Особенность: Сопротивление урону|||§6Эффект брони §7- Переключить способности|||§5Саморемонт через EMC",
 
   "item.itemalchemy.dark_matter_leggings": "Поножи из Тёмной материи",
   "item.itemalchemy.dark_matter_leggings.desc": "§5Поножи из Тёмной материи",
-  "item.itemalchemy.dark_matter_leggings.desc_shift": "§9Особенность: Ускорение|||§6Зарядка §7- Активировать способности|||§5Саморемонт через EMC",
+  "item.itemalchemy.dark_matter_leggings.desc_shift": "§9Особенность: Ускорение|||§6Эффект брони §7- Переключить способности|||§5Саморемонт через EMC",
 
   "item.itemalchemy.dark_matter_boots": "Ботинки из Тёмной материи",
   "item.itemalchemy.dark_matter_boots.desc": "§5Ботинки из Тёмной материи",
-  "item.itemalchemy.dark_matter_boots.desc_shift": "§9Особенность: Прыжок, шаг вверх|||§6Зарядка §7- Активировать способности|||§5Саморемонт через EMC",
+  "item.itemalchemy.dark_matter_boots.desc_shift": "§9Особенность: Прыжок, шаг вверх|||§6Эффект брони §7- Переключить способности|||§5Саморемонт через EMC",
 
   "item.itemalchemy.red_matter_helmet": "Шлем из Красной материи",
   "item.itemalchemy.red_matter_helmet.desc": "§cПредельный шлем",
@@ -227,7 +227,7 @@
 
   "item.itemalchemy.red_matter_chestplate": "Нагрудник из Красной материи",
   "item.itemalchemy.red_matter_chestplate.desc": "§cПредельный нагрудник",
-  "item.itemalchemy.red_matter_chestplate.desc_shift": "§9Особенность: Временная неуязвимость|||§6Зарядка §7- Способность полёта|||§cСильнейшая защита груди",
+  "item.itemalchemy.red_matter_chestplate.desc_shift": "§9Особенность: Временная неуязвимость|||§6Эффект брони §7- Способность полёта|||§cСильнейшая защита груди",
 
   "item.itemalchemy.red_matter_leggings": "Поножи из Красной материи",
   "item.itemalchemy.red_matter_leggings.desc": "§cПредельные поножи",
@@ -235,7 +235,7 @@
 
   "item.itemalchemy.red_matter_boots": "Ботинки из Красной материи",
   "item.itemalchemy.red_matter_boots.desc": "§cПредельные ботинки",
-  "item.itemalchemy.red_matter_boots.desc_shift": "§9Особенность: Полёт, ходьба по воде|||§6Зарядка §7- Ходьба по воздуху|||§cИдеальная обувь",
+  "item.itemalchemy.red_matter_boots.desc_shift": "§9Особенность: Полёт, ходьба по воде|||§6Эффект брони §7- Ходьба по воздуху|||§cИдеальная обувь",
 
   "item.itemalchemy.klein_star_ein": "Звезда Кляйна «Ein»",
   "item.itemalchemy.klein_star_ein.desc": "§7Первая ступень Звёзд Кляйна",
@@ -277,6 +277,7 @@
   "key.category.itemalchemy.main": "Item Alchemy",
   "key.itemalchemy.charge": "Зарядить",
   "key.itemalchemy.changemode": "Сменить режим",
+  "key.itemalchemy.armoreffect": "Эффект брони",
 
   "message.itemalchemy.failed_to_set_team": "[Item Alchemy] Не удалось назначить команду",
   "message.itemalchemy.diving_rod_switch_mode": "Переключено в режим %s",
