@@ -114,8 +114,8 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
                 }
 
                 long useEMC = EMCManager.get(targetStack.getItem());
-                if (useEMC == 0) useEMC = 1;
-                if (storedEMC >= useEMC) {
+
+                if (useEMC > 0 && storedEMC >= useEMC) {
                     ItemStack newStack;
                     if (ItemAlchemyConfig.isRemoveDataFromCopyStack()) {
                         // Remove Data
