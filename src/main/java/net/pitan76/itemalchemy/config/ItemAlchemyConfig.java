@@ -19,6 +19,9 @@ public class ItemAlchemyConfig {
     private static boolean removeDataFromCopyStack = true;
     private static boolean showEmcInTooltip = true; // requires restart game to apply (ReloadCommand is not working)
 
+    // 自動EMC計算で、EMCが未確定の材料を含むレシピを捨てるかどうか
+    private static boolean strictEmcGeneration = false;
+
     // Tome of Knowledge でのアイテムを一括解禁の有無
     private static boolean tomeOfKnowledgeEnabled = true;
     // Tome of Knowledge で解禁ブラックリスト、「,」カンマ区切りのID。"modid:*" で名前空間ごと指定可能
@@ -40,6 +43,7 @@ public class ItemAlchemyConfig {
 
         removeDataFromCopyStack = config.getBooleanOrCreate("remove_data_from_copy_stack", true);
         showEmcInTooltip = config.getBooleanOrCreate("show_emc_in_tooltip", true);
+        strictEmcGeneration = config.getBooleanOrCreate("strict_emc_generation", false);
         tomeOfKnowledgeEnabled = config.getBooleanOrCreate("tome_of_knowledge_enabled", true);
         setTomeOfKnowledgeBlacklist(config.getStringOrCreate("tome_of_knowledge_blacklist", ""), false);
 
@@ -64,6 +68,15 @@ public class ItemAlchemyConfig {
 
     public static void setShowEmcInTooltip(boolean showEmcInTooltip) {
         ItemAlchemyConfig.showEmcInTooltip = showEmcInTooltip;
+        isChanged = true;
+    }
+
+    public static boolean isStrictEmcGeneration() {
+        return strictEmcGeneration;
+    }
+
+    public static void setStrictEmcGeneration(boolean strictEmcGeneration) {
+        ItemAlchemyConfig.strictEmcGeneration = strictEmcGeneration;
         isChanged = true;
     }
 
@@ -154,6 +167,7 @@ public class ItemAlchemyConfig {
     public static Boolean reset() {
         config.setBoolean("remove_data_from_copy_stack", true);
         config.setBoolean("show_emc_in_tooltip", true);
+        config.setBoolean("strict_emc_generation", false);
         config.setBoolean("tome_of_knowledge_enabled", true);
         config.setString("tome_of_knowledge_blacklist", "");
         return true;

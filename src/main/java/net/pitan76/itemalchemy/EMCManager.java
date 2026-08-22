@@ -8,6 +8,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.pitan76.easyapi.config.Config;
 import net.pitan76.easyapi.config.JsonConfig;
+import net.pitan76.itemalchemy.config.ItemAlchemyConfig;
 import net.pitan76.itemalchemy.data.ModState;
 import net.pitan76.itemalchemy.data.PlayerState;
 import net.pitan76.itemalchemy.data.ServerState;
@@ -218,6 +219,8 @@ public class EMCManager {
                             unsetRecipes.add(recipe);
                             return false;
                         }
+
+                        if (ItemAlchemyConfig.isStrictEmcGeneration()) return false;
                         //totalEmc += 1 / outStack.getCount();
                     }
                 }
