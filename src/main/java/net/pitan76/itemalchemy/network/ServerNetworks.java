@@ -90,6 +90,7 @@ public class ServerNetworks {
 
                 int afterChargeLevel = player.isSneaking() ? chargeLevel - 1 : chargeLevel + 1;
                 ItemUtils.setCharge(stack, afterChargeLevel);
+                ItemUtils.setTargetCharge(stack, afterChargeLevel);
 
                 if (ItemUtils.getCharge(stack) == afterChargeLevel) {
                     WorldUtil.playSound(player.getWorld(), null, player.getBlockPos(), player.isSneaking() ? Sounds.UNCHARGE_SOUND : Sounds.CHARGE_SOUND, CompatSoundCategory.PLAYERS, 0.15f, 0.4f + afterChargeLevel / 5f);
