@@ -78,6 +78,8 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
         List<ItemEntityWrapper> items = ItemEntityUtil.getEntityWrappers(world,
                 new Box(pos).expand(PEDESTAL_RANGE));
 
+        boolean changed = false;
+
         for (ItemEntityWrapper itemEntity : items) {
             Vector3d itemPos = itemEntity.getPos();
             double dx = pedestalPos.getX() - itemPos.getX();
@@ -95,11 +97,12 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
             } else {
                 if (addToInventory(stack, itemEntity.getStack(), registryLookup)) {
                     itemEntity.discard();
+                    changed = true;
                 }
             }
         }
 
-        return false;
+        return changed;
     }
 
     private void spawnPedestalParticles(World world, BlockPos pos) {
@@ -124,17 +127,21 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
         }
     }
 
+    /**
+     * 収納しているアイテムのNBTを読み出す。
+     */
     private NbtList getInventoryNbt(ItemStack stack) {
         NbtCompound nbt = stack.getCustomNbtM();
-        if (!nbt.has(INVENTORY_NBT_KEY))
-            nbt.put(INVENTORY_NBT_KEY, NbtList.of());
+        if (!nbt.has(INVENTORY_NBT_KEY)) return NbtList.of();
 
         Optional<NbtList> optionalNbtList = NbtList.ofOptional(nbt.get(INVENTORY_NBT_KEY));
-        return optionalNbtList.orElseGet(() -> {
-            NbtList newList = NbtList.of();
-            nbt.put(INVENTORY_NBT_KEY, newList);
-            return newList;
-        });
+        return optionalNbtList.orElseGet(NbtList::of);
+    }
+
+    private void setInventoryNbt(ItemStack stack, NbtList inventory) {
+        NbtCompound nbt = stack.getCustomNbtM();
+        nbt.put(INVENTORY_NBT_KEY, inventory);
+        stack.setCustomNbt(nbt);
     }
 
     private boolean addToInventory(ItemStack stack, ItemStack itemStack, CompatRegistryLookup registryLookup) {
@@ -151,7 +158,8 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
             itemNbt.putSimpleItemStack("item", itemStack);
 
         inventory.add(itemNbt.toElement());
-        
+        setInventoryNbt(stack, inventory);
+
         return true;
     }
 
@@ -168,6 +176,7 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
 
         NbtElement itemNbtElement = inventory.get(0);
         inventory.remove(0);
+        setInventoryNbt(stack, inventory);
 
         NbtCompound itemNbt = itemNbtElement.asNbtCompound();
         if (itemNbt == null) return ItemStack.EMPTY;
@@ -179,10 +188,6 @@ public class BlackHoleBand extends Ring implements IPedestalItem {
     }
 
     public void clearInventory(ItemStack stack) {
-        NbtCompound nbt = stack.getCustomNbtM();
-        if (nbt != null) {
-            nbt.put(INVENTORY_NBT_KEY, NbtList.of());
-            stack.setCustomNbt(nbt);
-        }
+        setInventoryNbt(stack, NbtList.of());
     }
 }

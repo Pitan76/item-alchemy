@@ -26,6 +26,7 @@ import java.util.Optional;
 public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem, IRechargeableFromKlein {
 
     private static final int BONUS_TICKS_PER_CHARGE = 4;
+    private static final int BLOCK_UPDATE_INTERVAL = 4;
     private static final double MOB_SLOWDOWN = 0.25;
 
     public WatchOfFlowingTime(CompatibleItemSettings settings) {
@@ -67,18 +68,21 @@ public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem,
                 pos.add(DMPedestalTile.RANGE + 1, DMPedestalTile.RANGE + 1, DMPedestalTile.RANGE + 1)
         );
 
-        speedUpBlockEntities(world, effectBox, bonusTicks);
-        speedUpRandomTicks(world, effectBox, bonusTicks);
         slowMobs(world, effectBox);
+
+        if (world.getTime() % BLOCK_UPDATE_INTERVAL != 0) return false;
+
+        BlockPos min = pos.subtract(DMPedestalTile.RANGE, DMPedestalTile.RANGE, DMPedestalTile.RANGE);
+        BlockPos max = pos.add(DMPedestalTile.RANGE, DMPedestalTile.RANGE, DMPedestalTile.RANGE);
+
+        speedUpBlockEntities(world, min, max, bonusTicks * BLOCK_UPDATE_INTERVAL);
+        speedUpRandomTicks(world, min, max, bonusTicks * BLOCK_UPDATE_INTERVAL);
 
         return false;
     }
 
-    private void speedUpBlockEntities(World world, Box box, int bonusTicks) {
+    private void speedUpBlockEntities(World world, BlockPos min, BlockPos max, int bonusTicks) {
         if (world.isClient()) return;
-
-        BlockPos min = box.getMinPos();
-        BlockPos max = box.getMaxPos();
 
         for (BlockPos pos : BlockPos.iterate(min, max)) {
             BlockEntityWrapper blockEntity = world.getBlockEntity(pos);
@@ -90,13 +94,10 @@ public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem,
         }
     }
 
-    private void speedUpRandomTicks(World world, Box box, int bonusTicks) {
+    private void speedUpRandomTicks(World world, BlockPos min, BlockPos max, int bonusTicks) {
         Optional<ServerWorld> optionalServerWorld = world.toServerWorld();
         if (!optionalServerWorld.isPresent()) return;
         ServerWorld serverWorld = optionalServerWorld.get();
-
-        BlockPos min = box.getMinPos();
-        BlockPos max = box.getMaxPos();
 
         for (BlockPos pos : BlockPos.iterate(min, max)) {
             BlockState state = world.getBlockState(pos);

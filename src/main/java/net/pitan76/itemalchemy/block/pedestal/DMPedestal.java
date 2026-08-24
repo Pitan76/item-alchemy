@@ -117,7 +117,11 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
                         }
                         extractedCount++;
                     }
-                    
+
+                    // removeFirstItemはスタックのNBTを書き換えるので保存・同期させる
+                    if (extractedCount > 0)
+                        pedestal.setStack(pedestalStack, world.getRegistryLookup());
+
                     world.playSound(null, pos, CompatSoundEvents.ENTITY_ITEM_PICKUP, CompatSoundCategory.BLOCKS, 0.5F, 1.5F);
                     return e.success();
                 }
@@ -149,6 +153,9 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
                         } else {
                             player.offerOrDrop(extracted);
                         }
+
+                        // removeFirstItemはスタックのNBTを書き換えるので保存・同期させる
+                        pedestal.setStack(pedestalStack, world.getRegistryLookup());
 
                         world.playSound(null, pos, CompatSoundEvents.ENTITY_ITEM_PICKUP, CompatSoundCategory.BLOCKS, 0.5F, 1.0F);
                         return e.success();
@@ -186,6 +193,7 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
 
         ItemStack toDrop = ItemStack.empty();
         BlockPos pos = e.getMidohraPos();
+        World world = e.getMidohraWorld();
 
         // Direct lookup — works in older MC versions where BE is still accessible here.
         BlockEntity be = e.getBlockEntity();
@@ -196,15 +204,15 @@ public class DMPedestal extends CompatBlock implements ExtendBlockEntityProvider
         // Fallback for MC 1.21.x: the BE is removed from the world before onStateReplaced
         // fires, so the direct lookup returns null. markRemoved() caches the item for us.
         if (toDrop.isEmpty()) {
-            ItemStack pending = DMPedestalTile.takePendingDrop(pos);
+            ItemStack pending = DMPedestalTile.takePendingDrop(world, pos);
             if (pending != null) toDrop = pending;
         } else {
             // Consume the pending entry so it doesn't accumulate.
-            DMPedestalTile.takePendingDrop(pos);
+            DMPedestalTile.takePendingDrop(world, pos);
         }
 
         if (!toDrop.isEmpty()) {
-            e.getMidohraWorld().spawnStack(toDrop, pos);
+            world.spawnStack(toDrop, pos);
         }
 
         super.onStateReplaced(e);

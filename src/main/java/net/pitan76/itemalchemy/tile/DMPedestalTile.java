@@ -32,17 +32,43 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
     // so world.getBlockEntity(pos) returns null at that point.
     // markRemoved() fires during block removal (after block state is already changed to the new state),
     // so we cache the item here and DMPedestal.onStateReplaced reads it.
-    private static final ConcurrentHashMap<Long, ItemStack> PENDING_DROPS = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, PendingDrop> PENDING_DROPS = new ConcurrentHashMap<>();
 
-    public static ItemStack takePendingDrop(BlockPos pos) {
-        return PENDING_DROPS.remove(pos.asLong());
+    // onStateReplacedはmarkRemovedと同じtickに走るので、これを超えたものは破棄する
+    private static final long PENDING_DROP_EXPIRE_TICKS = 1;
+
+    private static class PendingDrop {
+        final ItemStack stack;
+        final long time;
+
+        PendingDrop(ItemStack stack, long time) {
+            this.stack = stack;
+            this.time = time;
+        }
+    }
+
+    private static String pendingDropKey(World world, BlockPos pos) {
+        return world.getDimensionId() + "@" + pos.asLong();
+    }
+
+    public static ItemStack takePendingDrop(World world, BlockPos pos) {
+        if (world == null) return null;
+
+        PendingDrop pending = PENDING_DROPS.remove(pendingDropKey(world, pos));
+        if (pending == null) return null;
+
+        if (world.getTime() - pending.time > PENDING_DROP_EXPIRE_TICKS) return null;
+
+        return pending.stack;
     }
 
     @Override
     public void markRemovedOverride() {
         World world = getMidohraWorld();
         if (world != null && !world.isClient() && !storedStack.isEmpty()) {
-            PENDING_DROPS.put(getMidohraPos().asLong(), storedStack.copy());
+            long time = world.getTime();
+            PENDING_DROPS.values().removeIf(pending -> time - pending.time > PENDING_DROP_EXPIRE_TICKS);
+            PENDING_DROPS.put(pendingDropKey(world, getMidohraPos()), new PendingDrop(storedStack.copy(), time));
         }
         super.markRemovedOverride();
     }
@@ -93,7 +119,8 @@ public class DMPedestalTile extends CompatBlockEntity implements ExtendBlockEnti
         }
 
         IPedestalItem pedestalItem = (IPedestalItem) storedStack.getRawItem();
-        pedestalItem.updateInPedestal(storedStack, world, blockPos, RegistryLookupUtil.getRegistryLookup(e.world));
+        if (pedestalItem.updateInPedestal(storedStack, world, blockPos, RegistryLookupUtil.getRegistryLookup(e.world)))
+            callMarkDirty();
     }
 
     private void spawnActiveParticles(World world, BlockPos pos) {

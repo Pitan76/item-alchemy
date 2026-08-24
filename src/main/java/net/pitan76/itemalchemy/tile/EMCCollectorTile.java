@@ -91,7 +91,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
 
         if (coolDown == 0 && !isFull()) {
             float skyAngle = world.getSkyAngle();
-            if ((!world.isRaining() && !world.isThundering() && (world.hasSkyLight() && skyAngle <= 0.25 || skyAngle >= 0.75) && world.isSkyVisible(pos.up()))
+            if ((!world.isRaining() && !world.isThundering() && world.hasSkyLight() && (skyAngle <= 0.25 || skyAngle >= 0.75) && world.isSkyVisible(pos.up()))
                     || world.getLuminance(pos.up()) > 10
                     || world.getLuminance(pos.down()) > 10
                     || world.getLuminance(pos.north()) > 10

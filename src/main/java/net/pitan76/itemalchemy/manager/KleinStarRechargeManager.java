@@ -105,14 +105,13 @@ public class KleinStarRechargeManager {
                         chargeableItem.maxCharge - chargeableItem.currentCharge,
                         extracted / chargeableItem.emcPerChargeLevel
                     );
-                    
+
+                    long unusedEmc = extracted - ((long) chargeLevels * chargeableItem.emcPerChargeLevel);
+                    if (unusedEmc > 0) {
+                        KleinStar.addEmc(starStack, unusedEmc);
+                    }
+
                     if (chargeLevels > 0) {
-                        // Refund unused EMC
-                        long unusedEmc = extracted - ((long) chargeLevels * chargeableItem.emcPerChargeLevel);
-                        if (unusedEmc > 0) {
-                            KleinStar.addEmc(starStack, unusedEmc);
-                        }
-                        
                         // Apply charge
                         int newCharge = chargeableItem.currentCharge + chargeLevels;
                         ItemUtils.setCharge(chargeableItem.stack, newCharge);
