@@ -34,7 +34,7 @@ public class EMCImporterScreenHandler extends ExtendedScreenHandler {
         tile = e.getWorldM().getBlockEntity(BlockPos.of(x, y, z)).getCompatBlockEntity(EMCImporterTile.class);
 
         if (buf.readBool()) {
-            tile.teamUUID = PacketByteUtil.readUuid(buf.toCompat()); // TODO: buf.readUuid()
+            tile.teamUUID = PacketByteUtil.readUuid(buf.toCompat());
 
             if (buf.readBool()) {
                 ownerName = buf.readString();
