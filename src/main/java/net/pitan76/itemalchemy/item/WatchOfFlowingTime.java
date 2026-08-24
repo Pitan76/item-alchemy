@@ -2,7 +2,13 @@ package net.pitan76.itemalchemy.item;
 
 import net.pitan76.itemalchemy.block.pedestal.IPedestalItem;
 import net.pitan76.itemalchemy.tile.DMPedestalTile;
+import net.pitan76.itemalchemy.util.IRechargeableFromKlein;
+import net.pitan76.itemalchemy.util.ItemUtils;
+import net.pitan76.mcpitanlib.api.event.item.ItemBarColorArgs;
+import net.pitan76.mcpitanlib.api.event.item.ItemBarStepArgs;
+import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 import net.pitan76.mcpitanlib.api.registry.CompatRegistryLookup;
 import net.pitan76.mcpitanlib.midohra.block.BlockState;
 import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityWrapper;
@@ -17,9 +23,9 @@ import net.pitan76.mcpitanlib.midohra.world.World;
 import java.util.List;
 import java.util.Optional;
 
-public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem {
+public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem, IRechargeableFromKlein {
 
-    private static final int BONUS_TICKS = 8;
+    private static final int BONUS_TICKS_PER_CHARGE = 4;
     private static final double MOB_SLOWDOWN = 0.25;
 
     public WatchOfFlowingTime(CompatibleItemSettings settings) {
@@ -27,22 +33,48 @@ public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem 
     }
 
     @Override
+    public int getEmcCostPerCharge() {
+        return 2000;
+    }
+
+    @Override
+    public boolean isItemBarVisible(ItemBarVisibleArgs args) {
+        return CustomDataUtil.contains(args.getStack(), "itemalchemy");
+    }
+
+    @Override
+    public int getItemBarStep(ItemBarStepArgs args) {
+        return ItemUtils.getChargeBarStep(args.getStack());
+    }
+
+    @Override
+    public int getItemBarColor(ItemBarColorArgs args) {
+        return ItemUtils.CHARGE_BAR_COLOR;
+    }
+
+    private static int getBonusTicks(ItemStack stack) {
+        return BONUS_TICKS_PER_CHARGE * (ItemUtils.getCharge(stack) + 1);
+    }
+
+    @Override
     public boolean updateInPedestal(ItemStack stack, World world, BlockPos pos, CompatRegistryLookup registryLookup) {
         if (world.isClient()) return false;
+
+        int bonusTicks = getBonusTicks(stack);
 
         Box effectBox = new Box(
                 pos.subtract(DMPedestalTile.RANGE, DMPedestalTile.RANGE, DMPedestalTile.RANGE),
                 pos.add(DMPedestalTile.RANGE + 1, DMPedestalTile.RANGE + 1, DMPedestalTile.RANGE + 1)
         );
 
-        speedUpBlockEntities(world, effectBox);
-        speedUpRandomTicks(world, effectBox);
+        speedUpBlockEntities(world, effectBox, bonusTicks);
+        speedUpRandomTicks(world, effectBox, bonusTicks);
         slowMobs(world, effectBox);
 
         return false;
     }
 
-    private void speedUpBlockEntities(World world, Box box) {
+    private void speedUpBlockEntities(World world, Box box, int bonusTicks) {
         if (world.isClient()) return;
 
         BlockPos min = box.getMinPos();
@@ -51,14 +83,14 @@ public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem 
         for (BlockPos pos : BlockPos.iterate(min, max)) {
             BlockEntityWrapper blockEntity = world.getBlockEntity(pos);
             if (blockEntity.isPresent() && !blockEntity.isRemoved() && !blockEntity.instanceOf(DMPedestalTile.class)) {
-                for (int i = 0; i < BONUS_TICKS; i++) {
+                for (int i = 0; i < bonusTicks; i++) {
                     blockEntity.tick();
                 }
             }
         }
     }
 
-    private void speedUpRandomTicks(World world, Box box) {
+    private void speedUpRandomTicks(World world, Box box, int bonusTicks) {
         Optional<ServerWorld> optionalServerWorld = world.toServerWorld();
         if (!optionalServerWorld.isPresent()) return;
         ServerWorld serverWorld = optionalServerWorld.get();
@@ -69,7 +101,7 @@ public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem 
         for (BlockPos pos : BlockPos.iterate(min, max)) {
             BlockState state = world.getBlockState(pos);
             if (state.hasRandomTicks()) {
-                for (int i = 0; i < BONUS_TICKS; i++) {
+                for (int i = 0; i < bonusTicks; i++) {
                     state.randomTick(serverWorld, pos);
                 }
             }
