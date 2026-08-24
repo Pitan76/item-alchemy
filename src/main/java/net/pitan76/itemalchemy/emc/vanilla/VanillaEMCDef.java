@@ -336,6 +336,9 @@ public class VanillaEMCDef extends EMCDef {
         add(Items.PURPLE_SHULKER_BOX, 4176);
         add(Items.POTION, 1);
         addExist("pointed_dripstone", 16);
+        addExist("sulfur_spike", 16);
+        addExist("sulfur", 64);
+        addExist("sulfur_cube_bucket", 832);
         add(Items.APPLE, 128);
         add(Items.POTATO, 64);
         add(Items.BAKED_POTATO, 64);
