@@ -10,6 +10,7 @@ import net.pitan76.itemalchemy.emc.vanilla.VanillaEMCDef;
 import net.pitan76.itemalchemy.gui.screen.ScreenHandlers;
 import net.pitan76.itemalchemy.item.ItemGroups;
 import net.pitan76.itemalchemy.item.Items;
+import net.pitan76.itemalchemy.manager.ArmorEffectManager;
 import net.pitan76.itemalchemy.manager.KleinStarRechargeManager;
 import net.pitan76.itemalchemy.network.ServerNetworks;
 import net.pitan76.itemalchemy.recipe.AlchemicalRecipeManager;
@@ -23,6 +24,7 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.v0.EventRegistry;
 import net.pitan76.mcpitanlib.api.event.v0.event.ItemStackActionEvent;
 import net.pitan76.mcpitanlib.api.event.v1.RecipeManagerRegistry;
+import net.pitan76.mcpitanlib.api.event.v2.EntityEventRegistry;
 import net.pitan76.mcpitanlib.api.event.v2.ItemEventRegistry;
 import net.pitan76.mcpitanlib.api.registry.v2.CompatRegistryV2;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
@@ -84,6 +86,18 @@ public class ItemAlchemy extends CommonModInitializer {
             if (e.isPlayer() && e.isSelected()) {
                 KleinStarRechargeManager.tryRechargeItems(e.getPlayer());
             }
+        });
+
+        EntityEventRegistry.PLAYER_TICK.register((e) -> {
+            if (e.isClient()) return;
+
+            ArmorEffectManager.tick(e.getPlayer());
+        });
+
+        EventRegistry.ServerConnection.quit((p) -> {
+            if (p == null) return;
+
+            ArmorEffectManager.onQuit(new Player(p));
         });
 
         //EventRegistry.ServerLifecycle.serverStopped(EMCManager::exit);

@@ -138,6 +138,7 @@ public class ServerState extends CompatPersistentState implements ModState {
         }
 
         team.owner = owner.getUUID();
+        team.ownerName = owner.getName();
         team.createdAt = System.currentTimeMillis();
         team.teamID = UUID.randomUUID();
 

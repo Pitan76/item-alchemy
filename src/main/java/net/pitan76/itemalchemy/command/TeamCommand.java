@@ -244,11 +244,10 @@ public class TeamCommand extends LiteralCommand {
 
                     if (playerManager.hasPlayerByUUID(state.owner)) {
                         Player player = playerManager.getPlayerByUUID(state.owner);
-                        e.sendSuccess("- §a§l" + state.name + "§7 - §rOwner: §c" + player.getName() + "§r");
-                    } else {
-                        // TODO: This is a bug. The owner is not online, so the owner's name is not displayed.
-                        e.sendSuccess("- §a§l" + state.name + "§7 - §rOwner: §c" + state.owner + "§r");
+                        state.ownerName = player.getName();
                     }
+
+                    e.sendSuccess("- §a§l" + state.name + "§7 - §rOwner: §c" + state.getOwnerName() + "§r");
                 }
             }
         });

@@ -2,7 +2,6 @@ package net.pitan76.itemalchemy.item;
 
 import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.util.TooltipUtil;
-import net.pitan76.mcpitanlib.api.entity.CompatPlayerAbilities;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.entity.effect.CompatStatusEffect;
 import net.pitan76.mcpitanlib.api.entity.effect.CompatStatusEffectInstance;
@@ -23,8 +22,6 @@ public class RedMatterArmor extends CompatibleArmorItem implements IArmorEffect 
 
     private static final int EFFECT_INTERVAL = 60;
     private static final int EFFECT_DURATION = 100;
-
-    private static final float STEP_HEIGHT = 1.0F;
 
     private static final CompatStatusEffect NIGHT_VISION = StatusEffectUtil.getStatusEffect(CompatIdentifier.of("minecraft", "night_vision"));
     private static final CompatStatusEffect FIRE_RESISTANCE = StatusEffectUtil.getStatusEffect(CompatIdentifier.of("minecraft", "fire_resistance"));
@@ -50,13 +47,8 @@ public class RedMatterArmor extends CompatibleArmorItem implements IArmorEffect 
         Player player = e.getPlayer();
         World world = e.getMidohraWorld();
 
-        boolean active = isWornByPlayer(player) && isEffectEnabled(e.getStackM());
-
-        // 解除とかも含めて更新する
-        if (type == ArmorEquipmentType.CHEST) updateFlight(player, active);
-        if (type == ArmorEquipmentType.FEET) updateStepHeight(player, active);
-
-        if (!active) return;
+        if (!isWornByPlayer(player)) return;
+        if (!isEffectEnabled(e.getStackM())) return;
 
         if (type == ArmorEquipmentType.FEET) {
             EntityUtil.setFallDistance(player.getEntity(), 0);
@@ -85,36 +77,7 @@ public class RedMatterArmor extends CompatibleArmorItem implements IArmorEffect 
         }
     }
 
-    /**
-     * 胸当て装備中は飛行を許可する。
-     */
-    private void updateFlight(Player player, boolean active) {
-        if (!active && isWornByPlayer(player)) return;
 
-        CompatPlayerAbilities abilities = player.getCompatAbilities();
-
-        // クリエイティブの飛行権限には触らない
-        if (abilities.isCreativeMode()) return;
-        if (abilities.allowFlying() == active) return;
-
-        abilities.setAllowFlying(active);
-        if (!active) abilities.setFlying(false);
-
-        abilities.sync();
-    }
-
-    /**
-     * ブーツ装備中は1ブロックの段差を登れるようにする。
-     */
-    private void updateStepHeight(Player player, boolean active) {
-        // 予備の防具を所持している場合に、装備中の効果を打ち消さないようにする
-        if (!active && isWornByPlayer(player)) return;
-
-        float stepHeight = active ? STEP_HEIGHT : EntityUtil.getDefaultStepHeight(player.getEntity());
-        if (EntityUtil.getStepHeight(player.getEntity()) == stepHeight) return;
-
-        EntityUtil.setStepHeight(player.getEntity(), stepHeight);
-    }
 
     private boolean isWornByPlayer(Player player) {
         return ItemStackUtil.getItem(player.getEquippedStack(type)) == this;

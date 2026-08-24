@@ -33,7 +33,7 @@ public class AEGUTile extends CompatBlockEntity implements ExtendBlockEntityTick
         this(Tiles.AEGU, e);
     }
 
-    // TODO: Cache Target Condenser Tile
+    private BlockPos cachedTargetPos = null;
 
     @Override
     public void tick(TileTickEvent<AEGUTile> e) {
@@ -41,28 +41,45 @@ public class AEGUTile extends CompatBlockEntity implements ExtendBlockEntityTick
         BlockState state = e.getMidohraState();
         BlockPos pos = e.getMidohraPos();
 
-        if (coolDown == 0) {
-            BlockPos targetPos = getNearEMCCondenserPos(world, pos);
-            if (targetPos != null) {
-                world.setBlockState(pos, AEGUBlock.setConnected(state, true));
-                Optional<EMCCondenserTile> optional = getNearEMCCondenserByTargetPos(world, targetPos);
-                if (!optional.isPresent()) return;
-                EMCCondenserTile tile = optional.get();
+        if (coolDown++ < getMaxCoolDown()) return;
+        coolDown = 0;
 
-                if (tile.storedEMC < tile.maxEMC)
-                    tile.storedEMC += state.getBlock().getCompatBlock(AEGUBlock.class).emc;
-            } else {
-                world.setBlockState(pos, AEGUBlock.setConnected(state, false));
-            }
+        BlockPos targetPos = getCachedTargetPos(world, pos);
+        if (targetPos == null) {
+            world.setBlockState(pos, AEGUBlock.setConnected(state, false));
+            return;
         }
 
-        if (coolDown >= getMaxCoolDown()) {
-            coolDown = 0;
-        }
+        world.setBlockState(pos, AEGUBlock.setConnected(state, true));
+
+        Optional<EMCCondenserTile> optional = getNearEMCCondenserByTargetPos(world, targetPos);
+        if (!optional.isPresent()) return;
+        EMCCondenserTile tile = optional.get();
+
+        if (tile.storedEMC < tile.maxEMC)
+            tile.storedEMC += state.getBlock().getCompatBlock(AEGUBlock.class).emc;
+    }
+
+    /**
+     * キャッシュしたCondenserの位置を返す。まだ有効ならそのまま、無効になっていれば探し直す。
+     */
+    private BlockPos getCachedTargetPos(World world, BlockPos pos) {
+        if (cachedTargetPos != null && world.getBlockEntity(cachedTargetPos).instanceOf(EMCCondenserTile.class))
+            return cachedTargetPos;
+
+        cachedTargetPos = getNearEMCCondenserPos(world, pos);
+
+        return cachedTargetPos;
     }
 
     public Optional<EMCCondenserTile> getNearEMCCondenser() {
-        return getNearEMCCondenser(getMidohraWorld(), getMidohraPos());
+        World world = getMidohraWorld();
+        if (world == null) return Optional.empty();
+
+        BlockPos targetPos = getCachedTargetPos(world, getMidohraPos());
+        if (targetPos == null) return Optional.empty();
+
+        return getNearEMCCondenserByTargetPos(world, targetPos);
     }
 
     public static Optional<EMCCondenserTile> getNearEMCCondenser(World world, BlockPos pos) {

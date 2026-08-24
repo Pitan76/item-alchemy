@@ -17,6 +17,8 @@ public class TeamState {
     public long createdAt;
     public UUID teamID;
     public UUID owner;
+    // オフライン時にもオーナー名を表示できるように保持しておく
+    public String ownerName = "";
     public long storedEMC = 0;
     public boolean isDefault = true;
     public List<String> registeredItems = new ArrayList<>();
@@ -26,6 +28,7 @@ public class TeamState {
         createdAt = nbt.getLong("created_at");
         teamID = nbt.getUuid("id");
         owner = nbt.getUuid("owner");
+        ownerName = nbt.getString("owner_name");
         storedEMC = nbt.getLong("emc");
         isDefault = nbt.getBoolean("is_default");
 
@@ -45,6 +48,7 @@ public class TeamState {
         nbt.putLong("created_at", createdAt);
         nbt.putUuid("id", teamID);
         nbt.putUuid("owner", owner);
+        nbt.putString("owner_name", ownerName);
         nbt.putLong("emc", storedEMC);
         nbt.putBoolean("is_default", isDefault);
 
@@ -57,6 +61,15 @@ public class TeamState {
         }
 
         nbt.put("registered_items", registeredItems);
+    }
+
+    /**
+     * オーナー名。未記録の場合はUUIDを返す。
+     */
+    public String getOwnerName() {
+        if (ownerName == null || ownerName.isEmpty()) return String.valueOf(owner);
+
+        return ownerName;
     }
 
     public boolean isOwner(UUID player) {

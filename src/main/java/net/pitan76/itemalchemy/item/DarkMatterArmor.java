@@ -22,11 +22,10 @@ public class DarkMatterArmor extends CompatibleArmorItem implements IArmorEffect
     private static final int EFFECT_INTERVAL = 60;
     private static final int EFFECT_DURATION = 100;
 
-    private static final float STEP_HEIGHT = 1.0F;
-
     private static final CompatStatusEffect NIGHT_VISION = StatusEffectUtil.getStatusEffect(CompatIdentifier.of("minecraft", "night_vision"));
     private static final CompatStatusEffect FIRE_RESISTANCE = StatusEffectUtil.getStatusEffect(CompatIdentifier.of("minecraft", "fire_resistance"));
     private static final CompatStatusEffect SPEED = StatusEffectUtil.getStatusEffect(CompatIdentifier.of("minecraft", "speed"));
+    private static final CompatStatusEffect JUMP_BOOST = StatusEffectUtil.getStatusEffect(CompatIdentifier.of("minecraft", "jump_boost"));
 
     public DarkMatterArmor(ArmorEquipmentType type, CompatibleItemSettings settings) {
         super(AlchemicalArmorMaterials.DARK_MATTER, type, settings);
@@ -44,16 +43,11 @@ public class DarkMatterArmor extends CompatibleArmorItem implements IArmorEffect
         if (!e.isPlayer()) return;
         Player player = e.getPlayer();
 
-        boolean active = isWornByPlayer(player) && isEffectEnabled(e.getStack());
+        if (!isWornByPlayer(player)) return;
+        if (!isEffectEnabled(e.getStack())) return;
 
-        if (type == ArmorEquipmentType.FEET) updateStepHeight(player, active);
-
-        if (!active) return;
-
-        if (type == ArmorEquipmentType.FEET) {
+        if (type == ArmorEquipmentType.FEET)
             EntityUtil.setFallDistance(player.getEntity(), 0);
-            return;
-        }
 
         if (WorldUtil.getTime(e.world) % EFFECT_INTERVAL != 0) return;
 
@@ -66,21 +60,12 @@ public class DarkMatterArmor extends CompatibleArmorItem implements IArmorEffect
         } else if (type == ArmorEquipmentType.LEGS) {
             player.addStatusEffect(
                     new CompatStatusEffectInstance(SPEED, EFFECT_DURATION, 0, true, false));
+        } else if (type == ArmorEquipmentType.FEET) {
+            player.addStatusEffect(
+                    new CompatStatusEffectInstance(JUMP_BOOST, EFFECT_DURATION, 0, true, false));
         }
     }
 
-    /**
-     * ブーツ装備中は1ブロックの段差を登れるようにする。
-     */
-    private void updateStepHeight(Player player, boolean active) {
-        // 予備の防具を所持している場合に、装備中の効果を打ち消さないようにする
-        if (!active && isWornByPlayer(player)) return;
-
-        float stepHeight = active ? STEP_HEIGHT : EntityUtil.getDefaultStepHeight(player.getEntity());
-        if (EntityUtil.getStepHeight(player.getEntity()) == stepHeight) return;
-
-        EntityUtil.setStepHeight(player.getEntity(), stepHeight);
-    }
 
     private boolean isWornByPlayer(Player player) {
         return ItemStackUtil.getItem(player.getEquippedStack(type)) == this;

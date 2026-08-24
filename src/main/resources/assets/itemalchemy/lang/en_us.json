@@ -211,7 +211,7 @@
 
   "item.itemalchemy.dark_matter_chestplate": "Dark Matter Chestplate",
   "item.itemalchemy.dark_matter_chestplate.desc": "§5A chestplate forged from Dark Matter",
-  "item.itemalchemy.dark_matter_chestplate.desc_shift": "§9Special ability: Damage resistance|||§6Armor Effect §7- Toggle abilities|||§5Self-repair via EMC",
+  "item.itemalchemy.dark_matter_chestplate.desc_shift": "§9Special ability: Fire resistance|||§6Armor Effect §7- Toggle abilities|||§5Self-repair via EMC",
 
   "item.itemalchemy.dark_matter_leggings": "Dark Matter Leggings",
   "item.itemalchemy.dark_matter_leggings.desc": "§5Leggings forged from Dark Matter",
@@ -219,23 +219,23 @@
 
   "item.itemalchemy.dark_matter_boots": "Dark Matter Boots",
   "item.itemalchemy.dark_matter_boots.desc": "§5Boots forged from Dark Matter",
-  "item.itemalchemy.dark_matter_boots.desc_shift": "§9Special ability: Jump boost, step up|||§6Armor Effect §7- Toggle abilities|||§5Self-repair via EMC",
+  "item.itemalchemy.dark_matter_boots.desc_shift": "§9Special ability: Jump boost, step up, no fall damage|||§6Armor Effect §7- Toggle abilities|||§5Self-repair via EMC",
 
   "item.itemalchemy.red_matter_helmet": "Red Matter Helmet",
   "item.itemalchemy.red_matter_helmet.desc": "§cThe ultimate helmet",
-  "item.itemalchemy.red_matter_helmet.desc_shift": "§9Special ability: Night vision, HUD|||§fFull set grants special abilities|||§cMaximum protection",
+  "item.itemalchemy.red_matter_helmet.desc_shift": "§9Special ability: Night vision, water breathing|||§fFull set grants regeneration|||§cMaximum protection",
 
   "item.itemalchemy.red_matter_chestplate": "Red Matter Chestplate",
   "item.itemalchemy.red_matter_chestplate.desc": "§cThe ultimate chestplate",
-  "item.itemalchemy.red_matter_chestplate.desc_shift": "§9Special ability: Temporary invulnerability|||§6Armor Effect §7- Flight ability|||§cStrongest chest protection",
+  "item.itemalchemy.red_matter_chestplate.desc_shift": "§9Special ability: Fire resistance|||§6Armor Effect §7- Creative flight|||§cStrongest chest protection",
 
   "item.itemalchemy.red_matter_leggings": "Red Matter Leggings",
   "item.itemalchemy.red_matter_leggings.desc": "§cThe ultimate leggings",
-  "item.itemalchemy.red_matter_leggings.desc_shift": "§9Special ability: Phase through blocks|||§fSpeed boost always active|||§cUnmatched leg protection",
+  "item.itemalchemy.red_matter_leggings.desc_shift": "§9Special ability: Speed boost, jump boost|||§6Armor Effect §7- Toggle abilities|||§cUnmatched leg protection",
 
   "item.itemalchemy.red_matter_boots": "Red Matter Boots",
   "item.itemalchemy.red_matter_boots.desc": "§cThe ultimate boots",
-  "item.itemalchemy.red_matter_boots.desc_shift": "§9Special ability: Flight, water walk|||§6Armor Effect §7- Air walk|||§cPerfect footwear",
+  "item.itemalchemy.red_matter_boots.desc_shift": "§9Special ability: Step up, no fall damage|||§6Armor Effect §7- Toggle abilities|||§cPerfect footwear",
 
   "item.itemalchemy.klein_star_ein": "Klein Star Ein",
   "item.itemalchemy.klein_star_ein.desc": "§7First tier Klein Star",

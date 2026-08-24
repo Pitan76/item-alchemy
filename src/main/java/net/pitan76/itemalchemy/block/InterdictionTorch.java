@@ -102,7 +102,8 @@ public class InterdictionTorch extends CompatBlock implements ExtendBlockEntityP
                 return state.with(FACING, candidate);
             }
         }
-        return BlockState.of((net.minecraft.block.BlockState) null); // TODO: BlockState.of()  no valid support — cancel placement
+
+        return BlockState.empty();
     }
 
     private boolean isSolid(IWorldView world, BlockPos pos) {
