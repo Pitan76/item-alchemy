@@ -1,6 +1,7 @@
 package net.pitan76.itemalchemy.item;
 
 import net.minecraft.item.ItemStack;
+import net.pitan76.itemalchemy.util.ArmorEffectUtil;
 import net.pitan76.itemalchemy.util.TooltipUtil;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.entity.effect.CompatStatusEffect;
@@ -16,12 +17,12 @@ import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.StatusEffectUtil;
 import net.pitan76.mcpitanlib.midohra.world.World;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class RedMatterArmor extends CompatibleArmorItem implements IArmorEffect {
 
-    private static final int EFFECT_INTERVAL = 60;
-    private static final int EFFECT_DURATION = 100;
+    private static final int EFFECT_INTERVAL = 80;
 
     private static final CompatStatusEffect NIGHT_VISION = StatusEffectUtil.getStatusEffect(CompatIdentifier.of("minecraft", "night_vision"));
     private static final CompatStatusEffect FIRE_RESISTANCE = StatusEffectUtil.getStatusEffect(CompatIdentifier.of("minecraft", "fire_resistance"));
@@ -56,28 +57,21 @@ public class RedMatterArmor extends CompatibleArmorItem implements IArmorEffect 
 
         if (world.getTime() % EFFECT_INTERVAL != 0) return;
 
+        List<CompatStatusEffectInstance> effects = player.getStatusEffects();
+
         if (type == ArmorEquipmentType.HEAD) {
-            player.addStatusEffect(
-                    new CompatStatusEffectInstance(NIGHT_VISION, EFFECT_DURATION, 0, true, false));
-            player.addStatusEffect(
-                    new CompatStatusEffectInstance(WATER_BREATHING, EFFECT_DURATION, 0, true, false));
+            ArmorEffectUtil.refresh(player, effects, NIGHT_VISION, 0);
+            ArmorEffectUtil.refresh(player, effects, WATER_BREATHING, 0);
         } else if (type == ArmorEquipmentType.CHEST) {
-            player.addStatusEffect(
-                    new CompatStatusEffectInstance(FIRE_RESISTANCE, EFFECT_DURATION, 0, true, false));
+            ArmorEffectUtil.refresh(player, effects, FIRE_RESISTANCE, 0);
         } else if (type == ArmorEquipmentType.LEGS) {
-            player.addStatusEffect(
-                    new CompatStatusEffectInstance(SPEED, EFFECT_DURATION, 1, true, false));
-            player.addStatusEffect(
-                    new CompatStatusEffectInstance(JUMP_BOOST, EFFECT_DURATION, 0, true, false));
+            ArmorEffectUtil.refresh(player, effects, SPEED, 1);
+            ArmorEffectUtil.refresh(player, effects, JUMP_BOOST, 0);
         }
 
-        if (hasFullSet(player)) {
-            player.addStatusEffect(
-                    new CompatStatusEffectInstance(REGENERATION, EFFECT_DURATION, 0, true, false));
-        }
+        if (hasFullSet(player))
+            ArmorEffectUtil.refresh(player, effects, REGENERATION, 0);
     }
-
-
 
     private boolean isWornByPlayer(Player player) {
         return ItemStackUtil.getItem(player.getEquippedStack(type)) == this;

@@ -49,9 +49,6 @@ public class KleinStarRechargeManager {
         // Reset counter and perform recharge
         playerTickCounters.put(playerId, 0);
         
-        if (DEBUG_RECHARGE) {
-            System.out.println("[DEBUG-RECHARGE] tryRechargeItems called for player " + player.getName());
-        }
         rechargeItemsFromKleinStar(player);
     }
     
@@ -60,20 +57,15 @@ public class KleinStarRechargeManager {
      * @param player the player to recharge items for
      */
     public static void rechargeItemsFromKleinStar(Player player) {
+        List<ChargeableItem> chargeableItems = findChargeableItems(player);
+        if (chargeableItems.isEmpty()) return;
+
         List<ItemStack> kleinStars = findKleinStars(player);
-        if (kleinStars.isEmpty()) {
-            if (DEBUG_RECHARGE) {
-                System.out.println("[DEBUG-RECHARGE] NO KLEIN STAR - skipping recharge for " + player.getName());
-            }
-            return;
-        }
-        
+        if (kleinStars.isEmpty()) return;
+
         if (DEBUG_RECHARGE) {
             System.out.println("[DEBUG-RECHARGE] Found " + kleinStars.size() + " Klein Stars with EMC");
         }
-        
-        List<ChargeableItem> chargeableItems = findChargeableItems(player);
-        if (chargeableItems.isEmpty()) return;
         
         // Sort by priority (lower charge = higher priority)
         chargeableItems.sort(Comparator
