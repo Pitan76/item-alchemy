@@ -1,21 +1,22 @@
 package net.pitan76.itemalchemy.item;
 
-import net.pitan76.mcpitanlib.api.item.v3.CompatToolMaterial;
+import net.pitan76.mcpitanlib.api.item.tool.CompatMiningLevel;
+import net.pitan76.mcpitanlib.api.item.v4.CompatToolMaterial;
 import net.pitan76.mcpitanlib.api.tag.item.RepairIngredientTag;
 
 public enum AlchemicalToolMaterials implements CompatToolMaterial {
 
-    DARK_MATTER(3, 16, 10.0F, 2.0F, 16),
-    RED_MATTER(3, 16, 15.0F, 4.0F, 20);
+    DARK_MATTER(CompatMiningLevel.DIAMOND, 16, 20.0F, 8.0F, 16),
+    RED_MATTER(CompatMiningLevel.NETHERITE, 16, 40.0F, 12.0F, 20);
 
-    private final int miningLevel;
+    private final CompatMiningLevel miningLevel;
     private final int itemDurability;
     private final float miningSpeed;
     private final float attackDamage;
     private final int enchantability;
     private final RepairIngredientTag repairIngredientTag;
 
-    AlchemicalToolMaterials(int miningLevel, int itemDurability, float miningSpeed, float attackDamage, int enchantability, RepairIngredientTag repairIngredientTag) {
+    AlchemicalToolMaterials(CompatMiningLevel miningLevel, int itemDurability, float miningSpeed, float attackDamage, int enchantability, RepairIngredientTag repairIngredientTag) {
         this.miningLevel = miningLevel;
         this.itemDurability = itemDurability;
         this.miningSpeed = miningSpeed;
@@ -24,7 +25,7 @@ public enum AlchemicalToolMaterials implements CompatToolMaterial {
         this.repairIngredientTag = repairIngredientTag;
     }
 
-    AlchemicalToolMaterials(int miningLevel, int itemDurability, float miningSpeed, float attackDamage, int enchantability) {
+    AlchemicalToolMaterials(CompatMiningLevel miningLevel, int itemDurability, float miningSpeed, float attackDamage, int enchantability) {
         this(miningLevel, itemDurability, miningSpeed, attackDamage, enchantability, RepairIngredientTag.STONE_TOOL_MATERIALS);
     }
 
@@ -44,7 +45,7 @@ public enum AlchemicalToolMaterials implements CompatToolMaterial {
     }
 
     @Override
-    public int getCompatMiningLevel() {
+    public CompatMiningLevel getCompatMiningLevelEnum() {
         return this.miningLevel;
     }
 
