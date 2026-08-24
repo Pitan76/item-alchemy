@@ -22,6 +22,9 @@ public class ItemUtils {
     // Key for getting back charge value of an item.
     public static final String CHARGE_COMPONENT_KEY = "charge";
 
+    // Key for the charge level the player wants the item to be kept at.
+    public static final String TARGET_CHARGE_COMPONENT_KEY = "target_charge";
+
     // Minimum charge value allowed.
     public static final int MIN_CHARGE_VALUE = 0;
     // Maximum charge value allowed.
@@ -105,6 +108,47 @@ public class ItemUtils {
 
     public static void setCharge(net.pitan76.mcpitanlib.midohra.item.ItemStack stack, int charge) {
         setCharge(stack.toMinecraft(), charge);
+    }
+
+    /**
+     * Returns the charge level the item should be automatically recharged up to.
+     * Defaults to the item's maximum charge when the player has never set it manually.
+     *
+     * @param stack of the item to get the target charge value.
+     * @return {@code int} of the target charge value.
+     */
+    public static int getTargetCharge(ItemStack stack) {
+        int max = getMaxCharge(stack);
+        if (!isItemChargeable(stack)) return max;
+
+        NbtCompound nbt = CustomDataUtil.get(stack, ItemAlchemy.MOD_ID);
+        if (!NbtUtil.has(nbt, TARGET_CHARGE_COMPONENT_KEY)) return max;
+
+        return constrainToRange(NbtUtil.getInt(nbt, TARGET_CHARGE_COMPONENT_KEY), MIN_CHARGE_VALUE, max);
+    }
+
+    public static int getTargetCharge(net.pitan76.mcpitanlib.midohra.item.ItemStack stack) {
+        return getTargetCharge(stack.toMinecraft());
+    }
+
+    /**
+     * Sets the charge level automatic recharging is allowed to reach.
+     *
+     * @param stack of the item to set the target charge value.
+     * @param targetCharge value to set the {@code stack} to.
+     */
+    public static void setTargetCharge(ItemStack stack, int targetCharge) {
+        if (!isItemChargeable(stack)) return;
+
+        targetCharge = constrainToRange(targetCharge, MIN_CHARGE_VALUE, getMaxCharge(stack));
+
+        NbtCompound nbt = CustomDataUtil.get(stack, ItemAlchemy.MOD_ID);
+        NbtUtil.set(nbt, TARGET_CHARGE_COMPONENT_KEY, targetCharge);
+        CustomDataUtil.set(stack, ItemAlchemy.MOD_ID, nbt);
+    }
+
+    public static void setTargetCharge(net.pitan76.mcpitanlib.midohra.item.ItemStack stack, int targetCharge) {
+        setTargetCharge(stack.toMinecraft(), targetCharge);
     }
 
     // Color of the charge bar shown under chargeable items.

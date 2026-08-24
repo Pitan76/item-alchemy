@@ -188,9 +188,9 @@ public class KleinStarRechargeManager {
                 IRechargeableFromKlein rechargeableItem = (IRechargeableFromKlein) stack.getItem().get();
 
                 int charge = ItemUtils.getCharge(stack);
-                int maxCharge = rechargeableItem.getMaxCharge();
-                
-                // Skip if max charge
+                int maxCharge = Math.min(rechargeableItem.getMaxCharge(), ItemUtils.getTargetCharge(stack));
+
+                // Skip if already at the target charge
                 if (charge >= maxCharge) continue;
                 
                 // Skip selected item if config requires inactive-only charging
