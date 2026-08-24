@@ -8,6 +8,7 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.gui.ExtendedScreenHandler;
 import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
 import net.pitan76.mcpitanlib.api.gui.args.SlotClickEvent;
+import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatPlayerInventory;
@@ -32,7 +33,7 @@ public class EMCExporterScreenHandler extends ExtendedScreenHandler {
         tile = e.getWorldM().getBlockEntity(BlockPos.of(x, y, z)).getCompatBlockEntity(EMCExporterTile.class);
 
         if (buf.readBool()) {
-            tile.teamUUID = buf.toCompat().readUuid();
+            tile.teamUUID = PacketByteUtil.readUuid(buf.toCompat());
 
             if (buf.readBool()) {
                 ownerName = buf.readString();
