@@ -15,7 +15,7 @@ public interface IArmorEffect {
      */
     default boolean isEffectEnabled(ItemStack stack) {
         NbtCompound nbt = stack.getCustomNbt("itemalchemy");
-        if (!nbt.has(EFFECT_KEY)) return false;
+        if (!nbt.has(EFFECT_KEY)) return true;
 
         return nbt.getBoolean(EFFECT_KEY);
     }

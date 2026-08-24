@@ -22,6 +22,8 @@ public class DarkMatterArmor extends CompatibleArmorItem implements IArmorEffect
     private static final int EFFECT_INTERVAL = 60;
     private static final int EFFECT_DURATION = 100;
 
+    private static final float STEP_HEIGHT = 1.0F;
+
     private static final CompatStatusEffect NIGHT_VISION = StatusEffectUtil.getStatusEffect(CompatIdentifier.of("minecraft", "night_vision"));
     private static final CompatStatusEffect FIRE_RESISTANCE = StatusEffectUtil.getStatusEffect(CompatIdentifier.of("minecraft", "fire_resistance"));
     private static final CompatStatusEffect SPEED = StatusEffectUtil.getStatusEffect(CompatIdentifier.of("minecraft", "speed"));
@@ -42,8 +44,11 @@ public class DarkMatterArmor extends CompatibleArmorItem implements IArmorEffect
         if (!e.isPlayer()) return;
         Player player = e.getPlayer();
 
-        if (!isWornByPlayer(player)) return;
-        if (!isEffectEnabled(e.getStack())) return;
+        boolean active = isWornByPlayer(player) && isEffectEnabled(e.getStack());
+
+        if (type == ArmorEquipmentType.FEET) updateStepHeight(player, active);
+
+        if (!active) return;
 
         if (type == ArmorEquipmentType.FEET) {
             EntityUtil.setFallDistance(player.getEntity(), 0);
@@ -62,6 +67,19 @@ public class DarkMatterArmor extends CompatibleArmorItem implements IArmorEffect
             player.addStatusEffect(
                     new CompatStatusEffectInstance(SPEED, EFFECT_DURATION, 0, true, false));
         }
+    }
+
+    /**
+     * ブーツ装備中は1ブロックの段差を登れるようにする。
+     */
+    private void updateStepHeight(Player player, boolean active) {
+        // 予備の防具を所持している場合に、装備中の効果を打ち消さないようにする
+        if (!active && isWornByPlayer(player)) return;
+
+        float stepHeight = active ? STEP_HEIGHT : EntityUtil.getDefaultStepHeight(player.getEntity());
+        if (EntityUtil.getStepHeight(player.getEntity()) == stepHeight) return;
+
+        EntityUtil.setStepHeight(player.getEntity(), stepHeight);
     }
 
     private boolean isWornByPlayer(Player player) {
