@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.pitan76.easyapi.config.Config;
 import net.pitan76.easyapi.config.JsonConfig;
@@ -23,6 +22,7 @@ import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 import net.pitan76.mcpitanlib.midohra.item.ItemWrapper;
 import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
+import net.pitan76.mcpitanlib.midohra.network.PacketByteBuf;
 import net.pitan76.mcpitanlib.midohra.recipe.*;
 import net.pitan76.mcpitanlib.midohra.resource.Resource;
 import net.pitan76.mcpitanlib.midohra.resource.ResourceManager;
@@ -294,7 +294,7 @@ public class EMCManager {
         if (!player.isServerPlayerEntity()) return;
 
         ServerState serverState = ServerState.of(player);
-        PacketByteBuf buf = PacketByteUtil.create();
+        PacketByteBuf buf = PacketByteBuf.of();
 
         if (!serverState.getTeamByPlayer(player.getUUID()).isPresent()) return;
         TeamState teamState = serverState.getTeamByPlayer(player.getUUID()).get();
@@ -306,19 +306,19 @@ public class EMCManager {
 
         nbt.put("team", teamNBT);
 
-        PacketByteUtil.writeNbt(buf, nbt);
+        buf.writeNbt(nbt);
 
-        ServerNetworking.send(player, _id("sync_emc"), buf);
+        ServerNetworking.send(player, _id("sync_emc"), buf.toCompat());
     }
 
     public static void syncS2C_emc_map(Player player) {
         if (!player.hasNetworkHandler()) return;
         if (map.isEmpty()) return;
 
-        PacketByteBuf buf = PacketByteUtil.create();
-        PacketByteUtil.writeMap(buf, map);
+        PacketByteBuf buf = PacketByteBuf.of();
+        PacketByteUtil.writeMap(buf.toCompat(), map);
         //System.out.println("send emc map to " + player.getName().getString());
-        ServerNetworking.send(player, _id("sync_emc_map"), buf);
+        ServerNetworking.send(player, _id("sync_emc_map"), buf.toCompat());
     }
 
     public static Map<String, Long> defaultEMCMap = new LinkedHashMap<>();

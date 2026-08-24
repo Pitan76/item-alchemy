@@ -1,7 +1,6 @@
 package net.pitan76.itemalchemy.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.text.Text;
@@ -19,6 +18,7 @@ import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
+import net.pitan76.mcpitanlib.midohra.block.MCBlocks;
 import org.jetbrains.annotations.Nullable;
 
 public class EMCExporter extends CompatBlock implements ExtendBlockEntityProvider, IUseableWrench {
@@ -36,7 +36,7 @@ public class EMCExporter extends CompatBlock implements ExtendBlockEntityProvide
     }
 
     public EMCExporter(CompatIdentifier id) {
-        this(CompatibleBlockSettings.copy(id, Blocks.STONE).mapColor(CompatMapColor.YELLOW).strength(2f, 7.0f));
+        this(CompatibleBlockSettings.copy(id, MCBlocks.STONE.get()).mapColor(CompatMapColor.YELLOW).strength(2f, 7.0f));
     }
 
     @Override

@@ -1,6 +1,5 @@
 package net.pitan76.itemalchemy.block;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.inventory.Inventory;
@@ -20,6 +19,7 @@ import net.pitan76.mcpitanlib.api.util.color.CompatMapColor;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 import net.pitan76.mcpitanlib.midohra.block.BlockState;
+import net.pitan76.mcpitanlib.midohra.block.MCBlocks;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.util.math.Direction;
 import net.pitan76.mcpitanlib.midohra.world.World;
@@ -54,7 +54,7 @@ public class EMCCollector extends CompatBlock implements ExtendBlockEntityProvid
     }
 
     public EMCCollector(CompatIdentifier id, long maxEMC) {
-        this(CompatibleBlockSettings.copy(id, Blocks.STONE).mapColor(CompatMapColor.YELLOW).strength(2f, 7.0f), maxEMC);
+        this(CompatibleBlockSettings.copy(id, MCBlocks.STONE.get()).mapColor(CompatMapColor.YELLOW).strength(2f, 7.0f), maxEMC);
     }
 
     @Override

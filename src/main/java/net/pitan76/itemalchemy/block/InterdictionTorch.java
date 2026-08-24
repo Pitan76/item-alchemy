@@ -3,26 +3,25 @@ package net.pitan76.itemalchemy.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.util.shape.VoxelShape;
 import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.block.CompatBlocks;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
 import net.pitan76.mcpitanlib.api.block.args.v2.OutlineShapeEvent;
 import net.pitan76.mcpitanlib.api.block.args.v2.PlacementStateArgs;
 import net.pitan76.mcpitanlib.api.block.args.v2.StateForNeighborUpdateArgs;
-import net.pitan76.mcpitanlib.api.block.v2.CompatBlock;
 import net.pitan76.mcpitanlib.api.block.v2.CompatibleBlockSettings;
+import net.pitan76.mcpitanlib.api.block.v3.CompatBlock;
 import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.state.property.CompatProperties;
 import net.pitan76.mcpitanlib.api.state.property.DirectionProperty;
 import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
-import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 import net.pitan76.mcpitanlib.core.serialization.codecs.CompatBlockMapCodecUtil;
 import net.pitan76.mcpitanlib.midohra.block.BlockState;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
 import net.pitan76.mcpitanlib.midohra.util.math.Direction;
+import net.pitan76.mcpitanlib.midohra.util.shape.VoxelShape;
 import net.pitan76.mcpitanlib.midohra.world.IWorldView;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,11 +29,11 @@ public class InterdictionTorch extends CompatBlock implements ExtendBlockEntityP
 
     public static final DirectionProperty FACING = CompatProperties.FACING;
 
-    protected static final VoxelShape FLOOR_SHAPE = VoxelShapeUtil.blockCuboid(6.0, 0.0, 6.0, 10.0, 10.0, 10.0);
-    protected static final VoxelShape NORTH_SHAPE = VoxelShapeUtil.blockCuboid(5.5, 3.0, 11.0, 10.5, 13.0, 16.0);
-    protected static final VoxelShape SOUTH_SHAPE = VoxelShapeUtil.blockCuboid(5.5, 3.0, 0.0, 10.5, 13.0, 5.0);
-    protected static final VoxelShape EAST_SHAPE = VoxelShapeUtil.blockCuboid(0.0, 3.0, 5.5, 5.0, 13.0, 10.5);
-    protected static final VoxelShape WEST_SHAPE = VoxelShapeUtil.blockCuboid(11.0, 3.0, 5.5, 16.0, 13.0, 10.5);
+    protected static final VoxelShape FLOOR_SHAPE = VoxelShape.blockCuboid(6.0, 0.0, 6.0, 10.0, 10.0, 10.0);
+    protected static final VoxelShape NORTH_SHAPE = VoxelShape.blockCuboid(5.5, 3.0, 11.0, 10.5, 13.0, 16.0);
+    protected static final VoxelShape SOUTH_SHAPE = VoxelShape.blockCuboid(5.5, 3.0, 0.0, 10.5, 13.0, 5.0);
+    protected static final VoxelShape EAST_SHAPE = VoxelShape.blockCuboid(0.0, 3.0, 5.5, 5.0, 13.0, 10.5);
+    protected static final VoxelShape WEST_SHAPE = VoxelShape.blockCuboid(11.0, 3.0, 5.5, 16.0, 13.0, 10.5);
 
     protected CompatMapCodec<? extends Block> CODEC = CompatBlockMapCodecUtil.createCodec(InterdictionTorch::new);
 
@@ -59,7 +58,7 @@ public class InterdictionTorch extends CompatBlock implements ExtendBlockEntityP
     }
 
     @Override
-    public VoxelShape getOutlineShape(OutlineShapeEvent e) {
+    public VoxelShape getOutlineShapeM(OutlineShapeEvent e) {
         Direction dir = e.has(FACING) ? e.get(FACING) : Direction.UP;
         if (dir.equals(Direction.NORTH)) return NORTH_SHAPE;
         if (dir.equals(Direction.SOUTH)) return SOUTH_SHAPE;

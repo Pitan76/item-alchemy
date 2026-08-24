@@ -1,12 +1,9 @@
 package net.pitan76.itemalchemy;
 
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.client.renderer.BlockRenderer;
 import net.pitan76.itemalchemy.client.renderer.blockentity.DMPedestalBlockEntityRenderer;
@@ -26,6 +23,9 @@ import net.pitan76.itemalchemy.tile.DMPedestalTile;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.network.v2.ClientNetworking;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityWrapper;
+import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
+import net.pitan76.mcpitanlib.midohra.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,15 +61,15 @@ public class ItemAlchemyClient {
         WorldRenderRegistry.registerWorldRenderBeforeBlockOutline(new BlockRenderer());
 
         ClientNetworking.registerReceiver(_id("pedestal_sync"), (e) -> {
-            BlockPos pos = PacketByteUtil.readBlockPos(e.buf);
+            BlockPos pos = PacketByteUtil.readBlockPosM(e.buf);
             NbtCompound nbt = PacketByteUtil.readNbt(e.buf);
-            World world = e.getWorld();
+            World world = e.getMidohraWorld();
             if (world == null) return;
-            BlockEntity be = WorldUtil.getBlockEntity(world, pos);
-            if (!(be instanceof DMPedestalTile)) return;
-            DMPedestalTile tile = (DMPedestalTile) be;
+            BlockEntityWrapper be = world.getBlockEntity(pos);
+            if (!be.instanceOf(DMPedestalTile.class)) return;
+            DMPedestalTile tile = be.getCompatBlockEntity(DMPedestalTile.class);
             if (NbtUtil.has(nbt, "PedestalItem")) {
-                Optional<ItemStack> opt = NbtUtil.getItemStack(nbt, "PedestalItem", RegistryLookupUtil.getRegistryLookup(world));
+                Optional<ItemStack> opt = NbtUtil.getItemStack(nbt, "PedestalItem", world.getRegistryLookup());
                 tile.setStackFromPacket(opt.orElse(ItemStackUtil.empty()));
             } else {
                 tile.setStackFromPacket(ItemStackUtil.empty());
