@@ -31,7 +31,7 @@ public class EMCExporterScreen extends CompatInventoryScreen<EMCExporterScreenHa
         if (this.textRenderer == null)
             this.textRenderer = ClientUtil.getTextRenderer();
 
-        setTitleX(backgroundWidth / 2 - textRenderer.getWidth(title) / 2);
+        setTitleX(backgroundWidth / 2 - ScreenUtil.getWidth(title) / 2);
     }
 
     @Override
