@@ -5,7 +5,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.block.Blocks;
+import net.pitan76.itemalchemy.client.model.DarkMatterArmorModel;
+import net.pitan76.itemalchemy.client.model.RedMatterArmorModel;
 import net.pitan76.itemalchemy.client.renderer.BlockRenderer;
+import net.pitan76.itemalchemy.item.Items;
 import net.pitan76.itemalchemy.client.renderer.blockentity.DMPedestalBlockEntityRenderer;
 import net.pitan76.itemalchemy.client.screen.*;
 import net.pitan76.itemalchemy.config.ItemAlchemyConfig;
@@ -16,6 +19,7 @@ import net.pitan76.itemalchemy.gui.screen.ScreenHandlers;
 import net.pitan76.itemalchemy.tile.Tiles;
 import net.pitan76.mcpitanlib.api.client.event.ItemTooltipRegistry;
 import net.pitan76.mcpitanlib.api.client.event.WorldRenderRegistry;
+import net.pitan76.mcpitanlib.api.client.model.CompatArmorModelRegistry;
 import net.pitan76.mcpitanlib.api.client.option.KeyCodes;
 import net.pitan76.mcpitanlib.api.client.registry.CompatRegistryClient;
 import net.pitan76.mcpitanlib.api.client.registry.v3.KeybindingRegistry;
@@ -39,6 +43,11 @@ public class ItemAlchemyClient {
 
     public static void init() {
         ItemAlchemyConfig.initOnce();
+
+        CompatArmorModelRegistry.register(DarkMatterArmorModel.create(), _id("textures/models/armor/dark_matter_armor.png"),
+                Items.DARK_MATTER_HELMET, Items.DARK_MATTER_CHESTPLATE, Items.DARK_MATTER_LEGGINGS, Items.DARK_MATTER_BOOTS);
+        CompatArmorModelRegistry.register(RedMatterArmorModel.create(), _id("textures/models/armor/red_matter_armor.png"),
+                Items.RED_MATTER_HELMET, Items.RED_MATTER_CHESTPLATE, Items.RED_MATTER_LEGGINGS, Items.RED_MATTER_BOOTS);
 
         // Mixinを使った場合、関数が1.20から変更されているために使えないのでこちらで対処しておく
         if (ItemAlchemyConfig.isShowEmcInTooltip())
