@@ -1,13 +1,18 @@
-// Maven Central (Sonatype) への publish 設定
+// Maven Central (Sonatype) / GitHub Packages への publish 設定
 // (MCPitanLib の gradle/maven-publish.gradle と同じ方式)
 //
 // 各サブプロジェクトの build.gradle に publishing ブロックを書くと
 // fabric だけ直して neoforge を忘れる、という事故が起きるためここに集約する。
 //
-// 使い方: ./gradlew publishToCentral  (stagingへdeploy → Central Portalへ引き渡しまで一括)
+// 使い方:
+//   ./gradlew publishToCentral         … Maven Central (stagingへdeploy → Central Portalへ引き渡しまで一括)
+//   ./gradlew publishToGitHubPackages  … GitHub Packages (maven.pkg.github.com/PTOM76/maven)
+// バージョン: 通常は mod_version のまま。-Psnapshot=true を付けたときだけ末尾に -SNAPSHOT を付ける
+//   (GitHub Packages は同じ正式バージョンの上書きを拒否するため。Maven Central には使えない)
 //
 // 認証情報:
 //   sonatype.user / sonatype.key   (または env SONATYPE_USERNAME / SONATYPE_PASSWORD)
+//   gpr.user / gpr.key             (または env GITHUB_ACTOR / GITHUB_TOKEN) … GitHub Packages用 (packages:write が必要)
 // 署名鍵 (上から順に探す。いずれも無ければ gpg コマンドにフォールバック):
 //   env GPG_KEY             … armored秘密鍵そのもの。CI用
 //   signing.keyFile         … armored秘密鍵(.asc)のパス。マシン固有なので
@@ -15,7 +20,7 @@
 //                             (repoのgradle.propertiesは ${} を展開しないので注意)
 // パスフレーズ: signing.password プロパティ または env GPG_PASSPHRASE
 //
-// Maven Central は SNAPSHOT を受け付けないため、version には -SNAPSHOT を付けない。
+// Maven Central は SNAPSHOT を受け付けないため、Central へ出すときは -SNAPSHOT を付けないこと。
 
 // ---- このリポジトリ固有の設定 ----------------------------------
 def pomInfo = [
@@ -52,6 +57,7 @@ def resolveSigningKey = { Project p ->
 }
 
 def isCentralPublish = { gradle.taskGraph.allTasks.any { it.name.toLowerCase().contains("sonatype") } }
+def isSnapshot = (project.findProperty("snapshot") ?: "false").toString().toBoolean()
 
 configure(publishTargets) {
     apply plugin: "maven-publish"
@@ -76,7 +82,7 @@ configure(publishTargets) {
         publications {
             create(pubName, MavenPublication) {
                 artifactId = artifactIdOf(project)
-                version = versionOf(project)
+                version = versionOf(project) + (isSnapshot ? "-SNAPSHOT" : "")
 
                 from components.java
 
@@ -128,6 +134,14 @@ configure(publishTargets) {
                     password = project.findProperty("sonatype.key") ?: System.getenv("SONATYPE_PASSWORD")
                 }
             }
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/PTOM76/maven")
+                credentials {
+                    username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                    password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                }
+            }
         }
     }
 
@@ -153,6 +167,18 @@ configure(publishTargets) {
     tasks.withType(Sign).configureEach {
         onlyIf { isCentralPublish() }
     }
+}
+
+tasks.register("publishToGitHubPackages") {
+    group = "publishing"
+    description = "全モジュールを GitHub Packages へ公開する (-Psnapshot=true で -SNAPSHOT 付き)"
+    dependsOn publishTargets.collect { (it == rootProject ? "" : it.path) + ":publishAllPublicationsToGitHubPackagesRepository" }
+}
+
+// Maven Central は SNAPSHOT を受け付けないため、アップロードを始める前に止める
+gradle.taskGraph.whenReady { graph ->
+    if (isSnapshot && graph.allTasks.any { it.name.toLowerCase().contains("sonatype") })
+        throw new GradleException("-Psnapshot=true は Maven Central へは公開できません (publishToGitHubPackages を使ってください)")
 }
 
 tasks.register("publishToCentral") {
