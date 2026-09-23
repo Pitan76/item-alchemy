@@ -3,9 +3,9 @@ package net.pitan76.itemalchemy.util;
 import net.pitan76.mcpitanlib.api.text.CompatStyle;
 import net.pitan76.mcpitanlib.api.text.TextComponent;
 import net.pitan76.mcpitanlib.api.util.PlatformUtil;
+import net.pitan76.mcpitanlib.api.util.client.KeyboardUtil;
 import net.pitan76.mcpitanlib.api.util.client.LanguageUtil;
 import net.pitan76.mcpitanlib.midohra.item.ItemWrapper;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,17 +17,13 @@ public class TooltipUtil {
 
     /**
      * Checks if the shift key is currently being held down.
-     * Uses GLFW directly for cross-version compatibility.
-     * 
+     * Uses MCPitanLib's KeyboardUtil for cross-version compatibility
+     * (GLFW is no longer available since 26.3).
+     *
      * @return true if either left or right shift key is pressed, false otherwise
      */
     public static boolean hasShiftDown() {
-        long window = GLFW.glfwGetCurrentContext();
-        if (window == 0L) {
-            return false;
-        }
-        return GLFW.glfwGetKey(window, GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS ||
-               GLFW.glfwGetKey(window, GLFW.GLFW_KEY_RIGHT_SHIFT) == GLFW.GLFW_PRESS;
+        return KeyboardUtil.hasShiftDown();
     }
 
     /**
