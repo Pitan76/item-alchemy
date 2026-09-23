@@ -1,0 +1,198 @@
+// Maven Central (Sonatype) への publish 設定
+// (MCPitanLib の gradle/maven-publish.gradle と同じ方式)
+//
+// 各サブプロジェクトの build.gradle に publishing ブロックを書くと
+// fabric だけ直して neoforge を忘れる、という事故が起きるためここに集約する。
+//
+// 使い方: ./gradlew publishToCentral  (stagingへdeploy → Central Portalへ引き渡しまで一括)
+//
+// 認証情報:
+//   sonatype.user / sonatype.key   (または env SONATYPE_USERNAME / SONATYPE_PASSWORD)
+// 署名鍵 (上から順に探す。いずれも無ければ gpg コマンドにフォールバック):
+//   env GPG_KEY             … armored秘密鍵そのもの。CI用
+//   signing.keyFile         … armored秘密鍵(.asc)のパス。マシン固有なので
+//                             ~/.gradle/gradle.properties に絶対パスで書くこと
+//                             (repoのgradle.propertiesは ${} を展開しないので注意)
+// パスフレーズ: signing.password プロパティ または env GPG_PASSPHRASE
+//
+// Maven Central は SNAPSHOT を受け付けないため、version には -SNAPSHOT を付けない。
+
+// ---- このリポジトリ固有の設定 ----------------------------------
+def pomInfo = [
+        name       : "Item Alchemy",
+        description: "A developing port of Equivalent Exchange (like Project E) for FabricMC.",
+        repo       : "Pitan76/item-alchemy", // github.com/<repo>
+        license    : "MIT License",
+        licenseUrl : "https://opensource.org/licenses/MIT",
+]
+
+// publish するプロジェクト
+def publishTargets = [rootProject]
+
+// artifactId / version (既存の GitHub Packages と同じ artifactId を維持)
+def artifactIdOf = { Project p -> rootProject.archives_base_name }
+def versionOf = { Project p -> rootProject.mod_version }
+
+// pom の dependencies から外す依存
+def excludeDep = { String group, String artifact ->
+    (group == "net.pitan76" && artifact.startsWith("mcpitanlib-")) || group == "net.fabricmc.fabric-api"
+}
+// ---------------------------------------------------------------
+
+def resolveSigningKey = { Project p ->
+    def env = System.getenv("GPG_KEY")
+    if (env) return env
+
+    def path = p.findProperty("signing.keyFile")
+    if (!path) return null
+
+    def f = p.file(path)
+    if (!f.exists()) throw new GradleException("signing.keyFile not found: ${f}")
+    return f.text
+}
+
+def isCentralPublish = { gradle.taskGraph.allTasks.any { it.name.toLowerCase().contains("sonatype") } }
+
+configure(publishTargets) {
+    apply plugin: "maven-publish"
+    apply plugin: "signing"
+
+    // Maven Centralはjavadocが必要なため
+    java {
+        withJavadocJar()
+    }
+
+    // MCのクラスを参照するJavadocは軽微な警告で落ちやすいので緩める
+    tasks.withType(Javadoc).configureEach {
+        failOnError = false
+        options.encoding = "UTF-8"
+        options.addStringOption("Xdoclint:none", "-quiet")
+    }
+
+    // mavenFabric / mavenNeoforge / mavenCommon (単一プロジェクトは mavenJava)
+    def pubName = project == rootProject ? "mavenJava" : "maven" + name.capitalize()
+
+    publishing {
+        publications {
+            create(pubName, MavenPublication) {
+                artifactId = artifactIdOf(project)
+                version = versionOf(project)
+
+                from components.java
+
+                pom {
+                    name = pomInfo.name + (project == rootProject ? "" : " (" + project.name + ")")
+                    description = pomInfo.description
+                    url = "https://github.com/" + pomInfo.repo
+                    licenses {
+                        license {
+                            name = pomInfo.license
+                            url = pomInfo.licenseUrl
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = "pitan76"
+                            name = "Pitan76"
+                            email = "admin@pitan76.net"
+                        }
+                    }
+                    scm {
+                        connection = "scm:git:git://github.com/" + pomInfo.repo + ".git"
+                        developerConnection = "scm:git:ssh://github.com/" + pomInfo.repo + ".git"
+                        url = "https://github.com/" + pomInfo.repo
+                    }
+
+                    withXml {
+                        def deps = asNode().dependencies
+                        if (deps.isEmpty()) return
+
+                        deps[0].dependency
+                                .findAll { it.version.text().endsWith("-SNAPSHOT") || excludeDep(it.groupId.text(), it.artifactId.text()) }
+                                .each {
+                                    logger.lifecycle("[${project.name}] drop dep from pom: "
+                                            + it.groupId.text() + ":" + it.artifactId.text() + ":" + it.version.text())
+                                    deps[0].remove(it)
+                                }
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name = "sonatype"
+                url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
+                credentials {
+                    username = project.findProperty("sonatype.user") ?: System.getenv("SONATYPE_USERNAME")
+                    password = project.findProperty("sonatype.key") ?: System.getenv("SONATYPE_PASSWORD")
+                }
+            }
+        }
+    }
+
+    signing {
+        def key = resolveSigningKey(project)
+        def pass = project.findProperty("signing.password") ?: System.getenv("GPG_PASSPHRASE")
+
+        required = isCentralPublish
+
+        if (key && pass) {
+            useInMemoryPgpKeys(key, pass)
+        } else if (!key) {
+            useGpgCmd()
+        }
+
+        sign publishing.publications[pubName]
+    }
+
+    tasks.withType(GenerateModuleMetadata).configureEach {
+        enabled = false
+    }
+
+    tasks.withType(Sign).configureEach {
+        onlyIf { isCentralPublish() }
+    }
+}
+
+tasks.register("publishToCentral") {
+    group = "publishing"
+    description = "全モジュールをstagingへdeployし、Central Portalへ引き渡すまで一括で行う"
+    dependsOn publishTargets.collect { (it == rootProject ? "" : it.path) + ":publishAllPublicationsToSonatypeRepository" }
+
+    doLast {
+        def user = project.findProperty("sonatype.user") ?: System.getenv("SONATYPE_USERNAME")
+        def pass = project.findProperty("sonatype.key") ?: System.getenv("SONATYPE_PASSWORD")
+        if (!user || !pass) throw new GradleException("sonatype credentials are not set")
+
+        def namespace = rootProject.maven_group
+
+        def publishingType = project.findProperty("central.publishingType") ?: "automatic"
+        def api = "https://ossrh-staging-api.central.sonatype.com"
+        def token = Base64.encoder.encodeToString((user + ":" + pass).getBytes("UTF-8"))
+
+        def call = { String method, String url ->
+            def conn = URI.create(url).toURL().openConnection()
+            conn.requestMethod = method
+            conn.setRequestProperty("Authorization", "Bearer " + token)
+            def code = conn.responseCode
+            def body = (code < 400 ? conn.inputStream : conn.errorStream)?.text ?: ""
+            if (code >= 400) throw new GradleException("${method} ${url} -> HTTP ${code}\n${body}")
+            return body
+        }
+
+        def repos = new groovy.json.JsonSlurper()
+                .parseText(call("GET", "$api/manual/search/repositories?state=open"))
+                .repositories
+                .findAll { it.key.endsWith("/${namespace}--default-repository") }
+
+        if (repos.isEmpty()) throw new GradleException("no open staging repository for ${namespace}")
+
+        def warned = repos.findAll { it.warnings }
+        if (warned) throw new GradleException("staging repository has warnings: ${warned*.warnings}")
+
+        logger.lifecycle("promoting ${namespace} (publishing_type=${publishingType})")
+        call("POST", "$api/manual/upload/defaultRepository/${namespace}?publishing_type=${publishingType}")
+        logger.lifecycle("done. https://central.sonatype.com/publishing/deployments")
+    }
+}

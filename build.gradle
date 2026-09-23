@@ -77,43 +77,6 @@ jar {
     }
 }
 
-// configure the maven publication
-publishing {
-    publications {
-        create("mavenJava", MavenPublication) {
-            artifactId = project.archives_base_name
-            version = project.mod_version + "-SNAPSHOT"
-            from components.java
-
-            pom.withXml {
-                def pomNode = asNode()
-                pomNode.dependencies.'*'.findAll {
-                    def groupId = it.groupId.text()
-                    def artifactId = it.artifactId.text()
-
-                    (groupId == 'net.pitan76' && artifactId.startsWith('mcpitanlib-')) ||
-                            (groupId == 'net.fabricmc.fabric-api')
-                }.each() {
-                    it.parent().remove(it)
-                    print("Removed dependency: ${it.groupId.text()}:${it.artifactId.text()}\n")
-                }
-            }
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/PTOM76/maven")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-}
-
 publishMods {
     file = remapJar.archiveFile
     version = project.mod_version
@@ -183,3 +146,5 @@ tasks.register('publishToModSites') {
 //    dependsOn curseforge
     dependsOn 'githubRelease'
 }
+
+apply from: "$rootDir/gradle/maven-publish.gradle"
