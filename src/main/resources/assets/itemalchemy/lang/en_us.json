@@ -270,6 +270,10 @@
 
   "text.itemalchemy.owner": "Owner: %s",
   "text.itemalchemy.shift_info": "§7Press [Shift] for details",
+  "text.itemalchemy.watch.active": "§eActive §7(Right-Click to toggle)",
+  "text.itemalchemy.watch.inactive": "§8Inactive §7(Right-Click to toggle)",
+  "text.itemalchemy.watch.toggle_on": "§a[Item Alchemy] §rWatch of Flowing Time: §aON",
+  "text.itemalchemy.watch.toggle_off": "§a[Item Alchemy] §rWatch of Flowing Time: §cOFF",
   "text.itemalchemy.charge": "Charge: %d%%",
   "text.itemalchemy.emc_stored": "EMC Stored: %d",
   "text.itemalchemy.max_emc": "Max EMC: %d",

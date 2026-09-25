@@ -219,6 +219,10 @@
   "item.itemalchemy.klein_star_omega.desc": "§9终极克莱因之星",
   "item.itemalchemy.klein_star_omega.desc_shift": "§9速度: 无限|||§9可为任何物品供能|||§6右键 §7- 从背包充能|||§c潜行+右键 §7- 放电|||§6进化路线: Ein → Zwei → Drei → Vier → Sphere → Omega|||§9最终阶段",
   "text.itemalchemy.shift_info": "§7按[Shift]显示详情",
+  "text.itemalchemy.watch.active": "§e已启用 §7(右键切换)",
+  "text.itemalchemy.watch.inactive": "§8已禁用 §7(右键切换)",
+  "text.itemalchemy.watch.toggle_on": "§a[Item Alchemy] §r时间洪流怀表: §a开",
+  "text.itemalchemy.watch.toggle_off": "§a[Item Alchemy] §r时间洪流怀表: §c关",
   "text.itemalchemy.charge": "充能: %d%%",
   "text.itemalchemy.emc_stored": "EMC储量: %d",
   "text.itemalchemy.max_emc": "最大EMC: %d"

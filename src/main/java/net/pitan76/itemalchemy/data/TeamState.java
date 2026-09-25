@@ -24,15 +24,17 @@ public class TeamState {
     public List<String> registeredItems = new ArrayList<>();
 
     public void readNbt(NbtCompound nbt) {
-        name = nbt.getString("name");
-        createdAt = nbt.getLong("created_at");
-        teamID = nbt.getUuid("id");
-        owner = nbt.getUuid("owner");
-        ownerName = nbt.getString("owner_name");
-        storedEMC = nbt.getLong("emc");
-        isDefault = nbt.getBoolean("is_default");
+        name = nbt.has("name") ? nbt.getString("name") : "";
+        createdAt = nbt.has("created_at") ? nbt.getLong("created_at") : 0;
+        teamID = nbt.has("id") ? nbt.getUuid("id") : null;
+        owner = nbt.has("owner") ? nbt.getUuid("owner") : null;
+        ownerName = nbt.has("owner_name") ? nbt.getString("owner_name") : "";
+        storedEMC = nbt.has("emc") ? nbt.getLong("emc") : 0;
+        isDefault = !nbt.has("is_default") || nbt.getBoolean("is_default");
 
         ItemAlchemy.logger.infoIfDev("TeamState.readNbt(): nbt: " + nbt);
+
+        if (!nbt.has("registered_items") || !nbt.get("registered_items").isNbtList()) return;
 
         List<String> registeredItems = (nbt.get("registered_items").asNbtList()).stream()
                 .filter(NbtElement::isNbtString)
@@ -44,11 +46,12 @@ public class TeamState {
     }
 
     public void writeNbt(NbtCompound nbt) {
-        nbt.putString("name", name);
+        // nullを書き込もうとすると保存自体が失敗し、ワールド全体のEMCが消えるため必ずガードする
+        nbt.putString("name", name == null ? "" : name);
         nbt.putLong("created_at", createdAt);
-        nbt.putUuid("id", teamID);
-        nbt.putUuid("owner", owner);
-        nbt.putString("owner_name", ownerName);
+        if (teamID != null) nbt.putUuid("id", teamID);
+        if (owner != null) nbt.putUuid("owner", owner);
+        nbt.putString("owner_name", ownerName == null ? "" : ownerName);
         nbt.putLong("emc", storedEMC);
         nbt.putBoolean("is_default", isDefault);
 

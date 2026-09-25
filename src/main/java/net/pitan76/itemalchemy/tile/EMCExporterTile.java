@@ -121,6 +121,7 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         storedEMC = Math.min(teamState.storedEMC, getMaxEMC());
         oldStoredEMC = storedEMC;
         BlockEntityUtil.markDirty(this);
+        markTeamStateDirty();
     }
 
     @Override
@@ -130,6 +131,7 @@ public class EMCExporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         getTeamState().ifPresent(teamState -> {
             if (teamState.storedEMC < consumeEmc) return;
             teamState.storedEMC -= consumeEmc;
+            markTeamStateDirty();
         });
 
         return IInventory.super.removeStack(slot, count);

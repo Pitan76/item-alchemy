@@ -63,14 +63,20 @@ public class ServerState extends CompatPersistentState implements ModState {
         NbtList playerNBTList = NbtList.of();
 
         for (TeamState teamState : teams) {
+            if (teamState.teamID == null) continue;
+
             NbtCompound teamNBT = NbtCompound.of();
             teamState.writeNbt(teamNBT);
+
             teamNBTList.add(teamNBT);
         }
 
         for (PlayerState playerState : players) {
+            if (playerState.playerUUID == null || playerState.teamID == null) continue;
+
             NbtCompound playerNBT = NbtCompound.of();
             playerState.writeNBT(playerNBT);
+
             playerNBTList.add(playerNBT);
         }
 
@@ -95,6 +101,8 @@ public class ServerState extends CompatPersistentState implements ModState {
             TeamState teamState = new TeamState();
             teamState.readNbt(teamNbt.asNbtCompound());
 
+            if (teamState.teamID == null) continue;
+
             teams.add(teamState);
         }
 
@@ -102,6 +110,8 @@ public class ServerState extends CompatPersistentState implements ModState {
         for (NbtElement playerNbt : playerNBTList) {
             PlayerState playerState = new PlayerState();
             playerState.readNbt(playerNbt.asNbtCompound());
+
+            if (playerState.playerUUID == null || playerState.teamID == null) continue;
 
             players.add(playerState);
         }
@@ -157,7 +167,10 @@ public class ServerState extends CompatPersistentState implements ModState {
 
         state.playerUUID = player.getUUID();
 
-        TeamState team = createTeam(player, null);
+        // playersの情報だけが失われた場合でも、既存のチーム (=EMC・登録アイテム) を作り直さずに復帰させる
+        List<TeamState> ownedTeams = getTeamsByOwner(player.getUUID());
+        TeamState team = ownedTeams.isEmpty() ? createTeam(player, null) : ownedTeams.get(0);
+
         state.teamID = team.teamID;
 
         players.add(state);
@@ -179,7 +192,7 @@ public class ServerState extends CompatPersistentState implements ModState {
 
     @Override
     public List<TeamState> getTeamsByOwner(UUID playerUUID) {
-        return teams.stream().filter(teamState -> teamState.owner == playerUUID).collect(Collectors.toList());
+        return teams.stream().filter(teamState -> playerUUID.equals(teamState.owner)).collect(Collectors.toList());
     }
 
     @Override

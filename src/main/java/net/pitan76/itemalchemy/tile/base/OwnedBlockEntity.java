@@ -35,6 +35,18 @@ public abstract class OwnedBlockEntity extends EMCStorageBlockEntity {
         return serverState.getTeam(teamUUID);
     }
 
+    /**
+     * チームのEMCや登録アイテムを変更したあとに必ず呼ぶ。
+     */
+    public void markTeamStateDirty() {
+        if (callGetWorld() == null) return;
+
+        ServerState serverState = ServerState.of(getMidohraWorld());
+        if (serverState == null) return;
+
+        serverState.callMarkDirty();
+    }
+
     public boolean isTeamOwner(Player player) {
         return getTeamState().map(state -> state.isOwner(player)).orElse(false);
     }

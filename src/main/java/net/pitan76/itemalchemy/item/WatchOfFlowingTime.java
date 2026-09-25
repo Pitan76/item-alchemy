@@ -1,12 +1,18 @@
 package net.pitan76.itemalchemy.item;
 
+import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.block.pedestal.IPedestalItem;
 import net.pitan76.itemalchemy.tile.DMPedestalTile;
 import net.pitan76.itemalchemy.util.IRechargeableFromKlein;
 import net.pitan76.itemalchemy.util.ItemUtils;
+import net.pitan76.mcpitanlib.api.event.item.ItemAppendTooltipEvent;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarColorArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarStepArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemBarVisibleArgs;
+import net.pitan76.mcpitanlib.api.event.item.ItemUseEvent;
+import net.pitan76.mcpitanlib.api.util.StackActionResult;
+import net.pitan76.mcpitanlib.api.util.TextUtil;
+import net.pitan76.mcpitanlib.midohra.nbt.NbtCompound;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 import net.pitan76.mcpitanlib.api.registry.CompatRegistryLookup;
@@ -29,8 +35,52 @@ public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem,
     private static final int BLOCK_UPDATE_INTERVAL = 4;
     private static final double MOB_SLOWDOWN = 0.25;
 
+    // 有効/無効の状態を保持するキー
+    public static final String ACTIVE_KEY = "active";
+
     public WatchOfFlowingTime(CompatibleItemSettings settings) {
         super(settings);
+    }
+
+    /**
+     * 時計が有効かどうか。未設定の場合は有効扱い (従来の挙動と互換)。
+     */
+    public static boolean isActive(ItemStack stack) {
+        NbtCompound customNbt = stack.getCustomNbtM().getCompound(ItemAlchemy.MOD_ID);
+        if (!customNbt.has(ACTIVE_KEY)) return true;
+
+        return customNbt.getBoolean(ACTIVE_KEY);
+    }
+
+    public static void setActive(ItemStack stack, boolean active) {
+        NbtCompound nbt = stack.getCustomNbtM();
+        NbtCompound customNbt = nbt.getCompound(ItemAlchemy.MOD_ID);
+
+        customNbt.putBoolean(ACTIVE_KEY, active);
+
+        nbt.put(ItemAlchemy.MOD_ID, customNbt);
+        stack.setCustomNbt(nbt);
+    }
+
+    @Override
+    public StackActionResult onRightClick(ItemUseEvent e) {
+        if (e.isClient()) return e.consume();
+
+        ItemStack stack = e.getStackM();
+        boolean active = !isActive(stack);
+
+        setActive(stack, active);
+        e.user.sendMessage(TextUtil.translatable(active ? "text.itemalchemy.watch.toggle_on" : "text.itemalchemy.watch.toggle_off"));
+
+        return e.success();
+    }
+
+    @Override
+    public void appendTooltip(ItemAppendTooltipEvent e) {
+        super.appendTooltip(e);
+
+        boolean active = isActive(e.getStackM());
+        e.addTooltip(TextUtil.translatable(active ? "text.itemalchemy.watch.active" : "text.itemalchemy.watch.inactive"));
     }
 
     @Override
@@ -60,6 +110,7 @@ public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem,
     @Override
     public boolean updateInPedestal(ItemStack stack, World world, BlockPos pos, CompatRegistryLookup registryLookup) {
         if (world.isClient()) return false;
+        if (!isActive(stack)) return false;
 
         int bonusTicks = getBonusTicks(stack);
 

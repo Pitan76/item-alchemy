@@ -270,6 +270,10 @@
 
   "text.itemalchemy.owner": "Владелец: %s",
   "text.itemalchemy.shift_info": "§7Нажмите [Shift] для подробностей",
+  "text.itemalchemy.watch.active": "§eВключены §7(ПКМ для переключения)",
+  "text.itemalchemy.watch.inactive": "§8Выключены §7(ПКМ для переключения)",
+  "text.itemalchemy.watch.toggle_on": "§a[Item Alchemy] §rЧасы Текущего Времени: §aВКЛ",
+  "text.itemalchemy.watch.toggle_off": "§a[Item Alchemy] §rЧасы Текущего Времени: §cВЫКЛ",
   "text.itemalchemy.charge": "Заряд: %d%%",
   "text.itemalchemy.emc_stored": "EMC сохранено: %d",
   "text.itemalchemy.max_emc": "Макс. EMC: %d",

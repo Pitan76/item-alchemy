@@ -219,6 +219,10 @@
   "item.itemalchemy.klein_star_omega.desc": "§9究極のクラインスター",
   "item.itemalchemy.klein_star_omega.desc_shift": "§9速度: 無限|||§9全てに電力供給可能|||§6右クリック §7- インベントリから充電|||§cスニーク+右クリック §7- 放電|||§6進化: Ein → Zwei → Drei → Vier → Sphere → Omega|||§9最終段階",
   "text.itemalchemy.shift_info": "§7[Shift]キーで詳細表示",
+  "text.itemalchemy.watch.active": "§e有効 §7(右クリックで切り替え)",
+  "text.itemalchemy.watch.inactive": "§8無効 §7(右クリックで切り替え)",
+  "text.itemalchemy.watch.toggle_on": "§a[Item Alchemy] §r時流計: §a有効",
+  "text.itemalchemy.watch.toggle_off": "§a[Item Alchemy] §r時流計: §c無効",
   "text.itemalchemy.charge": "チャージ: %d%%",
   "text.itemalchemy.emc_stored": "EMC保存量: %d",
   "text.itemalchemy.max_emc": "最大EMC: %d"

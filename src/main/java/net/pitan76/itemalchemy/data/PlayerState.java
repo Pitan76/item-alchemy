@@ -13,13 +13,14 @@ public class PlayerState {
     public UUID teamID;
 
     public void readNbt(NbtCompound nbt) {
-        playerUUID = nbt.getUuid("uuid");
-        teamID = nbt.getUuid("team");
+        playerUUID = nbt.has("uuid") ? nbt.getUuid("uuid") : null;
+        teamID = nbt.has("team") ? nbt.getUuid("team") : null;
     }
 
     public void writeNBT(NbtCompound nbt) {
-        nbt.putUuid("uuid", playerUUID);
-        nbt.putUuid("team", teamID);
+        // nullを書き込むと保存処理全体が失敗するためガードする
+        if (playerUUID != null) nbt.putUuid("uuid", playerUUID);
+        if (teamID != null) nbt.putUuid("team", teamID);
     }
 
     public Player getPlayer(World world) {

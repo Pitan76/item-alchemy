@@ -127,6 +127,7 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
             teamState.storedEMC += storedEMC;
             storedEMC = 0;
             BlockEntityUtil.markDirty(this);
+            markTeamStateDirty();
         }
 
         if (inv.isEmpty(0)) return;
@@ -151,6 +152,7 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
         if (!teamState.registeredItems.contains(stack.getItem().getId().toString())) return;
 
         teamState.storedEMC += emc;
+        markTeamStateDirty();
         inv.set(0, ItemStackUtil.empty());
     }
 
