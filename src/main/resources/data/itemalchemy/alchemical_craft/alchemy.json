@@ -26,19 +26,5 @@
       "itemalchemy:alchemical_fuel"
     ],
     "amount": 2
-  },
-  {
-    "items": [
-      "itemalchemy:alchemical_fuel",
-      "itemalchemy:mobius_fuel"
-    ],
-    "amount": 2
-  },
-  {
-    "items": [
-      "itemalchemy:mobius_fuel",
-      "itemalchemy:aeternalis_fuel"
-    ],
-    "amount": 2
   }
 ]
