@@ -41,9 +41,30 @@ public class AlchemyTableScreen extends CompatInventoryScreen<AlchemyTableScreen
         setBackgroundHeight(222);
     }
 
+    /**
+     * Minecraft 26.3 switched input handling from GLFW to SDL, so GLFW_KEY_ESCAPE (256)
+     * is never seen on that version. MCPitanLib builds KeyEventArgs from KeyEvent.key(),
+     * which on 26.3 is the SDL scancode -- 41 for Escape (measured in game).
+     *
+     * Both values are accepted so the mod keeps working on the older versions it still
+     * supports, and they cannot collide: GLFW has no key 41, and SDL has no scancode 256.
+     */
+    private static boolean isEscapeKey(KeyEventArgs args) {
+        return args.keyCode == 41 || args.keyCode == 256;
+    }
+
     @Override
     public boolean keyPressed(KeyEventArgs args) {
-        if (!TextFieldUtil.isFocused(searchBox) || args.keyCode == 256)
+        // Escape must be handled here. While the search box is focused the branch below
+        // forwards the key to the text field and returns its result, so without this the
+        // key is swallowed and the screen can never be closed (issue #201).
+        if (isEscapeKey(args)) {
+            TextFieldUtil.setFocused(searchBox, false);
+            closeOverride();
+            return true;
+        }
+
+        if (!TextFieldUtil.isFocused(searchBox))
             return super.keyPressed(args);
 
         return TextFieldUtil.keyPressed(searchBox, args.keyCode, args.scanCode, args.modifiers);
