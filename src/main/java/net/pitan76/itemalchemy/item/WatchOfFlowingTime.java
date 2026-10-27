@@ -154,6 +154,8 @@ public class WatchOfFlowingTime extends AlchemicalItem implements IPedestalItem,
             BlockState state = world.getBlockState(pos);
             if (state.hasRandomTicks()) {
                 for (int i = 0; i < bonusTicks; i++) {
+                    // stop once the block changed: repeating the tick on the old state dropped a decayed leaf again
+                    if (i > 0 && world.getBlockState(pos).toMinecraft() != state.toMinecraft()) break;
                     state.randomTick(serverWorld, pos);
                 }
             }

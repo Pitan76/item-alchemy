@@ -1,5 +1,6 @@
 package net.pitan76.itemalchemy.tile;
 
+import net.pitan76.itemalchemy.util.TileUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.pitan76.itemalchemy.block.AEGUBlock;
@@ -130,6 +131,8 @@ public class AEGUTile extends CompatBlockEntity implements ExtendBlockEntityTick
 
     @Override
     public int size() {
+        // this only proxies the condenser next to it: breaking the AEGU must not drop the condenser's contents
+        if (TileUtils.isBlockGone(this)) return 0;
         return getNearEMCCondenser().map(EMCCondenserTile::size).orElse(0);
     }
 

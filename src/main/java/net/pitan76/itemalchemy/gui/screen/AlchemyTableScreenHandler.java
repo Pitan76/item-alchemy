@@ -167,6 +167,13 @@ public class AlchemyTableScreenHandler extends SimpleScreenHandler {
         this.searchText = searchText;
     }
 
+    @Override
+    public boolean canInsertIntoSlotOverride(net.pitan76.mcpitanlib.midohra.item.ItemStack stack, Slot slot) {
+        // double-click (PICKUP_ALL) must not collect items from the extraction slots without paying EMC
+        if (slot instanceof ExtractSlot) return false;
+        return super.canInsertIntoSlotOverride(stack, slot);
+    }
+
     public NbtCompound translations = NbtCompound.of();
     public void setTranslations(NbtCompound translations) {
         this.translations = translations;

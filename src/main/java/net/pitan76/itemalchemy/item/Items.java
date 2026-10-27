@@ -100,7 +100,9 @@ public class Items {
     public static ITypedItemWrapper<KleinStar> KLEIN_STAR_OMEGA;
 
     public static void init() {
-        PHILOSOPHER_STONE = registry.registerItem(_id("philosopher_stone"), () -> new PhilosopherStone(ChargeItemSettings.of(_id("philosopher_stone")).addGroup(ItemGroups.ITEM_ALCHEMY).rarity(CompatRarity.EPIC)));
+        // no max damage (the charge has its own bar): a damageable stone matched the vanilla repair recipe and, being
+        // its own crafting remainder, two stones made a third
+        PHILOSOPHER_STONE = registry.registerItem(_id("philosopher_stone"), () -> new PhilosopherStone(CompatibleItemSettings.of(_id("philosopher_stone")).maxCount(1).addGroup(ItemGroups.ITEM_ALCHEMY).rarity(CompatRarity.EPIC)));
         ALCHEMY_TABLE = registry.registerBlockItem(_id("alchemy_table"), Blocks.ALCHEMY_TABLE, CompatibleItemSettings.of(_id("alchemy_table")).addGroup(ItemGroups.ITEM_ALCHEMY));
         TOME_OF_KNOWLEDGE = registry.registerItem(_id("tome_of_knowledge"), () -> new TomeOfKnowledge(CompatibleItemSettings.of(_id("tome_of_knowledge")).rarity(CompatRarity.EPIC).maxCount(1).addGroup(ItemGroups.ITEM_ALCHEMY)));
         EMC_COLLECTOR_MK1 = registry.registerBlockItem(_id("emc_collector_mk1"), Blocks.EMC_COLLECTOR_MK1, CompatibleItemSettings.of(_id("emc_collector_mk1")).addGroup(ItemGroups.ITEM_ALCHEMY));

@@ -1,5 +1,7 @@
 package net.pitan76.itemalchemy;
 
+import net.pitan76.mcpitanlib.api.util.PlatformUtil;
+import net.pitan76.itemalchemy.compat.TransferApiCompat;
 import net.pitan76.itemalchemy.block.Blocks;
 import net.pitan76.itemalchemy.command.ItemAlchemyCommand;
 import net.pitan76.itemalchemy.config.ItemAlchemyConfig;
@@ -65,6 +67,8 @@ public class ItemAlchemy extends CommonModInitializer {
         EMCManager.registerEMCGenerator(EMCGenerators.CRAFTING, EMCGenerators.STONECUTTING, EMCGenerators.SMELTING);
 
         EventRegistry.ServerLifecycle.serverStarted(EMCManager::init);
+        if (PlatformUtil.isModLoaded("fabric-transfer-api-v1"))
+            EventRegistry.ServerLifecycle.serverStarting(server -> TransferApiCompat.register());
 
         EventRegistry.ServerConnection.join((p) -> {
             if (p == null) return;
