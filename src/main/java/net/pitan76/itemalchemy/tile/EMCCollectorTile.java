@@ -133,7 +133,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
                             inventory.getAsMidohra(index).decrement(1);
                             stack.setCount(1);
                             inventory.set(nextIndex, stack);
-                        } else if (nextStack.getItem() == stack.getItem() && nextStack.getCount() < nextStack.getMaxCount()) {
+                        } else if (nextStack.getItem().get() == stack.getItem().get() && nextStack.getCount() < nextStack.getMaxCount()) {
                             inventory.getAsMidohra(index).decrement(1);
                             nextStack.increment(1);
                         }
@@ -186,7 +186,8 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
     public ItemStack convertStack(ItemStack stack, boolean test) {
         net.pitan76.mcpitanlib.midohra.item.ItemStack inputStack = inventory.getAsMidohra(1);
 
-        if (!inventory.getAsMidohra(1).isEmpty() && inputStack.getItem() == stack.getItem()) return ItemStack.EMPTY;
+        // getItem() returns a new ItemWrapper on every call, so compare the wrapped items
+        if (!inventory.getAsMidohra(1).isEmpty() && inputStack.getItem().get() == stack.getItem().get()) return ItemStack.EMPTY;
 
         if (stack.getItem().equals(MCItems.COAL)) {
             if (storedEMC >= 16 || test) {

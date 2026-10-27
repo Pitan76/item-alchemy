@@ -82,7 +82,7 @@ public class AEGUBlock extends CompatBlock implements ExtendBlockEntityProvider,
         BlockPos pos = AEGUTile.getNearEMCCondenserPos(e.getMidohraWorld(), e.getMidohraPos());
         if (pos == null) return e.fail();
 
-        BlockEntityWrapper blockEntity = e.getBlockEntityWrapper();
+        BlockEntityWrapper blockEntity = e.getMidohraWorld().getBlockEntity(pos);
         if (blockEntity.instanceOf(EMCCondenserTile.class)) {
             EMCCondenserTile tile = blockEntity.getCompatBlockEntity(EMCCondenserTile.class);
             if (e.isClient())

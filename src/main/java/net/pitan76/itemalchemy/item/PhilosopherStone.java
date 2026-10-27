@@ -94,7 +94,7 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
         addExchangeInMap("minecraft:sand", "minecraft:grass_block");
         addExchangeInMap("minecraft:glass", "minecraft:sand");
 
-        addExchangeInMap("minecraft:nettherack", "minecraft:cobblestone");
+        addExchangeInMap("minecraft:netherrack", "minecraft:cobblestone");
         addExchangeInMap("minecraft:sandstone", "minecraft:gravel");
         addExchangeInMap("minecraft:pumpkin", "minecraft:melon");
         addExchangeInMap("minecraft:melon", "minecraft:pumpkin");
@@ -170,7 +170,7 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
             return e.success();
         BlockState replaceState = replaceBlock.getDefaultState();
 
-        blocks.forEach(pos2 -> exchangeBlock(world, pos2, replaceState, world.getBlockState(pos)));
+        blocks.forEach(pos2 -> exchangeBlock(world, pos2, replaceState, world.getBlockState(pos2)));
 
         world.playSound(null, pos, Sounds.EXCHANGE_SOUND, CompatSoundCategory.PLAYERS, 0.15f, 1f);
 
@@ -178,6 +178,7 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
     }
 
     public void exchangeBlock(World world, BlockPos blockPos, BlockState newBlockState, BlockState blockState) {
+        newBlockState = withPropertiesOf(newBlockState, blockState);
         if (newBlockState.contains(CompatProperties.FACING) && blockState.contains(CompatProperties.FACING)) {
             newBlockState = newBlockState.with(CompatProperties.FACING, blockState.get(CompatProperties.FACING));
         }
@@ -186,6 +187,34 @@ public class PhilosopherStone extends CompatItem implements FixedRecipeRemainder
         }
 
         world.setBlockState(blockPos, newBlockState);
+    }
+
+    private static java.lang.reflect.Method withPropertiesOf;
+    private static boolean withPropertiesOfSearched = false;
+
+    /**
+     * Copies every property the new block shares with the old one (log axis, waterlogged, leaves persistence and
+     * distance...), like vanilla's Block#withPropertiesOf. It is looked up by name because MCPitanLib's runtime
+     * remapping doesn't cover it on every version; if it can't be found, the facing copy below still runs.
+     */
+    private static BlockState withPropertiesOf(BlockState newState, BlockState oldState) {
+        if (!withPropertiesOfSearched) {
+            withPropertiesOfSearched = true;
+            for (String name : new String[] {"withPropertiesOf", "method_34725", "getStateWithProperties"}) {
+                try {
+                    withPropertiesOf = net.minecraft.block.Block.class.getMethod(name, net.minecraft.block.BlockState.class);
+                    break;
+                } catch (NoSuchMethodException ignored) {
+                }
+            }
+        }
+        if (withPropertiesOf == null) return newState;
+
+        try {
+            return BlockState.of((net.minecraft.block.BlockState) withPropertiesOf.invoke(newState.getBlock().get(), oldState.toMinecraft()));
+        } catch (ReflectiveOperationException | RuntimeException e) {
+            return newState;
+        }
     }
 
     public void exchangeBlock(net.minecraft.world.World world, net.minecraft.util.math.BlockPos blockPos, net.minecraft.block.BlockState newBlockState, net.minecraft.block.BlockState blockState) {

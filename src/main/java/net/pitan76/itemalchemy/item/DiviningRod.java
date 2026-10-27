@@ -69,19 +69,20 @@ public class DiviningRod extends CompatItem {
                 int level = stack.getCustomNbt("divining_rod_level", Integer.class);
                 int depth = getAdditionalDepth(level);
 
+                // extend the scan into the block, away from the clicked face
                 Direction dir = e.getSideM();
                 if (dir.equals(Direction.UP)) {
-                    y2 += depth;
-                } else if (dir.equals(Direction.DOWN)) {
                     y1 -= depth;
+                } else if (dir.equals(Direction.DOWN)) {
+                    y2 += depth;
                 } else if (dir.equals(Direction.NORTH)) {
-                    z1 += depth;
+                    z2 += depth;
                 } else if (dir.equals(Direction.SOUTH)) {
-                    z2 -= depth;
+                    z1 -= depth;
                 } else if (dir.equals(Direction.WEST)) {
-                    x1 += depth;
+                    x2 += depth;
                 } else if (dir.equals(Direction.EAST)) {
-                    x2 -= depth;
+                    x1 -= depth;
                 }
             }
         }

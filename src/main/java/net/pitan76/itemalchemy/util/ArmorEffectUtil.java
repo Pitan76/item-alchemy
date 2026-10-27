@@ -15,12 +15,12 @@ public class ArmorEffectUtil {
      * 効果を付け直す残り時間の閾値 (tick)。
      * これより長く残っている場合は何もしない。
      */
-    public static final int REFRESH_THRESHOLD = 150;
+    public static final int REFRESH_THRESHOLD = 300;
 
     /**
      * 付与する効果の長さ (tick)。
      */
-    public static final int EFFECT_DURATION = 1000;
+    public static final int EFFECT_DURATION = 400;
 
     /**
      * 残り時間が短い場合のみ効果を付け直す。
