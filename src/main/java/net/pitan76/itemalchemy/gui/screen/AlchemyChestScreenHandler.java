@@ -1,5 +1,7 @@
 package net.pitan76.itemalchemy.gui.screen;
 
+import net.pitan76.itemalchemy.tile.AlchemyChestTile;
+import net.pitan76.itemalchemy.util.MenuUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import net.pitan76.mcpitanlib.api.entity.Player;
@@ -14,9 +16,15 @@ import net.pitan76.mcpitanlib.api.util.inventory.ICompatInventory;
 
 public class AlchemyChestScreenHandler extends SimpleScreenHandler {
     public ICompatInventory inventory;
+    public AlchemyChestTile tile;
     public CompatPlayerInventory playerInventory;
     public AlchemyChestScreenHandler(CreateMenuEvent e) {
         this(e, new CompatInventory(104));
+    }
+
+    public AlchemyChestScreenHandler(CreateMenuEvent e, AlchemyChestTile tile, ICompatInventory inventory) {
+        this(e, inventory);
+        this.tile = tile;
     }
 
     public AlchemyChestScreenHandler(CreateMenuEvent e, ICompatInventory inventory) {
@@ -50,5 +58,10 @@ public class AlchemyChestScreenHandler extends SimpleScreenHandler {
             SlotUtil.onTakeItem(slot, player, itemStack2);
         }
         return itemStack;
+    }
+
+    @Override
+    public boolean canUse(Player player) {
+        return MenuUtils.canPlayerUse(tile, player);
     }
 }

@@ -83,6 +83,7 @@ public class EMCBatteryTile extends EMCStorageBlockEntity implements ExtendBlock
     @Override
     public void tick(TileTickEvent<EMCBatteryTile> e) {
         if (e.isClient()) return;
+        markDirtyIfEMCChanged();
         World world = e.getMidohraWorld();
         BlockState state = e.getMidohraState();
 

@@ -7,6 +7,7 @@ import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.screen.AlchemyTableScreenHandler;
 import net.pitan76.itemalchemy.item.ILearnableItem;
 import net.pitan76.itemalchemy.item.KleinStar;
+import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.inventory.CompatInventory;
@@ -76,8 +77,16 @@ public class RegisterInventory extends CompatInventory {
             }
 
             if (slot == 50) {
-                if (!player.isClient() && EMCManager.get(stack) != 0) {
+                if (!player.isClient() && ItemUtils.holdsItems(stack)) {
+                    // only the container itself would be credited and its contents destroyed: give it back
+                    player.offerOrDrop(stack.copy());
+                } else if (!player.isClient() && EMCManager.get(stack) != 0) {
                     EMCManager.writeEmcToPlayer(player, stack);
+                    // a charged Klein Star also gives back the EMC stored in it
+                    if (stack.getItem().instanceOf(KleinStar.class)) {
+                        long stored = KleinStar.getStoredEmc(stack);
+                        if (stored > 0) EMCManager.incrementEmc(player, stored * stack.getCount());
+                    }
                     if (player.isServerPlayerEntity())
                         EMCManager.syncS2C(player);
                 }

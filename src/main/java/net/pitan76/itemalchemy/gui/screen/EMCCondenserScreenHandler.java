@@ -1,5 +1,6 @@
 package net.pitan76.itemalchemy.gui.screen;
 
+import net.pitan76.itemalchemy.util.MenuUtils;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.pitan76.itemalchemy.EMCManager;
@@ -205,5 +206,10 @@ public class EMCCondenserScreenHandler extends ExtendedScreenHandler {
     protected void setTargetStack(ItemStack stack) {
         targetStack = stack;
         tile.setTargetStack(stack);
+    }
+
+    @Override
+    public boolean canUse(Player player) {
+        return MenuUtils.canPlayerUse(tile, player);
     }
 }

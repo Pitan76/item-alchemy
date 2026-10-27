@@ -83,6 +83,7 @@ public class EMCCollectorTile extends EMCStorageBlockEntity implements ExtendBlo
     public void tick(TileTickEvent<EMCCollectorTile> e) {
         World world = e.getMidohraWorld();
         if (e.isClient()) return;
+        markDirtyIfEMCChanged();
 
         if (maxEMC == -1)
             maxEMC = ((EMCCollector) e.state.getBlock()).maxEMC;

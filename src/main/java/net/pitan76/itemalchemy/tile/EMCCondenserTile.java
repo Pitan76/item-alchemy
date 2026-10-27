@@ -3,6 +3,7 @@ package net.pitan76.itemalchemy.tile;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.EMCManager;
+import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.itemalchemy.ItemAlchemy;
 import net.pitan76.itemalchemy.api.EMCStorageUtil;
 import net.pitan76.itemalchemy.config.ItemAlchemyConfig;
@@ -79,6 +80,7 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
     @Override
     public void tick(TileTickEvent<EMCCondenserTile> e) {
         if (e.isClient()) return;
+        markDirtyIfEMCChanged();
         World world = e.getMidohraWorld();
         if (!getItems().isEmpty()) {
             ItemStack targetStack = getItems().getAsMidohra(0);
@@ -103,6 +105,7 @@ public class EMCCondenserTile extends EMCStorageBlockEntity implements ExtendBlo
                         for (ItemStack stack : getItems().toMidohra()) {
                             if (stack.isEmpty()) continue;
                             if (stack.getItem().equals(targetStack.getItem())) continue;
+                            if (ItemUtils.holdsItems(stack)) continue;
 
                             long emc = EMCManager.get(stack.getItem());
                             if (emc == 0) continue;

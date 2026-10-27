@@ -1,5 +1,6 @@
 package net.pitan76.itemalchemy.gui.screen;
 
+import net.pitan76.itemalchemy.util.MenuUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import net.pitan76.itemalchemy.gui.slot.FilterSlot;
@@ -109,5 +110,10 @@ public class EMCExporterScreenHandler extends ExtendedScreenHandler {
             return;
         }
         super.onSlotClick(e);
+    }
+
+    @Override
+    public boolean canUse(Player player) {
+        return MenuUtils.canPlayerUse(tile, player);
     }
 }

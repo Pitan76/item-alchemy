@@ -85,6 +85,9 @@ public class EMCStorageUtil {
         from.storedEMC -= emc;
         to.storedEMC += emc;
 
+        from.markDirtyIfEMCChanged();
+        to.markDirtyIfEMCChanged();
+
         return true;
     }
 

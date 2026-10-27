@@ -4,6 +4,7 @@ import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.tile.CompatBlockEntity;
+import net.pitan76.mcpitanlib.api.util.BlockEntityUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.midohra.block.entity.BlockEntityTypeWrapper;
 
@@ -55,6 +56,18 @@ public abstract class EMCStorageBlockEntity extends CompatBlockEntity {
 
     public void removeEMC(long emc) {
         storedEMC -= emc;
+    }
+
+    private long lastMarkedEMC = Long.MIN_VALUE;
+
+    /**
+     * Marks the block entity dirty when storedEMC changed since the last call, so the chunk gets saved: ticks and
+     * transfers change storedEMC directly, and a chunk that is never marked keeps its old EMC after a restart.
+     */
+    public void markDirtyIfEMCChanged() {
+        if (storedEMC == lastMarkedEMC) return;
+        lastMarkedEMC = storedEMC;
+        BlockEntityUtil.markDirty(this);
     }
 
     public abstract long getMaxEMC();

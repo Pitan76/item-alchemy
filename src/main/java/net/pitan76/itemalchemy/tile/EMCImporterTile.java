@@ -3,6 +3,7 @@ package net.pitan76.itemalchemy.tile;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.pitan76.itemalchemy.EMCManager;
+import net.pitan76.itemalchemy.util.ItemUtils;
 import net.pitan76.itemalchemy.api.EMCStorageUtil;
 import net.pitan76.itemalchemy.data.TeamState;
 import net.pitan76.itemalchemy.gui.screen.EMCImporterScreenHandler;
@@ -117,6 +118,7 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
     @Override
     public void tick(TileTickEvent<EMCImporterTile> e) {
         if (e.isClient()) return;
+        markDirtyIfEMCChanged();
         if (!hasTeam()) return;
 
         EMCStorageUtil.transferAllEMC(this);
@@ -190,6 +192,7 @@ public class EMCImporterTile extends OwnedBlockEntity implements ExtendBlockEnti
 
         if (!hasTeam()) return false;
         if (!EMCManager.contains(stack.getItem())) return false;
+        if (ItemUtils.holdsItems(stack)) return false;
 
         if (getFilterCount() > 0) {
             boolean isFiltered = false;

@@ -1,5 +1,6 @@
 package net.pitan76.itemalchemy.gui.screen;
 
+import net.pitan76.itemalchemy.util.MenuUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
@@ -80,5 +81,10 @@ public class EMCBatteryScreenHandler extends ExtendedScreenHandler {
             }
         }
         return ItemStackUtil.empty();
+    }
+
+    @Override
+    public boolean canUse(Player player) {
+        return MenuUtils.canPlayerUse(tile, player);
     }
 }

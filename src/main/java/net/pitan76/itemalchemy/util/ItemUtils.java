@@ -3,6 +3,7 @@ package net.pitan76.itemalchemy.util;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.pitan76.itemalchemy.ItemAlchemy;
+import net.pitan76.mcpitanlib.api.util.BlockEntityDataUtil;
 import net.pitan76.mcpitanlib.api.util.CustomDataUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
@@ -15,6 +16,24 @@ import static com.google.common.primitives.Ints.constrainToRange;
  * level.
  */
 public class ItemUtils {
+
+    /**
+     * Whether the stack holds other items, so burning, importing or condensing it would destroy them: an item whose
+     * block entity data has a non-empty Items list, or a container from the itemalchemy:item_containers tag
+     * (shulker boxes, bundles; modpacks can extend it) that carries any data. Empty containers still count as plain
+     * items.
+     */
+    public static boolean holdsItems(net.pitan76.mcpitanlib.midohra.item.ItemStack stack) {
+        if (stack.isEmpty()) return false;
+
+        if (BlockEntityDataUtil.hasBlockEntityNbt(stack)) {
+            net.pitan76.mcpitanlib.midohra.nbt.NbtCompound nbt = BlockEntityDataUtil.getBlockEntityNbt(stack);
+            if (nbt.has("Items") && !nbt.getList("Items").isEmpty()) return true;
+        }
+
+        return stack.getItem().isInTag(ItemAlchemy._id("item_containers"))
+                && !stack.areNbtOrComponentEqual(stack.getItem().createStack());
+    }
 
     // DEBUG flag - set to true to enable diagnostic logging
     private static final boolean DEBUG_CHARGE = false;
