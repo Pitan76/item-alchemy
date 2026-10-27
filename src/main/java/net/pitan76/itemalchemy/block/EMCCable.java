@@ -155,8 +155,10 @@ public class EMCCable extends EMCRepeater implements IUseableWrench, CompatWater
         BlockPos pos = args.getPos();
         IWorldView world = args.getWorldView();
 
+        // Water's tick delay is always 5. Reading args.world here throws NoSuchFieldError on 26.3, where MCPitanLib
+        // declares the field with another type (LevelReader).
         if (state.get(WATERLOGGED))
-            args.getTickView().scheduleFluidTick(pos, FluidWrapper.of(FluidUtil.water()), FluidUtil.getTickRate(FluidUtil.water(), args.world));
+            args.getTickView().scheduleFluidTick(pos, FluidWrapper.of(FluidUtil.water()), 5);
 
         BlockState north = world.getBlockState(pos.north());
         BlockState south = world.getBlockState(pos.south());
