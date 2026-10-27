@@ -48,7 +48,7 @@ public class RankingCommand extends LiteralCommand {
                         continue;
 
                     List<Player> players = playerManager.getPlayers();
-                    boolean isOwner = (uuid == team.get().owner);
+                    boolean isOwner = uuid.equals(team.get().owner);
                     if (isOwner) {
                         for (Player p : players) {
                             p.sendMessage(TextUtil.literal((i + 1) + ". §a" + player.getName() + " §c(Owner) §r: §a" + playerStates.get(i).getTeamState(world).get().storedEMC + "EMC"));
@@ -86,7 +86,7 @@ public class RankingCommand extends LiteralCommand {
             if (!team.isPresent())
                 continue;
 
-            boolean isOwner = (uuid == team.get().owner);
+            boolean isOwner = uuid.equals(team.get().owner);
             if (isOwner) {
                 e.sendSuccess((i + 1) + ". §a" + player.getName() + " §c(Owner) §r: §a" + playerStates.get(i).getTeamState(world).get().storedEMC + "EMC");
             } else {

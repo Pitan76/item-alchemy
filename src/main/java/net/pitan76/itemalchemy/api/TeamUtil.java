@@ -72,7 +72,7 @@ public class TeamUtil {
 
         if (!teamState.isPresent()) return false;
 
-        List<PlayerState> playerStates = serverState.players.stream().filter(playerState -> playerState.teamID == teamUUID).collect(Collectors.toList());
+        List<PlayerState> playerStates = serverState.players.stream().filter(playerState -> teamUUID.equals(playerState.teamID)).collect(Collectors.toList());
 
         for (PlayerState playerState : playerStates) {
             if (!leaveTeam(server, playerState.playerUUID)) return false;
@@ -95,15 +95,15 @@ public class TeamUtil {
         TeamState currentTeamState = serverState.getTeamByPlayer(playerUUID).get();
         Optional<TeamState> defaultTeamState = serverState.getTeamsByOwner(playerUUID)
                 .stream()
-                .filter(state -> state.owner == playerUUID && state.isDefault)
+                .filter(state -> playerUUID.equals(state.owner) && state.isDefault)
                 .findFirst();
 
         if (!defaultTeamState.isPresent()) return false;
-        if (currentTeamState.isDefault && currentTeamState.owner == playerUUID) return false;
+        if (currentTeamState.isDefault && playerUUID.equals(currentTeamState.owner)) return false;
 
         playerState.get().teamID = defaultTeamState.get().teamID;
 
-        if (currentTeamState.owner == playerUUID) {
+        if (playerUUID.equals(currentTeamState.owner)) {
             removeTeam(server, currentTeamState.teamID);
         }
 
@@ -118,7 +118,7 @@ public class TeamUtil {
         Optional<TeamState> teamState = serverState.getTeam(teamUUID);
 
         if (!teamState.isPresent()) return false;
-        if (teamState.get().owner == playerUUID) return false;
+        if (playerUUID.equals(teamState.get().owner)) return false;
 
         return leaveTeam(server, playerUUID);
     }
